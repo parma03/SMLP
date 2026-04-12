@@ -1,0 +1,15 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="01.Base/01.Base.csproj" />
+    <Project Path="02.Domain/02.Domain.csproj" Id="919c6dab-e1e3-410c-a22b-171391286af0" />
+    <Project Path="03.Shared/03.Shared.csproj" Id="18ea265e-a07c-47ef-b5ac-ec096418f45a" />
+    <Project Path="04.Application/04.Application.csproj" Id="7cb7529e-ccf3-47f1-8742-9e61a585b069" />
+    <Project Path="05.Infrastructure/05.Infrastructure.csproj" Id="40e00cf9-fd33-44d1-ba3f-0f55aa9f0443" />
+    <Project Path="06.WebApi/06.WebApi.csproj" Id="54f7eca1-2300-44f9-8a39-db25136f36ca" />
+    <Project Path="07.Client/07.Client.csproj" Id="a41df58f-e9bb-4af9-b933-836343c7b852" />
+    <Project Path="08.Bsui/08.Bsui.csproj" Id="2d2cd34f-6038-4df3-a91f-d0997986a846" />
+  </Folder>
+  <Folder Name="/src/Solution Items/">
+    <File Path=".editorconfig" />
+  </Folder>
+</Solution>
