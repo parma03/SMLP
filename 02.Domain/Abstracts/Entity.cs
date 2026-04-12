@@ -1,4 +1,6 @@
-﻿namespace SMLP.Domain.Abstracts
+﻿using SMLP.Domain.Interfaces;
+
+namespace SMLP.Domain.Abstracts
 {
     public abstract class Entity : IHasKey, ICreatable
     {
