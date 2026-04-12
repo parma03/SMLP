@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace SMLP.Base.User.Enums
+namespace Smlp.Base.Document.Enums
 {
     public enum DocumentType
     {

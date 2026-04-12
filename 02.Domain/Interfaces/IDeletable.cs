@@ -1,4 +1,4 @@
-﻿namespace SMLP.Domain.Interfaces
+﻿namespace Smlp.Domain.Interfaces
 {
     public interface IDeletable
     {

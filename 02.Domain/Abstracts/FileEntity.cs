@@ -1,6 +1,6 @@
-﻿using SMLP.Domain.Interfaces;
+﻿using Smlp.Domain.Interfaces;
 
-namespace SMLP.Domain.Abstracts
+namespace Smlp.Domain.Abstracts
 {
     public abstract class FileEntity : AuditableEntity, IHasFile
     {

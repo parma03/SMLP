@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace SMLP.Base.Common
+namespace Smlp.Base.Common
 {
     public enum CurrencyType
     {

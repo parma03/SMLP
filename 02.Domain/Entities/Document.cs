@@ -1,8 +1,8 @@
-﻿using SMLP.Base.User.Enums;
-using SMLP.Domain.Abstracts;
-using SMLP.Domain.Events;
+﻿using Smlp.Base.Document.Enums;
+using Smlp.Domain.Abstracts;
+using Smlp.Domain.Events;
 
-namespace SMLP.Domain.Entities
+namespace Smlp.Domain.Entities
 {
     public class Document : FileEntity, IHasDomainEvent
     {

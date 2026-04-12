@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
-using SMLP.Base.Common;
+using Smlp.Base.Common;
 
-namespace SMLP.Base.ValueObjects
+namespace Smlp.Base.ValueObjects
 {
 
     public class Geolocation : ValueObject

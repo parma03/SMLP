@@ -1,7 +1,7 @@
-﻿using SMLP.Base.ValueObjects;
-using SMLP.Domain.Abstracts;
+﻿using Smlp.Base.ValueObjects;
+using Smlp.Domain.Abstracts;
 
-namespace SMLP.Domain.Entities
+namespace Smlp.Domain.Entities
 {
     public class Audit : Entity
     {

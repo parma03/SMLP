@@ -1,7 +1,7 @@
-﻿using SMLP.Base.User.Enums;
-using SMLP.Domain.Abstracts;
+﻿using Smlp.Base.User.Enums;
+using Smlp.Domain.Abstracts;
 
-namespace SMLP.Domain.Entities.Master
+namespace Smlp.Domain.Entities.Master
 {
     public class User : AuditableEntity
     {

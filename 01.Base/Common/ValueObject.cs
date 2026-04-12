@@ -1,4 +1,4 @@
-﻿namespace SMLP.Base.Common
+﻿namespace Smlp.Base.Common
 {
     public abstract class ValueObject
     {

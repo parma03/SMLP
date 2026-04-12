@@ -1,4 +1,4 @@
-﻿namespace SMLP.Base.Common.Attributes
+﻿namespace Smlp.Base.Common.Attributes
 {
     public class CssAttribute : Attribute
     {

@@ -1,6 +1,6 @@
-﻿using SMLP.Base.User.Enums;
+﻿using Smlp.Base.User.Enums;
 
-namespace SMLP.Base.User.Lists
+namespace Smlp.Base.User.Lists
 {
     public static class RoleList
     {
