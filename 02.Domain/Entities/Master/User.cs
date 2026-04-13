@@ -11,5 +11,6 @@ namespace Smlp.Domain.Entities.Master
         public string PhoneNumber { get; set; } = default!;
         public string EmailAddress { get; set; } = default!;
         public bool IsActive { get; set; }
+        public FileEntity? ProfilePict { get; set; }
     }
 }
