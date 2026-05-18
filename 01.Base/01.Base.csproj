@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <Folder Include="Email\Enums\" />
+    <Folder Include="ValueObjects\" />
   </ItemGroup>
 
 </Project>
