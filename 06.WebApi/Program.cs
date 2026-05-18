@@ -1,18 +1,18 @@
 using System.Text.Json.Serialization;
 using FluentValidation.AspNetCore;
-using PSMP.Application;
-using PSMP.Infrastructure;
-using Psmp.Infrastructure.Logging;
-using Psmp.Infrastructure.Persistence;
-using PSMP.Shared;
-using Psmp.Shared.Localization;
-using Psmp.Shared.Common.Constants;
-using Psmp.WebApi.Common.Filters.ApiException;
-using Psmp.WebApi.Common.ModelBindings;
-using Psmp.WebApi.Services;
-using Psmp.WebApi.Services.BackEnd;
-using Psmp.WebApi.Services.Documentation;
-using Psmp.Infrastructure.BackgroundJob.Hangfire;
+using Smlp.Application;
+using Smlp.Infrastructure;
+using Smlp.Infrastructure.Logging;
+using Smlp.Infrastructure.Persistence;
+using Smlp.Shared;
+using Smlp.Shared.Localization;
+using Smlp.Shared.Common.Constants;
+using Smlp.WebApi.Common.Filters.ApiException;
+using Smlp.WebApi.Common.ModelBindings;
+using Smlp.WebApi.Services;
+using Smlp.WebApi.Services.BackEnd;
+using Smlp.WebApi.Services.Documentation;
+using Smlp.Infrastructure.BackgroundJob.Hangfire;
 
 Console.WriteLine($"Starting {CommonValueFor.EntryAssemblySimpleName}...");
 
@@ -55,9 +55,7 @@ CultureConfigurator.Configure(new LocalizationSettings
 logger.LogInformation("Running {AssemblyName}", CommonValueFor.EntryAssemblySimpleName);
 
 if (!app.Environment.IsProduction())
-{
     app.UseDeveloperExceptionPage();
-}
 
 app.UseBackEndService(builder.Configuration);
 app.UseHttpsRedirection();

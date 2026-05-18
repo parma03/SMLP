@@ -15,7 +15,7 @@ public static class DatabaseMigration
         var logger = serviceProvider.GetRequiredService<ILogger<T>>();
         var persistenceOptions = configuration.GetSection(PersistenceOptions.SectionKey).Get<PersistenceOptions>();
 
-        PsmpDbContext context;
+        SMLPDbContext context;
         bool isMigrationNeeded;
 
         switch (persistenceOptions!.Provider)

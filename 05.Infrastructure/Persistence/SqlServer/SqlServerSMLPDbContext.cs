@@ -1,16 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Psmp.Application.Services.CurrentUser;
-using Psmp.Application.Services.DateAndTime;
-using Psmp.Application.Services.DomainEvent;
-using Psmp.Infrastructure.Persistence.Common.Extensions;
-using Psmp.Infrastructure.Persistence.SqlServer.Configuration;
+using Microsoft.EntityFrameworkCore;
+using Smlp.Application.Services.CurrentUser;
+using Smlp.Application.Services.DateAndTime;
+using Smlp.Application.Services.DomainEvent;
+using Smlp.Infrastructure.Persistence.Common.Extensions;
+using Smlp.Infrastructure.Persistence.SqlServer.Configuration;
 
-namespace Psmp.Infrastructure.Persistence.SqlServer;
+namespace Smlp.Infrastructure.Persistence.SqlServer;
 
-public class SqlServerSMLPDbContext : PsmpDbContext
+public class SqlServerSmlpDbContext : SmlpDbContext
 {
-    public SqlServerSMLPDbContext(
-        DbContextOptions<SqlServerSMLPDbContext> options,
+    public SqlServerSmlpDbContext(
+        DbContextOptions<SqlServerSmlpDbContext> options,
         ICurrentUserService currentUser,
         IDateAndTimeService dateTime,
         IDomainEventService domainEvent) : base(options)
@@ -20,14 +20,13 @@ public class SqlServerSMLPDbContext : PsmpDbContext
         _domainEvent = domainEvent;
     }
 
-    public SqlServerSMLPDbContext(DbContextOptions<SqlServerSMLPDbContext> options) : base(options)
+    public SqlServerSmlpDbContext(DbContextOptions<SqlServerSmlpDbContext> options) : base(options)
     {
     }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.ApplyConfigurationsFromNameSpace(typeof(AuditConfiguration).Namespace!);
-
         base.OnModelCreating(builder);
     }
 }
