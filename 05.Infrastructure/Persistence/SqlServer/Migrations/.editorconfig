@@ -1,0 +1,5 @@
+[*]
+generated_code = true
+
+# IDE0005: Remove unnecessary using directives
+dotnet_diagnostic.IDE0005.severity = none

@@ -1,0 +1,36 @@
+﻿:root {
+    --primaryColor: #0f4c81;
+    --secondaryColor: #349b72;
+    --darkColor: #000;
+    --midDarkColor: #2f313a;
+    --grayColor: #444;
+    --midGrayColor: #ebebeb;
+    --lightColor: #f6f6f7;
+    --dangerColor: #d26b4e;
+    --warningColor: #ff8f30;
+    --successColor: #3aaa97;
+    --ffBase: 'Roboto',sans-serif;
+    --bgMain: var(--lightColor);
+    --bgSecondary: #fff;
+    --fcNegative: #fff;
+    --fcBase: var(--grayColor);
+    --fcAction: var(--primaryColor);
+    --bgAside: #0f4c81;
+    --bgMenuActive: #1460a2;
+    --bcMenuActive: #1460a2;
+    --bcInput: var(--midGrayColor);
+    --bcInputHover: var(--primaryColor);
+    --bgInputHover: var(--primaryColor);
+    --fcInputHover: var(--primaryColor);
+    --bcTable: var(--midGrayColor);
+    --bgTable: var(--bgSecondary);
+    --bgTableSecondary: var(--midGrayColor);
+    --bgTableButton: var(--bgSecondary);
+    --bgButton: var(--secondaryColor);
+    --bgImageDarken: linear-gradient(rgba(0,0,0,0.2),rgba(0,0,0,0.2));
+    --bgImageLigthen: linear-gradient(rgba(255,255,255,0.8),rgba(255,255,255,0.8));
+    --bgBulletTimeline: var(--primaryColor);
+    --bgLineTimeline: var(--midGrayColor);
+    --bcEventTimeline: var(--midGrayColor);
+    --logoImageUrl: url(../../healthchecks/pertamina-white.png);
+}

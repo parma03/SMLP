@@ -1,0 +1,9 @@
+﻿$env:ASPNETCORE_ENVIRONMENT='Local'
+set ASPNETCORE_ENVIRONMENT=Local
+dotnet tool update --global dotnet-ef
+
+dotnet ef migrations add 001_InitialSchema --context SqlServerPSMPDbContext --project src/05.Infrastructure --startup-project src/06.WebApi --output-dir Persistence/SqlServer/Migrations
+
+dotnet ef migrations remove  --context SqlServerPSMPDbContext --project src/05.Infrastructure --startup-project src/06.WebApi
+
+dotnet ef database update --context SqlServerPSMPDbContext --project src/05.Infrastructure --startup-project src/06.WebApi

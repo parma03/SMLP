@@ -1,6 +1,6 @@
 ﻿using Smlp.Shared.Common.Responses;
 
-namespace Psmp.Shared.Scholarships.ScholarshipPlan.Commands.Delete
+namespace Smlp.Shared.Scholarships.ScholarshipPlan.Commands.Delete
 {
     public class DeleteUserResponse : Response
     {
