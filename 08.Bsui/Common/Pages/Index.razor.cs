@@ -1,27 +1,15 @@
-﻿using MudBlazor;
+using MudBlazor;
 using Smlp.Bsui.Common.Constants;
-using Smlp.Shared.Common.Constants;
-using Smlp.Shared.Common.Extensions;
 
 namespace Smlp.Bsui.Common.Pages;
 
 public partial class Index
 {
-    private List<BreadcrumbItem> _breadcrumbItems = new();
     private string _greetings = default!;
 
     protected override void OnInitialized()
     {
-        SetupBreadcrumb();
-
-        _greetings = $"Good {DateTimeOffset.Now.ToFriendlyTimeDisplayText()}";
-    }
-
-    private void SetupBreadcrumb()
-    {
-        _breadcrumbItems = new()
-        {
-            CommonBreadcrumbFor.Active(CommonDisplayTextFor.Home)
-        };
+        var hour = DateTime.Now.Hour;
+        _greetings = hour < 12 ? "Selamat Pagi" : hour < 15 ? "Selamat Siang" : hour < 18 ? "Selamat Sore" : "Selamat Malam";
     }
 }

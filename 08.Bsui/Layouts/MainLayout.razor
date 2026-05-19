@@ -1,4 +1,4 @@
-﻿@using Darnton.Blazor.DeviceInterop.Geolocation
+@using Darnton.Blazor.DeviceInterop.Geolocation
 @using Smlp.Bsui.Common.Pages
 @using Smlp.Bsui.Common.Pages.Errors
 @using Smlp.Bsui.Services.AppInfo
@@ -31,13 +31,14 @@
         <MudDialogProvider FullWidth="true" MaxWidth="MaxWidth.Small" />
         <MudSnackbarProvider />
         <MudLayout>
-            <MudAppBar>
+            <MudAppBar Elevation="2">
                 @if (_authorized)
                 {
                     <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
                 }
-                <MudText Typo="Typo.h6" Class="ml-3">@_appInfoOptions.Value.FullName</MudText>
-                <img src="img/icontoga_.png" alt="icon scholarship" class="ml-2" style="width: 60px; height: 30px;" />
+                <MudIcon Icon="@Icons.Material.Filled.LocalCafe" Color="Color.Inherit" Class="ml-2 mr-1" />
+                <MudText Typo="Typo.h6" Class="ml-1 font-weight-bold">@_appInfoOptions.Value.ShortName</MudText>
+                <MudText Typo="Typo.caption" Class="ml-2 mt-1 d-none d-sm-flex" Style="opacity:0.8">@_appInfoOptions.Value.Description</MudText>
                 <MudSpacer />
                 <HealthCheckInfo />
                 @if (_usingAuthentication)
@@ -48,8 +49,16 @@
             @if (_authorized)
             {
                 <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
-                    <div class="logo">
-                    </div>
+                    <MudDrawerHeader>
+                        <div class="drawer-header d-flex align-center pa-2">
+                            <MudIcon Icon="@Icons.Material.Filled.LocalCafe" Style="color:#FFCCBC; font-size:2rem;" />
+                            <div class="ml-2">
+                                <MudText Typo="Typo.subtitle1" Style="color:#FFF8E1; font-weight:700;">@_appInfoOptions.Value.FullName</MudText>
+                                <MudText Typo="Typo.caption" Style="color:#FFCCBC;">Loyalty Management System</MudText>
+                            </div>
+                        </div>
+                        <MudDivider Style="background-color:#795548;" />
+                    </MudDrawerHeader>
                     <NavMenu />
                 </MudDrawer>
             }
@@ -61,7 +70,7 @@
                         {
                             if (_geolocationResult is null)
                             {
-                                <Loading Description="Retrieving your current location..." />
+                                <Loading Description="Memuat lokasi Anda..." />
                             }
                             else
                             {
@@ -93,7 +102,7 @@
             </MudMainContent>
         </MudLayout>
         <MudScrollToTop TopOffset="200">
-            <MudFab Color="Color.Warning" Icon="@Icons.Material.Filled.ArrowCircleUp" />
+            <MudFab Color="Color.Secondary" Icon="@Icons.Material.Filled.ArrowCircleUp" />
         </MudScrollToTop>
     </Authorized>
     <NotAuthorized>
@@ -106,52 +115,47 @@
         .element_large {
             display: none;
         }
-
-        .login_box_compact {
-            height: 450px;
-            width: 360px;
-            background-color: rgba(255,255,255,0.13);
-            position: absolute;
-            transform: translate(-50%,-50%);
-            top: 50%;
-            left: 50%;
-            border-radius: 10px;
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(255,255,255,0.1);
-            box-shadow: 0 0 40px rgba(8,7,16,0.6);
-            padding: 50px 35px;
-            font-family: 'Poppins',sans-serif;
-            color: #ffffff;
-            letter-spacing: 0.5px;
-            outline: none;
-            border: none;
-            text-align: center;
-        }
     }
 
     .main-content {
         position: relative;
         height: 100%;
         min-height: calc(100vh - 64px);
-        padding: 12px 24px 24px 24px;
-        background-image: url(./img/bg_web.png);
-        background-repeat: no-repeat;
-        background-size: cover;
-        background-position: center;
+        padding: 16px 24px 24px 24px;
+        background-color: #FFF8F0;
+        background-image: radial-gradient(circle at 10% 20%, rgba(111,78,55,0.04) 0%, transparent 50%),
+                          radial-gradient(circle at 90% 80%, rgba(200,134,10,0.04) 0%, transparent 50%);
     }
 
     .mud-appbar {
-        background-image: url(./img/bg_appbar.png);
-        background-repeat: no-repeat;
-        background-size: cover;
-        background-position: center;
+        background: linear-gradient(135deg, #3E2723 0%, #6F4E37 100%) !important;
     }
 
     .mud-drawer-content {
-        background-image: url(./img/bg_web.png);
-        background-repeat: no-repeat;
-        background-size: cover;
-        background-position: center;
+        background: linear-gradient(180deg, #3E2723 0%, #4E342E 100%) !important;
+    }
+
+    .mud-nav-link {
+        color: #FFF8E1 !important;
+        border-radius: 8px;
+        margin: 2px 8px;
+    }
+
+    .mud-nav-link:hover {
+        background-color: rgba(255, 248, 225, 0.12) !important;
+    }
+
+    .mud-nav-link.active {
+        background-color: rgba(200, 134, 10, 0.25) !important;
+        color: #FFE082 !important;
+    }
+
+    .mud-nav-group-title {
+        color: #FFCCBC !important;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
 
     .loading {
@@ -160,5 +164,9 @@
         top: 50%;
         transform: translate(-50%, -50%);
         text-align: center;
+    }
+
+    .drawer-header {
+        padding: 12px 8px;
     }
 </style>

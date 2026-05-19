@@ -1,40 +1,186 @@
-﻿@page "/Dashboard"
+@page "/Dashboard"
+@page "/"
 
 @using Smlp.Bsui.Services.AppInfo
+@using Smlp.Bsui.Common.Constants
 
 @inject IOptions<AppInfoOptions> _appInfoOptions
 
+<BrowserTabTitle>Dashboard</BrowserTabTitle>
+<PageHeader Title="Dashboard" Icon="@Icons.Material.Filled.Dashboard" />
 
-<BrowserTabTitle>@CommonDisplayTextFor.Home</BrowserTabTitle>
-<PageHeader Title="@CommonDisplayTextFor.Home" />
 <AuthorizeView Context="context">
     <Authorized>
-        @if (context.User.HasPermission(Permissions.Psmp_ScholarshipPlan_View)
-        || context.User.HasPermission(Permissions.Psmp_ScholarshipPosting_View)
-        || context.User.HasPermission(Permissions.Psmp_SelectionOverview_View)
-        || context.User.HasPermission(Permissions.Psmp_ScholarshipPosting_View))
-        {
-            <MudGrid Class="mt-12">
-                <MudItem xs="12" sm="6">
-                    Grid 1
-                </MudItem>
-                <MudItem xs="12" sm="6">
-                    Grid 2
-                </MudItem>
-                <MudItem xs="12" sm="6">
-                    Grid 3
-                </MudItem>
-                <MudItem xs="12" sm="6">
-                    Grid 4
-                </MudItem>
-            </MudGrid>
-        }
-        else
-        {
-            <MudText Typo="Typo.h4" Class="mt-16">@_greetings</MudText>
-            <MudText Typo="Typo.h3">@context.User.GetDisplayName()</MudText>
-            <MudText Typo="Typo.h5" Class="mt-12">Welcome to</MudText>
-            <MudText Typo="Typo.h4" Class="mt-4">@_appInfoOptions.Value.FullName</MudText>
-        }
+        @* KPI Cards Row *@
+        <MudGrid Class="mb-4">
+            <MudItem xs="12" sm="6" md="3">
+                <MudPaper Class="pa-4 rounded-lg" Elevation="2" Style="border-left: 4px solid #6F4E37;">
+                    <div class="d-flex align-center justify-space-between">
+                        <div>
+                            <MudText Typo="Typo.caption" Color="Color.Secondary">Total Pelanggan Aktif</MudText>
+                            <MudText Typo="Typo.h4" Style="color:#6F4E37; font-weight:700;">—</MudText>
+                            <MudText Typo="Typo.caption" Color="Color.Success">
+                                <MudIcon Icon="@Icons.Material.Filled.TrendingUp" Size="Size.Small" /> Bulan ini
+                            </MudText>
+                        </div>
+                        <MudIcon Icon="@Icons.Material.Filled.People" Style="font-size:3rem; color:#D7CCC8;" />
+                    </div>
+                </MudPaper>
+            </MudItem>
+            <MudItem xs="12" sm="6" md="3">
+                <MudPaper Class="pa-4 rounded-lg" Elevation="2" Style="border-left: 4px solid #C8860A;">
+                    <div class="d-flex align-center justify-space-between">
+                        <div>
+                            <MudText Typo="Typo.caption" Color="Color.Secondary">Total Poin Beredar</MudText>
+                            <MudText Typo="Typo.h4" Style="color:#C8860A; font-weight:700;">—</MudText>
+                            <MudText Typo="Typo.caption" Color="Color.Secondary">Keseluruhan member</MudText>
+                        </div>
+                        <MudIcon Icon="@Icons.Material.Filled.Stars" Style="font-size:3rem; color:#FFE0B2;" />
+                    </div>
+                </MudPaper>
+            </MudItem>
+            <MudItem xs="12" sm="6" md="3">
+                <MudPaper Class="pa-4 rounded-lg" Elevation="2" Style="border-left: 4px solid #2E7D32;">
+                    <div class="d-flex align-center justify-space-between">
+                        <div>
+                            <MudText Typo="Typo.caption" Color="Color.Secondary">Transaksi Hari Ini</MudText>
+                            <MudText Typo="Typo.h4" Style="color:#2E7D32; font-weight:700;">—</MudText>
+                            <MudText Typo="Typo.caption" Color="Color.Secondary">Total belanja</MudText>
+                        </div>
+                        <MudIcon Icon="@Icons.Material.Filled.Receipt" Style="font-size:3rem; color:#C8E6C9;" />
+                    </div>
+                </MudPaper>
+            </MudItem>
+            <MudItem xs="12" sm="6" md="3">
+                <MudPaper Class="pa-4 rounded-lg" Elevation="2" Style="border-left: 4px solid #C62828;">
+                    <div class="d-flex align-center justify-space-between">
+                        <div>
+                            <MudText Typo="Typo.caption" Color="Color.Secondary">Reward Ditukar</MudText>
+                            <MudText Typo="Typo.h4" Style="color:#C62828; font-weight:700;">—</MudText>
+                            <MudText Typo="Typo.caption" Color="Color.Secondary">Bulan ini</MudText>
+                        </div>
+                        <MudIcon Icon="@Icons.Material.Filled.Redeem" Style="font-size:3rem; color:#FFCDD2;" />
+                    </div>
+                </MudPaper>
+            </MudItem>
+        </MudGrid>
+
+        @* Quick Access Menu *@
+        <MudGrid Class="mb-4">
+            <MudItem xs="12">
+                <MudText Typo="Typo.h6" Class="mb-2" Style="color:#6F4E37;">⚡ Akses Cepat</MudText>
+            </MudItem>
+            <MudItem xs="6" sm="4" md="2">
+                <MudButton Variant="Variant.Filled"
+                           Style="background:#6F4E37; color:white; width:100%; height:80px; flex-direction:column;"
+                           Href="@CommonRouteFor.TransactionCreate">
+                    <MudIcon Icon="@Icons.Material.Filled.AddCircle" Size="Size.Large" />
+                    <MudText Typo="Typo.caption">Input Transaksi</MudText>
+                </MudButton>
+            </MudItem>
+            <MudItem xs="6" sm="4" md="2">
+                <MudButton Variant="Variant.Filled"
+                           Style="background:#C8860A; color:white; width:100%; height:80px; flex-direction:column;"
+                           Href="@CommonRouteFor.Customers">
+                    <MudIcon Icon="@Icons.Material.Filled.PersonSearch" Size="Size.Large" />
+                    <MudText Typo="Typo.caption">Cek Member</MudText>
+                </MudButton>
+            </MudItem>
+            <MudItem xs="6" sm="4" md="2">
+                <MudButton Variant="Variant.Filled"
+                           Style="background:#2E7D32; color:white; width:100%; height:80px; flex-direction:column;"
+                           Href="@CommonRouteFor.RedeemHistories">
+                    <MudIcon Icon="@Icons.Material.Filled.Redeem" Size="Size.Large" />
+                    <MudText Typo="Typo.caption">Proses Redeem</MudText>
+                </MudButton>
+            </MudItem>
+            <MudItem xs="6" sm="4" md="2">
+                <MudButton Variant="Variant.Filled"
+                           Style="background:#0277BD; color:white; width:100%; height:80px; flex-direction:column;"
+                           Href="@CommonRouteFor.Analytics">
+                    <MudIcon Icon="@Icons.Material.Filled.Analytics" Size="Size.Large" />
+                    <MudText Typo="Typo.caption">Analytics</MudText>
+                </MudButton>
+            </MudItem>
+            <MudItem xs="6" sm="4" md="2">
+                <MudButton Variant="Variant.Filled"
+                           Style="background:#6A1B9A; color:white; width:100%; height:80px; flex-direction:column;"
+                           Href="@CommonRouteFor.CustomerInsights">
+                    <MudIcon Icon="@Icons.Material.Filled.Psychology" Size="Size.Large" />
+                    <MudText Typo="Typo.caption">Customer Insights</MudText>
+                </MudButton>
+            </MudItem>
+            <MudItem xs="6" sm="4" md="2">
+                <MudButton Variant="Variant.Filled"
+                           Style="background:#00695C; color:white; width:100%; height:80px; flex-direction:column;"
+                           Href="@CommonRouteFor.Reports">
+                    <MudIcon Icon="@Icons.Material.Filled.Assessment" Size="Size.Large" />
+                    <MudText Typo="Typo.caption">Laporan</MudText>
+                </MudButton>
+            </MudItem>
+        </MudGrid>
+
+        @* Tier Distribution & Recent Activity *@
+        <MudGrid>
+            <MudItem xs="12" md="6">
+                <MudPaper Class="pa-4 rounded-lg" Elevation="2">
+                    <MudText Typo="Typo.subtitle1" Class="mb-3" Style="color:#6F4E37; font-weight:700;">
+                        <MudIcon Icon="@Icons.Material.Filled.WorkspacePremium" Class="mr-1" />
+                        Distribusi Tier Member
+                    </MudText>
+                    <MudList Dense="true">
+                        <MudListItem>
+                            <div class="d-flex align-center justify-space-between">
+                                <div class="d-flex align-center">
+                                    <MudChip Color="Color.Default" Size="Size.Small" Class="mr-2">Bronze</MudChip>
+                                    <MudText Typo="Typo.body2">Member Baru</MudText>
+                                </div>
+                                <MudProgressLinear Value="60" Color="Color.Default" Class="flex-grow-1 mx-4" />
+                                <MudText Typo="Typo.body2">—</MudText>
+                            </div>
+                        </MudListItem>
+                        <MudListItem>
+                            <div class="d-flex align-center justify-space-between">
+                                <div class="d-flex align-center">
+                                    <MudChip Color="Color.Secondary" Size="Size.Small" Class="mr-2">Silver</MudChip>
+                                    <MudText Typo="Typo.body2">Member Reguler</MudText>
+                                </div>
+                                <MudProgressLinear Value="30" Color="Color.Secondary" Class="flex-grow-1 mx-4" />
+                                <MudText Typo="Typo.body2">—</MudText>
+                            </div>
+                        </MudListItem>
+                        <MudListItem>
+                            <div class="d-flex align-center justify-space-between">
+                                <div class="d-flex align-center">
+                                    <MudChip Color="Color.Warning" Size="Size.Small" Class="mr-2">Gold</MudChip>
+                                    <MudText Typo="Typo.body2">Member Setia</MudText>
+                                </div>
+                                <MudProgressLinear Value="10" Color="Color.Warning" Class="flex-grow-1 mx-4" />
+                                <MudText Typo="Typo.body2">—</MudText>
+                            </div>
+                        </MudListItem>
+                    </MudList>
+                    <MudButton Variant="Variant.Text" Color="Color.Primary" Href="@CommonRouteFor.LoyaltyAnalysis" Class="mt-2">
+                        Lihat Detail Loyalty Analysis →
+                    </MudButton>
+                </MudPaper>
+            </MudItem>
+            <MudItem xs="12" md="6">
+                <MudPaper Class="pa-4 rounded-lg" Elevation="2">
+                    <MudText Typo="Typo.subtitle1" Class="mb-3" Style="color:#6F4E37; font-weight:700;">
+                        <MudIcon Icon="@Icons.Material.Filled.Notifications" Class="mr-1" />
+                        Aktivitas Terbaru
+                    </MudText>
+                    <MudText Typo="Typo.body2" Color="Color.Secondary" Class="text-center pa-4">
+                        <MudIcon Icon="@Icons.Material.Filled.HourglassEmpty" Size="Size.Large" />
+                        <br />
+                        Belum ada aktivitas hari ini
+                    </MudText>
+                    <MudButton Variant="Variant.Text" Color="Color.Primary" Href="@CommonRouteFor.Transactions" Class="mt-2">
+                        Lihat Semua Transaksi →
+                    </MudButton>
+                </MudPaper>
+            </MudItem>
+        </MudGrid>
     </Authorized>
 </AuthorizeView>

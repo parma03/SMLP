@@ -1,96 +1,138 @@
-﻿@using Smlp.Client.Services.BackEnd.Selections
-@using Smlp.Client.Services.Hris
-
-@inject IWebHostEnvironment _webHostEnvironment
-@inject IOptions<HrisOptions> _hrisOptions
-@inject ApplicantByPassService _applicantByPassService
-@inject ApplicantService _applicantService
-@inject SelectionOverviewService _selectionOverviewService
+@using Smlp.Bsui.Common.Constants
 
 <MudNavMenu>
-	<AuthorizeView>
-		<Authorized>
-			@if (context.User.GetPermissions().Any())
-			{
-				@if (context.User.HasPermission(Permissions.Scholarship))
-				{
-					<MudNavLink Icon="@Icons.Material.Filled.AdminPanelSettings" Match="NavLinkMatch.All" Href="@CommonRouteFor.SiteAdministrator">@Smlp.Shared.Scholarships.Constants.DisplayTextFor.SiteAdministrator</MudNavLink>
-				}
+    <AuthorizeView>
+        <Authorized>
+            @* ========== DASHBOARD ========== *@
+            <MudNavLink Icon="@Icons.Material.Filled.Dashboard"
+                        Match="NavLinkMatch.All"
+                        Href="@CommonRouteFor.Dashboard">
+                Dashboard
+            </MudNavLink>
 
-				<MudNavLink Icon="@Icons.Material.Filled.Dashboard" Match="NavLinkMatch.All" Href="">@CommonDisplayTextFor.Dashboard</MudNavLink>
-				@if (context.User.HasPermission(Permissions.Scholarship))
-				{
-					<MudNavLink Icon="@Icons.Material.Filled.School" Match="NavLinkMatch.All" Href="@CommonRouteFor.Scholarships">@Smlp.Shared.Scholarships.Constants.DisplayTextFor.ScholarshipPlan</MudNavLink>
-				}
+            @* ========== CRM - PELANGGAN ========== *@
+            <MudNavGroup Icon="@Icons.Material.Filled.People"
+                         ExpandIcon="@Icons.Material.Filled.ExpandMore"
+                         Title="Manajemen Pelanggan"
+                         Expanded="false">
+                <MudNavLink Icon="@Icons.Material.Filled.PersonSearch"
+                            Match="NavLinkMatch.All"
+                            Href="@CommonRouteFor.Customers">
+                    Daftar Pelanggan
+                </MudNavLink>
+                <MudNavLink Icon="@Icons.Material.Filled.PersonAdd"
+                            Match="NavLinkMatch.All"
+                            Href="@CommonRouteFor.CustomerCreate">
+                    Tambah Pelanggan
+                </MudNavLink>
+            </MudNavGroup>
 
-				@if (context.User.HasPermission(Permissions.Selection))
-				{
-					<MudNavGroup Icon="@Icons.Material.Filled.FactCheck"
-								 ExpandIcon="@Icons.Material.Filled.ExpandMore"
-								 Title="@($"{@Smlp.Shared.Selections.Constants.DisplayTextFor.CompanySelection}")">
-						<MudNavLink Icon="@Icons.Material.Outlined.NoteAlt" Match="NavLinkMatch.All" Href="@CommonRouteFor.Selection">@Smlp.Shared.Selections.Constants.DisplayTextFor.OpenRegistration</MudNavLink>
-						<MudNavLink Icon="@Icons.Material.Rounded.NoteAlt" Match="NavLinkMatch.All" Href="@CommonRouteFor.SelectionClose">@Smlp.Shared.Selections.Constants.DisplayTextFor.CloseRegistration</MudNavLink>
-					</MudNavGroup>
+            @* ========== TRANSAKSI ========== *@
+            <MudNavGroup Icon="@Icons.Material.Filled.Receipt"
+                         ExpandIcon="@Icons.Material.Filled.ExpandMore"
+                         Title="Transaksi"
+                         Expanded="false">
+                <MudNavLink Icon="@Icons.Material.Filled.ReceiptLong"
+                            Match="NavLinkMatch.All"
+                            Href="@CommonRouteFor.Transactions">
+                    Riwayat Transaksi
+                </MudNavLink>
+                <MudNavLink Icon="@Icons.Material.Filled.AddCircle"
+                            Match="NavLinkMatch.All"
+                            Href="@CommonRouteFor.TransactionCreate">
+                    Input Transaksi
+                </MudNavLink>
+                <MudNavLink Icon="@Icons.Material.Filled.Tune"
+                            Match="NavLinkMatch.All"
+                            Href="@CommonRouteFor.PointAdjustments">
+                    Penyesuaian Poin
+                </MudNavLink>
+            </MudNavGroup>
 
-					<MudNavLink Icon="@Icons.Material.Filled.HomeRepairService" Match="NavLinkMatch.All" Href="@CommonRouteFor.StudyPreparation">@Smlp.Shared.Scholarships.Constants.DisplayTextFor.StudyPreparation</MudNavLink>
-					<MudNavLink Icon="@Icons.Material.Filled.Book" Match="NavLinkMatch.All" Href="@CommonRouteFor.UniversityRegistration">@Smlp.Shared.Scholarships.Constants.DisplayTextFor.UniversityRegistration</MudNavLink>
-					<MudNavLink Icon="@Icons.Material.Filled.MenuBook" Match="NavLinkMatch.All" Href="@CommonRouteFor.StudyMonitoring">@Smlp.Shared.Scholarships.Constants.DisplayTextFor.StudyMonitoring</MudNavLink>
-					<MudNavLink Icon="@Icons.Material.Filled.Payment" Match="NavLinkMatch.All" Href="@CommonRouteFor.Payment">@Smlp.Shared.Scholarships.Constants.DisplayTextFor.Payment</MudNavLink>
-					<MudNavLink Icon="@Icons.Material.Filled.Bookmark" Match="NavLinkMatch.All" Href="@CommonRouteFor.Project" Disabled="false">@Smlp.Shared.Scholarships.Constants.DisplayTextFor.InnovationProject</MudNavLink>
+            @* ========== REWARD ========== *@
+            <MudNavGroup Icon="@Icons.Material.Filled.CardGiftcard"
+                         ExpandIcon="@Icons.Material.Filled.ExpandMore"
+                         Title="Reward & Redeem"
+                         Expanded="false">
+                <MudNavLink Icon="@Icons.Material.Filled.Loyalty"
+                            Match="NavLinkMatch.All"
+                            Href="@CommonRouteFor.Rewards">
+                    Katalog Reward
+                </MudNavLink>
+                <MudNavLink Icon="@Icons.Material.Filled.Redeem"
+                            Match="NavLinkMatch.All"
+                            Href="@CommonRouteFor.RedeemHistories">
+                    Riwayat Penukaran
+                </MudNavLink>
+            </MudNavGroup>
 
-				}
-				@if (context.User.HasPermission(Permissions.Payment))
-				{
-					<MudNavLink Icon="@Icons.Material.Filled.Payment" Match="NavLinkMatch.All" Href="@CommonRouteFor.Payment">@Smlp.Shared.Scholarships.Constants.DisplayTextFor.Payment</MudNavLink>
-				}
-				<MudNavGroup Icon="@Icons.Material.Filled.FactCheck"
-							 ExpandIcon="@Icons.Material.Filled.ExpandMore"
-							 Title="@($"{@Smlp.Shared.Selections.Constants.DisplayTextFor.Applicant}")">
-					<MudNavLink Icon="@Icons.Material.Filled.HowToReg" Match="NavLinkMatch.All" Href="@CommonRouteFor.Registration">@Smlp.Shared.Scholarships.Constants.DisplayTextFor.Registration</MudNavLink>
-					<MudNavLink Icon="@Icons.Material.Outlined.FactCheck" Match="NavLinkMatch.All" Href="@Smlp.Shared.Applicants.Constants.RouteFor.ApplicantSelection">@Smlp.Shared.Selections.Constants.DisplayTextFor.Selection</MudNavLink>
+            @* ========== ANALYTICS ========== *@
+            <MudNavGroup Icon="@Icons.Material.Filled.Analytics"
+                         ExpandIcon="@Icons.Material.Filled.ExpandMore"
+                         Title="Analytics & Laporan"
+                         Expanded="false">
+                <MudNavLink Icon="@Icons.Material.Filled.Insights"
+                            Match="NavLinkMatch.All"
+                            Href="@CommonRouteFor.Analytics">
+                    Dashboard Analytics
+                </MudNavLink>
+                <MudNavLink Icon="@Icons.Material.Filled.Psychology"
+                            Match="NavLinkMatch.All"
+                            Href="@CommonRouteFor.CustomerInsights">
+                    Customer Insights
+                </MudNavLink>
+                <MudNavLink Icon="@Icons.Material.Filled.Stars"
+                            Match="NavLinkMatch.All"
+                            Href="@CommonRouteFor.LoyaltyAnalysis">
+                    Loyalty Analysis
+                </MudNavLink>
+                <MudNavLink Icon="@Icons.Material.Filled.Assessment"
+                            Match="NavLinkMatch.All"
+                            Href="@CommonRouteFor.Reports">
+                    Laporan
+                </MudNavLink>
+            </MudNavGroup>
 
-					@if (_isAwardee)
-					{
-						<MudNavLink Icon="@Icons.Material.Outlined.School" Match="NavLinkMatch.All" Href="@Smlp.Shared.Applicants.Constants.RouteFor.ApplicantStudyPreparation">@Smlp.Shared.Studies.Constants.DisplayTextFor.StudyPreparation</MudNavLink>
-						<MudNavLink Icon="@Icons.Material.Filled.Apartment" Match="NavLinkMatch.All" Href="@Smlp.Shared.Applicants.Constants.RouteFor.ApplicantUniversity">@Smlp.Shared.Studies.Constants.DisplayTextFor.University</MudNavLink>
-						<MudNavLink Icon="@Icons.Material.Outlined.MonitorHeart" Match="NavLinkMatch.All" Href="@Smlp.Shared.Applicants.Constants.RouteFor.ApplicantStudyMonitoring">@Smlp.Shared.Studies.Constants.DisplayTextFor.StudyMonitoring</MudNavLink>
-						<MudNavLink Icon="@Icons.Material.Outlined.Payment" Match="NavLinkMatch.All" Href="@Smlp.Shared.Applicants.Constants.RouteFor.ApplicantPayment">@Smlp.Shared.Studies.Constants.DisplayTextFor.Payment</MudNavLink>
-						<MudNavLink Icon="@Icons.Material.Filled.Bookmark" Match="NavLinkMatch.All" Href="@CommonRouteFor.ProjectApplicant" Disabled="false">@Smlp.Shared.Scholarships.Constants.DisplayTextFor.InnovationProject</MudNavLink>
-					}
-				</MudNavGroup>
-			}
-			else
-			{
-				<MudNavLink Icon="@Icons.Material.Filled.Home" Match="NavLinkMatch.All" Href="@CommonRouteFor.Index">@CommonDisplayTextFor.Home</MudNavLink>
-				<MudNavLink Icon="@Icons.Material.Filled.HowToReg" Match="NavLinkMatch.All" Href="@CommonRouteFor.Registration">@Smlp.Shared.Scholarships.Constants.DisplayTextFor.Registration</MudNavLink>
-				<MudNavLink Icon="@Icons.Material.Outlined.FactCheck" Match="NavLinkMatch.All" Href="@Smlp.Shared.Applicants.Constants.RouteFor.ApplicantSelection">@Smlp.Shared.Selections.Constants.DisplayTextFor.Selection</MudNavLink>
+            @* ========== MASTER DATA ========== *@
+            <MudNavGroup Icon="@Icons.Material.Filled.Settings"
+                         ExpandIcon="@Icons.Material.Filled.ExpandMore"
+                         Title="Master Data"
+                         Expanded="false">
+                <MudNavLink Icon="@Icons.Material.Filled.Rule"
+                            Match="NavLinkMatch.All"
+                            Href="@CommonRouteFor.PointRules">
+                    Aturan Poin
+                </MudNavLink>
+                <MudNavLink Icon="@Icons.Material.Filled.WorkspacePremium"
+                            Match="NavLinkMatch.All"
+                            Href="@CommonRouteFor.TierRules">
+                    Aturan Tier
+                </MudNavLink>
+            </MudNavGroup>
 
-				@if (_isAwardee)
-				{
-					<MudNavLink Icon="@Icons.Material.Outlined.School" Match="NavLinkMatch.All" Href="@Smlp.Shared.Applicants.Constants.RouteFor.ApplicantStudyPreparation">@Smlp.Shared.Studies.Constants.DisplayTextFor.StudyPreparation</MudNavLink>
-					<MudNavLink Icon="@Icons.Material.Filled.Apartment" Match="NavLinkMatch.All" Href="@Smlp.Shared.Applicants.Constants.RouteFor.ApplicantUniversity">@Smlp.Shared.Studies.Constants.DisplayTextFor.University</MudNavLink>
-					<MudNavLink Icon="@Icons.Material.Outlined.MonitorHeart" Match="NavLinkMatch.All" Href="@Smlp.Shared.Applicants.Constants.RouteFor.ApplicantStudyMonitoring">@Smlp.Shared.Studies.Constants.DisplayTextFor.StudyMonitoring</MudNavLink>
-					<MudNavLink Icon="@Icons.Material.Outlined.Payment" Match="NavLinkMatch.All" Href="@Smlp.Shared.Applicants.Constants.RouteFor.ApplicantPayment">@Smlp.Shared.Studies.Constants.DisplayTextFor.Payment</MudNavLink>
-					@* @if (_isMentor)
-					{
-						<MudNavGroup Icon="@Icons.Material.Filled.FactCheck"
-									 ExpandIcon="@Icons.Material.Filled.ExpandMore"
-									 Title="@($"Mentor")">
-							<MudNavLink Icon="@Icons.Material.Filled.Bookmark" Match="NavLinkMatch.All" Href="@CommonRouteFor.Project" Disabled="false">@Smlp.Shared.Scholarships.Constants.DisplayTextFor.InnovationProject</MudNavLink>
-						</MudNavGroup>
-						<MudNavLink Icon="@Icons.Material.Filled.Bookmark" Match="NavLinkMatch.All" Href="@CommonRouteFor.ProjectApplicant" Disabled="false">@Smlp.Shared.Scholarships.Constants.DisplayTextFor.InnovationProject</MudNavLink>
-					}
-					else
-					{ *@
-						<MudNavLink Icon="@Icons.Material.Filled.Bookmark" Match="NavLinkMatch.All" Href="@CommonRouteFor.ProjectApplicant" Disabled="false">@Smlp.Shared.Scholarships.Constants.DisplayTextFor.InnovationProject</MudNavLink>
-					@* } *@
-				}
-				@if (_isMentor && !_isAwardee)
-				{
-					<MudNavLink Icon="@Icons.Material.Filled.Bookmark" Match="NavLinkMatch.All" Href="@CommonRouteFor.Project" Disabled="false">@Smlp.Shared.Scholarships.Constants.DisplayTextFor.InnovationProject</MudNavLink>
-				}
-			}
-		</Authorized>
-	</AuthorizeView>
-	<MudNavLink Icon="@Icons.Material.Filled.Countertops" Match="NavLinkMatch.All" Href="@CommonRouteFor.About">@CommonDisplayTextFor.About</MudNavLink>
+            @* ========== ADMINISTRATOR ========== *@
+            <AuthorizeView Roles="Admin,Owner">
+                <Authorized>
+                    <MudDivider Class="my-2" Style="background-color:rgba(255,255,255,0.15);" />
+                    <MudNavLink Icon="@Icons.Material.Filled.AdminPanelSettings"
+                                Match="NavLinkMatch.All"
+                                Href="@CommonRouteFor.SiteAdministrator">
+                        Administrator
+                    </MudNavLink>
+                    <MudNavLink Icon="@Icons.Material.Filled.ManageSearch"
+                                Match="NavLinkMatch.All"
+                                Href="@CommonRouteFor.Audits">
+                        Audit Log
+                    </MudNavLink>
+                </Authorized>
+            </AuthorizeView>
+        </Authorized>
+    </AuthorizeView>
+
+    <MudDivider Class="my-2" Style="background-color:rgba(255,255,255,0.15);" />
+    <MudNavLink Icon="@Icons.Material.Filled.Info"
+                Match="NavLinkMatch.All"
+                Href="@CommonRouteFor.About">
+        Tentang Aplikasi
+    </MudNavLink>
 </MudNavMenu>
