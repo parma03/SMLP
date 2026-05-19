@@ -1,0 +1,81 @@
+@page "/Transactions"
+
+<BrowserTabTitle>Riwayat Transaksi</BrowserTabTitle>
+<PageHeader Title="Riwayat Transaksi" Icon="@Icons.Material.Filled.ReceiptLong" />
+
+<MudPaper Class="pa-4 rounded-lg" Elevation="1">
+    <MudGrid Class="mb-3">
+        <MudItem xs="12" sm="6" md="4">
+            <MudTextField @bind-Value="_searchText"
+                          Label="Cari transaksi / nama pelanggan..."
+                          Adornment="Adornment.Start"
+                          AdornmentIcon="@Icons.Material.Filled.Search"
+                          Variant="Variant.Outlined"
+                          Immediate="true" />
+        </MudItem>
+        <MudItem xs="6" sm="3" md="2">
+            <MudDatePicker @bind-Date="_dateFrom" Label="Dari Tanggal" Variant="Variant.Outlined" />
+        </MudItem>
+        <MudItem xs="6" sm="3" md="2">
+            <MudDatePicker @bind-Date="_dateTo" Label="Sampai Tanggal" Variant="Variant.Outlined" />
+        </MudItem>
+        <MudItem xs="12" sm="6" md="2" Class="d-flex align-end">
+            <MudButton Variant="Variant.Filled"
+                       StartIcon="@Icons.Material.Filled.AddCircle"
+                       Style="background:#6F4E37; color:white; width:100%;"
+                       Href="/TransactionCreate">
+                Input Transaksi
+            </MudButton>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="2" Class="d-flex align-end">
+            <MudButton Variant="Variant.Outlined"
+                       StartIcon="@Icons.Material.Filled.FileDownload"
+                       Color="Color.Secondary"
+                       Style="width:100%;">
+                Export Excel
+            </MudButton>
+        </MudItem>
+    </MudGrid>
+
+    <MudTable Items="@_transactions" Dense="true" Hover="true" Striped="true" Loading="@_loading"
+              LoadingProgressColor="Color.Primary" Elevation="0">
+        <HeaderContent>
+            <MudTh>Kode Transaksi</MudTh>
+            <MudTh>Nama Pelanggan</MudTh>
+            <MudTh>Tanggal</MudTh>
+            <MudTh Style="text-align:right">Total Belanja</MudTh>
+            <MudTh Style="text-align:right">Poin Diperoleh</MudTh>
+            <MudTh>Metode Bayar</MudTh>
+            <MudTh>Status</MudTh>
+            <MudTh>Aksi</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd><MudText Typo="Typo.body2" Style="font-family:monospace;">@context.TransactionCode</MudText></MudTd>
+            <MudTd>@context.CustomerName</MudTd>
+            <MudTd><MudText Typo="Typo.caption">@context.TransactionDate.ToString("dd MMM yyyy HH:mm")</MudText></MudTd>
+            <MudTd Style="text-align:right">
+                <MudText Style="color:#2E7D32; font-weight:700;">
+                    Rp @context.TotalAmount.ToString("N0")
+                </MudText>
+            </MudTd>
+            <MudTd Style="text-align:right">
+                <MudText Style="color:#C8860A; font-weight:700;">⭐ @context.PointsEarned</MudText>
+            </MudTd>
+            <MudTd><MudChip Size="Size.Small">@context.PaymentMethod</MudChip></MudTd>
+            <MudTd>
+                <MudChip Size="Size.Small" Color="@(context.Status == "Selesai" ? Color.Success : Color.Warning)">
+                    @context.Status
+                </MudChip>
+            </MudTd>
+            <MudTd>
+                <MudIconButton Icon="@Icons.Material.Filled.Visibility" Size="Size.Small" Color="Color.Primary" />
+            </MudTd>
+        </RowTemplate>
+        <NoRecordsContent>
+            <MudText Class="pa-4 text-center" Color="Color.Secondary">Belum ada transaksi</MudText>
+        </NoRecordsContent>
+        <PagerContent>
+            <MudTablePager PageSizeOptions="new int[]{10, 25, 50}" />
+        </PagerContent>
+    </MudTable>
+</MudPaper>

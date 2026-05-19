@@ -1,0 +1,118 @@
+@page "/LoyaltyAnalysis"
+
+<BrowserTabTitle>Loyalty Analysis</BrowserTabTitle>
+<PageHeader Title="Loyalty Analysis" Icon="@Icons.Material.Filled.Stars" />
+
+@* Tier Health KPIs *@
+<MudGrid Class="mb-4">
+    <MudItem xs="12">
+        <MudText Typo="Typo.h6" Style="color:#6F4E37; font-weight:700;" Class="mb-2">
+            🏆 Kesehatan Program Loyalitas
+        </MudText>
+    </MudItem>
+    <MudItem xs="12" sm="6" md="3">
+        <MudPaper Class="pa-4 rounded-lg" Elevation="2">
+            <MudText Typo="Typo.caption" Color="Color.Secondary">Program Participation Rate</MudText>
+            <MudText Typo="Typo.h4" Style="color:#6F4E37; font-weight:700;">—%</MudText>
+            <MudText Typo="Typo.caption" Color="Color.Secondary">member aktif / total pelanggan</MudText>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" sm="6" md="3">
+        <MudPaper Class="pa-4 rounded-lg" Elevation="2">
+            <MudText Typo="Typo.caption" Color="Color.Secondary">Avg. Poin per Member</MudText>
+            <MudText Typo="Typo.h4" Style="color:#C8860A; font-weight:700;">— poin</MudText>
+            <MudText Typo="Typo.caption" Color="Color.Secondary">rata-rata saldo poin</MudText>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" sm="6" md="3">
+        <MudPaper Class="pa-4 rounded-lg" Elevation="2">
+            <MudText Typo="Typo.caption" Color="Color.Secondary">Point Redemption Rate</MudText>
+            <MudText Typo="Typo.h4" Style="color:#2E7D32; font-weight:700;">—%</MudText>
+            <MudText Typo="Typo.caption" Color="Color.Secondary">poin digunakan vs diterbitkan</MudText>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" sm="6" md="3">
+        <MudPaper Class="pa-4 rounded-lg" Elevation="2">
+            <MudText Typo="Typo.caption" Color="Color.Secondary">Tier Upgrade Rate</MudText>
+            <MudText Typo="Typo.h4" Style="color:#6A1B9A; font-weight:700;">—%</MudText>
+            <MudText Typo="Typo.caption" Color="Color.Secondary">naik tier bulan ini</MudText>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+
+@* Tier Analysis *@
+<MudGrid Class="mb-4">
+    <MudItem xs="12" md="7">
+        <MudPaper Class="pa-4 rounded-lg" Elevation="2">
+            <MudText Typo="Typo.subtitle1" Class="mb-3" Style="color:#6F4E37; font-weight:700;">
+                📊 Distribusi & Pergerakan Tier
+            </MudText>
+            <MudTable Dense="true" Hover="true" Elevation="0" Items="@_tierStats">
+                <HeaderContent>
+                    <MudTh>Tier</MudTh>
+                    <MudTh Style="text-align:right">Anggota</MudTh>
+                    <MudTh Style="text-align:right">Avg. Poin</MudTh>
+                    <MudTh Style="text-align:right">Avg. Spend</MudTh>
+                    <MudTh>Naik Tier (30 hari)</MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd>
+                        <MudChip Size="Size.Small" Color="@context.Color">@context.Name</MudChip>
+                    </MudTd>
+                    <MudTd Style="text-align:right">—</MudTd>
+                    <MudTd Style="text-align:right" Style2="color:#C8860A;">⭐ —</MudTd>
+                    <MudTd Style="text-align:right">Rp —</MudTd>
+                    <MudTd><MudText Typo="Typo.caption" Color="Color.Success">+— member</MudText></MudTd>
+                </RowTemplate>
+            </MudTable>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" md="5">
+        <MudPaper Class="pa-4 rounded-lg" Elevation="2">
+            <MudText Typo="Typo.subtitle1" Class="mb-3" Style="color:#6F4E37; font-weight:700;">
+                🎯 Aturan Poin Aktif
+            </MudText>
+            <MudList Dense="true">
+                <MudListItem Icon="@Icons.Material.Filled.Rule">
+                    <MudText>Rp 10.000 = 1 poin (aturan dasar)</MudText>
+                </MudListItem>
+                <MudListItem Icon="@Icons.Material.Filled.Stars">
+                    <MudText Typo="Typo.caption">Gold: 1.5× multiplier</MudText>
+                </MudListItem>
+                <MudListItem Icon="@Icons.Material.Filled.WorkspacePremium">
+                    <MudText Typo="Typo.caption">Platinum: 2× multiplier</MudText>
+                </MudListItem>
+            </MudList>
+            <MudDivider Class="my-2" />
+            <MudButton Variant="Variant.Outlined" Color="Color.Primary" Href="/PointRules" Size="Size.Small"
+                       StartIcon="@Icons.Material.Filled.Edit">
+                Kelola Aturan Poin
+            </MudButton>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+
+@* Reward Performance *@
+<MudPaper Class="pa-4 rounded-lg" Elevation="2">
+    <MudText Typo="Typo.subtitle1" Class="mb-3" Style="color:#6F4E37; font-weight:700;">
+        🎁 Performa Reward
+    </MudText>
+    <MudGrid>
+        <MudItem xs="12" md="6">
+            <MudText Typo="Typo.body2" Class="mb-2" Style="font-weight:600;">Reward Paling Populer</MudText>
+            <MudList Dense="true">
+                <MudListItem>
+                    <div class="d-flex justify-space-between">
+                        <MudText Typo="Typo.body2">1. Gratis 1 Americano (50 poin)</MudText>
+                        <MudText Typo="Typo.caption" Color="Color.Secondary">— redeem</MudText>
+                    </div>
+                </MudListItem>
+            </MudList>
+        </MudItem>
+        <MudItem xs="12" md="6">
+            <MudText Typo="Typo.body2" Class="mb-2" Style="font-weight:600;">Total Nilai Reward Ditukar</MudText>
+            <MudText Typo="Typo.h5" Style="color:#C62828; font-weight:700;">Rp —</MudText>
+            <MudText Typo="Typo.caption" Color="Color.Secondary">estimasi nilai reward yang telah diberikan</MudText>
+        </MudItem>
+    </MudGrid>
+</MudPaper>

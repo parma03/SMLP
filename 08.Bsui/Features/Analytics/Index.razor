@@ -1,0 +1,124 @@
+@page "/Analytics"
+
+<BrowserTabTitle>Dashboard Analytics</BrowserTabTitle>
+<PageHeader Title="Dashboard Analytics" Icon="@Icons.Material.Filled.Analytics" />
+
+<MudGrid Class="mb-4">
+    @* Date Range Filter *@
+    <MudItem xs="12" Class="d-flex align-center gap-3">
+        <MudDateRangePicker @bind-DateRange="_dateRange" Label="Periode" Variant="Variant.Outlined" Class="mr-2" Style="max-width:320px;" />
+        <MudSelect @bind-Value="_selectedPeriod" Label="Periode Cepat" Variant="Variant.Outlined" Style="max-width:200px;">
+            <MudSelectItem Value="@("7d")">7 Hari Terakhir</MudSelectItem>
+            <MudSelectItem Value="@("30d")">30 Hari Terakhir</MudSelectItem>
+            <MudSelectItem Value="@("90d")">3 Bulan Terakhir</MudSelectItem>
+            <MudSelectItem Value="@("ytd")">Tahun Ini</MudSelectItem>
+        </MudSelect>
+        <MudButton Variant="Variant.Filled" Style="background:#6F4E37; color:white;" StartIcon="@Icons.Material.Filled.Refresh">
+            Perbarui
+        </MudButton>
+    </MudItem>
+</MudGrid>
+
+@* Revenue & Points KPI *@
+<MudGrid Class="mb-4">
+    <MudItem xs="12" sm="6" md="3">
+        <MudPaper Class="pa-4 rounded-lg" Elevation="2">
+            <MudText Typo="Typo.caption" Color="Color.Secondary">Total Revenue</MudText>
+            <MudText Typo="Typo.h5" Style="color:#2E7D32; font-weight:700;">Rp —</MudText>
+            <MudText Typo="Typo.caption"><MudIcon Icon="@Icons.Material.Filled.TrendingUp" Size="Size.Small" Color="Color.Success" /> vs periode lalu</MudText>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" sm="6" md="3">
+        <MudPaper Class="pa-4 rounded-lg" Elevation="2">
+            <MudText Typo="Typo.caption" Color="Color.Secondary">Rata-rata Transaksi</MudText>
+            <MudText Typo="Typo.h5" Style="color:#0277BD; font-weight:700;">Rp —</MudText>
+            <MudText Typo="Typo.caption" Color="Color.Secondary">per pelanggan</MudText>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" sm="6" md="3">
+        <MudPaper Class="pa-4 rounded-lg" Elevation="2">
+            <MudText Typo="Typo.caption" Color="Color.Secondary">Poin Diterbitkan</MudText>
+            <MudText Typo="Typo.h5" Style="color:#C8860A; font-weight:700;">— poin</MudText>
+            <MudText Typo="Typo.caption" Color="Color.Secondary">periode ini</MudText>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" sm="6" md="3">
+        <MudPaper Class="pa-4 rounded-lg" Elevation="2">
+            <MudText Typo="Typo.caption" Color="Color.Secondary">Redemption Rate</MudText>
+            <MudText Typo="Typo.h5" Style="color:#6A1B9A; font-weight:700;">— %</MudText>
+            <MudText Typo="Typo.caption" Color="Color.Secondary">poin ditukar / diterbitkan</MudText>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+
+@* Charts Row *@
+<MudGrid Class="mb-4">
+    <MudItem xs="12" md="8">
+        <MudPaper Class="pa-4 rounded-lg" Elevation="2">
+            <MudText Typo="Typo.subtitle1" Class="mb-3" Style="color:#6F4E37; font-weight:700;">
+                📈 Tren Revenue & Transaksi
+            </MudText>
+            <div style="height:280px; display:flex; align-items:center; justify-content:center; background:#FFF8F0; border-radius:8px;">
+                <div class="text-center">
+                    <MudIcon Icon="@Icons.Material.Filled.BarChart" Style="font-size:4rem; color:#D7CCC8;" />
+                    <MudText Color="Color.Secondary">Grafik tren revenue</MudText>
+                    <MudText Typo="Typo.caption" Color="Color.Secondary">Terhubung ke data transaksi setelah service tersedia</MudText>
+                </div>
+            </div>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" md="4">
+        <MudPaper Class="pa-4 rounded-lg" Elevation="2">
+            <MudText Typo="Typo.subtitle1" Class="mb-3" Style="color:#6F4E37; font-weight:700;">
+                🥧 Distribusi Metode Bayar
+            </MudText>
+            <div style="height:280px; display:flex; align-items:center; justify-content:center; background:#FFF8F0; border-radius:8px;">
+                <div class="text-center">
+                    <MudIcon Icon="@Icons.Material.Filled.PieChart" Style="font-size:4rem; color:#D7CCC8;" />
+                    <MudText Color="Color.Secondary">Pie chart metode pembayaran</MudText>
+                </div>
+            </div>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+
+@* Top Products & Best Customers *@
+<MudGrid>
+    <MudItem xs="12" md="6">
+        <MudPaper Class="pa-4 rounded-lg" Elevation="2">
+            <MudText Typo="Typo.subtitle1" Class="mb-3" Style="color:#6F4E37; font-weight:700;">
+                ☕ Produk Terlaris
+            </MudText>
+            <MudList Dense="true">
+                <MudListItem>
+                    <div class="d-flex align-center justify-space-between">
+                        <MudText Typo="Typo.body2">1. Americano</MudText>
+                        <MudText Style="color:#C8860A;">— pcs</MudText>
+                    </div>
+                </MudListItem>
+                <MudListItem>
+                    <div class="d-flex align-center justify-space-between">
+                        <MudText Typo="Typo.body2">2. Latte</MudText>
+                        <MudText Style="color:#C8860A;">— pcs</MudText>
+                    </div>
+                </MudListItem>
+                <MudListItem>
+                    <div class="d-flex align-center justify-space-between">
+                        <MudText Typo="Typo.body2">3. Croissant</MudText>
+                        <MudText Style="color:#C8860A;">— pcs</MudText>
+                    </div>
+                </MudListItem>
+            </MudList>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" md="6">
+        <MudPaper Class="pa-4 rounded-lg" Elevation="2">
+            <MudText Typo="Typo.subtitle1" Class="mb-3" Style="color:#6F4E37; font-weight:700;">
+                👑 Top Pelanggan (by Spend)
+            </MudText>
+            <MudText Class="pa-4 text-center" Color="Color.Secondary" Typo="Typo.body2">
+                Data akan muncul setelah transaksi tersedia
+            </MudText>
+        </MudPaper>
+    </MudItem>
+</MudGrid>

@@ -1,0 +1,61 @@
+@page "/Rewards"
+
+<BrowserTabTitle>Katalog Reward</BrowserTabTitle>
+<PageHeader Title="Katalog Reward" Icon="@Icons.Material.Filled.CardGiftcard" />
+
+<MudGrid Class="mb-4">
+    <MudItem xs="12" sm="6" md="4">
+        <MudTextField @bind-Value="_searchText" Label="Cari reward..." Variant="Variant.Outlined"
+                      Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" />
+    </MudItem>
+    <MudItem xs="12" sm="6" md="3">
+        <MudSelect @bind-Value="_filterType" Label="Tipe Reward" Variant="Variant.Outlined">
+            <MudSelectItem Value="@("")">Semua Tipe</MudSelectItem>
+            <MudSelectItem Value="@("FreeItem")">Gratis Item</MudSelectItem>
+            <MudSelectItem Value="@("Discount")">Diskon</MudSelectItem>
+            <MudSelectItem Value="@("Voucher")">Voucher</MudSelectItem>
+        </MudSelect>
+    </MudItem>
+    <MudItem xs="12" sm="6" md="2" Class="d-flex align-end">
+        <MudButton Variant="Variant.Filled"
+                   Style="background:#6F4E37; color:white; width:100%;"
+                   StartIcon="@Icons.Material.Filled.Add"
+                   Href="/RewardCreate">
+            Tambah Reward
+        </MudButton>
+    </MudItem>
+</MudGrid>
+
+<MudGrid>
+    @* Sample reward cards - will be replaced with actual data *@
+    <MudItem xs="12" sm="6" md="4">
+        <MudCard Class="rounded-lg" Elevation="2">
+            <MudCardContent>
+                <div class="d-flex align-center mb-2">
+                    <MudIcon Icon="@Icons.Material.Filled.LocalCafe" Style="color:#6F4E37; font-size:2.5rem;" Class="mr-2" />
+                    <div>
+                        <MudText Typo="Typo.subtitle1" Style="font-weight:700;">Gratis 1 Americano</MudText>
+                        <MudChip Size="Size.Small" Color="Color.Success">Aktif</MudChip>
+                    </div>
+                </div>
+                <MudDivider Class="my-2" />
+                <div class="d-flex justify-space-between">
+                    <MudText Typo="Typo.caption">Biaya Poin</MudText>
+                    <MudText Typo="Typo.subtitle2" Style="color:#C8860A; font-weight:700;">⭐ 50 poin</MudText>
+                </div>
+                <div class="d-flex justify-space-between">
+                    <MudText Typo="Typo.caption">Min. Tier</MudText>
+                    <MudChip Size="Size.Small" Color="Color.Default">Bronze</MudChip>
+                </div>
+                <div class="d-flex justify-space-between">
+                    <MudText Typo="Typo.caption">Sudah ditukar</MudText>
+                    <MudText Typo="Typo.caption">0 kali</MudText>
+                </div>
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton Size="Size.Small" Color="Color.Primary" Variant="Variant.Text">Edit</MudButton>
+                <MudButton Size="Size.Small" Color="Color.Secondary" Variant="Variant.Text">Proses Redeem</MudButton>
+            </MudCardActions>
+        </MudCard>
+    </MudItem>
+</MudGrid>

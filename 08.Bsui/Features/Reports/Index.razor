@@ -1,0 +1,146 @@
+@page "/Reports"
+
+<BrowserTabTitle>Laporan</BrowserTabTitle>
+<PageHeader Title="Laporan" Icon="@Icons.Material.Filled.Assessment" />
+
+<MudGrid>
+    @* Report Cards *@
+    <MudItem xs="12" sm="6" md="4">
+        <MudCard Class="rounded-lg" Elevation="2">
+            <MudCardContent>
+                <MudIcon Icon="@Icons.Material.Filled.People" Style="font-size:3rem; color:#6F4E37;" />
+                <MudText Typo="Typo.subtitle1" Style="font-weight:700;">Laporan Pelanggan</MudText>
+                <MudText Typo="Typo.caption" Color="Color.Secondary">
+                    Daftar lengkap pelanggan dengan detail poin, tier, dan riwayat transaksi
+                </MudText>
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton Variant="Variant.Outlined" Color="Color.Primary" StartIcon="@Icons.Material.Filled.FileDownload">
+                    Export Excel
+                </MudButton>
+                <MudButton Variant="Variant.Text" Color="Color.Secondary" StartIcon="@Icons.Material.Filled.PictureAsPdf">
+                    Export PDF
+                </MudButton>
+            </MudCardActions>
+        </MudCard>
+    </MudItem>
+    <MudItem xs="12" sm="6" md="4">
+        <MudCard Class="rounded-lg" Elevation="2">
+            <MudCardContent>
+                <MudIcon Icon="@Icons.Material.Filled.ReceiptLong" Style="font-size:3rem; color:#C8860A;" />
+                <MudText Typo="Typo.subtitle1" Style="font-weight:700;">Laporan Transaksi</MudText>
+                <MudText Typo="Typo.caption" Color="Color.Secondary">
+                    Riwayat semua transaksi dengan total poin, revenue, dan metode pembayaran
+                </MudText>
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton Variant="Variant.Outlined" Color="Color.Primary" StartIcon="@Icons.Material.Filled.FileDownload">
+                    Export Excel
+                </MudButton>
+                <MudButton Variant="Variant.Text" Color="Color.Secondary" StartIcon="@Icons.Material.Filled.PictureAsPdf">
+                    Export PDF
+                </MudButton>
+            </MudCardActions>
+        </MudCard>
+    </MudItem>
+    <MudItem xs="12" sm="6" md="4">
+        <MudCard Class="rounded-lg" Elevation="2">
+            <MudCardContent>
+                <MudIcon Icon="@Icons.Material.Filled.Redeem" Style="font-size:3rem; color:#2E7D32;" />
+                <MudText Typo="Typo.subtitle1" Style="font-weight:700;">Laporan Penukaran Reward</MudText>
+                <MudText Typo="Typo.caption" Color="Color.Secondary">
+                    Semua histori redeem reward dengan nilai poin dan pelanggan
+                </MudText>
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton Variant="Variant.Outlined" Color="Color.Primary" StartIcon="@Icons.Material.Filled.FileDownload">
+                    Export Excel
+                </MudButton>
+                <MudButton Variant="Variant.Text" Color="Color.Secondary" StartIcon="@Icons.Material.Filled.PictureAsPdf">
+                    Export PDF
+                </MudButton>
+            </MudCardActions>
+        </MudCard>
+    </MudItem>
+    <MudItem xs="12" sm="6" md="4">
+        <MudCard Class="rounded-lg" Elevation="2">
+            <MudCardContent>
+                <MudIcon Icon="@Icons.Material.Filled.Stars" Style="font-size:3rem; color:#6A1B9A;" />
+                <MudText Typo="Typo.subtitle1" Style="font-weight:700;">Laporan Poin</MudText>
+                <MudText Typo="Typo.caption" Color="Color.Secondary">
+                    Ringkasan poin diterbitkan, digunakan, dan saldo per periode
+                </MudText>
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton Variant="Variant.Outlined" Color="Color.Primary" StartIcon="@Icons.Material.Filled.FileDownload">
+                    Export Excel
+                </MudButton>
+            </MudCardActions>
+        </MudCard>
+    </MudItem>
+    <MudItem xs="12" sm="6" md="4">
+        <MudCard Class="rounded-lg" Elevation="2">
+            <MudCardContent>
+                <MudIcon Icon="@Icons.Material.Filled.Analytics" Style="font-size:3rem; color:#0277BD;" />
+                <MudText Typo="Typo.subtitle1" Style="font-weight:700;">Laporan Segmentasi</MudText>
+                <MudText Typo="Typo.caption" Color="Color.Secondary">
+                    Distribusi pelanggan per segmen RFM dan tier
+                </MudText>
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton Variant="Variant.Outlined" Color="Color.Primary" StartIcon="@Icons.Material.Filled.FileDownload">
+                    Export Excel
+                </MudButton>
+            </MudCardActions>
+        </MudCard>
+    </MudItem>
+    <MudItem xs="12" sm="6" md="4">
+        <MudCard Class="rounded-lg" Elevation="2">
+            <MudCardContent>
+                <MudIcon Icon="@Icons.Material.Filled.BarChart" Style="font-size:3rem; color:#C62828;" />
+                <MudText Typo="Typo.subtitle1" Style="font-weight:700;">Laporan Ringkasan Bulanan</MudText>
+                <MudText Typo="Typo.caption" Color="Color.Secondary">
+                    Rekap bulanan: revenue, pelanggan baru, retention rate, reward cost
+                </MudText>
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton Variant="Variant.Outlined" Color="Color.Primary" StartIcon="@Icons.Material.Filled.FileDownload">
+                    Export Excel
+                </MudButton>
+                <MudButton Variant="Variant.Text" Color="Color.Secondary" StartIcon="@Icons.Material.Filled.PictureAsPdf">
+                    Export PDF
+                </MudButton>
+            </MudCardActions>
+        </MudCard>
+    </MudItem>
+</MudGrid>
+
+@* Report Generator *@
+<MudPaper Class="pa-4 rounded-lg mt-4" Elevation="2">
+    <MudText Typo="Typo.subtitle1" Class="mb-3" Style="color:#6F4E37; font-weight:700;">
+        ⚙️ Generator Laporan Kustom
+    </MudText>
+    <MudGrid>
+        <MudItem xs="12" sm="4">
+            <MudSelect @bind-Value="_reportType" Label="Jenis Laporan" Variant="Variant.Outlined">
+                <MudSelectItem Value="@("customers")">Pelanggan</MudSelectItem>
+                <MudSelectItem Value="@("transactions")">Transaksi</MudSelectItem>
+                <MudSelectItem Value="@("points")">Poin</MudSelectItem>
+                <MudSelectItem Value="@("rewards")">Reward</MudSelectItem>
+            </MudSelect>
+        </MudItem>
+        <MudItem xs="6" sm="3">
+            <MudDatePicker @bind-Date="_reportFrom" Label="Dari Tanggal" Variant="Variant.Outlined" />
+        </MudItem>
+        <MudItem xs="6" sm="3">
+            <MudDatePicker @bind-Date="_reportTo" Label="Sampai Tanggal" Variant="Variant.Outlined" />
+        </MudItem>
+        <MudItem xs="12" sm="2" Class="d-flex align-end">
+            <MudButton Variant="Variant.Filled" Style="background:#6F4E37; color:white; width:100%;"
+                       StartIcon="@Icons.Material.Filled.Download">
+                Generate
+            </MudButton>
+        </MudItem>
+    </MudGrid>
+</MudPaper>
+EOF

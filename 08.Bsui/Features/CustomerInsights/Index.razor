@@ -1,0 +1,127 @@
+@page "/CustomerInsights"
+
+<BrowserTabTitle>Customer Insights</BrowserTabTitle>
+<PageHeader Title="Customer Insights" Icon="@Icons.Material.Filled.Psychology" />
+
+<MudAlert Severity="Severity.Info" Class="mb-4">
+    📊 Analisis mendalam perilaku pelanggan — segmentasi otomatis, prediksi churn, dan rekomendasi aksi.
+</MudAlert>
+
+@* RFM Analysis Section *@
+<MudGrid Class="mb-4">
+    <MudItem xs="12">
+        <MudText Typo="Typo.h6" Style="color:#6F4E37; font-weight:700;" Class="mb-2">
+            📐 Analisis RFM (Recency, Frequency, Monetary)
+        </MudText>
+    </MudItem>
+    <MudItem xs="12" sm="4">
+        <MudPaper Class="pa-4 rounded-lg" Elevation="2">
+            <div class="d-flex align-center mb-2">
+                <MudIcon Icon="@Icons.Material.Filled.AccessTime" Style="color:#0277BD;" Class="mr-2" />
+                <MudText Typo="Typo.subtitle2" Style="color:#0277BD; font-weight:700;">RECENCY</MudText>
+            </div>
+            <MudText Typo="Typo.caption" Color="Color.Secondary">Seberapa baru pelanggan bertransaksi</MudText>
+            <MudDivider Class="my-2" />
+            <MudList Dense="true">
+                <MudListItem><MudText Typo="Typo.caption">≤ 7 hari: <strong>— pelanggan</strong></MudText></MudListItem>
+                <MudListItem><MudText Typo="Typo.caption">8–30 hari: <strong>— pelanggan</strong></MudText></MudListItem>
+                <MudListItem><MudText Typo="Typo.caption">31–90 hari: <strong>— pelanggan</strong></MudText></MudListItem>
+                <MudListItem><MudText Typo="Typo.caption">> 90 hari: <strong>— pelanggan</strong></MudText></MudListItem>
+            </MudList>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" sm="4">
+        <MudPaper Class="pa-4 rounded-lg" Elevation="2">
+            <div class="d-flex align-center mb-2">
+                <MudIcon Icon="@Icons.Material.Filled.Repeat" Style="color:#C8860A;" Class="mr-2" />
+                <MudText Typo="Typo.subtitle2" Style="color:#C8860A; font-weight:700;">FREQUENCY</MudText>
+            </div>
+            <MudText Typo="Typo.caption" Color="Color.Secondary">Frekuensi transaksi pelanggan</MudText>
+            <MudDivider Class="my-2" />
+            <MudList Dense="true">
+                <MudListItem><MudText Typo="Typo.caption">1× (sekali): <strong>— pelanggan</strong></MudText></MudListItem>
+                <MudListItem><MudText Typo="Typo.caption">2–5×: <strong>— pelanggan</strong></MudText></MudListItem>
+                <MudListItem><MudText Typo="Typo.caption">6–10×: <strong>— pelanggan</strong></MudText></MudListItem>
+                <MudListItem><MudText Typo="Typo.caption">> 10×: <strong>— pelanggan</strong></MudText></MudListItem>
+            </MudList>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" sm="4">
+        <MudPaper Class="pa-4 rounded-lg" Elevation="2">
+            <div class="d-flex align-center mb-2">
+                <MudIcon Icon="@Icons.Material.Filled.AttachMoney" Style="color:#2E7D32;" Class="mr-2" />
+                <MudText Typo="Typo.subtitle2" Style="color:#2E7D32; font-weight:700;">MONETARY</MudText>
+            </div>
+            <MudText Typo="Typo.caption" Color="Color.Secondary">Nilai belanja pelanggan</MudText>
+            <MudDivider Class="my-2" />
+            <MudList Dense="true">
+                <MudListItem><MudText Typo="Typo.caption">< Rp 100rb: <strong>— pelanggan</strong></MudText></MudListItem>
+                <MudListItem><MudText Typo="Typo.caption">Rp 100rb–500rb: <strong>— pelanggan</strong></MudText></MudListItem>
+                <MudListItem><MudText Typo="Typo.caption">Rp 500rb–1jt: <strong>— pelanggan</strong></MudText></MudListItem>
+                <MudListItem><MudText Typo="Typo.caption">> Rp 1jt: <strong>— pelanggan</strong></MudText></MudListItem>
+            </MudList>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+
+@* Churn Risk & Retention *@
+<MudGrid Class="mb-4">
+    <MudItem xs="12" md="6">
+        <MudPaper Class="pa-4 rounded-lg" Elevation="2" Style="border-left:4px solid #C62828;">
+            <MudText Typo="Typo.subtitle1" Class="mb-3" Style="color:#C62828; font-weight:700;">
+                ⚠️ Pelanggan Berisiko Churn
+            </MudText>
+            <MudText Typo="Typo.caption" Color="Color.Secondary" Class="mb-2">
+                Pelanggan yang tidak bertransaksi > 60 hari dan memiliki riwayat aktif
+            </MudText>
+            <MudText Class="pa-4 text-center" Color="Color.Secondary">
+                Data analisis tersedia setelah riwayat transaksi terkumpul
+            </MudText>
+            <MudButton Variant="Variant.Outlined" Color="Color.Error" StartIcon="@Icons.Material.Filled.Email" Size="Size.Small">
+                Kirim Notifikasi Retensi
+            </MudButton>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" md="6">
+        <MudPaper Class="pa-4 rounded-lg" Elevation="2" Style="border-left:4px solid #2E7D32;">
+            <MudText Typo="Typo.subtitle1" Class="mb-3" Style="color:#2E7D32; font-weight:700;">
+                🌟 High-Value Customers
+            </MudText>
+            <MudText Typo="Typo.caption" Color="Color.Secondary" Class="mb-2">
+                Pelanggan dengan total spend tertinggi (Top 20%)
+            </MudText>
+            <MudText Class="pa-4 text-center" Color="Color.Secondary">
+                Data HVC tersedia setelah riwayat transaksi terkumpul
+            </MudText>
+            <MudButton Variant="Variant.Outlined" Color="Color.Success" StartIcon="@Icons.Material.Filled.CardGiftcard" Size="Size.Small">
+                Kirim Reward Eksklusif
+            </MudButton>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+
+@* Customer Segment Matrix *@
+<MudPaper Class="pa-4 rounded-lg" Elevation="2">
+    <MudText Typo="Typo.subtitle1" Class="mb-3" Style="color:#6F4E37; font-weight:700;">
+        🎯 Matriks Segmentasi Pelanggan
+    </MudText>
+    <MudTable Dense="true" Hover="true" Elevation="0">
+        <HeaderContent>
+            <MudTh>Segmen</MudTh>
+            <MudTh>Deskripsi</MudTh>
+            <MudTh Style="text-align:right">Jumlah</MudTh>
+            <MudTh Style="text-align:right">% Total</MudTh>
+            <MudTh>Aksi yang Disarankan</MudTh>
+        </HeaderContent>
+        <RowTemplate Context="seg">
+            <MudTd><MudChip Size="Size.Small" Color="@seg.Color">@seg.Name</MudChip></MudTd>
+            <MudTd><MudText Typo="Typo.caption">@seg.Description</MudText></MudTd>
+            <MudTd Style="text-align:right">—</MudTd>
+            <MudTd Style="text-align:right">—%</MudTd>
+            <MudTd><MudText Typo="Typo.caption" Color="Color.Secondary">@seg.Action</MudText></MudTd>
+        </RowTemplate>
+        <NoRecordsContent>
+            <MudText Class="pa-2" Color="Color.Secondary">Belum ada data</MudText>
+        </NoRecordsContent>
+    </MudTable>
+</MudPaper>
