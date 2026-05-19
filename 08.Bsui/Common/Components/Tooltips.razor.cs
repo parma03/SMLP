@@ -1,9 +1,9 @@
 ﻿using MudBlazor;
-using Psmp.Base.Payments.Enums;
+using Smlp.Base.Payments.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
-namespace Psmp.Bsui.Common.Components;
+namespace Smlp.Bsui.Common.Components;
 
 public partial class Tooltips
 {

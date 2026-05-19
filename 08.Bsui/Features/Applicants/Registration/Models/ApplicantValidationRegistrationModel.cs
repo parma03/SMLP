@@ -1,4 +1,4 @@
-namespace Psmp.Bsui.Features.Applicants.Registration.Models;
+namespace Smlp.Bsui.Features.Applicants.Registration.Models;
 
 public class ApplicantValidationRegistrationModel
 {

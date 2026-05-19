@@ -1,27 +1,27 @@
 ﻿using System.Data;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using Psmp.Base.Scholarships.Enums;
-using Psmp.Base.Selections.Enums;
-using Psmp.Bsui.Common.Constants;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Shared.Common.Constants;
-using Psmp.Shared.Common.Extensions;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.Documents.Commands.CreateDocument;
-using Psmp.Shared.Documents.Queries.GetDocumentFile;
-using Psmp.Shared.Selections.BeritaAcara.Commands.Create;
-using Psmp.Shared.Selections.BeritaAcara.Commands.Update;
-using Psmp.Shared.Selections.BeritaAcara.Queries;
-using Psmp.Shared.Selections.CreateSK.Commands.Create;
-using Psmp.Shared.Selections.SelectionOverviews.Commands.Update;
-using Psmp.Shared.Selections.SelectionTalentReviews.Commands.Update;
+using Smlp.Base.Scholarships.Enums;
+using Smlp.Base.Selections.Enums;
+using Smlp.Bsui.Common.Constants;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Shared.Common.Constants;
+using Smlp.Shared.Common.Extensions;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Documents.Commands.CreateDocument;
+using Smlp.Shared.Documents.Queries.GetDocumentFile;
+using Smlp.Shared.Selections.BeritaAcara.Commands.Create;
+using Smlp.Shared.Selections.BeritaAcara.Commands.Update;
+using Smlp.Shared.Selections.BeritaAcara.Queries;
+using Smlp.Shared.Selections.CreateSK.Commands.Create;
+using Smlp.Shared.Selections.SelectionOverviews.Commands.Update;
+using Smlp.Shared.Selections.SelectionTalentReviews.Commands.Update;
 using Syncfusion.Blazor.DocumentEditor;
 using Syncfusion.DocIORenderer;
 using Syncfusion.XlsIO;
-using RouteFor = Psmp.Bsui.Features.Selections.BeritaAcara.Constants.RouteFor;
+using RouteFor = Smlp.Bsui.Features.Selections.BeritaAcara.Constants.RouteFor;
 
-namespace Psmp.Bsui.Features.Selections.BeritaAcara.Components;
+namespace Smlp.Bsui.Features.Selections.BeritaAcara.Components;
 
 public partial class DraftingBeritaAcara
 {
@@ -613,7 +613,7 @@ public partial class DraftingBeritaAcara
 
     public async Task OnClickBack()
     {
-        _navigationManager.NavigateTo(Psmp.Bsui.Features.Selections.CreateSK.Constants.RouteFor.Selection, true);
+        _navigationManager.NavigateTo(Smlp.Bsui.Features.Selections.CreateSK.Constants.RouteFor.Selection, true);
         await Task.CompletedTask;
     }
 

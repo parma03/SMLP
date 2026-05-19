@@ -1,14 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
-using Psmp.Bsui.Services.Authorization.IdAMan.Models.GetAuhtorizationInfo;
-using Psmp.Bsui.Services.Authorization.IdAMan.Models.GetPositions;
-using Psmp.Shared.Common.Constants;
-using Psmp.Shared.Services.Authorization.Constants;
-using Psmp.Shared.Services.Authorization.Models.GetAuthorizationInfo;
-using Psmp.Shared.Services.Authorization.Models.GetPositions;
+using Smlp.Bsui.Services.Authorization.IdAMan.Models.GetAuhtorizationInfo;
+using Smlp.Bsui.Services.Authorization.IdAMan.Models.GetPositions;
+using Smlp.Shared.Common.Constants;
+using Smlp.Shared.Services.Authorization.Constants;
+using Smlp.Shared.Services.Authorization.Models.GetAuthorizationInfo;
+using Smlp.Shared.Services.Authorization.Models.GetPositions;
 using RestSharp;
 
-namespace Psmp.Bsui.Services.Authorization.IdAMan;
+namespace Smlp.Bsui.Services.Authorization.IdAMan;
 
 public class IdAManAuthorizationService : IAuthorizationService
 {

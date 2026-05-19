@@ -1,21 +1,19 @@
 ﻿/*
-* Pertamina Scholarship Management Portal
-* Copyright (c) 2024-2025 PT. Pertamina Persero
 */
 
 using System.Security.Claims;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
-using Psmp.Base.Selections.Enums;
-using Psmp.Bsui.Common.Constants;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Shared.Common.Constants;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.Documents.Queries.GetDocumentFile;
-using Psmp.Shared.Universities.AdmissionSuperiorLetter.Queries;
-using Psmp.Shared.Universities.Constants;
-namespace Psmp.Bsui.Features.Applicants.University.Components;
+using Smlp.Base.Selections.Enums;
+using Smlp.Bsui.Common.Constants;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Shared.Common.Constants;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Documents.Queries.GetDocumentFile;
+using Smlp.Shared.Universities.AdmissionSuperiorLetter.Queries;
+using Smlp.Shared.Universities.Constants;
+namespace Smlp.Bsui.Features.Applicants.University.Components;
 
 public partial class DetailUniversityAdmission
 {
@@ -137,7 +135,7 @@ public partial class DetailUniversityAdmission
     #region Action
     private void OnClickBack()
     {
-        _navigationManager.NavigateTo(Psmp.Bsui.Features.Applicants.University.Constants.RouteFor.ApplicantUnivesityTab(0), true);
+        _navigationManager.NavigateTo(Smlp.Bsui.Features.Applicants.University.Constants.RouteFor.ApplicantUnivesityTab(0), true);
     }
     #endregion
 }

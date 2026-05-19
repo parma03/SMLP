@@ -3,16 +3,16 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
 using MudBlazor;
-using Psmp.Bsui.Common.Components;
-using Psmp.Bsui.Common.Constants;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Bsui.Features.Documents.Components;
-using Psmp.Shared.Common.Constants;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.Documents.Constants;
-using Psmp.Shared.Documents.Queries.GetDocuments;
+using Smlp.Bsui.Common.Components;
+using Smlp.Bsui.Common.Constants;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Bsui.Features.Documents.Components;
+using Smlp.Shared.Common.Constants;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Documents.Constants;
+using Smlp.Shared.Documents.Queries.GetDocuments;
 
-namespace Psmp.Bsui.Features.Documents;
+namespace Smlp.Bsui.Features.Documents;
 
 public partial class Index
 {

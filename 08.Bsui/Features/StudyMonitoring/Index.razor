@@ -1,7 +1,7 @@
 ﻿@page "/StudyMonitoring"
 @page "/StudyMonitoring/{TabIndex:int}"
 
-@using Psmp.Shared.StudyMonitorings.Constants
+@using Smlp.Shared.StudyMonitorings.Constants
 
 <BrowserTabTitle>@DisplayTextFor.StudyMonitoring</BrowserTabTitle>
 <MudBreadcrumbs Items="_breadcrumbItems"></MudBreadcrumbs>
@@ -10,25 +10,25 @@
     @if (IsShowStudyPeriode)
     {
         <MudTabPanel Text="@DisplayTextFor.StudyPeriod">
-            <Psmp.Bsui.Features.StudyMonitoring.StudyPeriod.Index>
+            <Smlp.Bsui.Features.StudyMonitoring.StudyPeriod.Index>
 
-            </Psmp.Bsui.Features.StudyMonitoring.StudyPeriod.Index>
+            </Smlp.Bsui.Features.StudyMonitoring.StudyPeriod.Index>
         </MudTabPanel>
     }
     @if (IsShowGraduate)
     {
         <MudTabPanel Text="@DisplayTextFor.Graduate">
-            <Psmp.Bsui.Features.StudyMonitoring.Graduate.Index>
+            <Smlp.Bsui.Features.StudyMonitoring.Graduate.Index>
 
-            </Psmp.Bsui.Features.StudyMonitoring.Graduate.Index>
+            </Smlp.Bsui.Features.StudyMonitoring.Graduate.Index>
         </MudTabPanel>
     }
     @if (IsShowAfterProgram)
     {
         <MudTabPanel Text="@DisplayTextFor.AfterProgram">
-            <Psmp.Bsui.Features.StudyMonitoring.AfterProgram.Index>
+            <Smlp.Bsui.Features.StudyMonitoring.AfterProgram.Index>
 
-            </Psmp.Bsui.Features.StudyMonitoring.AfterProgram.Index>
+            </Smlp.Bsui.Features.StudyMonitoring.AfterProgram.Index>
         </MudTabPanel>
     }
 </MudTabs>

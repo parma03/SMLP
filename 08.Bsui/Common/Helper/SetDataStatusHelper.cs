@@ -1,4 +1,4 @@
-﻿namespace Psmp.Bsui.Common.Helper;
+﻿namespace Smlp.Bsui.Common.Helper;
 
 public static class SetDataStatusHelper
 {

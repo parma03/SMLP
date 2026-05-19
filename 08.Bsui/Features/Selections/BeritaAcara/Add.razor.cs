@@ -1,9 +1,9 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
-using Psmp.Shared.Common.Responses;
+using Smlp.Shared.Common.Responses;
 
-namespace Psmp.Bsui.Features.Selections.BeritaAcara;
+namespace Smlp.Bsui.Features.Selections.BeritaAcara;
 
 public partial class Add
 {

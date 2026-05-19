@@ -4,16 +4,16 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Options;
-using Psmp.Bsui.Common.Constants;
-using Psmp.Bsui.Services.Authentication.IdAMan;
-using Psmp.Bsui.Services.Authentication.IS4IM;
-using Psmp.Client.Services.HealthCheck;
-using Psmp.Shared.Common.Constants;
-using Psmp.Shared.Services.Authentication.Constants;
-using Psmp.Shared.Services.HealthCheck.Constants;
-using AuthenticationOptions = Psmp.Bsui.Services.Authentication.AuthenticationOptions;
+using Smlp.Bsui.Common.Constants;
+using Smlp.Bsui.Services.Authentication.IdAMan;
+using Smlp.Bsui.Services.Authentication.IS4IM;
+using Smlp.Client.Services.HealthCheck;
+using Smlp.Shared.Common.Constants;
+using Smlp.Shared.Services.Authentication.Constants;
+using Smlp.Shared.Services.HealthCheck.Constants;
+using AuthenticationOptions = Smlp.Bsui.Services.Authentication.AuthenticationOptions;
 
-namespace Psmp.Bsui.Pages.Account;
+namespace Smlp.Bsui.Pages.Account;
 
 public class LogoutModel : PageModel
 {

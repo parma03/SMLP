@@ -2,17 +2,17 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
-using Psmp.Bsui.Common.Constants;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Shared.Common.Extensions;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.Projects.ProjectComments.Commands;
-using Psmp.Shared.Projects.ProjectComments.Queries;
-using Psmp.Shared.Projects.ProjectMonitorings.Commands;
-using Psmp.Shared.Projects.ProjectMonitorings.Queries;
+using Smlp.Bsui.Common.Constants;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Shared.Common.Extensions;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Projects.ProjectComments.Commands;
+using Smlp.Shared.Projects.ProjectComments.Queries;
+using Smlp.Shared.Projects.ProjectMonitorings.Commands;
+using Smlp.Shared.Projects.ProjectMonitorings.Queries;
 using Syncfusion.Blazor.Grids;
 
-namespace Psmp.Bsui.Features.Projects.ProjectMentoring;
+namespace Smlp.Bsui.Features.Projects.ProjectMentoring;
 
 public partial class Detail
 {

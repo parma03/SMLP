@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Psmp.Application.Services.DateAndTime;
+using Smlp.Application.Services.DateAndTime;
 
-namespace Psmp.InfrastructureDateAndTime;
+namespace Smlp.InfrastructureDateAndTime;
 
 public static class DependencyInjection
 {

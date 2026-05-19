@@ -1,13 +1,13 @@
-﻿@using Psmp.Base.Scholarships.Enums
-@using Psmp.Base.Studies.Enums
-@using Psmp.Shared.Common.Responses
-@using Psmp.Shared.Masters.Queries
-@using Psmp.Shared.Scholarships.ScholarshipPosting.Queries
-@using Psmp.Shared.Selections.SelectionOverviews.Queries
-@using Psmp.Bsui.Features.StudyPreparations.IELTS
-@using Psmp.Shared.StudyPreparations.Ielts.Queries
-@using Psmp.Bsui.Features.StudyPreparations.Component
-@using Psmp.Shared.StudyPreparations.Ielts.Commands.Update
+﻿@using Smlp.Base.Scholarships.Enums
+@using Smlp.Base.Studies.Enums
+@using Smlp.Shared.Common.Responses
+@using Smlp.Shared.Masters.Queries
+@using Smlp.Shared.Scholarships.ScholarshipPosting.Queries
+@using Smlp.Shared.Selections.SelectionOverviews.Queries
+@using Smlp.Bsui.Features.StudyPreparations.IELTS
+@using Smlp.Shared.StudyPreparations.Ielts.Queries
+@using Smlp.Bsui.Features.StudyPreparations.Component
+@using Smlp.Shared.StudyPreparations.Ielts.Commands.Update
 
 <style>
     .e-chip-list {
@@ -95,7 +95,7 @@ else
                     <MudGrid Justify="Justify.Center">
                         <!-- Card pertama -->
                         <MudItem xs="12" sm="4" md="4" Class="d-flex justify-start">
-                            <Psmp.Bsui.Features.StudyPreparations.Component.CardStatistic Judul="@_judul1" CountString="@_totalAwardee"></Psmp.Bsui.Features.StudyPreparations.Component.CardStatistic>
+                            <Smlp.Bsui.Features.StudyPreparations.Component.CardStatistic Judul="@_judul1" CountString="@_totalAwardee"></Smlp.Bsui.Features.StudyPreparations.Component.CardStatistic>
                         </MudItem>
 
                         <!-- Divider Vertikal -->
@@ -105,8 +105,8 @@ else
 
                         <!-- Card kedua -->
 						<MudItem xs="12" sm="4" md="4" Class="d-flex justify-start">
-                            @* <Psmp.Bsui.Features.StudyPreparations.Component.CardStatistic Judul="@_judul2" CountString="@_gmatParticipants"></Psmp.Bsui.Features.StudyPreparations.Component.CardStatistic> *@
-                            <Psmp.Bsui.Features.StudyPreparations.Component.CardStatistic Judul="@_judul2" CountString="@_totalAwardee"></Psmp.Bsui.Features.StudyPreparations.Component.CardStatistic>
+                            @* <Smlp.Bsui.Features.StudyPreparations.Component.CardStatistic Judul="@_judul2" CountString="@_gmatParticipants"></Smlp.Bsui.Features.StudyPreparations.Component.CardStatistic> *@
+                            <Smlp.Bsui.Features.StudyPreparations.Component.CardStatistic Judul="@_judul2" CountString="@_totalAwardee"></Smlp.Bsui.Features.StudyPreparations.Component.CardStatistic>
                         </MudItem>
 
                         <!-- Divider Vertikal -->
@@ -116,7 +116,7 @@ else
 
                         <!-- Card ketiga -->
 						<MudItem xs="12" sm="4" md="4" Class="d-flex justify-start">
-                            <Psmp.Bsui.Features.StudyPreparations.Component.CardStatistic Judul="@_judul3" CountString="@_gmatAverage" IsLast="true"></Psmp.Bsui.Features.StudyPreparations.Component.CardStatistic>
+                            <Smlp.Bsui.Features.StudyPreparations.Component.CardStatistic Judul="@_judul3" CountString="@_gmatAverage" IsLast="true"></Smlp.Bsui.Features.StudyPreparations.Component.CardStatistic>
                         </MudItem>
                     </MudGrid>
                 </MudPaper>

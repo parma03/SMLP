@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Psmp.Application.Services.BackgroundJob.Methods;
+using Smlp.Application.Services.BackgroundJob.Methods;
 
-namespace Psmp.Infrastructure.BackgroundJob.Hangfire;
+namespace Smlp.Infrastructure.BackgroundJob.Hangfire;
 public static class DataBackgroundJobs
 {
     public static async Task ApplyDataBackgroundJobsAsync(this IServiceProvider serviceProvider)

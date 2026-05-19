@@ -1,11 +1,9 @@
 ﻿/*
-* Pertamina Scholarship Management Portal
-* Copyright (c) 2024-2025 PT. Pertamina Persero
 */
 
 using Microsoft.AspNetCore.Components;
 
-namespace Psmp.Bsui.Common.Pages;
+namespace Smlp.Bsui.Common.Pages;
 
 public partial class Login
 {
@@ -18,7 +16,7 @@ public partial class Login
     private async Task OnClickLoginAsync()
     {
         _processing = true;
-        NavigationManager.NavigateTo(Psmp.Bsui.Pages.Account.Constants.RouteFor.Login, true);
+        NavigationManager.NavigateTo(Smlp.Bsui.Pages.Account.Constants.RouteFor.Login, true);
         await Task.Delay(DelayTime);
         _processing = false;
     }

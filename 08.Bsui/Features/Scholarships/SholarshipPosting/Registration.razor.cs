@@ -2,23 +2,23 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
-using Psmp.Base.Scholarships.Enums;
-using Psmp.Base.Selections.Enums;
-using Psmp.Bsui.Common.Constants;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Bsui.Features.Scholarships.SholarshipPosting.Constants;
-using Psmp.Shared.Common.Extensions;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.Masters.AdministrativeCriterias.Queries;
-using Psmp.Shared.Masters.Queries;
-using Psmp.Shared.Scholarships.ScholarshipPlan.Queries;
-using Psmp.Shared.Scholarships.ScholarshipPosting.Commands.Create;
-using Psmp.Shared.Scholarships.ScholarshipPosting.Commands.Update;
-using Psmp.Shared.Scholarships.ScholarshipPosting.Constants;
+using Smlp.Base.Scholarships.Enums;
+using Smlp.Base.Selections.Enums;
+using Smlp.Bsui.Common.Constants;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Bsui.Features.Scholarships.SholarshipPosting.Constants;
+using Smlp.Shared.Common.Extensions;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Masters.AdministrativeCriterias.Queries;
+using Smlp.Shared.Masters.Queries;
+using Smlp.Shared.Scholarships.ScholarshipPlan.Queries;
+using Smlp.Shared.Scholarships.ScholarshipPosting.Commands.Create;
+using Smlp.Shared.Scholarships.ScholarshipPosting.Commands.Update;
+using Smlp.Shared.Scholarships.ScholarshipPosting.Constants;
 using Syncfusion.Blazor.Calendars;
 using Syncfusion.Blazor.DropDowns;
 
-namespace Psmp.Bsui.Features.Scholarships.SholarshipPosting;
+namespace Smlp.Bsui.Features.Scholarships.SholarshipPosting;
 
 public partial class Registration
 {

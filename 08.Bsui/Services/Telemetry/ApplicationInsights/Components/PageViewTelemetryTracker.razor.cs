@@ -1,8 +1,8 @@
 ﻿using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.AspNetCore.Components.Routing;
-using Psmp.Bsui.Common.Constants;
+using Smlp.Bsui.Common.Constants;
 
-namespace Psmp.Bsui.Services.Telemetry.ApplicationInsights.Components;
+namespace Smlp.Bsui.Services.Telemetry.ApplicationInsights.Components;
 
 public partial class PageViewTelemetryTracker
 {

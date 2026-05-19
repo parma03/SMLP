@@ -1,19 +1,17 @@
 ﻿/*
-* Pertamina Scholarship Management Portal
-* Copyright (c) 2024-2025 PT. Pertamina Persero
 */
 
 using System.Security.Claims;
-using Psmp.Base.Scholarships.Enums;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Client.Services.BackEnd.Applicants;
-using Psmp.Client.Services.Hris;
-using Psmp.Shared.Applicants.Commands.Create;
-using Psmp.Shared.Common.Extensions;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.Scholarships.ScholarshipPosting.Queries;
+using Smlp.Base.Scholarships.Enums;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Client.Services.BackEnd.Applicants;
+using Smlp.Client.Services.Hris;
+using Smlp.Shared.Applicants.Commands.Create;
+using Smlp.Shared.Common.Extensions;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Scholarships.ScholarshipPosting.Queries;
 
-namespace Psmp.Bsui.Features.Applicants.Registration.Actions;
+namespace Smlp.Bsui.Features.Applicants.Registration.Actions;
 
 public class RegistrationApply
 {

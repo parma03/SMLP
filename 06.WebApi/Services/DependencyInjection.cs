@@ -1,7 +1,7 @@
-﻿using Psmp.WebApi.Services.BackEnd;
-using Psmp.WebApi.Services.Documentation;
+﻿using Smlp.WebApi.Services.BackEnd;
+using Smlp.WebApi.Services.Documentation;
 
-namespace Psmp.WebApi.Services;
+namespace Smlp.WebApi.Services;
 
 public static class DependencyInjection
 {

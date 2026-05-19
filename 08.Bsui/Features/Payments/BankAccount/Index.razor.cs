@@ -3,18 +3,18 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
 using MudBlazor;
-using Psmp.Base.Selections.Enums;
-using Psmp.Bsui.Common.Constants;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Shared.Common.Constants;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.Documents.Queries.GetDocumentFile;
-using Psmp.Shared.Payments.Queries;
+using Smlp.Base.Selections.Enums;
+using Smlp.Bsui.Common.Constants;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Shared.Common.Constants;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Documents.Queries.GetDocumentFile;
+using Smlp.Shared.Payments.Queries;
 using Syncfusion.Blazor.Grids;
 using Syncfusion.Blazor.Navigations;
-using static Psmp.Bsui.Features.Payments.Index;
+using static Smlp.Bsui.Features.Payments.Index;
 
-namespace Psmp.Bsui.Features.Payments.BankAccount;
+namespace Smlp.Bsui.Features.Payments.BankAccount;
 
 public partial class Index
 {

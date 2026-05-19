@@ -1,6 +1,6 @@
 ﻿using Microsoft.ApplicationInsights.Extensibility;
 
-namespace Psmp.Bsui.Services.Telemetry.ApplicationInsights;
+namespace Smlp.Bsui.Services.Telemetry.ApplicationInsights;
 
 public static class DependencyInjection
 {

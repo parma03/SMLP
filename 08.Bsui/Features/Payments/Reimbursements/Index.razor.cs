@@ -2,26 +2,26 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
-using Psmp.Base.Common;
-using Psmp.Base.Payments.Enums;
-using Psmp.Base.Scholarships.Enums;
-using Psmp.Base.Selections.Enums;
-using Psmp.Bsui.Common.Constants;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Bsui.Common.Helper;
-using Psmp.Shared.Common.Constants;
-using Psmp.Shared.Common.Extensions;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.Documents.Queries.GetDocumentFile;
-using Psmp.Shared.Documents.Queries.GetDocuments;
-using Psmp.Shared.Payments.Commands;
-using Psmp.Shared.Payments.Queries;
+using Smlp.Base.Common;
+using Smlp.Base.Payments.Enums;
+using Smlp.Base.Scholarships.Enums;
+using Smlp.Base.Selections.Enums;
+using Smlp.Bsui.Common.Constants;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Bsui.Common.Helper;
+using Smlp.Shared.Common.Constants;
+using Smlp.Shared.Common.Extensions;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Documents.Queries.GetDocumentFile;
+using Smlp.Shared.Documents.Queries.GetDocuments;
+using Smlp.Shared.Payments.Commands;
+using Smlp.Shared.Payments.Queries;
 using Syncfusion.Blazor.Grids;
 using Syncfusion.Blazor.Inputs;
 using Syncfusion.Blazor.Navigations;
-using static Psmp.Bsui.Features.Payments.Index;
+using static Smlp.Bsui.Features.Payments.Index;
 
-namespace Psmp.Bsui.Features.Payments.Reimbursements;
+namespace Smlp.Bsui.Features.Payments.Reimbursements;
 
 public partial class Index
 {
@@ -677,7 +677,7 @@ public partial class Index
     }
     public async Task OnClickBack()
     {
-        _navigationManager.NavigateTo(Psmp.Bsui.Features.Payments.Constants.RouteFor.Payment);
+        _navigationManager.NavigateTo(Smlp.Bsui.Features.Payments.Constants.RouteFor.Payment);
         //await Task.CompletedTask;
     }
 

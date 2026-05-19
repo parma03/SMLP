@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
-using Psmp.Domain.Abstracts;
+using Smlp.Domain.Abstracts;
 
-namespace Psmp.Infrastructure.Persistence.Common.Extensions;
+namespace Smlp.Infrastructure.Persistence.Common.Extensions;
 
 public static class TypeExtensions
 {

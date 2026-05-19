@@ -1,25 +1,23 @@
 ﻿/*
-* Pertamina Scholarship Management Portal
-* Copyright (c) 2024-2025 PT. Pertamina Persero
 */
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Psmp.Application.Applicants.Commands.CancelApplicant;
-using Psmp.Application.Applicants.Commands.CreateApplicant;
-using Psmp.Application.Applicants.Commands.CreateApplicantAdministrativeCriteria;
-using Psmp.Application.Applicants.Queries.GetApplicant;
-using Psmp.Application.Applicants.Queries.GetApplicantPayment;
-using Psmp.Application.Applicants.Queries.GetMentor;
-using Psmp.Shared.Applicants.Commands.Create;
-using Psmp.Shared.Applicants.Constants;
-using Psmp.Shared.Applicants.Queries.GetApplicant;
-using Psmp.Shared.Applicants.Queries.GetApplicantPayment;
-using Psmp.Shared.Applicants.Queries.GetMentor;
-using Psmp.Shared.Common.Constants;
-using Psmp.Shared.Common.Responses;
+using Smlp.Application.Applicants.Commands.CancelApplicant;
+using Smlp.Application.Applicants.Commands.CreateApplicant;
+using Smlp.Application.Applicants.Commands.CreateApplicantAdministrativeCriteria;
+using Smlp.Application.Applicants.Queries.GetApplicant;
+using Smlp.Application.Applicants.Queries.GetApplicantPayment;
+using Smlp.Application.Applicants.Queries.GetMentor;
+using Smlp.Shared.Applicants.Commands.Create;
+using Smlp.Shared.Applicants.Constants;
+using Smlp.Shared.Applicants.Queries.GetApplicant;
+using Smlp.Shared.Applicants.Queries.GetApplicantPayment;
+using Smlp.Shared.Applicants.Queries.GetMentor;
+using Smlp.Shared.Common.Constants;
+using Smlp.Shared.Common.Responses;
 
-namespace Psmp.WebApi.Areas.V1.Controllers.Applicants;
+namespace Smlp.WebApi.Areas.V1.Controllers.Applicants;
 
 [ApiVersion(ApiVersioning.V1.Number)]
 public class UsersController : ApiControllerBase

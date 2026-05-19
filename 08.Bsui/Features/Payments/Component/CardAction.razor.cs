@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
-namespace Psmp.Bsui.Features.Payments.Component;
+namespace Smlp.Bsui.Features.Payments.Component;
 
 public partial class CardAction
 {

@@ -2,9 +2,9 @@
 using Hangfire.SqlServer;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
-using Psmp.Shared.Common.Extensions;
+using Smlp.Shared.Common.Extensions;
 
-namespace Psmp.Infrastructure.BackgroundJob.Hangfire.Storages.SqlServer;
+namespace Smlp.Infrastructure.BackgroundJob.Hangfire.Storages.SqlServer;
 
 public static class DependencyInjection
 {

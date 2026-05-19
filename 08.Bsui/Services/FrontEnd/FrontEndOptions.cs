@@ -1,4 +1,4 @@
-﻿namespace Psmp.Bsui.Services.FrontEnd;
+﻿namespace Smlp.Bsui.Services.FrontEnd;
 
 public class FrontEndOptions
 {

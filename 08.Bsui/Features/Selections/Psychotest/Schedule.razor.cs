@@ -1,19 +1,19 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
-using Psmp.Base.Selections.Enums;
-using Psmp.Bsui.Common.Constants;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.Emails.Commands.SendEmailSchedule;
-using Psmp.Shared.Selections.Constants;
-using Psmp.Shared.Selections.SelectionPsychotests.Commands.Create;
-using Psmp.Shared.Selections.SelectionPsychotests.Queries;
+using Smlp.Base.Selections.Enums;
+using Smlp.Bsui.Common.Constants;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Emails.Commands.SendEmailSchedule;
+using Smlp.Shared.Selections.Constants;
+using Smlp.Shared.Selections.SelectionPsychotests.Commands.Create;
+using Smlp.Shared.Selections.SelectionPsychotests.Queries;
 using Syncfusion.Blazor.Calendars;
 using Syncfusion.Blazor.Grids;
-using RouteFor = Psmp.Bsui.Features.Selections.Psychotest.Constants.RouteFor;
+using RouteFor = Smlp.Bsui.Features.Selections.Psychotest.Constants.RouteFor;
 
-namespace Psmp.Bsui.Features.Selections.Psychotest;
+namespace Smlp.Bsui.Features.Selections.Psychotest;
 
 public partial class Schedule
 {

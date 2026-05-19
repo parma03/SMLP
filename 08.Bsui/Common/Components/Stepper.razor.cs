@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
-namespace Psmp.Bsui.Common.Components;
+namespace Smlp.Bsui.Common.Components;
 
 public partial class Stepper
 {

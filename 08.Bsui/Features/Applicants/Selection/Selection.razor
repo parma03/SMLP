@@ -1,8 +1,8 @@
 ﻿@page "/ApplicantSelection"
 @page "/ApplicantSelection/{Condition}"
 
-@using Psmp.Shared.Applicants.Constants
-@using Psmp.Bsui.Features.Applicants.Selection.Components
+@using Smlp.Shared.Applicants.Constants
+@using Smlp.Bsui.Features.Applicants.Selection.Components
 
 @inject IWebHostEnvironment _webHostEnvironment
 @inject IOptions<HrisOptions> _hrisOptions
@@ -101,7 +101,7 @@ else
     }
 }
 
-<Psmp.Bsui.Features.Projects.Component.DialogViewScholarshipPlan 
+<Smlp.Bsui.Features.Projects.Component.DialogViewScholarshipPlan 
     Visibility="VisiblePopup"
     Title="@TitlePopup"
     IdScholarshipPlan="@IdScholarshipPlan"
@@ -109,7 +109,7 @@ else
     DialogClose="DialogClose"
     OnClickNo="ClickedNo" 
     IsEnabled="@IsEnabled">
-</Psmp.Bsui.Features.Projects.Component.DialogViewScholarshipPlan>
+</Smlp.Bsui.Features.Projects.Component.DialogViewScholarshipPlan>
 
 @* <style>
     .custom-blue {

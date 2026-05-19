@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Psmp.Client.Services.HealthCheck;
+namespace Smlp.Client.Services.HealthCheck;
 
 public static class DependencyInjection
 {

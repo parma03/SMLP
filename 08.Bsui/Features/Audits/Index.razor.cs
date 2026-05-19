@@ -1,15 +1,15 @@
 ﻿using Microsoft.JSInterop;
 using MudBlazor;
-using Psmp.Bsui.Common.Constants;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Bsui.Features.Audits.Components;
-using Psmp.Shared.Audits.Constants;
-using Psmp.Shared.Audits.Queries.ExportAudits;
-using Psmp.Shared.Audits.Queries.GetAudits;
-using Psmp.Shared.Common.Constants;
-using Psmp.Shared.Common.Responses;
+using Smlp.Bsui.Common.Constants;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Bsui.Features.Audits.Components;
+using Smlp.Shared.Audits.Constants;
+using Smlp.Shared.Audits.Queries.ExportAudits;
+using Smlp.Shared.Audits.Queries.GetAudits;
+using Smlp.Shared.Common.Constants;
+using Smlp.Shared.Common.Responses;
 
-namespace Psmp.Bsui.Features.Audits;
+namespace Smlp.Bsui.Features.Audits;
 
 public partial class Index
 {

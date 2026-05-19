@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Components;
-using Psmp.Shared.Payments.Commands;
+using Smlp.Shared.Payments.Commands;
 
-namespace Psmp.Bsui.Features.Payments.Component;
+namespace Smlp.Bsui.Features.Payments.Component;
 
 public partial class DialogEditStatusSap
 {

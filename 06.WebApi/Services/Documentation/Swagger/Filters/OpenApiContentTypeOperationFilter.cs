@@ -1,9 +1,9 @@
 ﻿using System.Reflection;
 using Microsoft.OpenApi.Models;
-using Psmp.Shared.Common.Attributes;
+using Smlp.Shared.Common.Attributes;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace Psmp.WebApi.Services.Documentation.Swagger.Filters;
+namespace Smlp.WebApi.Services.Documentation.Swagger.Filters;
 
 public class OpenApiContentTypeOperationFilter : IOperationFilter
 {

@@ -1,8 +1,8 @@
 ﻿@page "/Payment"
 @page "/Payment/{ApplicantId:guid}"
 
-@using Psmp.Shared.Payments.Contants;
-@using Psmp.Bsui.Features.Applicants.Payments.Components
+@using Smlp.Shared.Payments.Contants;
+@using Smlp.Bsui.Features.Applicants.Payments.Components
 
 @* <BrowserTabTitle>@DisplayTextFor.Payment</BrowserTabTitle>
 <PageHeader Title="@DisplayTextFor.Payment" /> *@
@@ -13,17 +13,17 @@
     @if(ApplicantId == null)
     {
         <MudTabPanel Text="@DisplayTextFor.Overview">
-            <Psmp.Bsui.Features.Payments.Overview.Index></Psmp.Bsui.Features.Payments.Overview.Index>
+            <Smlp.Bsui.Features.Payments.Overview.Index></Smlp.Bsui.Features.Payments.Overview.Index>
         </MudTabPanel>
         <CascadingValue Value="PaymentFilters">
             <MudTabPanel Text="@DisplayTextFor.Reimbursement">
-                <Psmp.Bsui.Features.Payments.Reimbursements.Index></Psmp.Bsui.Features.Payments.Reimbursements.Index>
+                <Smlp.Bsui.Features.Payments.Reimbursements.Index></Smlp.Bsui.Features.Payments.Reimbursements.Index>
             </MudTabPanel>
             <MudTabPanel Text="@DisplayTextFor.Disbursement">
-                <Psmp.Bsui.Features.Payments.Disbursement.Index></Psmp.Bsui.Features.Payments.Disbursement.Index>
+                <Smlp.Bsui.Features.Payments.Disbursement.Index></Smlp.Bsui.Features.Payments.Disbursement.Index>
             </MudTabPanel>
             <MudTabPanel Text="@DisplayTextFor.BankAccount">
-                <Psmp.Bsui.Features.Payments.BankAccount.Index></Psmp.Bsui.Features.Payments.BankAccount.Index>
+                <Smlp.Bsui.Features.Payments.BankAccount.Index></Smlp.Bsui.Features.Payments.BankAccount.Index>
             </MudTabPanel>
         </CascadingValue>
     }
@@ -31,10 +31,10 @@
     {
         <CascadingValue Value="PaymentFilters">
             <MudTabPanel Text="@DisplayTextFor.Reimbursement">
-                <Psmp.Bsui.Features.Payments.Reimbursements.Index ApplicantId="@ApplicantId"></Psmp.Bsui.Features.Payments.Reimbursements.Index>
+                <Smlp.Bsui.Features.Payments.Reimbursements.Index ApplicantId="@ApplicantId"></Smlp.Bsui.Features.Payments.Reimbursements.Index>
             </MudTabPanel>
             <MudTabPanel Text="@DisplayTextFor.Disbursement">
-                <Psmp.Bsui.Features.Payments.Disbursement.Index ApplicantId="@ApplicantId"></Psmp.Bsui.Features.Payments.Disbursement.Index>
+                <Smlp.Bsui.Features.Payments.Disbursement.Index ApplicantId="@ApplicantId"></Smlp.Bsui.Features.Payments.Disbursement.Index>
             </MudTabPanel>
         </CascadingValue>
     }

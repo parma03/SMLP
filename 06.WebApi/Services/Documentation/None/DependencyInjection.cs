@@ -1,7 +1,7 @@
-﻿using Psmp.Infrastructure.Logging;
-using Psmp.Shared.Common.Constants;
+﻿using Smlp.Infrastructure.Logging;
+using Smlp.Shared.Common.Constants;
 
-namespace Psmp.WebApi.Services.Documentation.None;
+namespace Smlp.WebApi.Services.Documentation.None;
 
 public static class DependencyInjection
 {

@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Psmp.Bsui.Services.Authorization.IdAMan.Models.GetPositions;
+namespace Smlp.Bsui.Services.Authorization.IdAMan.Models.GetPositions;
 
 public class GetPositionsIdAManPosition
 {

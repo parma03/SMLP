@@ -1,4 +1,4 @@
-﻿namespace Psmp.Bsui.Pages.Account.Constants;
+﻿namespace Smlp.Bsui.Pages.Account.Constants;
 
 public static class RouteFor
 {

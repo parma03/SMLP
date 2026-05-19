@@ -1,9 +1,9 @@
-﻿//namespace Psmp.Bsui.Features.Selections.Overview;
+﻿//namespace Smlp.Bsui.Features.Selections.Overview;
 using Microsoft.AspNetCore.Components.Web;
-using Psmp.Shared.Common.Responses;
+using Smlp.Shared.Common.Responses;
 using Syncfusion.Blazor.Inputs;
 
-namespace Psmp.Bsui.Features.UnivRegistration.UniversityAdmission;
+namespace Smlp.Bsui.Features.UnivRegistration.UniversityAdmission;
 
 public partial class Index
 {

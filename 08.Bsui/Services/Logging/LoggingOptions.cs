@@ -1,4 +1,4 @@
-﻿namespace Psmp.Bsui.Services.Logging;
+﻿namespace Smlp.Bsui.Services.Logging;
 
 public class LoggingOptions
 {

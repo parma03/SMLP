@@ -1,5 +1,5 @@
-﻿//namespace Psmp.Bsui.Features.Selections.Overview;
-namespace Psmp.Bsui.Features.StudyPreparations.Ielts;
+﻿//namespace Smlp.Bsui.Features.Selections.Overview;
+namespace Smlp.Bsui.Features.StudyPreparations.Ielts;
 
 internal class DataDStudyPreparation
 {

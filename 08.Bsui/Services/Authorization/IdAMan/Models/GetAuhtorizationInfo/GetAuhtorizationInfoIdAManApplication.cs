@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Psmp.Bsui.Services.Authorization.IdAMan.Models.GetAuhtorizationInfo;
+namespace Smlp.Bsui.Services.Authorization.IdAMan.Models.GetAuhtorizationInfo;
 
 public class GetAuhtorizationInfoIdAManApplication
 {

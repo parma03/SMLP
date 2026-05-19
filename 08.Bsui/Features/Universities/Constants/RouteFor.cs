@@ -1,4 +1,4 @@
-﻿namespace Psmp.Bsui.Features.Universities.Constants;
+﻿namespace Smlp.Bsui.Features.Universities.Constants;
 
 public static class RouteFor
 {

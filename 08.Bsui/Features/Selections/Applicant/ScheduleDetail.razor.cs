@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 
-namespace Psmp.Bsui.Features.Selections.Applicant;
+namespace Smlp.Bsui.Features.Selections.Applicant;
 
 public partial class ScheduleDetail
 {

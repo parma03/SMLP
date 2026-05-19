@@ -1,4 +1,4 @@
-﻿namespace Psmp.WebApi.Services.BackEnd;
+﻿namespace Smlp.WebApi.Services.BackEnd;
 
 public class BackEndOptions
 {

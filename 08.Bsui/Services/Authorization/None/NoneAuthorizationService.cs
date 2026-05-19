@@ -1,8 +1,8 @@
-﻿using Psmp.Shared.Common.Constants;
-using Psmp.Shared.Services.Authorization.Models.GetAuthorizationInfo;
-using Psmp.Shared.Services.Authorization.Models.GetPositions;
+﻿using Smlp.Shared.Common.Constants;
+using Smlp.Shared.Services.Authorization.Models.GetAuthorizationInfo;
+using Smlp.Shared.Services.Authorization.Models.GetPositions;
 
-namespace Psmp.Bsui.Services.Authorization.None;
+namespace Smlp.Bsui.Services.Authorization.None;
 
 public class NoneAuthorizationService : IAuthorizationService
 {

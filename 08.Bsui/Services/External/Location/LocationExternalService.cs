@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Options;
-using Psmp.Bsui.Services.External.Location.Models;
+using Smlp.Bsui.Services.External.Location.Models;
 using RestSharp;
 
-namespace Psmp.Bsui.Services.External.Location;
+namespace Smlp.Bsui.Services.External.Location;
 
 public class LocationExternalService
 {

@@ -1,17 +1,17 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using Psmp.Bsui.Common.Constants;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.Masters.Queries;
-using Psmp.Shared.Selections.SelectionPsychotests.Queries;
+using Smlp.Bsui.Common.Constants;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Masters.Queries;
+using Smlp.Shared.Selections.SelectionPsychotests.Queries;
 using Syncfusion.Blazor.Grids;
-using Psmp.Shared.Selections.Constants;
-using Psmp.Bsui.Common.Extensions;
+using Smlp.Shared.Selections.Constants;
+using Smlp.Bsui.Common.Extensions;
 using Microsoft.AspNetCore.Components.Web;
-using RouteFor = Psmp.Bsui.Features.Selections.Psychotest.Constants.RouteFor;
-using Psmp.Shared.Selections.SelectionPsychotests.Commands.Update;
+using RouteFor = Smlp.Bsui.Features.Selections.Psychotest.Constants.RouteFor;
+using Smlp.Shared.Selections.SelectionPsychotests.Commands.Update;
 
-namespace Psmp.Bsui.Features.Selections.Psychotest;
+namespace Smlp.Bsui.Features.Selections.Psychotest;
 
 public partial class ScheduleDetail
 {

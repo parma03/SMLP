@@ -2,23 +2,23 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
-using Psmp.Base.Payments.Enums;
-using Psmp.Base.Selections.Enums;
-using Psmp.Base.Studies.Enums;
-using Psmp.Bsui.Common.Constants;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Shared.Common.Constants;
-using Psmp.Shared.Common.Extensions;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.Documents.Commands.CreateDocument;
-using Psmp.Shared.Documents.Queries.GetDocumentFile;
-using Psmp.Shared.Masters.Queries;
-using Psmp.Shared.StudyPreparations.VisaGuarantee.Commands.Update;
-using Psmp.Shared.StudyPreparations.VisaGuarantee.Queries;
+using Smlp.Base.Payments.Enums;
+using Smlp.Base.Selections.Enums;
+using Smlp.Base.Studies.Enums;
+using Smlp.Bsui.Common.Constants;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Shared.Common.Constants;
+using Smlp.Shared.Common.Extensions;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Documents.Commands.CreateDocument;
+using Smlp.Shared.Documents.Queries.GetDocumentFile;
+using Smlp.Shared.Masters.Queries;
+using Smlp.Shared.StudyPreparations.VisaGuarantee.Commands.Update;
+using Smlp.Shared.StudyPreparations.VisaGuarantee.Queries;
 using Syncfusion.Blazor.DocumentEditor;
 using Syncfusion.DocIORenderer;
 
-namespace Psmp.Bsui.Features.StudyPreparations.VisaGuarantee.Components;
+namespace Smlp.Bsui.Features.StudyPreparations.VisaGuarantee.Components;
 
 public partial class DraftVisaGuarantee
 {
@@ -84,7 +84,7 @@ public partial class DraftVisaGuarantee
         if (dataResponse.Result == null || dataResponse.Result.Id == Guid.Empty)
         {
             _snackbar.AddError("Data not found!!");
-            _navigationManager.NavigateTo(Psmp.Bsui.Features.StudyPreparations.Constants.RouteFor.StudyPreparationTab(4), true);
+            _navigationManager.NavigateTo(Smlp.Bsui.Features.StudyPreparations.Constants.RouteFor.StudyPreparationTab(4), true);
             StateHasChanged();
             return;
         }
@@ -137,7 +137,7 @@ public partial class DraftVisaGuarantee
 
     public async Task OnClickBack()
     {
-        _navigationManager.NavigateTo(Psmp.Bsui.Features.StudyPreparations.Constants.RouteFor.StudyPreparationTab(5), true);
+        _navigationManager.NavigateTo(Smlp.Bsui.Features.StudyPreparations.Constants.RouteFor.StudyPreparationTab(5), true);
         await Task.CompletedTask;
     }
 

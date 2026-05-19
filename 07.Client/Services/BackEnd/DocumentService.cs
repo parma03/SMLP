@@ -1,15 +1,15 @@
 ﻿using Microsoft.Extensions.Options;
-using Psmp.Client.Common.Extensions;
-using Psmp.Client.Services.UserInfo;
-using Psmp.Shared.Common.Requests;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.Documents.Commands.CreateDocument;
-using Psmp.Shared.Documents.Queries.GetDocumentFile;
-using Psmp.Shared.Documents.Queries.GetDocuments;
+using Smlp.Client.Common.Extensions;
+using Smlp.Client.Services.UserInfo;
+using Smlp.Shared.Common.Requests;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Documents.Commands.CreateDocument;
+using Smlp.Shared.Documents.Queries.GetDocumentFile;
+using Smlp.Shared.Documents.Queries.GetDocuments;
 using RestSharp;
-using static Psmp.Shared.Documents.Constants.ApiEndpoint.V1;
+using static Smlp.Shared.Documents.Constants.ApiEndpoint.V1;
 
-namespace Psmp.Client.Services.BackEnd;
+namespace Smlp.Client.Services.BackEnd;
 
 public class DocumentService
 {

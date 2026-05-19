@@ -1,4 +1,4 @@
-﻿namespace Psmp.Bsui.Features.StudyPreparations.VisaGuarantee.Components;
+﻿namespace Smlp.Bsui.Features.StudyPreparations.VisaGuarantee.Components;
 
 public partial class DraftItemData
 {

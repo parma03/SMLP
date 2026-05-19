@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Psmp.Application.Logs.Commands;
-using Psmp.Shared.Common.Constants;
-using Psmp.Shared.Common.Responses;
+using Smlp.Application.Logs.Commands;
+using Smlp.Shared.Common.Constants;
+using Smlp.Shared.Common.Responses;
 
-namespace Psmp.WebApi.Areas.V1.Controllers;
+namespace Smlp.WebApi.Areas.V1.Controllers;
 
 [ApiVersion(ApiVersioning.V1.Number)]
 public class LogsController : ApiControllerBase

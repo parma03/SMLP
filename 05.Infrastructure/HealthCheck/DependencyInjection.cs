@@ -3,14 +3,14 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Psmp.Infrastructure.AppInfo;
-using Psmp.Infrastructure.HealthCheck.Storages.SqlServer;
-using Psmp.Infrastructure.Logging;
-using Psmp.Shared.Common.Constants;
-using Psmp.Infrastructure.Vault;
-using Psmp.Infrastructure.Persistence.VaultSqlServer;
+using Smlp.Infrastructure.AppInfo;
+using Smlp.Infrastructure.HealthCheck.Storages.SqlServer;
+using Smlp.Infrastructure.Logging;
+using Smlp.Shared.Common.Constants;
+using Smlp.Infrastructure.Vault;
+using Smlp.Infrastructure.Persistence.VaultSqlServer;
 
-namespace Psmp.Infrastructure.HealthCheck;
+namespace Smlp.Infrastructure.HealthCheck;
 
 public static class DependencyInjection
 {

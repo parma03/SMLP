@@ -1,4 +1,4 @@
-﻿namespace Psmp.Bsui.Features.StudyPreparations.SponsorshipLetter.Components;
+﻿namespace Smlp.Bsui.Features.StudyPreparations.SponsorshipLetter.Components;
 
 public partial class DraftItemData
 {

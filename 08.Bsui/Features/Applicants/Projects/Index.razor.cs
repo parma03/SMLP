@@ -2,13 +2,13 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
-using Psmp.Bsui.Common.Constants;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Shared.Common.Constants;
-using Psmp.Shared.Projects.Constants;
-using Psmp.Shared.Projects.ProjectCharterPlans.Queries;
+using Smlp.Bsui.Common.Constants;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Shared.Common.Constants;
+using Smlp.Shared.Projects.Constants;
+using Smlp.Shared.Projects.ProjectCharterPlans.Queries;
 
-namespace Psmp.Bsui.Features.Applicants.Projects;
+namespace Smlp.Bsui.Features.Applicants.Projects;
 
 public partial class Index
 {

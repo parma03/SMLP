@@ -1,6 +1,6 @@
-﻿@using Psmp.Base.Payments.Enums
-@using Psmp.Bsui.Features.Applicants.Payments.Components
-@using Psmp.Shared.Payments.Queries
+﻿@using Smlp.Base.Payments.Enums
+@using Smlp.Bsui.Features.Applicants.Payments.Components
+@using Smlp.Shared.Payments.Queries
 @inject IWebHostEnvironment _webHostEnvironment
 @inject IOptions<HrisOptions> _hrisOptions
 
@@ -117,7 +117,7 @@ else
                                         <MudGrid Justify="Justify.Center">
                                             <!-- Card pertama -->
                                             <MudItem xs="12" sm="6" md="6" Class="d-flex justify-start">
-                                                <Psmp.Bsui.Features.Payments.Component.CardStatistic ImageSrc="img/dollars.png" AvatarColor="Color.Info" Judul="@($"{"Preparation"} ({_count1})")" CountCurrency="@_countcurrency1"></Psmp.Bsui.Features.Payments.Component.CardStatistic>
+                                                <Smlp.Bsui.Features.Payments.Component.CardStatistic ImageSrc="img/dollars.png" AvatarColor="Color.Info" Judul="@($"{"Preparation"} ({_count1})")" CountCurrency="@_countcurrency1"></Smlp.Bsui.Features.Payments.Component.CardStatistic>
                                             </MudItem>
 
                                             <!-- Divider Vertikal -->
@@ -129,7 +129,7 @@ else
 
                                             <!-- Card kedua -->
 										<MudItem xs="12" sm="6" md="6" Class="d-flex justify-start">
-												<Psmp.Bsui.Features.Payments.Component.CardStatistic ImageSrc="img/idr7.png" AvatarColor="Color.Info" Judul="@($"{"Preparation"} ({_count2})")" CountCurrency="@_countcurrency2" CurrencyType="@("Rp")" IsLast="true"></Psmp.Bsui.Features.Payments.Component.CardStatistic>
+												<Smlp.Bsui.Features.Payments.Component.CardStatistic ImageSrc="img/idr7.png" AvatarColor="Color.Info" Judul="@($"{"Preparation"} ({_count2})")" CountCurrency="@_countcurrency2" CurrencyType="@("Rp")" IsLast="true"></Smlp.Bsui.Features.Payments.Component.CardStatistic>
                                             </MudItem>
 
                                             @* <!-- Divider Vertikal -->
@@ -141,7 +141,7 @@ else
 
                                             <!-- Card kedua -->
                                             <MudItem xs="5" md="3" Class="d-flex justify-start">
-                                                <Psmp.Bsui.Features.Payments.Component.CardStatistic ImageSrc="img/dollars.png" AvatarColor="Color.Default" Judul="@($"{"Requested to BMC"} ({_count3})")" CountCurrency="@_countcurrency3"></Psmp.Bsui.Features.Payments.Component.CardStatistic>
+                                                <Smlp.Bsui.Features.Payments.Component.CardStatistic ImageSrc="img/dollars.png" AvatarColor="Color.Default" Judul="@($"{"Requested to BMC"} ({_count3})")" CountCurrency="@_countcurrency3"></Smlp.Bsui.Features.Payments.Component.CardStatistic>
                                             </MudItem>
 
                                             <!-- Divider Vertikal -->
@@ -153,7 +153,7 @@ else
 
                                             <!-- Card kedua -->
                                             <MudItem xs="5" md="2" Class="d-flex justify-start">
-                                                <Psmp.Bsui.Features.Payments.Component.CardStatistic ImageSrc="img/dollars.png" AvatarColor="Color.Default" Judul="@($"{"Requested to BMC"} ({_count4})")" CountCurrency="@_countcurrency4" CurrencyType="@("Rp")"></Psmp.Bsui.Features.Payments.Component.CardStatistic>
+                                                <Smlp.Bsui.Features.Payments.Component.CardStatistic ImageSrc="img/dollars.png" AvatarColor="Color.Default" Judul="@($"{"Requested to BMC"} ({_count4})")" CountCurrency="@_countcurrency4" CurrencyType="@("Rp")"></Smlp.Bsui.Features.Payments.Component.CardStatistic>
                                             </MudItem> *@
                                         </MudGrid>
                                     </MudCard>
@@ -167,7 +167,7 @@ else
                                         <MudGrid Justify="Justify.Center">
                                             <!-- Card pertama -->
                                             <MudItem xs="12" sm="6" md="6" Class="d-flex justify-start">
-                                                <Psmp.Bsui.Features.Payments.Component.CardStatistic ImageSrc="img/dollars.png" AvatarColor="Color.Success" Judul="@($"{"Completed"} ({_count5})")" CountCurrency="@_countcurrency5"></Psmp.Bsui.Features.Payments.Component.CardStatistic>
+                                                <Smlp.Bsui.Features.Payments.Component.CardStatistic ImageSrc="img/dollars.png" AvatarColor="Color.Success" Judul="@($"{"Completed"} ({_count5})")" CountCurrency="@_countcurrency5"></Smlp.Bsui.Features.Payments.Component.CardStatistic>
                                             </MudItem>
 
                                             <!-- Divider Vertikal -->
@@ -179,7 +179,7 @@ else
 
                                             <!-- Card kedua -->
                                             <MudItem xs="12" sm="6" md="6" Class="d-flex justify-start">
-												<Psmp.Bsui.Features.Payments.Component.CardStatistic ImageSrc="img/idr7.png" AvatarColor="Color.Success" Judul="@($"{"Completed"} ({_count6})")" CountCurrency="@_countcurrency6" CurrencyType="@("Rp")" IsLast="true"></Psmp.Bsui.Features.Payments.Component.CardStatistic>
+												<Smlp.Bsui.Features.Payments.Component.CardStatistic ImageSrc="img/idr7.png" AvatarColor="Color.Success" Judul="@($"{"Completed"} ({_count6})")" CountCurrency="@_countcurrency6" CurrencyType="@("Rp")" IsLast="true"></Smlp.Bsui.Features.Payments.Component.CardStatistic>
                                             </MudItem>
                                         </MudGrid>
                                     </MudCard>
@@ -431,7 +431,7 @@ else
 					  OnChangeCountry="OnChangeCountryHandler"
 					  OnChangeCity="OnChangeCityHandler">
 </DialogAddDibursement>
-<Psmp.Bsui.Common.Components.DialogConfirmation
+<Smlp.Bsui.Common.Components.DialogConfirmation
     Visibility="VisiblePopupDelete"
     Title="Delete Confirmation"
     Content="Are you sure want to delete this data?"

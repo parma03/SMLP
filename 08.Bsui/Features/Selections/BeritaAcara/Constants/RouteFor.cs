@@ -1,4 +1,4 @@
-﻿namespace Psmp.Bsui.Features.Selections.BeritaAcara.Constants;
+﻿namespace Smlp.Bsui.Features.Selections.BeritaAcara.Constants;
 
 public static class RouteFor
 {

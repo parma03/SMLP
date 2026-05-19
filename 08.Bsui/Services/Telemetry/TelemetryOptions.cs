@@ -1,4 +1,4 @@
-﻿namespace Psmp.Bsui.Services.Telemetry;
+﻿namespace Smlp.Bsui.Services.Telemetry;
 
 public class TelemetryOptions
 {

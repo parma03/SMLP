@@ -2,12 +2,12 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
-using Psmp.Base.Studies.Enums;
-using Psmp.Bsui.Common.Constants;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Shared.StudyPreparations.SponsorshipLetter.Constants;
+using Smlp.Base.Studies.Enums;
+using Smlp.Bsui.Common.Constants;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Shared.StudyPreparations.SponsorshipLetter.Constants;
 
-namespace Psmp.Bsui.Features.StudyPreparations.SponsorshipLetter;
+namespace Smlp.Bsui.Features.StudyPreparations.SponsorshipLetter;
 
 public partial class DetailAccepted
 {
@@ -31,7 +31,7 @@ public partial class DetailAccepted
         if (dataResponse.Result == null || dataResponse.Result.Id == Guid.Empty)
         {
             _snackbar.AddError("Data not found!!");
-            _navigationManager.NavigateTo(Psmp.Bsui.Features.StudyPreparations.Constants.RouteFor.StudyPreparationTab(4), true);
+            _navigationManager.NavigateTo(Smlp.Bsui.Features.StudyPreparations.Constants.RouteFor.StudyPreparationTab(4), true);
             StateHasChanged();
             return;
         }
@@ -57,7 +57,7 @@ public partial class DetailAccepted
         if (!canAccess)
         {
             _snackbar.AddError("Can not access this data!!");
-            _navigationManager.NavigateTo(Psmp.Bsui.Features.StudyPreparations.Constants.RouteFor.StudyPreparationTab(4), true);
+            _navigationManager.NavigateTo(Smlp.Bsui.Features.StudyPreparations.Constants.RouteFor.StudyPreparationTab(4), true);
             StateHasChanged();
             return;
         }

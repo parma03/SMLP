@@ -1,22 +1,22 @@
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.Payments.Queries;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Payments.Queries;
 using Syncfusion.Blazor.Grids;
 using Syncfusion.Blazor.Inputs;
 using System.Security.Claims;
-using Psmp.Base.Common;
-using Psmp.Shared.Common.Extensions;
-using Psmp.Shared.Payments.Commands;
-using Psmp.Bsui.Common.Extensions;
+using Smlp.Base.Common;
+using Smlp.Shared.Common.Extensions;
+using Smlp.Shared.Payments.Commands;
+using Smlp.Bsui.Common.Extensions;
 using System.Data;
-using Psmp.Base.Payments.Enums;
-using Psmp.Base.Scholarships.Enums;
-using Psmp.Shared.Services.Authorization.Constants;
+using Smlp.Base.Payments.Enums;
+using Smlp.Base.Scholarships.Enums;
+using Smlp.Shared.Services.Authorization.Constants;
 using Syncfusion.Blazor.Navigations;
-using Psmp.Bsui.Features.Payments.Constants;
+using Smlp.Bsui.Features.Payments.Constants;
 
-namespace Psmp.Bsui.Features.Payments.Overview;
+namespace Smlp.Bsui.Features.Payments.Overview;
 
 public partial class Index
 {

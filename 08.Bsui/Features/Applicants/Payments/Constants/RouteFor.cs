@@ -1,4 +1,4 @@
-﻿namespace Psmp.Bsui.Features.Applicants.Payments.Constants;
+﻿namespace Smlp.Bsui.Features.Applicants.Payments.Constants;
 
 public static class RouteFor
 {

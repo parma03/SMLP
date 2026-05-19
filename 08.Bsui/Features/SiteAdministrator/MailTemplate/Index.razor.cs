@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components.Web;
-using Psmp.Shared.Common.Responses;
+using Smlp.Shared.Common.Responses;
 
-namespace Psmp.Bsui.Features.SiteAdministrator.MailTemplate;
+namespace Smlp.Bsui.Features.SiteAdministrator.MailTemplate;
 
 public partial class Index
 {

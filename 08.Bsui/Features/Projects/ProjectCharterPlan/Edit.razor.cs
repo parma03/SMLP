@@ -4,23 +4,23 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
 using MudBlazor;
-using Psmp.Base.Selections.Enums;
-using Psmp.Bsui.Common.Components;
-using Psmp.Bsui.Common.Constants;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Bsui.Features.Projects.Constants;
-using Psmp.Shared.Common.Constants;
-using Psmp.Shared.Common.Extensions;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.Documents.Queries.GetDocumentFile;
-using Psmp.Shared.Documents.Queries.GetDocuments;
-using Psmp.Shared.Projects.ProjectCharterPlans.Commands;
-using Psmp.Shared.Projects.ProjectCharterPlans.Queries;
-using Psmp.Shared.Projects.ProjectComments.Commands;
-using Psmp.Shared.Projects.ProjectComments.Queries;
+using Smlp.Base.Selections.Enums;
+using Smlp.Bsui.Common.Components;
+using Smlp.Bsui.Common.Constants;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Bsui.Features.Projects.Constants;
+using Smlp.Shared.Common.Constants;
+using Smlp.Shared.Common.Extensions;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Documents.Queries.GetDocumentFile;
+using Smlp.Shared.Documents.Queries.GetDocuments;
+using Smlp.Shared.Projects.ProjectCharterPlans.Commands;
+using Smlp.Shared.Projects.ProjectCharterPlans.Queries;
+using Smlp.Shared.Projects.ProjectComments.Commands;
+using Smlp.Shared.Projects.ProjectComments.Queries;
 using Syncfusion.Blazor.Grids;
 
-namespace Psmp.Bsui.Features.Projects.ProjectCharterPlan;
+namespace Smlp.Bsui.Features.Projects.ProjectCharterPlan;
 
 public partial class Edit
 {

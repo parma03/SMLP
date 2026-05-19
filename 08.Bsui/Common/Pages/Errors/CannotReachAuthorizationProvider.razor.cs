@@ -1,7 +1,7 @@
-﻿using Psmp.Bsui.Services.Authorization.IdAMan;
-using Psmp.Shared.Services.Authorization.Constants;
+﻿using Smlp.Bsui.Services.Authorization.IdAMan;
+using Smlp.Shared.Services.Authorization.Constants;
 
-namespace Psmp.Bsui.Common.Pages.Errors;
+namespace Smlp.Bsui.Common.Pages.Errors;
 
 public partial class CannotReachAuthorizationProvider
 {

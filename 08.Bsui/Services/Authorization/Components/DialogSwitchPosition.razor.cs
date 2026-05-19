@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Bsui.Services.Authentication;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.Services.Authorization.Models.GetPositions;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Bsui.Services.Authentication;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Services.Authorization.Models.GetPositions;
 
-namespace Psmp.Bsui.Services.Authorization.Components;
+namespace Smlp.Bsui.Services.Authorization.Components;
 
 public partial class DialogSwitchPosition
 {

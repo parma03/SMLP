@@ -1,9 +1,9 @@
 ﻿using MudBlazor;
-using Psmp.Bsui.Common.Constants;
-using Psmp.Shared.Common.Constants;
-using Psmp.Shared.Common.Extensions;
+using Smlp.Bsui.Common.Constants;
+using Smlp.Shared.Common.Constants;
+using Smlp.Shared.Common.Extensions;
 
-namespace Psmp.Bsui.Common.Pages;
+namespace Smlp.Bsui.Common.Pages;
 
 public partial class Index
 {

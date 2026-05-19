@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 
-namespace Psmp.Bsui.Features.Dashboards.Component;
+namespace Smlp.Bsui.Features.Dashboards.Component;
 
 public partial class CardStatistic
 {

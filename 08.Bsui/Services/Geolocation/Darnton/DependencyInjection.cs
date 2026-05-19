@@ -1,6 +1,6 @@
 ﻿using Darnton.Blazor.DeviceInterop.Geolocation;
 
-namespace Psmp.Bsui.Services.Geolocation.Darnton;
+namespace Smlp.Bsui.Services.Geolocation.Darnton;
 
 public static class DependencyInjection
 {

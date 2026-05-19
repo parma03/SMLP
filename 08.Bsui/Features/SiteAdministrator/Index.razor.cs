@@ -1,8 +1,8 @@
 ﻿using MudBlazor;
-using Psmp.Bsui.Common.Constants;
-using Psmp.Shared.SiteAdministrator.Constants;
+using Smlp.Bsui.Common.Constants;
+using Smlp.Shared.SiteAdministrator.Constants;
 
-namespace Psmp.Bsui.Features.SiteAdministrator;
+namespace Smlp.Bsui.Features.SiteAdministrator;
 
 public partial class Index
 {

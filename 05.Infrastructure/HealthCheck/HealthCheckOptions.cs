@@ -1,4 +1,4 @@
-﻿namespace Psmp.Infrastructure.HealthCheck;
+﻿namespace Smlp.Infrastructure.HealthCheck;
 
 public class HealthCheckOptions
 {

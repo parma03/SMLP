@@ -1,12 +1,12 @@
 ﻿using System.Security.Claims;
 using IdentityModel;
 using Microsoft.AspNetCore.Http;
-using Psmp.Application.Services.CurrentUser;
-using Psmp.Base.ValueObjects;
-using Psmp.Shared.Common.Constants;
-using Psmp.Shared.Services.Authorization.Constants;
+using Smlp.Application.Services.CurrentUser;
+using Smlp.Base.ValueObjects;
+using Smlp.Shared.Common.Constants;
+using Smlp.Shared.Services.Authorization.Constants;
 
-namespace Psmp.InfrastructureCurrentUser;
+namespace Smlp.InfrastructureCurrentUser;
 
 public class CurrentUserService : ICurrentUserService
 {

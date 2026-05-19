@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using Psmp.Application.Services.Persistence.Seeders;
+using Smlp.Application.Services.Persistence.Seeders;
 using Smlp.Application.Common.Behaviours;
 
 namespace Smlp.Application;

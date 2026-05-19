@@ -1,4 +1,4 @@
-﻿namespace Psmp.Bsui.Services.Authentication.Constants;
+﻿namespace Smlp.Bsui.Services.Authentication.Constants;
 
 public static class CustomClaimTypes
 {

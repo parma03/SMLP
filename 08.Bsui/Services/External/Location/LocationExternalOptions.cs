@@ -1,4 +1,4 @@
-﻿namespace Psmp.Bsui.Services.External.Location;
+﻿namespace Smlp.Bsui.Services.External.Location;
 
 public class LocationExternalOptions
 {

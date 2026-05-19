@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Psmp.Application.Services.Persistence.Seeders;
+using Smlp.Application.Services.Persistence.Seeders;
 
-namespace Psmp.Infrastructure.Persistence;
+namespace Smlp.Infrastructure.Persistence;
 
 public static class DatabaseSeeding
 {

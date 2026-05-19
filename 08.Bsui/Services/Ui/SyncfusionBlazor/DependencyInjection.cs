@@ -1,6 +1,6 @@
 ﻿using Syncfusion.Licensing;
 
-namespace Psmp.Bsui.Services.Ui.SyncfusionBlazor;
+namespace Smlp.Bsui.Services.Ui.SyncfusionBlazor;
 
 public static class DependencyInjection
 {

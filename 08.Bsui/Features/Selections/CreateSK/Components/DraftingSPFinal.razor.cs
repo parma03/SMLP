@@ -1,17 +1,17 @@
 ﻿using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components;
-using Psmp.Bsui.Common.Extensions;
+using Smlp.Bsui.Common.Extensions;
 using Syncfusion.Blazor.Inputs;
-using Psmp.Base.Selections.Enums;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.Documents.Queries.GetDocumentFile;
+using Smlp.Base.Selections.Enums;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Documents.Queries.GetDocumentFile;
 using Syncfusion.Blazor.DocumentEditor;
-using Psmp.Shared.Documents.Commands.CreateDocument;
-using Psmp.Shared.Selections.CreateSK.Commands.Create;
-using Psmp.Shared.Selections.CreateSK.Queries;
-using Psmp.Shared.Selections.CreateSK.Commands.Update;
+using Smlp.Shared.Documents.Commands.CreateDocument;
+using Smlp.Shared.Selections.CreateSK.Commands.Create;
+using Smlp.Shared.Selections.CreateSK.Queries;
+using Smlp.Shared.Selections.CreateSK.Commands.Update;
 
-namespace Psmp.Bsui.Features.Selections.CreateSK.Components;
+namespace Smlp.Bsui.Features.Selections.CreateSK.Components;
 
 public partial class DraftingSPFinal
 {

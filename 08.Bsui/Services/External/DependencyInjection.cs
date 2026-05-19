@@ -1,6 +1,6 @@
-﻿using Psmp.Bsui.Services.External.Location;
+﻿using Smlp.Bsui.Services.External.Location;
 
-namespace Psmp.Bsui.Services.External;
+namespace Smlp.Bsui.Services.External;
 
 public static class DependencyInjection
 {

@@ -1,29 +1,27 @@
 ﻿/*
-* Pertamina Scholarship Management Portal
-* Copyright (c) 2024-2025 PT. Pertamina Persero
 */
 
 using System.Security.Claims;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
-using Psmp.Base.Selections.Enums;
-using Psmp.Base.Studies.Enums;
-using Psmp.Bsui.Common.Constants;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Shared.Common.Constants;
-using Psmp.Shared.Common.Extensions;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.Documents.Commands.CreateDocument;
-using Psmp.Shared.Documents.Queries.GetDocumentFile;
-using Psmp.Shared.StudyMonitorings.AfterProgram.Commands.Update;
-using Psmp.Shared.StudyMonitorings.AfterProgram.Queries;
-using Psmp.Shared.StudyMonitorings.StudyMonitoringComment.Commands.Create;
-using Psmp.Shared.StudyMonitorings.StudyMonitoringComment.Queries;
+using Smlp.Base.Selections.Enums;
+using Smlp.Base.Studies.Enums;
+using Smlp.Bsui.Common.Constants;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Shared.Common.Constants;
+using Smlp.Shared.Common.Extensions;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Documents.Commands.CreateDocument;
+using Smlp.Shared.Documents.Queries.GetDocumentFile;
+using Smlp.Shared.StudyMonitorings.AfterProgram.Commands.Update;
+using Smlp.Shared.StudyMonitorings.AfterProgram.Queries;
+using Smlp.Shared.StudyMonitorings.StudyMonitoringComment.Commands.Create;
+using Smlp.Shared.StudyMonitorings.StudyMonitoringComment.Queries;
 using Syncfusion.Blazor.Grids;
 using Syncfusion.Blazor.Inputs;
 
-namespace Psmp.Bsui.Features.Applicants.Studies.Monitoring;
+namespace Smlp.Bsui.Features.Applicants.Studies.Monitoring;
 
 public partial class MonitoringAfterProgram
 {
@@ -143,7 +141,7 @@ public partial class MonitoringAfterProgram
                             PresentationTime = TimeOnly.MinValue;
                             PresentationLink = string.Empty;
                             PresentationDocumentId = Guid.Empty;
-                            PresentationStatus = Psmp.Base.Studies.Enums.PresentationStatus.NotStarted.GetDescription();
+                            PresentationStatus = Smlp.Base.Studies.Enums.PresentationStatus.NotStarted.GetDescription();
                         }
 
                         await OnLoadGrid();

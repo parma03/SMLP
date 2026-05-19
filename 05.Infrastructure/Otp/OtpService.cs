@@ -1,15 +1,15 @@
 ﻿using OtpNet;
-using Psmp.Application.Services.Otp;
-using Psmp.Application.Services.Otp.Models.CreateOtp;
-using Psmp.Shared.Common.Constants;
+using Smlp.Application.Services.Otp;
+using Smlp.Application.Services.Otp.Models.CreateOtp;
+using Smlp.Shared.Common.Constants;
 using QRCoder;
 using static QRCoder.PayloadGenerator;
 
-namespace Psmp.InfrastructureOtp;
+namespace Smlp.InfrastructureOtp;
 
 public class OtpService : IOtpService
 {
-    private const string Issuer = "PSMP";
+    private const string Issuer = "SMLP";
 
     public CreateOtpResponse CreateOtp(string username)
     {

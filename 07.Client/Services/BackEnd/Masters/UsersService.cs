@@ -1,18 +1,16 @@
 ﻿/*
-* Pertamina Scholarship Management Portal
-* Copyright (c) 2024-2025 PT. Pertamina Persero
 */
 
 using Microsoft.Extensions.Options;
-using Psmp.Client.Common.Extensions;
-using Psmp.Client.Services.UserInfo;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.Masters.AdministrativeCriterias.Commands;
-using Psmp.Shared.Masters.AdministrativeCriterias.Queries;
+using Smlp.Client.Common.Extensions;
+using Smlp.Client.Services.UserInfo;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Masters.AdministrativeCriterias.Commands;
+using Smlp.Shared.Masters.AdministrativeCriterias.Queries;
 using RestSharp;
-using static Psmp.Shared.Masters.AdministrativeCriterias.Constants.ApiEndpoint.V1;
+using static Smlp.Shared.Masters.AdministrativeCriterias.Constants.ApiEndpoint.V1;
 
-namespace Psmp.Client.Services.BackEnd.Masters;
+namespace Smlp.Client.Services.BackEnd.Masters;
 
 public class UsersService : IDisposable
 {

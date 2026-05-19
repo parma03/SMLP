@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Psmp.Infrastructure.BackgroundJob.Hangfire;
-using Psmp.Infrastructure.BackgroundJob.None;
-using Psmp.Shared.Common.Constants;
-using Psmp.Shared.Common.Extensions;
+using Smlp.Infrastructure.BackgroundJob.Hangfire;
+using Smlp.Infrastructure.BackgroundJob.None;
+using Smlp.Shared.Common.Constants;
+using Smlp.Shared.Common.Extensions;
 
-namespace Psmp.Infrastructure.BackgroundJob;
+namespace Smlp.Infrastructure.BackgroundJob;
 
 public static class DependencyInjection
 {

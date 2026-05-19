@@ -1,4 +1,4 @@
-﻿namespace Psmp.Bsui;
+﻿namespace Smlp.Bsui;
 
 public class InitialApplicationState
 {

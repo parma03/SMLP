@@ -1,4 +1,4 @@
-﻿namespace Psmp.WebApi.Services.Documentation;
+﻿namespace Smlp.WebApi.Services.Documentation;
 
 public class DocumentationOptions
 {

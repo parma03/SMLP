@@ -1,10 +1,10 @@
 ﻿using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using Psmp.Base.Payments.Enums;
+using Smlp.Base.Payments.Enums;
 using Syncfusion.Blazor.Inputs;
 
-namespace Psmp.Bsui.Common.Components;
+namespace Smlp.Bsui.Common.Components;
 
 public partial class DialogValidation
 {

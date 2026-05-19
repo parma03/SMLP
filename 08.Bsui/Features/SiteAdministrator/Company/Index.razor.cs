@@ -2,11 +2,11 @@
 using Microsoft.AspNetCore.Components;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Components.Web;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.Masters.Queries;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Masters.Queries;
 using Syncfusion.Blazor.Inputs;
 
-namespace Psmp.Bsui.Features.SiteAdministrator.Company;
+namespace Smlp.Bsui.Features.SiteAdministrator.Company;
 
 public partial class Index
 {

@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using Psmp.Bsui.Common.Constants;
-using Psmp.Shared.Selections.Constants;
+using Smlp.Bsui.Common.Constants;
+using Smlp.Shared.Selections.Constants;
 
-namespace Psmp.Bsui.Features.Selections;
+namespace Smlp.Bsui.Features.Selections;
 
 public partial class Index
 {

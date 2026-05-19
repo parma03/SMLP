@@ -1,14 +1,14 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Bsui.Common.Helper;
-using Psmp.Client.Services.BackEnd.Masters;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.Masters.Commands.SetDataStatus.Update;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Bsui.Common.Helper;
+using Smlp.Client.Services.BackEnd.Masters;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Masters.Commands.SetDataStatus.Update;
 using Syncfusion.Blazor.Calendars;
 
-namespace Psmp.Bsui.Features.SiteAdministrator.SetDataStatus;
+namespace Smlp.Bsui.Features.SiteAdministrator.SetDataStatus;
 
 public partial class Index
 {

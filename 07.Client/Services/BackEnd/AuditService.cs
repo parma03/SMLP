@@ -1,14 +1,14 @@
 ﻿using Microsoft.Extensions.Options;
-using Psmp.Client.Common.Extensions;
-using Psmp.Client.Services.UserInfo;
-using Psmp.Shared.Audits.Queries.ExportAudits;
-using Psmp.Shared.Audits.Queries.GetAudit;
-using Psmp.Shared.Audits.Queries.GetAudits;
-using Psmp.Shared.Common.Responses;
+using Smlp.Client.Common.Extensions;
+using Smlp.Client.Services.UserInfo;
+using Smlp.Shared.Audits.Queries.ExportAudits;
+using Smlp.Shared.Audits.Queries.GetAudit;
+using Smlp.Shared.Audits.Queries.GetAudits;
+using Smlp.Shared.Common.Responses;
 using RestSharp;
-using static Psmp.Shared.Audits.Constants.ApiEndpoint.V1;
+using static Smlp.Shared.Audits.Constants.ApiEndpoint.V1;
 
-namespace Psmp.Client.Services.BackEnd;
+namespace Smlp.Client.Services.BackEnd;
 
 public class AuditService
 {

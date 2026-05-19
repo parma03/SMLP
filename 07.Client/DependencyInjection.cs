@@ -1,12 +1,12 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Psmp.Client.Services.BackEnd;
-using Psmp.Client.Services.HealthCheck;
-using Psmp.Client.Services.Hris;
-using Psmp.Client.Services.Iam;
-using Psmp.Client.Services.UserInfo;
+using Smlp.Client.Services.BackEnd;
+using Smlp.Client.Services.HealthCheck;
+using Smlp.Client.Services.Hris;
+using Smlp.Client.Services.Iam;
+using Smlp.Client.Services.UserInfo;
 
-namespace Psmp.Client;
+namespace Smlp.Client;
 
 public static class DependencyInjection
 {

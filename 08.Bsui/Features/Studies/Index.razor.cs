@@ -1,4 +1,4 @@
-﻿namespace Psmp.Bsui.Features.Studies;
+﻿namespace Smlp.Bsui.Features.Studies;
 
 public partial class Index
 {

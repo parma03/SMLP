@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
-namespace Psmp.Bsui.Features.Projects.Component;
+namespace Smlp.Bsui.Features.Projects.Component;
 
 public partial class CardProjectStatistic
 {

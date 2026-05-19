@@ -1,12 +1,12 @@
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components;
-using Psmp.Bsui.Common.Constants;
+using Smlp.Bsui.Common.Constants;
 using System.Security.Claims;
 using MudBlazor;
-using Psmp.Shared.Payments.Contants;
-using Psmp.Bsui.Common.Extensions;
+using Smlp.Shared.Payments.Contants;
+using Smlp.Bsui.Common.Extensions;
 
-namespace Psmp.Bsui.Features.Applicants.Payments;
+namespace Smlp.Bsui.Features.Applicants.Payments;
 
 public partial class Index
 {

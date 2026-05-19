@@ -1,9 +1,9 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
-using Psmp.Application.Services.DomainEvent;
-using Psmp.Application.Services.DomainEvent.Models;
+using Smlp.Application.Services.DomainEvent;
+using Smlp.Application.Services.DomainEvent.Models;
 
-namespace Psmp.InfrastructureDomainEvent;
+namespace Smlp.InfrastructureDomainEvent;
 
 public class DomainEventService : IDomainEventService
 {

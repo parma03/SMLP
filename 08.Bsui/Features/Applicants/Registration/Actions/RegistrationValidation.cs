@@ -1,17 +1,15 @@
 ﻿/*
-* Pertamina Scholarship Management Portal
-* Copyright (c) 2024-2025 PT. Pertamina Persero
 */
 
-using Psmp.Base.Scholarships.Enums;
-using Psmp.Base.Selections.Enums;
-using Psmp.Bsui.Features.Applicants.Registration.Models;
-using Psmp.Client.Services.BackEnd.Applicants;
-using Psmp.Client.Services.Hris;
-using Psmp.Shared.Common.Extensions;
-using Psmp.Shared.Scholarships.ScholarshipPosting.Queries;
+using Smlp.Base.Scholarships.Enums;
+using Smlp.Base.Selections.Enums;
+using Smlp.Bsui.Features.Applicants.Registration.Models;
+using Smlp.Client.Services.BackEnd.Applicants;
+using Smlp.Client.Services.Hris;
+using Smlp.Shared.Common.Extensions;
+using Smlp.Shared.Scholarships.ScholarshipPosting.Queries;
 
-namespace Psmp.Bsui.Features.Applicants.Registration.Actions;
+namespace Smlp.Bsui.Features.Applicants.Registration.Actions;
 
 public class RegistrationValidation
 {

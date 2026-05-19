@@ -1,4 +1,4 @@
-﻿namespace Psmp.Bsui.Services.Authentication.IS4IM;
+﻿namespace Smlp.Bsui.Services.Authentication.IS4IM;
 
 public class IS4IMAuthenticationOptions
 {

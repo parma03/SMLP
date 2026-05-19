@@ -1,4 +1,4 @@
-﻿namespace Psmp.Infrastructure.BackgroundJob.Hangfire;
+﻿namespace Smlp.Infrastructure.BackgroundJob.Hangfire;
 
 public class HangfireBackgroundJobOptions
 {

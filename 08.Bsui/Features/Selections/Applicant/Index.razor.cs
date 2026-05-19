@@ -2,11 +2,11 @@
 using Microsoft.AspNetCore.Components;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Components.Web;
-using Psmp.Shared.Common.Extensions;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Shared.Scholarships.ScholarshipPostingApplicant.Queries;
+using Smlp.Shared.Common.Extensions;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Shared.Scholarships.ScholarshipPostingApplicant.Queries;
 
-namespace Psmp.Bsui.Features.Selections.Applicant;
+namespace Smlp.Bsui.Features.Selections.Applicant;
 
 public partial class Index
 {

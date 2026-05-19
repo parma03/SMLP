@@ -3,12 +3,12 @@ using IdentityModel;
 using Microsoft.ApplicationInsights.Channel;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Extensions.Options;
-using Psmp.Bsui.Services.AppInfo;
-using Psmp.Shared.Common.Constants;
+using Smlp.Bsui.Services.AppInfo;
+using Smlp.Shared.Common.Constants;
 
-using GeolocationValueObject = Psmp.Base.ValueObjects.Geolocation;
+using GeolocationValueObject = Smlp.Base.ValueObjects.Geolocation;
 
-namespace Psmp.Bsui.Services.Telemetry.ApplicationInsights;
+namespace Smlp.Bsui.Services.Telemetry.ApplicationInsights;
 
 public class CustomTelemetryInitializer : ITelemetryInitializer
 {

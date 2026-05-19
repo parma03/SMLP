@@ -1,4 +1,4 @@
-﻿namespace Psmp.Bsui.Services.AppInfo;
+﻿namespace Smlp.Bsui.Services.AppInfo;
 
 public class AppInfoOptions
 {

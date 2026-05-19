@@ -5,20 +5,20 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.JSInterop;
 using MudBlazor;
-using Psmp.Bsui.Common.Constants;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Bsui.Common.Helper;
-using Psmp.Bsui.Features.Payments.Constants;
-using Psmp.Shared.Common.Constants;
-using Psmp.Shared.Common.Extensions;
-using Psmp.Shared.Payments.Commands;
-using Psmp.Shared.Payments.Queries;
-using Psmp.Shared.Payments.Queries.PaymentOverviewDetails;
+using Smlp.Bsui.Common.Constants;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Bsui.Common.Helper;
+using Smlp.Bsui.Features.Payments.Constants;
+using Smlp.Shared.Common.Constants;
+using Smlp.Shared.Common.Extensions;
+using Smlp.Shared.Payments.Commands;
+using Smlp.Shared.Payments.Queries;
+using Smlp.Shared.Payments.Queries.PaymentOverviewDetails;
 using Syncfusion.Blazor.Grids;
 using Syncfusion.Blazor.Inputs;
 using Syncfusion.XlsIO;
 
-namespace Psmp.Bsui.Features.Payments.Overview;
+namespace Smlp.Bsui.Features.Payments.Overview;
 
 public partial class Detail
 {
@@ -677,7 +677,7 @@ public partial class Detail
 
     public async Task OnClickBack()
     {
-        _navigationManager.NavigateTo(Psmp.Bsui.Features.Payments.Constants.RouteFor.Payment, true);
+        _navigationManager.NavigateTo(Smlp.Bsui.Features.Payments.Constants.RouteFor.Payment, true);
         //await Task.CompletedTask;
     }
 

@@ -1,9 +1,9 @@
 ﻿using System.Reflection;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Psmp.Shared.Common.Attributes;
-using Psmp.Shared.Common.Constants;
+using Smlp.Shared.Common.Attributes;
+using Smlp.Shared.Common.Constants;
 
-namespace Psmp.WebApi.Common.ModelBindings;
+namespace Smlp.WebApi.Common.ModelBindings;
 
 public class JsonModelBinderProvider : IModelBinderProvider
 {

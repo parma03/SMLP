@@ -1,19 +1,19 @@
 ﻿using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components;
 using System.Security.Claims;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.Masters.Queries;
-using Psmp.Shared.Scholarships.ScholarshipPosting.Queries;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Masters.Queries;
+using Smlp.Shared.Scholarships.ScholarshipPosting.Queries;
 using Microsoft.AspNetCore.Components.Web;
-using Psmp.Bsui.Features.Scholarships.SholarshipPosting.Constants;
+using Smlp.Bsui.Features.Scholarships.SholarshipPosting.Constants;
 using Syncfusion.Blazor.Grids;
-using Psmp.Shared.Scholarships.ScholarshipPosting.Commands.Update;
-using Psmp.Base.Scholarships.Enums;
-using Psmp.Bsui.Common.Extensions;
+using Smlp.Shared.Scholarships.ScholarshipPosting.Commands.Update;
+using Smlp.Base.Scholarships.Enums;
+using Smlp.Bsui.Common.Extensions;
 using Syncfusion.Blazor.Navigations;
-using Psmp.Shared.Common.Extensions;
+using Smlp.Shared.Common.Extensions;
 
-namespace Psmp.Bsui.Features.Scholarships.SholarshipPosting;
+namespace Smlp.Bsui.Features.Scholarships.SholarshipPosting;
 
 public partial class Index
 {

@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using Psmp.Shared.Payments.Queries;
+using Smlp.Shared.Payments.Queries;
 
-namespace Psmp.Bsui.Features.Payments.Component;
+namespace Smlp.Bsui.Features.Payments.Component;
 
 public partial class CardStatistic
 {

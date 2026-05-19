@@ -1,20 +1,18 @@
 ﻿/*
-* Pertamina Scholarship Management Portal
-* Copyright (c) 2024-2025 PT. Pertamina Persero
 */
 
 using System.Security.Claims;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
-using Psmp.Base.Selections.Enums;
-using Psmp.Bsui.Common.Constants;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Shared.Common.Constants;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.Studies.Constants;
+using Smlp.Base.Selections.Enums;
+using Smlp.Bsui.Common.Constants;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Shared.Common.Constants;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Studies.Constants;
 
-namespace Psmp.Bsui.Features.Applicants.Studies.Preparation;
+namespace Smlp.Bsui.Features.Applicants.Studies.Preparation;
 
 public partial class Preparation
 {

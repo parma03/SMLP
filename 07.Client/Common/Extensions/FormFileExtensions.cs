@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace Psmp.Client.Common.Extensions;
+namespace Smlp.Client.Common.Extensions;
 
 public static class FormFileExtensions
 {

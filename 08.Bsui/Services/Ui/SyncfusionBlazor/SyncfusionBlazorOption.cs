@@ -1,4 +1,4 @@
-﻿namespace Psmp.Bsui.Services.Ui.SyncfusionBlazor;
+﻿namespace Smlp.Bsui.Services.Ui.SyncfusionBlazor;
 
 public class SyncfusionBlazorOption
 {

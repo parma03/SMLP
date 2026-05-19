@@ -3,14 +3,14 @@ using Hangfire.Dashboard.BasicAuthorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Psmp.Application.Services.BackgroundJob;
-using Psmp.Infrastructure.BackgroundJob.Hangfire.Storages.SqlServer;
-using Psmp.Infrastructure.Persistence.VaultSqlServer;
-using Psmp.Infrastructure.Vault;
-using Psmp.Shared.Common.Constants;
-using Psmp.Shared.Common.Extensions;
+using Smlp.Application.Services.BackgroundJob;
+using Smlp.Infrastructure.BackgroundJob.Hangfire.Storages.SqlServer;
+using Smlp.Infrastructure.Persistence.VaultSqlServer;
+using Smlp.Infrastructure.Vault;
+using Smlp.Shared.Common.Constants;
+using Smlp.Shared.Common.Extensions;
 
-namespace Psmp.Infrastructure.BackgroundJob.Hangfire;
+namespace Smlp.Infrastructure.BackgroundJob.Hangfire;
 
 public static class DependencyInjection
 {

@@ -1,4 +1,4 @@
-﻿namespace Psmp.Bsui.Common.Constants;
+﻿namespace Smlp.Bsui.Common.Constants;
 
 public static class JavaScriptIdentifierFor
 {

@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Psmp.Bsui.Services.External.Location.Models;
+namespace Smlp.Bsui.Services.External.Location.Models;
 
 public class Address
 {

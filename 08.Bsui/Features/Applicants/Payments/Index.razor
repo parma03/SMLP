@@ -1,7 +1,7 @@
 ﻿@page "/ApplicantPayment"
 @page "/ApplicantPayment/{EmployeeNumber}/{Action}"
-@using Psmp.Shared.Payments.Contants;
-@using Psmp.Bsui.Features.Applicants.Payments.Components
+@using Smlp.Shared.Payments.Contants;
+@using Smlp.Bsui.Features.Applicants.Payments.Components
 
 <BrowserTabTitle>@DisplayTextFor.Payment</BrowserTabTitle>
 <PageHeader Title="@DisplayTextFor.Payment" />
@@ -15,31 +15,31 @@
     @if (Action == "Reimbursement")
     {
         <MudTabPanel Text="@DisplayTextFor.Reimbursement">
-            <Psmp.Bsui.Features.Applicants.Payments.Reimbursements.Index Action="@Action" EmployeeNumber="@EmployeeNumber"></Psmp.Bsui.Features.Applicants.Payments.Reimbursements.Index>
+            <Smlp.Bsui.Features.Applicants.Payments.Reimbursements.Index Action="@Action" EmployeeNumber="@EmployeeNumber"></Smlp.Bsui.Features.Applicants.Payments.Reimbursements.Index>
         </MudTabPanel>
 	@* 	<MudTabPanel Text="@DisplayTextFor.BankAccount">
-			<Psmp.Bsui.Features.Applicants.Payments.BankAccount.Index Action="@Action" EmployeeNumber="@EmployeeNumber"></Psmp.Bsui.Features.Applicants.Payments.BankAccount.Index>
+			<Smlp.Bsui.Features.Applicants.Payments.BankAccount.Index Action="@Action" EmployeeNumber="@EmployeeNumber"></Smlp.Bsui.Features.Applicants.Payments.BankAccount.Index>
 		</MudTabPanel> *@
     }
     else if (Action == "Disbursement")
     {
         <MudTabPanel Text="@DisplayTextFor.Disbursement">
-            <Psmp.Bsui.Features.Applicants.Payments.Dibursements.Index Action="@Action" EmployeeNumber="@EmployeeNumber"></Psmp.Bsui.Features.Applicants.Payments.Dibursements.Index>
+            <Smlp.Bsui.Features.Applicants.Payments.Dibursements.Index Action="@Action" EmployeeNumber="@EmployeeNumber"></Smlp.Bsui.Features.Applicants.Payments.Dibursements.Index>
         </MudTabPanel>
 	@* 	<MudTabPanel Text="@DisplayTextFor.BankAccount">
-			<Psmp.Bsui.Features.Applicants.Payments.BankAccount.Index Action="@Action" EmployeeNumber="@EmployeeNumber"></Psmp.Bsui.Features.Applicants.Payments.BankAccount.Index>
+			<Smlp.Bsui.Features.Applicants.Payments.BankAccount.Index Action="@Action" EmployeeNumber="@EmployeeNumber"></Smlp.Bsui.Features.Applicants.Payments.BankAccount.Index>
 		</MudTabPanel> *@
     }
     else
     {
         <MudTabPanel Text="@DisplayTextFor.BankAccount">
-            <Psmp.Bsui.Features.Applicants.Payments.BankAccount.Index Action="@Action" EmployeeNumber="@EmployeeNumber"></Psmp.Bsui.Features.Applicants.Payments.BankAccount.Index>
+            <Smlp.Bsui.Features.Applicants.Payments.BankAccount.Index Action="@Action" EmployeeNumber="@EmployeeNumber"></Smlp.Bsui.Features.Applicants.Payments.BankAccount.Index>
         </MudTabPanel>
         <MudTabPanel Text="@DisplayTextFor.Reimbursement">
-            <Psmp.Bsui.Features.Applicants.Payments.Reimbursements.Index Action="@Action" EmployeeNumber="@EmployeeNumber"></Psmp.Bsui.Features.Applicants.Payments.Reimbursements.Index>
+            <Smlp.Bsui.Features.Applicants.Payments.Reimbursements.Index Action="@Action" EmployeeNumber="@EmployeeNumber"></Smlp.Bsui.Features.Applicants.Payments.Reimbursements.Index>
         </MudTabPanel>
         <MudTabPanel Text="@DisplayTextFor.Disbursement">
-            <Psmp.Bsui.Features.Applicants.Payments.Dibursements.Index Action="@Action" EmployeeNumber="@EmployeeNumber"></Psmp.Bsui.Features.Applicants.Payments.Dibursements.Index>
+            <Smlp.Bsui.Features.Applicants.Payments.Dibursements.Index Action="@Action" EmployeeNumber="@EmployeeNumber"></Smlp.Bsui.Features.Applicants.Payments.Dibursements.Index>
         </MudTabPanel>
     }
     

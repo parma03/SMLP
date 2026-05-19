@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components;
 using System.Security.Claims;
-using Psmp.Shared.Common.Responses;
+using Smlp.Shared.Common.Responses;
 //using Syncfusion.Blazor.Grids;
-using Psmp.Shared.SiteAdministrator.Mentors.Queries;
+using Smlp.Shared.SiteAdministrator.Mentors.Queries;
 
-namespace Psmp.Bsui.Features.SiteAdministrator.Mentor;
+namespace Smlp.Bsui.Features.SiteAdministrator.Mentor;
 public partial class Index
 {
     [CascadingParameter]

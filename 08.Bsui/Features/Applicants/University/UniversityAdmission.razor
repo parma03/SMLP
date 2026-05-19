@@ -1,8 +1,8 @@
 ﻿@inject IWebHostEnvironment _webHostEnvironment
 @inject IOptions<HrisOptions> _hrisOptions
 
-@using Psmp.Base.Universities.Enums
-@using Psmp.Shared.Universities.Constants
+@using Smlp.Base.Universities.Enums
+@using Smlp.Shared.Universities.Constants
 
 <style>
 	.text-center {
@@ -127,7 +127,7 @@ else
                                         @if (!_isButtonVisible)
                                         {
                                             <MudGrid Class="mb-2">
-                                                <Psmp.Bsui.Features.Universities.AdmissionDetail.Components.FinalLetter IsRead="true" Id="@(_dataGrid.FirstOrDefault()!.AdmissionId)"></Psmp.Bsui.Features.Universities.AdmissionDetail.Components.FinalLetter>
+                                                <Smlp.Bsui.Features.Universities.AdmissionDetail.Components.FinalLetter IsRead="true" Id="@(_dataGrid.FirstOrDefault()!.AdmissionId)"></Smlp.Bsui.Features.Universities.AdmissionDetail.Components.FinalLetter>
                                             </MudGrid>
                                         }
                                     </MudItem>
@@ -139,7 +139,7 @@ else
 			</MudGrid>
 		</MudGrid>
 
-		<Psmp.Bsui.Features.Applicants.University.Components.DialogAddUniversityAdmission Visibility="VisiblePopup"
+		<Smlp.Bsui.Features.Applicants.University.Components.DialogAddUniversityAdmission Visibility="VisiblePopup"
 																						  Title="@TitlePopup"
 																						  IsEnabled="@IsEnabled"
 																						  DialogOpen="DialogOpen"
@@ -154,7 +154,7 @@ else
 																						  OnRemoveUploaderSuperiorApproval="OnRemoveUploaderSuperiorApproval"
 																						  ValueChangeUploaderSuperiorApproval="ValueChangeUploaderSuperiorApproval"
 																						  MaxFileSize="_maximumFileSizeInBytes">
-        </Psmp.Bsui.Features.Applicants.University.Components.DialogAddUniversityAdmission>
+        </Smlp.Bsui.Features.Applicants.University.Components.DialogAddUniversityAdmission>
 	}
 	else
 	{

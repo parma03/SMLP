@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Newtonsoft.Json;
 
-namespace Psmp.WebApi.Common.ModelBindings;
+namespace Smlp.WebApi.Common.ModelBindings;
 
 public class JsonModelBinder : IModelBinder
 {

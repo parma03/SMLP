@@ -1,4 +1,4 @@
-﻿namespace Psmp.Infrastructure.Persistence.SqlServer;
+﻿namespace Smlp.Infrastructure.Persistence.SqlServer;
 
 public class SqlServerOptions
 {

@@ -1,6 +1,6 @@
-﻿using Psmp.Application.Services.DateAndTime;
+﻿using Smlp.Application.Services.DateAndTime;
 
-namespace Psmp.InfrastructureDateAndTime;
+namespace Smlp.InfrastructureDateAndTime;
 
 public class DateAndTimeService : IDateAndTimeService
 {

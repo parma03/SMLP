@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Psmp.Application.Services.BackgroundJob;
+using Smlp.Application.Services.BackgroundJob;
 
-namespace Psmp.Infrastructure.BackgroundJob.None;
+namespace Smlp.Infrastructure.BackgroundJob.None;
 
 public static class DependencyInjection
 {

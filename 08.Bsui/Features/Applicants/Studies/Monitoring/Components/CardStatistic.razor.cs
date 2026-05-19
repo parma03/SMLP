@@ -1,12 +1,10 @@
 ﻿/*
-* Pertamina Scholarship Management Portal
-* Copyright (c) 2024-2025 PT. Pertamina Persero
 */
 
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
-namespace Psmp.Bsui.Features.Applicants.Studies.Monitoring.Components;
+namespace Smlp.Bsui.Features.Applicants.Studies.Monitoring.Components;
 
 public partial class CardStatistic
 {

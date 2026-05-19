@@ -1,7 +1,7 @@
 ﻿using MudBlazor;
 using MudBlazor.Services;
 
-namespace Psmp.Bsui.Services.UI.MudBlazorUI;
+namespace Smlp.Bsui.Services.UI.MudBlazorUI;
 
 public static class DependencyInjection
 {

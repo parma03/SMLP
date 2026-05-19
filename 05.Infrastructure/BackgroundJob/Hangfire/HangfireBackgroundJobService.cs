@@ -1,11 +1,11 @@
 ﻿using System.Linq.Expressions;
 using Microsoft.Extensions.Logging;
-using Psmp.Application.Services.BackgroundJob;
+using Smlp.Application.Services.BackgroundJob;
 
 using HangfireBackgroundJob = Hangfire.BackgroundJob;
 using HangfireRecurringJob = Hangfire.RecurringJob;
 
-namespace Psmp.Infrastructure.BackgroundJob.Hangfire;
+namespace Smlp.Infrastructure.BackgroundJob.Hangfire;
 
 public class HangfireBackgroundJobService : IBackgroundJobService
 {

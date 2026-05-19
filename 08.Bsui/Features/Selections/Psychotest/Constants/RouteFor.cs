@@ -1,4 +1,4 @@
-﻿namespace Psmp.Bsui.Features.Selections.Psychotest.Constants;
+﻿namespace Smlp.Bsui.Features.Selections.Psychotest.Constants;
 
 public static class RouteFor
 {

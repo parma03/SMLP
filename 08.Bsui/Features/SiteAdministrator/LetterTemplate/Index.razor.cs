@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components;
 using System.Security.Claims;
-using Psmp.Shared.Common.Responses;
-//using Psmp.Shared.Masters.Queries;
+using Smlp.Shared.Common.Responses;
+//using Smlp.Shared.Masters.Queries;
 using Syncfusion.Blazor.Inputs;
 using Microsoft.AspNetCore.Components.Web;
 
-namespace Psmp.Bsui.Features.SiteAdministrator.LetterTemplate;
+namespace Smlp.Bsui.Features.SiteAdministrator.LetterTemplate;
 
 public partial class Index
 {

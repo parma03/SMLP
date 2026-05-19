@@ -1,4 +1,4 @@
-﻿namespace Psmp.WebApi.Areas;
+﻿namespace Smlp.WebApi.Areas;
 
 public static class ApiVersioning
 {

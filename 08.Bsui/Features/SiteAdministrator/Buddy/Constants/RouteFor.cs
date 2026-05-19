@@ -1,4 +1,4 @@
-﻿namespace Psmp.Bsui.Features.SiteAdministrator.Budy.Constants;
+﻿namespace Smlp.Bsui.Features.SiteAdministrator.Budy.Constants;
 
 public static class RouteFor
 {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Psmp.Application.Services.Otp;
+using Smlp.Application.Services.Otp;
 
-namespace Psmp.InfrastructureOtp;
+namespace Smlp.InfrastructureOtp;
 
 public static class DependencyInjection
 {

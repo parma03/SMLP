@@ -1,11 +1,11 @@
 ﻿using System.Collections;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
-using Psmp.Shared.Common.Attributes;
-using Psmp.Shared.Common.Constants;
+using Smlp.Shared.Common.Attributes;
+using Smlp.Shared.Common.Constants;
 using RestSharp;
 
-namespace Psmp.Client.Common.Extensions;
+namespace Smlp.Client.Common.Extensions;
 
 public static class RestRequestExtensions
 {

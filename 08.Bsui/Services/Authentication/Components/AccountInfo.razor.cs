@@ -1,9 +1,9 @@
-﻿using Psmp.Bsui.Common.Constants;
-using Psmp.Bsui.Pages.Account.Constants;
-using Psmp.Bsui.Services.Authorization.Components;
-using Psmp.Shared.Services.Authentication.Constants;
+﻿using Smlp.Bsui.Common.Constants;
+using Smlp.Bsui.Pages.Account.Constants;
+using Smlp.Bsui.Services.Authorization.Components;
+using Smlp.Shared.Services.Authentication.Constants;
 
-namespace Psmp.Bsui.Services.Authentication.Components;
+namespace Smlp.Bsui.Services.Authentication.Components;
 
 public partial class AccountInfo
 {

@@ -1,5 +1,5 @@
 ﻿@page "/payment-overview/detail/{RequestId}"
-@using Psmp.Shared.Payments.Queries.PaymentOverviewDetails
+@using Smlp.Shared.Payments.Queries.PaymentOverviewDetails
 
 <style>
 	.e-upload .e-file-select-wrap, .e-bigger.e-small .e-upload .e-file-select-wrap {
@@ -362,7 +362,7 @@ else
 
 }
 
-<Psmp.Bsui.Features.Payments.Component.DialogConfirmation Visibility="_visibleConfirmationDialog"
+<Smlp.Bsui.Features.Payments.Component.DialogConfirmation Visibility="_visibleConfirmationDialog"
 														  Title="@_dialogTitle"
 														  Content="@_dialogContent"
 														  OnClickYes="OnConfirmationYes"
@@ -371,14 +371,14 @@ else
 														  IsProgressButton="@_isProgressButton"
 														  ShowNoButton="@_showNoButton"
 														  Duration="500">
-</Psmp.Bsui.Features.Payments.Component.DialogConfirmation>
+</Smlp.Bsui.Features.Payments.Component.DialogConfirmation>
 
-<Psmp.Bsui.Features.Payments.Component.DialogEditStatusSap Visibility="_visibleEditDialog"
+<Smlp.Bsui.Features.Payments.Component.DialogEditStatusSap Visibility="_visibleEditDialog"
 														   Title="Edit Status"
 														   OnClickCancel="OnCloseEditDialog"
 														   DialogClose="OnCloseEditDialog"
 														   OnClickSave="OnSaveStatusToSap"
 														   Request="@_requestResponseSap"
 														   IsLoading="_isSavingStatusToSap">
-</Psmp.Bsui.Features.Payments.Component.DialogEditStatusSap>
+</Smlp.Bsui.Features.Payments.Component.DialogEditStatusSap>
 

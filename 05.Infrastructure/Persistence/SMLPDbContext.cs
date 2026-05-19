@@ -5,11 +5,11 @@
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using Psmp.Infrastructure.Persistence.Common.Extensions;
-using Psmp.Infrastructure.Persistence.Common.Models;
-using Psmp.InfrastructureCurrentUser;
-using Psmp.InfrastructureDateAndTime;
-using Psmp.InfrastructureDomainEvent;
+using Smlp.Infrastructure.Persistence.Common.Extensions;
+using Smlp.Infrastructure.Persistence.Common.Models;
+using Smlp.InfrastructureCurrentUser;
+using Smlp.InfrastructureDateAndTime;
+using Smlp.InfrastructureDomainEvent;
 using Smlp.Application.Services.CurrentUser;
 using Smlp.Application.Services.DateAndTime;
 using Smlp.Application.Services.DomainEvent;

@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components;
-using Psmp.Shared.Common.Responses;
+using Smlp.Shared.Common.Responses;
 using System.Security.Claims;
 
-namespace Psmp.Bsui.Features.Selections.CreateSK;
+namespace Smlp.Bsui.Features.Selections.CreateSK;
 
 public partial class Edit
 {

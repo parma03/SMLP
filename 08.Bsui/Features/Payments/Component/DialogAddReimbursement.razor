@@ -1,10 +1,10 @@
-﻿@using Psmp.Bsui.Features.Applicants.Payments.Constants
-@using Psmp.Shared.Common.Responses
-@using Psmp.Shared.Documents.Queries.GetDocuments
-@using Psmp.Shared.Payments.Commands
-@using Psmp.Shared.Payments.Queries
-@using Psmp.Bsui.Common.Components
-@using Psmp.Base.Payments.Enums;
+﻿@using Smlp.Bsui.Features.Applicants.Payments.Constants
+@using Smlp.Shared.Common.Responses
+@using Smlp.Shared.Documents.Queries.GetDocuments
+@using Smlp.Shared.Payments.Commands
+@using Smlp.Shared.Payments.Queries
+@using Smlp.Bsui.Common.Components
+@using Smlp.Base.Payments.Enums;
 @using MudBlazor;
 @using System.Globalization
 @inject IWebHostEnvironment _webHostEnvironment
@@ -713,7 +713,7 @@
 			return;
 
 		// Navigasi ke halaman lain
-		_navigationManager.NavigateTo(Psmp.Bsui.Features.Payments.Constants.RouteFor.ApplicantPaymentd(EmployeeNumber, "Reimbursement"));
+		_navigationManager.NavigateTo(Smlp.Bsui.Features.Payments.Constants.RouteFor.ApplicantPaymentd(EmployeeNumber, "Reimbursement"));
 	}
 
 	public async void OnChangeItemAsync(ChangeEventArgs<int, DropdownItemResponse> args)

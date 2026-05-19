@@ -4,22 +4,22 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
-using Psmp.Base.Universities.Enums;
-using Psmp.Bsui.Common.Constants;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Shared.Common.Constants;
-using Psmp.Shared.Common.Extensions;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.Masters.Queries;
-using Psmp.Shared.Universities.UniversityRecommendation.Commands.Create;
-using Psmp.Shared.Universities.UniversityRecommendation.Commands.Update;
-using Psmp.Shared.Universities.UniversityRecommendation.Queries;
+using Smlp.Base.Universities.Enums;
+using Smlp.Bsui.Common.Constants;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Shared.Common.Constants;
+using Smlp.Shared.Common.Extensions;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Masters.Queries;
+using Smlp.Shared.Universities.UniversityRecommendation.Commands.Create;
+using Smlp.Shared.Universities.UniversityRecommendation.Commands.Update;
+using Smlp.Shared.Universities.UniversityRecommendation.Queries;
 using Syncfusion.Blazor.Grids;
 using Syncfusion.Blazor.Inputs;
 using Syncfusion.Blazor.Navigations;
 using Syncfusion.XlsIO;
 
-namespace Psmp.Bsui.Features.Universities.Recommendation;
+namespace Smlp.Bsui.Features.Universities.Recommendation;
 
 public partial class Index
 {

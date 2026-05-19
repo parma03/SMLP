@@ -1,22 +1,20 @@
 ﻿/*
-* Pertamina Scholarship Management Portal
-* Copyright (c) 2024-2025 PT. Pertamina Persero
 */
 
 using System.Security.Claims;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
-using Psmp.Base.Selections.Enums;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Shared.Common.Constants;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.Documents.Commands.CreateDocument;
-using Psmp.Shared.Universities.AdmissionSuperiorLetter.Commands.Create;
-using Psmp.Shared.Universities.AdmissionSuperiorLetter.Queries;
-using Psmp.Shared.Universities.UniversityRecommendation.Queries;
+using Smlp.Base.Selections.Enums;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Shared.Common.Constants;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Documents.Commands.CreateDocument;
+using Smlp.Shared.Universities.AdmissionSuperiorLetter.Commands.Create;
+using Smlp.Shared.Universities.AdmissionSuperiorLetter.Queries;
+using Smlp.Shared.Universities.UniversityRecommendation.Queries;
 using Syncfusion.Blazor.Inputs;
 
-namespace Psmp.Bsui.Features.Applicants.University;
+namespace Smlp.Bsui.Features.Applicants.University;
 
 public partial class UniversityAdmission
 {
@@ -150,7 +148,7 @@ public partial class UniversityAdmission
     #region Action
     private void OnClickDetail(Guid id)
     {
-        _navigationManager.NavigateTo(Psmp.Bsui.Features.Applicants.University.Constants.RouteFor.ApplicantUnivesityDetail("UniversityAdmission", id), true);
+        _navigationManager.NavigateTo(Smlp.Bsui.Features.Applicants.University.Constants.RouteFor.ApplicantUnivesityDetail("UniversityAdmission", id), true);
     }
     #endregion
 

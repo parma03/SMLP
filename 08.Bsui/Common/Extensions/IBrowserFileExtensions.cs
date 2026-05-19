@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components.Forms;
 
-namespace Psmp.Bsui.Common.Extensions;
+namespace Smlp.Bsui.Common.Extensions;
 
 public static class IBrowserFileExtensions
 {

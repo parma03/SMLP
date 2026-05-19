@@ -2,7 +2,7 @@
 using IdentityModel;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 
-namespace Psmp.Bsui.Services.Authentication.Extensions;
+namespace Smlp.Bsui.Services.Authentication.Extensions;
 
 public static class TokenResponseReceivedContextExtensions
 {

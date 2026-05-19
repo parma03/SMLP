@@ -1,4 +1,4 @@
-﻿namespace Psmp.Bsui.Features.Selections.TOEFL.Constants;
+﻿namespace Smlp.Bsui.Features.Selections.TOEFL.Constants;
 
 public static class RouteFor
 {

@@ -1,15 +1,13 @@
 ﻿/*
-* Pertamina Scholarship Management Portal
-* Copyright (c) 2024-2025 PT. Pertamina Persero
 */
 
-using Psmp.Client.Services.BackEnd.Selections;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.Selections.SelectionAdministrations.Commands.Create;
-using Psmp.Shared.Selections.SelectionOverviews.Commands.Create;
-using Psmp.Shared.Selections.SelectionTOEFLs.Commands.Create;
+using Smlp.Client.Services.BackEnd.Selections;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Selections.SelectionAdministrations.Commands.Create;
+using Smlp.Shared.Selections.SelectionOverviews.Commands.Create;
+using Smlp.Shared.Selections.SelectionTOEFLs.Commands.Create;
 
-namespace Psmp.Bsui.Features.Applicants.Registration.Actions;
+namespace Smlp.Bsui.Features.Applicants.Registration.Actions;
 
 public class SelectionCreate
 {

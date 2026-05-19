@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Psmp.Application.Services.DomainEvent;
+using Smlp.Application.Services.DomainEvent;
 
-namespace Psmp.InfrastructureDomainEvent;
+namespace Smlp.InfrastructureDomainEvent;
 
 public static class DependencyInjection
 {

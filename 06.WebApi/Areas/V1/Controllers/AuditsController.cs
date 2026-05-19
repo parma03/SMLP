@@ -1,15 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Psmp.Application.Audits.Queries.ExportAudits;
-using Psmp.Application.Audits.Queries.GetAudit;
-using Psmp.Application.Audits.Queries.GetAudits;
-using Psmp.Shared.Audits.Constants;
-using Psmp.Shared.Audits.Queries.ExportAudits;
-using Psmp.Shared.Audits.Queries.GetAudit;
-using Psmp.Shared.Audits.Queries.GetAudits;
-using Psmp.Shared.Common.Responses;
-using Psmp.WebApi.Common.Extensions;
+using Smlp.Application.Audits.Queries.ExportAudits;
+using Smlp.Application.Audits.Queries.GetAudit;
+using Smlp.Application.Audits.Queries.GetAudits;
+using Smlp.Shared.Audits.Constants;
+using Smlp.Shared.Audits.Queries.ExportAudits;
+using Smlp.Shared.Audits.Queries.GetAudit;
+using Smlp.Shared.Audits.Queries.GetAudits;
+using Smlp.Shared.Common.Responses;
+using Smlp.WebApi.Common.Extensions;
 
-namespace Psmp.WebApi.Areas.V1.Controllers;
+namespace Smlp.WebApi.Areas.V1.Controllers;
 
 [ApiVersion(ApiVersioning.V1.Number)]
 public class AuditsController : ApiControllerBase

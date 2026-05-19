@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Psmp.Shared.Common.Responses;
+using Smlp.Shared.Common.Responses;
 
-namespace Psmp.WebApi.Common.Extensions;
+namespace Smlp.WebApi.Common.Extensions;
 
 public static class FileResponseExtensions
 {

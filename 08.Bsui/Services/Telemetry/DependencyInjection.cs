@@ -1,8 +1,8 @@
-﻿using Psmp.Bsui.Services.Telemetry.ApplicationInsights;
-using Psmp.Bsui.Services.Telemetry.None;
-using Psmp.Shared.Common.Constants;
+﻿using Smlp.Bsui.Services.Telemetry.ApplicationInsights;
+using Smlp.Bsui.Services.Telemetry.None;
+using Smlp.Shared.Common.Constants;
 
-namespace Psmp.Bsui.Services.Telemetry;
+namespace Smlp.Bsui.Services.Telemetry;
 
 public static class DependencyInjection
 {

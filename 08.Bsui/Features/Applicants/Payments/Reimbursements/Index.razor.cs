@@ -2,24 +2,24 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
-using Psmp.Base.Common;
-using Psmp.Base.Payments.Enums;
-using Psmp.Base.Selections.Enums;
-using Psmp.Bsui.Common.Constants;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Client.Services.BackEnd.Masters;
-using Psmp.Shared.Common.Constants;
-using Psmp.Shared.Common.Extensions;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.Documents.Commands.CreateDocument;
-using Psmp.Shared.Documents.Queries.GetDocumentFile;
-using Psmp.Shared.Documents.Queries.GetDocuments;
-using Psmp.Shared.Payments.Commands;
-using Psmp.Shared.Payments.Queries;
+using Smlp.Base.Common;
+using Smlp.Base.Payments.Enums;
+using Smlp.Base.Selections.Enums;
+using Smlp.Bsui.Common.Constants;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Client.Services.BackEnd.Masters;
+using Smlp.Shared.Common.Constants;
+using Smlp.Shared.Common.Extensions;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Documents.Commands.CreateDocument;
+using Smlp.Shared.Documents.Queries.GetDocumentFile;
+using Smlp.Shared.Documents.Queries.GetDocuments;
+using Smlp.Shared.Payments.Commands;
+using Smlp.Shared.Payments.Queries;
 using Syncfusion.Blazor.Grids;
 using Syncfusion.Blazor.Inputs;
 
-namespace Psmp.Bsui.Features.Applicants.Payments.Reimbursements;
+namespace Smlp.Bsui.Features.Applicants.Payments.Reimbursements;
 public partial class Index
 {
     [CascadingParameter]
@@ -711,7 +711,7 @@ public partial class Index
         {
             //if (args.RowData.CategoryId == 14)
             //{
-            //    _navigationManager.NavigateTo(Psmp.Bsui.Features.Applicants.Payments.Constants.RouteFor.PaymentDetailAccepted(args.RowData.Id, args.RowData.ApplicantId), true);
+            //    _navigationManager.NavigateTo(Smlp.Bsui.Features.Applicants.Payments.Constants.RouteFor.PaymentDetailAccepted(args.RowData.Id, args.RowData.ApplicantId), true);
             //}
             //else
             //{

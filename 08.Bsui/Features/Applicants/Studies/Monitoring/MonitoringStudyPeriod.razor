@@ -1,8 +1,8 @@
-﻿@using Psmp.Bsui.Features.Applicants.Studies.Monitoring.Components
-@using Psmp.Bsui.Features.Studies
-@using Psmp.Shared.Studies.Constants
-@using Psmp.Shared.StudyMonitorings.StudyPeriod.Queries
-@using Psmp.Shared.Documents.Queries.GetDocuments;
+﻿@using Smlp.Bsui.Features.Applicants.Studies.Monitoring.Components
+@using Smlp.Bsui.Features.Studies
+@using Smlp.Shared.Studies.Constants
+@using Smlp.Shared.StudyMonitorings.StudyPeriod.Queries
+@using Smlp.Shared.Documents.Queries.GetDocuments;
 
 @inject IWebHostEnvironment _webHostEnvironment
 @inject IOptions<HrisOptions> _hrisOptions
@@ -47,8 +47,8 @@ else
                 <MudGrid AlignItems="center">
                     <!-- Card Highest -->
                     <MudItem xs="5" md="4" Class="d-flex justify-center">
-                        <Psmp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardStatistic Icon="@Icons.Material.Rounded.TrendingUp" AvatarColor="Color.Success" Title="Highest GPA" Count="_gpaMaximum">
-                        </Psmp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardStatistic>
+                        <Smlp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardStatistic Icon="@Icons.Material.Rounded.TrendingUp" AvatarColor="Color.Success" Title="Highest GPA" Count="_gpaMaximum">
+                        </Smlp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardStatistic>
                     </MudItem>
 
                     <!-- Divider Vertikal -->
@@ -60,8 +60,8 @@ else
 
                     <!-- Card Lower -->
                     <MudItem xs="5" md="4" Class="d-flex justify-center">
-                        <Psmp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardStatistic Icon="@Icons.Material.Rounded.TrendingDown" AvatarColor="Color.Warning" Title="Lowest GPA" Count="_gpaMinimum">
-                        </Psmp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardStatistic>
+                        <Smlp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardStatistic Icon="@Icons.Material.Rounded.TrendingDown" AvatarColor="Color.Warning" Title="Lowest GPA" Count="_gpaMinimum">
+                        </Smlp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardStatistic>
                     </MudItem>
 
                     <!-- Divider Vertikal -->
@@ -73,8 +73,8 @@ else
 
                     <!-- Card Average -->
                     <MudItem xs="5" md="3" Class="d-flex justify-center">
-                        <Psmp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardStatistic Icon="@Icons.Material.Rounded.InsertChart" AvatarColor="Color.Primary" Title="GPA Average" Count="_gpaAverage">
-                        </Psmp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardStatistic>
+                        <Smlp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardStatistic Icon="@Icons.Material.Rounded.InsertChart" AvatarColor="Color.Primary" Title="GPA Average" Count="_gpaAverage">
+                        </Smlp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardStatistic>
                     </MudItem>
                 </MudGrid>
             </MudCard>

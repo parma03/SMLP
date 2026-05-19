@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Psmp.Application.Common.Exceptions;
+using Smlp.Application.Common.Exceptions;
 
-namespace Psmp.WebApi.Common.Filters.ApiException;
+namespace Smlp.WebApi.Common.Filters.ApiException;
 
 public sealed class ApiExceptionFilterAttribute : ExceptionFilterAttribute
 {

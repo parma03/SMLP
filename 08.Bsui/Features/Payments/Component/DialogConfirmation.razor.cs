@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 
-namespace Psmp.Bsui.Features.Payments.Component;
+namespace Smlp.Bsui.Features.Payments.Component;
 
 public partial class DialogConfirmation
 {

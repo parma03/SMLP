@@ -2,25 +2,25 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
-using Psmp.Base.Payments.Enums;
-using Psmp.Base.Selections.Enums;
-using Psmp.Base.Universities.Enums;
-using Psmp.Bsui.Common.Constants;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Shared.Common.Constants;
-using Psmp.Shared.Common.Extensions;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.Documents.Commands.CreateDocument;
-using Psmp.Shared.Documents.Queries.GetDocumentFile;
-using Psmp.Shared.Masters.Queries;
-using Psmp.Shared.Universities.AdmissionSuperiorLetter.Queries;
-using Psmp.Shared.Universities.AdmissionWarrant.Commands.Create;
-using Psmp.Shared.Universities.AdmissionWarrant.Commands.Update;
-using Psmp.Shared.Universities.AdmissionWarrant.Queries;
+using Smlp.Base.Payments.Enums;
+using Smlp.Base.Selections.Enums;
+using Smlp.Base.Universities.Enums;
+using Smlp.Bsui.Common.Constants;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Shared.Common.Constants;
+using Smlp.Shared.Common.Extensions;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Documents.Commands.CreateDocument;
+using Smlp.Shared.Documents.Queries.GetDocumentFile;
+using Smlp.Shared.Masters.Queries;
+using Smlp.Shared.Universities.AdmissionSuperiorLetter.Queries;
+using Smlp.Shared.Universities.AdmissionWarrant.Commands.Create;
+using Smlp.Shared.Universities.AdmissionWarrant.Commands.Update;
+using Smlp.Shared.Universities.AdmissionWarrant.Queries;
 using Syncfusion.Blazor.DocumentEditor;
 using Syncfusion.DocIORenderer;
 
-namespace Psmp.Bsui.Features.Universities.AdmissionDetail.Components;
+namespace Smlp.Bsui.Features.Universities.AdmissionDetail.Components;
 
 public partial class DraftWarrant
 {
@@ -164,7 +164,7 @@ public partial class DraftWarrant
     #endregion
     public async Task OnClickBack()
     {
-        _navigationManager.NavigateTo(Psmp.Bsui.Features.Universities.Constants.RouteFor.UniversityAdmissionTab(1), true);
+        _navigationManager.NavigateTo(Smlp.Bsui.Features.Universities.Constants.RouteFor.UniversityAdmissionTab(1), true);
         await Task.CompletedTask;
     }
     #region Action Document

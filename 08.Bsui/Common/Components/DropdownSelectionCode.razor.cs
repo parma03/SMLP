@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Psmp.Shared.Common.Responses;
+using Smlp.Shared.Common.Responses;
 using Syncfusion.Blazor.DropDowns;
 
-namespace Psmp.Bsui.Common.Components;
+namespace Smlp.Bsui.Common.Components;
 
 public partial class DropdownSelectionCode
 {

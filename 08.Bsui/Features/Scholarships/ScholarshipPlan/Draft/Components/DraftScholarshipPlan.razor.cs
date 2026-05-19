@@ -3,26 +3,26 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
-using Psmp.Base.Scholarships.Enums;
-using Psmp.Base.Selections.Enums;
-using Psmp.Bsui.Common.Constants;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Bsui.Features.Scholarships.ScholarshipPlan.Constants;
-using Psmp.Shared.Common.Constants;
-using Psmp.Shared.Common.Extensions;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.Documents.Commands.CreateDocument;
-using Psmp.Shared.Documents.Queries.GetDocumentFile;
-using Psmp.Shared.Scholarships.ScholarshipPlan.Commands.Update;
-using Psmp.Shared.Scholarships.ScholarshipPlan.Queries;
-using Psmp.Shared.Services.Authorization.Constants;
+using Smlp.Base.Scholarships.Enums;
+using Smlp.Base.Selections.Enums;
+using Smlp.Bsui.Common.Constants;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Bsui.Features.Scholarships.ScholarshipPlan.Constants;
+using Smlp.Shared.Common.Constants;
+using Smlp.Shared.Common.Extensions;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Documents.Commands.CreateDocument;
+using Smlp.Shared.Documents.Queries.GetDocumentFile;
+using Smlp.Shared.Scholarships.ScholarshipPlan.Commands.Update;
+using Smlp.Shared.Scholarships.ScholarshipPlan.Queries;
+using Smlp.Shared.Services.Authorization.Constants;
 using Syncfusion.Blazor.DocumentEditor;
 using Syncfusion.Blazor.Grids;
 using Syncfusion.DocIO.DLS;
 using Syncfusion.DocIORenderer;
 using Syncfusion.XlsIO;
 
-namespace Psmp.Bsui.Features.Scholarships.ScholarshipPlan.Draft.Components;
+namespace Smlp.Bsui.Features.Scholarships.ScholarshipPlan.Draft.Components;
 
 public partial class DraftScholarshipPlan
 {

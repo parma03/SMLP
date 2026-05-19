@@ -1,4 +1,4 @@
-﻿namespace Psmp.Bsui.Services.Authorization.IdAMan;
+﻿namespace Smlp.Bsui.Services.Authorization.IdAMan;
 
 public class IdAManAuthorizationOptions
 {

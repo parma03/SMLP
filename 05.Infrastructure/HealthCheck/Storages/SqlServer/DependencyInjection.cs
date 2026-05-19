@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Psmp.Infrastructure.HealthCheck.Storages.SqlServer;
+namespace Smlp.Infrastructure.HealthCheck.Storages.SqlServer;
 
 public static class DependencyInjection
 {

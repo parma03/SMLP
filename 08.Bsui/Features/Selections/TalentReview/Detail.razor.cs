@@ -3,26 +3,26 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
-using Psmp.Base.Selections.Enums;
-using Psmp.Bsui.Common.Constants;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.Projects.ProjectCharterPlans.Commands;
-using Psmp.Shared.Projects.ProjectCharterPlans.Queries;
-using Psmp.Shared.Projects.ProjectCharterRealisations.Commands;
-using Psmp.Shared.Projects.ProjectCharterRealisations.Queries;
-using Psmp.Shared.Projects.ProjectPlans.Commands;
-using Psmp.Shared.Selections.BeritaAcara.Commands.Create;
-using Psmp.Shared.Selections.Constants;
-using Psmp.Shared.Selections.CreateSK.Commands.Update;
-using Psmp.Shared.Selections.CreateSK.Queries;
-using Psmp.Shared.Selections.SelectionOverviews.Commands.Update;
-using Psmp.Shared.Selections.SelectionTalentReviews.Commands.Update;
-using Psmp.Shared.Selections.SelectionTalentReviews.Queries;
+using Smlp.Base.Selections.Enums;
+using Smlp.Bsui.Common.Constants;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Projects.ProjectCharterPlans.Commands;
+using Smlp.Shared.Projects.ProjectCharterPlans.Queries;
+using Smlp.Shared.Projects.ProjectCharterRealisations.Commands;
+using Smlp.Shared.Projects.ProjectCharterRealisations.Queries;
+using Smlp.Shared.Projects.ProjectPlans.Commands;
+using Smlp.Shared.Selections.BeritaAcara.Commands.Create;
+using Smlp.Shared.Selections.Constants;
+using Smlp.Shared.Selections.CreateSK.Commands.Update;
+using Smlp.Shared.Selections.CreateSK.Queries;
+using Smlp.Shared.Selections.SelectionOverviews.Commands.Update;
+using Smlp.Shared.Selections.SelectionTalentReviews.Commands.Update;
+using Smlp.Shared.Selections.SelectionTalentReviews.Queries;
 using Syncfusion.Blazor.Inputs;
-using RouteFor = Psmp.Bsui.Features.Selections.TalentReview.Constants.RouteFor;
+using RouteFor = Smlp.Bsui.Features.Selections.TalentReview.Constants.RouteFor;
 
-namespace Psmp.Bsui.Features.Selections.TalentReview;
+namespace Smlp.Bsui.Features.Selections.TalentReview;
 
 public partial class Detail
 {

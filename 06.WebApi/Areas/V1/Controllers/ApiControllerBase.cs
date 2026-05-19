@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Psmp.WebApi.Areas.V1.Controllers;
+namespace Smlp.WebApi.Areas.V1.Controllers;
 
 [Route(ApiVersioning.V1.BaseRoute)]
 [ApiVersion(ApiVersioning.V1.Number)]

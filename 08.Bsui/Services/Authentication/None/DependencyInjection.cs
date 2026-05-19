@@ -1,7 +1,7 @@
-﻿using Psmp.Bsui.Services.Logging;
-using Psmp.Shared.Common.Constants;
+﻿using Smlp.Bsui.Services.Logging;
+using Smlp.Shared.Common.Constants;
 
-namespace Psmp.Bsui.Services.Authentication.None;
+namespace Smlp.Bsui.Services.Authentication.None;
 
 public static class DependencyInjection
 {

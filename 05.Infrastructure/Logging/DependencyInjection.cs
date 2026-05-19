@@ -1,10 +1,10 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Psmp.Infrastructure.Logging.None;
-using Psmp.Infrastructure.Logging.Serilog;
-using Psmp.Shared.Common.Constants;
+using Smlp.Infrastructure.Logging.None;
+using Smlp.Infrastructure.Logging.Serilog;
+using Smlp.Shared.Common.Constants;
 
-namespace Psmp.Infrastructure.Logging;
+namespace Smlp.Infrastructure.Logging;
 
 public static class DependencyInjection
 {

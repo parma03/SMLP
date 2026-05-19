@@ -2,29 +2,29 @@
 using Microsoft.AspNetCore.Components;
 using System.Data;
 using System.Security.Claims;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.StudyPreparations.Essay.Commands.Update;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.StudyPreparations.Essay.Commands.Update;
 using Syncfusion.Blazor.Grids;
 using Syncfusion.Blazor.Inputs;
-using Psmp.Shared.StudyPreparations.Essay.Queries;
-using Psmp.Base.Studies.Enums;
-using Psmp.Base.Scholarships.Enums;
-using Psmp.Shared.Masters.Queries;
-using Psmp.Shared.Scholarships.ScholarshipPosting.Queries;
-using Psmp.Shared.Common.Extensions;
+using Smlp.Shared.StudyPreparations.Essay.Queries;
+using Smlp.Base.Studies.Enums;
+using Smlp.Base.Scholarships.Enums;
+using Smlp.Shared.Masters.Queries;
+using Smlp.Shared.Scholarships.ScholarshipPosting.Queries;
+using Smlp.Shared.Common.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Base.Selections.Enums;
-using Psmp.Shared.Documents.Commands.CreateDocument;
-using Psmp.Shared.Documents.Queries.GetDocuments;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Base.Selections.Enums;
+using Smlp.Shared.Documents.Commands.CreateDocument;
+using Smlp.Shared.Documents.Queries.GetDocuments;
 using Microsoft.JSInterop;
-using Psmp.Bsui.Common.Constants;
-using Psmp.Shared.Common.Constants;
-using Psmp.Shared.Documents.Queries.GetDocumentFile;
+using Smlp.Bsui.Common.Constants;
+using Smlp.Shared.Common.Constants;
+using Smlp.Shared.Documents.Queries.GetDocumentFile;
 using Syncfusion.XlsIO;
 
-namespace Psmp.Bsui.Features.StudyPreparations.Essay;
+namespace Smlp.Bsui.Features.StudyPreparations.Essay;
 
 public partial class Index
 {

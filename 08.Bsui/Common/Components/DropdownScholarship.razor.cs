@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Psmp.Shared.Scholarships.ScholarshipPosting.Queries;
+using Smlp.Shared.Scholarships.ScholarshipPosting.Queries;
 using Syncfusion.Blazor.DropDowns;
 
-namespace Psmp.Bsui.Common.Components;
+namespace Smlp.Bsui.Common.Components;
 
 public partial class DropdownScholarship
 {

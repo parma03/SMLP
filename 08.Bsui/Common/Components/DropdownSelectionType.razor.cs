@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Psmp.Base.Selections.Enums;
-using Psmp.Shared.Common.Extensions;
-using Psmp.Shared.Common.Responses;
+using Smlp.Base.Selections.Enums;
+using Smlp.Shared.Common.Extensions;
+using Smlp.Shared.Common.Responses;
 using Syncfusion.Blazor.DropDowns;
 
-namespace Psmp.Bsui.Common.Components;
+namespace Smlp.Bsui.Common.Components;
 
 public partial class DropdownSelectionType
 {

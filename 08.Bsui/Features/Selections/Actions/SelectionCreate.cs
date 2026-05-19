@@ -1,14 +1,14 @@
-﻿using Psmp.Base.Selections.Enums;
-using Psmp.Client.Services.BackEnd.Selections;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.Selections.SelectionAdministrations.Commands.Create;
-using Psmp.Shared.Selections.SelectionOverviews.Commands.Create;
-using Psmp.Shared.Selections.SelectionPsychotests.Commands.Create;
-using Psmp.Shared.Selections.SelectionPsychotests.Commands.Update;
-using Psmp.Shared.Selections.SelectionTalentReviewFirsts.Commands.Create;
-using Psmp.Shared.Selections.SelectionTOEFLs.Commands.Create;
+﻿using Smlp.Base.Selections.Enums;
+using Smlp.Client.Services.BackEnd.Selections;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Selections.SelectionAdministrations.Commands.Create;
+using Smlp.Shared.Selections.SelectionOverviews.Commands.Create;
+using Smlp.Shared.Selections.SelectionPsychotests.Commands.Create;
+using Smlp.Shared.Selections.SelectionPsychotests.Commands.Update;
+using Smlp.Shared.Selections.SelectionTalentReviewFirsts.Commands.Create;
+using Smlp.Shared.Selections.SelectionTOEFLs.Commands.Create;
 
-namespace Psmp.Bsui.Features.Selections.Actions;
+namespace Smlp.Bsui.Features.Selections.Actions;
 
 public class SelectionCreate
 {

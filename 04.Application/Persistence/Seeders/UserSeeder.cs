@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 using Smlp.Application.Services.Persistence;
 using static Smlp.Shared.Master.Users.Constants.ApiEndpoint.V1;
 
-namespace Psmp.Application.Services.Persistence.Seeders;
+namespace Smlp.Application.Services.Persistence.Seeders;
 public class UserSeeder
 {
     private readonly ILogger<UserSeeder> _logger;

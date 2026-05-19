@@ -1,22 +1,20 @@
 ﻿/*
-* Pertamina Scholarship Management Portal
-* Copyright (c) 2024-2025 PT. Pertamina Persero
 */
 
 using System.Security.Claims;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
-using Psmp.Base.Scholarships.Enums;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Bsui.Features.Applicants.Registration.Actions;
-using Psmp.Bsui.Features.Applicants.Registration.Components;
-using Psmp.Bsui.Features.Applicants.Registration.Models;
-using Psmp.Shared.Common.Constants;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.Scholarships.ScholarshipPosting.Queries;
+using Smlp.Base.Scholarships.Enums;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Bsui.Features.Applicants.Registration.Actions;
+using Smlp.Bsui.Features.Applicants.Registration.Components;
+using Smlp.Bsui.Features.Applicants.Registration.Models;
+using Smlp.Shared.Common.Constants;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Scholarships.ScholarshipPosting.Queries;
 
-namespace Psmp.Bsui.Features.Applicants.Registration;
+namespace Smlp.Bsui.Features.Applicants.Registration;
 
 public partial class Registration
 {

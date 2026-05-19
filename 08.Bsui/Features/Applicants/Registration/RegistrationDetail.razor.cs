@@ -1,14 +1,12 @@
 ﻿/*
-* Pertamina Scholarship Management Portal
-* Copyright (c) 2024-2025 PT. Pertamina Persero
 */
 
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
-using Psmp.Shared.Scholarships.ScholarshipPosting.Queries;
+using Smlp.Shared.Scholarships.ScholarshipPosting.Queries;
 
-namespace Psmp.Bsui.Features.Applicants.Registration;
+namespace Smlp.Bsui.Features.Applicants.Registration;
 
 public partial class RegistrationDetail
 {

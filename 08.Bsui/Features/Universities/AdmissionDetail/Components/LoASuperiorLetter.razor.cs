@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Psmp.Base.Selections.Enums;
-using Psmp.Base.Universities.Enums;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.Documents.Queries.GetDocumentFile;
-using Psmp.Shared.Universities.Admission.Commands.Update;
-using Psmp.Shared.Universities.AdmissionSuperiorLetter.Queries;
+using Smlp.Base.Selections.Enums;
+using Smlp.Base.Universities.Enums;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Documents.Queries.GetDocumentFile;
+using Smlp.Shared.Universities.Admission.Commands.Update;
+using Smlp.Shared.Universities.AdmissionSuperiorLetter.Queries;
 
-namespace Psmp.Bsui.Features.Universities.AdmissionDetail.Components;
+namespace Smlp.Bsui.Features.Universities.AdmissionDetail.Components;
 
 public partial class LoASuperiorLetter
 {
@@ -98,7 +98,7 @@ public partial class LoASuperiorLetter
     #endregion
     public async Task OnClickBack()
     {
-        _navigationManager.NavigateTo(Psmp.Bsui.Features.Universities.Constants.RouteFor.UniversityAdmissionTab(1), true);
+        _navigationManager.NavigateTo(Smlp.Bsui.Features.Universities.Constants.RouteFor.UniversityAdmissionTab(1), true);
         await Task.CompletedTask;
     }
     #region Dropdown

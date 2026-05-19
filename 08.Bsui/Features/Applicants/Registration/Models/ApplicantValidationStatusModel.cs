@@ -1,6 +1,6 @@
-﻿using Psmp.Base.Selections.Enums;
+﻿using Smlp.Base.Selections.Enums;
 
-namespace Psmp.Bsui.Features.Applicants.Registration.Models;
+namespace Smlp.Bsui.Features.Applicants.Registration.Models;
 
 public class ApplicantValidationStatusModel
 {

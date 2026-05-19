@@ -1,14 +1,14 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using Psmp.Base.Selections.Enums;
-using Psmp.Bsui.Common.Constants;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.Documents.Queries.GetDocumentFile;
-using Psmp.Shared.StudyMonitorings.Constants;
-using Psmp.Shared.StudyMonitorings.Graduate.Queries;
+using Smlp.Base.Selections.Enums;
+using Smlp.Bsui.Common.Constants;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Documents.Queries.GetDocumentFile;
+using Smlp.Shared.StudyMonitorings.Constants;
+using Smlp.Shared.StudyMonitorings.Graduate.Queries;
 
-namespace Psmp.Bsui.Features.StudyMonitoring.Graduate;
+namespace Smlp.Bsui.Features.StudyMonitoring.Graduate;
 
 public partial class Detail
 {
@@ -60,7 +60,7 @@ public partial class Detail
         if (data.Result == null || data.Result.Id == Guid.Empty)
         {
             _snackbar.AddError("Data not found!!");
-            _navigationManager.NavigateTo(Psmp.Bsui.Features.StudyMonitoring.Constants.RouteFor.StudyMonitoringTab(1), true);
+            _navigationManager.NavigateTo(Smlp.Bsui.Features.StudyMonitoring.Constants.RouteFor.StudyMonitoringTab(1), true);
             StateHasChanged();
             return;
         }
@@ -116,7 +116,7 @@ public partial class Detail
     #region OnClick
     public async Task OnClickBack()
     {
-        _navigationManager.NavigateTo(Psmp.Bsui.Features.StudyMonitoring.Constants.RouteFor.StudyMonitoringTab(1), true);
+        _navigationManager.NavigateTo(Smlp.Bsui.Features.StudyMonitoring.Constants.RouteFor.StudyMonitoringTab(1), true);
         await Task.CompletedTask;
     }
     #endregion

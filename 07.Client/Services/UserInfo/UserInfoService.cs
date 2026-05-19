@@ -1,6 +1,6 @@
-﻿using Psmp.Base.ValueObjects;
+﻿using Smlp.Base.ValueObjects;
 
-namespace Psmp.Client.Services.UserInfo;
+namespace Smlp.Client.Services.UserInfo;
 
 public class UserInfoService
 {

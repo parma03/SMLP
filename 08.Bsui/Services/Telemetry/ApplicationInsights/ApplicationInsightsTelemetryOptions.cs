@@ -1,4 +1,4 @@
-﻿namespace Psmp.Bsui.Services.Telemetry.ApplicationInsights;
+﻿namespace Smlp.Bsui.Services.Telemetry.ApplicationInsights;
 
 public class ApplicationInsightsTelemetryOptions
 {

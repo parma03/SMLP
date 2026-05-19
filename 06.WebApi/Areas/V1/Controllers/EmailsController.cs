@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Psmp.Application.Emails.Commands;
-using Psmp.Shared.Common.Constants;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.Emails.Commands.SendEmail;
-using Psmp.Shared.Emails.Constants;
+using Smlp.Application.Emails.Commands;
+using Smlp.Shared.Common.Constants;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Emails.Commands.SendEmail;
+using Smlp.Shared.Emails.Constants;
 
-namespace Psmp.WebApi.Areas.V1.Controllers;
+namespace Smlp.WebApi.Areas.V1.Controllers;
 
 [ApiVersion(ApiVersioning.V1.Number)]
 public class EmailsController : ApiControllerBase

@@ -1,21 +1,21 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using Psmp.Base.Selections.Enums;
-using Psmp.Bsui.Common.Constants;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Shared.Common.Constants;
-using Psmp.Shared.Common.Extensions;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.Documents.Commands.CreateDocument;
-using Psmp.Shared.Documents.Queries.GetDocumentFile;
-using Psmp.Shared.Selections.CreateSK.Commands.Create;
-using Psmp.Shared.Selections.CreateSK.Commands.Update;
-using Psmp.Shared.Selections.CreateSK.Queries;
+using Smlp.Base.Selections.Enums;
+using Smlp.Bsui.Common.Constants;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Shared.Common.Constants;
+using Smlp.Shared.Common.Extensions;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Documents.Commands.CreateDocument;
+using Smlp.Shared.Documents.Queries.GetDocumentFile;
+using Smlp.Shared.Selections.CreateSK.Commands.Create;
+using Smlp.Shared.Selections.CreateSK.Commands.Update;
+using Smlp.Shared.Selections.CreateSK.Queries;
 using Syncfusion.Blazor.DocumentEditor;
 using Syncfusion.DocIO.DLS;
 using Syncfusion.DocIORenderer;
 
-namespace Psmp.Bsui.Features.Selections.CreateSK.Components;
+namespace Smlp.Bsui.Features.Selections.CreateSK.Components;
 
 public partial class DraftingSK
 {
@@ -79,7 +79,7 @@ public partial class DraftingSK
 
     public async Task OnClickBack()
     {
-        _navigationManager.NavigateTo(Psmp.Bsui.Features.Selections.CreateSK.Constants.RouteFor.Selection, true);
+        _navigationManager.NavigateTo(Smlp.Bsui.Features.Selections.CreateSK.Constants.RouteFor.Selection, true);
         await Task.CompletedTask;
     }
 

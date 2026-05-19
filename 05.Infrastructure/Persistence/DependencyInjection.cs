@@ -1,12 +1,12 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Psmp.Infrastructure.Persistence.None;
-using Psmp.Infrastructure.Persistence.SqlServer;
-using Psmp.Infrastructure.Persistence.VaultSqlServer;
-using Psmp.Infrastructure.Vault;
-using Psmp.Shared.Common.Constants;
+using Smlp.Infrastructure.Persistence.None;
+using Smlp.Infrastructure.Persistence.SqlServer;
+using Smlp.Infrastructure.Persistence.VaultSqlServer;
+using Smlp.Infrastructure.Vault;
+using Smlp.Shared.Common.Constants;
 
-namespace Psmp.Infrastructure.Persistence;
+namespace Smlp.Infrastructure.Persistence;
 
 public static class DependencyInjection
 {

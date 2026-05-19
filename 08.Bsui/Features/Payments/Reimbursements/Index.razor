@@ -1,8 +1,8 @@
-﻿@using Psmp.Base.Payments.Enums
-@using Psmp.Shared.Applicants.Constants
-@using Psmp.Shared.Common.Responses
-@using Psmp.Shared.Payments.Queries
-@using Psmp.Bsui.Features.Payments.Component
+﻿@using Smlp.Base.Payments.Enums
+@using Smlp.Shared.Applicants.Constants
+@using Smlp.Shared.Common.Responses
+@using Smlp.Shared.Payments.Queries
+@using Smlp.Bsui.Features.Payments.Component
 
 <style>
 	.e-chip-list {
@@ -93,7 +93,7 @@ else
 									<MudGrid Justify="Justify.Center">
                                         <!-- Card pertama - Waiting for Approval -->
 										<MudItem xs="12" sm="6" md="3" Class="d-flex justify-start brown-avatar">
-                                            <Psmp.Bsui.Features.Payments.Component.CardStatistic ImageSrc="img/dollars.png" AvatarColor="Color.Warning" Judul="@($"{"Waiting for Approval"} ({_count1})")" CountCurrency="@_countcurrency1"></Psmp.Bsui.Features.Payments.Component.CardStatistic>
+                                            <Smlp.Bsui.Features.Payments.Component.CardStatistic ImageSrc="img/dollars.png" AvatarColor="Color.Warning" Judul="@($"{"Waiting for Approval"} ({_count1})")" CountCurrency="@_countcurrency1"></Smlp.Bsui.Features.Payments.Component.CardStatistic>
                                         </MudItem>
 
                                         <!-- Divider Vertikal -->
@@ -105,7 +105,7 @@ else
 
                                         <!-- Card kedua - Waiting for Approval (Rp) -->
 										<MudItem xs="12"sm="6" md="3" Class="d-flex justify-start brown-avatar">
-											<Psmp.Bsui.Features.Payments.Component.CardStatistic ImageSrc="img/idr7.png" AvatarColor="Color.Warning" Judul="@($"{"Waiting for Approval"} ({_count2})")" CountCurrency="@_countcurrency2" CurrencyType="@("Rp")"></Psmp.Bsui.Features.Payments.Component.CardStatistic>
+											<Smlp.Bsui.Features.Payments.Component.CardStatistic ImageSrc="img/idr7.png" AvatarColor="Color.Warning" Judul="@($"{"Waiting for Approval"} ({_count2})")" CountCurrency="@_countcurrency2" CurrencyType="@("Rp")"></Smlp.Bsui.Features.Payments.Component.CardStatistic>
                                         </MudItem>
 
                                         <!-- Divider Vertikal -->
@@ -117,7 +117,7 @@ else
 
                                         <!-- Card ketiga - Rejected -->
                                         <MudItem xs="12" sm="6" md="3" Class="d-flex justify-start">
-                                            <Psmp.Bsui.Features.Payments.Component.CardStatistic ImageSrc="img/dollars.png" AvatarColor="Color.Error" Judul="@($"{"Rejected"} ({_count5})")" CountCurrency="@_countcurrency5"></Psmp.Bsui.Features.Payments.Component.CardStatistic>
+                                            <Smlp.Bsui.Features.Payments.Component.CardStatistic ImageSrc="img/dollars.png" AvatarColor="Color.Error" Judul="@($"{"Rejected"} ({_count5})")" CountCurrency="@_countcurrency5"></Smlp.Bsui.Features.Payments.Component.CardStatistic>
                                         </MudItem>
 
                                         <!-- Divider Vertikal -->
@@ -129,7 +129,7 @@ else
 
                                         <!-- Card keempat - Rejected (Rp) -->
                                         <MudItem xs="12" sm="6" md="3" Class="d-flex justify-start">
-											<Psmp.Bsui.Features.Payments.Component.CardStatistic ImageSrc="img/idr7.png" AvatarColor="Color.Error" Judul="@($"{"Rejected"} ({_count6})")" CountCurrency="@_countcurrency6" CurrencyType="@("Rp")" IsLast="true"></Psmp.Bsui.Features.Payments.Component.CardStatistic>
+											<Smlp.Bsui.Features.Payments.Component.CardStatistic ImageSrc="img/idr7.png" AvatarColor="Color.Error" Judul="@($"{"Rejected"} ({_count6})")" CountCurrency="@_countcurrency6" CurrencyType="@("Rp")" IsLast="true"></Smlp.Bsui.Features.Payments.Component.CardStatistic>
                                         </MudItem>
 									</MudGrid>
 								</MudCard>
@@ -142,7 +142,7 @@ else
 									<MudGrid Justify="Justify.Center">
                                         <!-- Card pertama - Need Revision -->
                                         <MudItem xs="12" sm="6" md="3" Class="d-flex justify-start">
-                                            <Psmp.Bsui.Features.Payments.Component.CardStatistic ImageSrc="img/dollars.png" AvatarColor="Color.Warning" Judul="@($"{"Need Revision"} ({_count13})")" CountCurrency="@_countcurrency13"></Psmp.Bsui.Features.Payments.Component.CardStatistic>
+                                            <Smlp.Bsui.Features.Payments.Component.CardStatistic ImageSrc="img/dollars.png" AvatarColor="Color.Warning" Judul="@($"{"Need Revision"} ({_count13})")" CountCurrency="@_countcurrency13"></Smlp.Bsui.Features.Payments.Component.CardStatistic>
                                         </MudItem>
 
                                         <!-- Divider Vertikal -->
@@ -154,7 +154,7 @@ else
 
                                         <!-- Card kedua - Need Revision (Rp) -->
                                         <MudItem xs="12" sm="6" md="3" Class="d-flex justify-start">
-											<Psmp.Bsui.Features.Payments.Component.CardStatistic ImageSrc="img/idr7.png" AvatarColor="Color.Warning" Judul="@($"{"Need Revision"} ({_count14})")" CountCurrency="@_countcurrency14" CurrencyType="@("Rp")"></Psmp.Bsui.Features.Payments.Component.CardStatistic>
+											<Smlp.Bsui.Features.Payments.Component.CardStatistic ImageSrc="img/idr7.png" AvatarColor="Color.Warning" Judul="@($"{"Need Revision"} ({_count14})")" CountCurrency="@_countcurrency14" CurrencyType="@("Rp")"></Smlp.Bsui.Features.Payments.Component.CardStatistic>
                                         </MudItem>
 
                                         <!-- Divider Vertikal -->
@@ -166,7 +166,7 @@ else
 
                                         <!-- Card ketiga - Pending -->
                                         <MudItem xs="12" sm="6" md="3" Class="d-flex justify-start">
-                                            <Psmp.Bsui.Features.Payments.Component.CardStatistic ImageSrc="img/dollars.png" AvatarColor="Color.Default" Judul="@($"{"Pending"} ({_count3})")" CountCurrency="@_countcurrency3"></Psmp.Bsui.Features.Payments.Component.CardStatistic>
+                                            <Smlp.Bsui.Features.Payments.Component.CardStatistic ImageSrc="img/dollars.png" AvatarColor="Color.Default" Judul="@($"{"Pending"} ({_count3})")" CountCurrency="@_countcurrency3"></Smlp.Bsui.Features.Payments.Component.CardStatistic>
                                         </MudItem>
 
                                         <!-- Divider Vertikal -->
@@ -178,7 +178,7 @@ else
 
                                         <!-- Card keempat - Pending (Rp) -->
                                         <MudItem xs="12" sm="6" md="3" Class="d-flex justify-start">
-											<Psmp.Bsui.Features.Payments.Component.CardStatistic ImageSrc="img/idr7.png" AvatarColor="Color.Default" Judul="@($"{"Pending"} ({_count4})")" CountCurrency="@_countcurrency4" CurrencyType="@("Rp")" IsLast="true"></Psmp.Bsui.Features.Payments.Component.CardStatistic>
+											<Smlp.Bsui.Features.Payments.Component.CardStatistic ImageSrc="img/idr7.png" AvatarColor="Color.Default" Judul="@($"{"Pending"} ({_count4})")" CountCurrency="@_countcurrency4" CurrencyType="@("Rp")" IsLast="true"></Smlp.Bsui.Features.Payments.Component.CardStatistic>
                                         </MudItem>
 									</MudGrid>
 								</MudCard>
@@ -192,7 +192,7 @@ else
 									<MudGrid Justify="Justify.Center">
                                         <!-- Card kedua -->
                                         <MudItem xs="12" sm="6" md="6" Class="d-flex justify-start">
-                                            <Psmp.Bsui.Features.Payments.Component.CardStatistic ImageSrc="img/dollars.png" AvatarColor="Color.Info" Judul="@($"{"Preparation"} ({_count7})")" CountCurrency="@_countcurrency7"></Psmp.Bsui.Features.Payments.Component.CardStatistic>
+                                            <Smlp.Bsui.Features.Payments.Component.CardStatistic ImageSrc="img/dollars.png" AvatarColor="Color.Info" Judul="@($"{"Preparation"} ({_count7})")" CountCurrency="@_countcurrency7"></Smlp.Bsui.Features.Payments.Component.CardStatistic>
                                         </MudItem>
 
                                         <!-- Divider Vertikal -->
@@ -204,7 +204,7 @@ else
 
                                         <!-- Card kedua -->
                                         <MudItem xs="12" sm="6" md="6" Class="d-flex justify-start">
-											<Psmp.Bsui.Features.Payments.Component.CardStatistic ImageSrc="img/idr7.png" AvatarColor="Color.Info" Judul="@($"{"Preparation"} ({_count8})")" CountCurrency="@_countcurrency8" CurrencyType="@("Rp")" IsLast="true"></Psmp.Bsui.Features.Payments.Component.CardStatistic>
+											<Smlp.Bsui.Features.Payments.Component.CardStatistic ImageSrc="img/idr7.png" AvatarColor="Color.Info" Judul="@($"{"Preparation"} ({_count8})")" CountCurrency="@_countcurrency8" CurrencyType="@("Rp")" IsLast="true"></Smlp.Bsui.Features.Payments.Component.CardStatistic>
                                         </MudItem>
 									</MudGrid>
 								</MudCard>
@@ -218,7 +218,7 @@ else
 									<MudGrid Justify="Justify.Center">
                                         <!-- Card ketiga -->
                                         <MudItem xs="12" sm="6" md="6" Class="d-flex justify-start">
-                                            <Psmp.Bsui.Features.Payments.Component.CardStatistic ImageSrc="img/dollars.png" AvatarColor="Color.Success" Judul="@($"{"Completed"} ({_count11})")" CountCurrency="@_countcurrency11"></Psmp.Bsui.Features.Payments.Component.CardStatistic>
+                                            <Smlp.Bsui.Features.Payments.Component.CardStatistic ImageSrc="img/dollars.png" AvatarColor="Color.Success" Judul="@($"{"Completed"} ({_count11})")" CountCurrency="@_countcurrency11"></Smlp.Bsui.Features.Payments.Component.CardStatistic>
                                         </MudItem>
 
                                         <!-- Divider Vertikal -->
@@ -230,7 +230,7 @@ else
 
                                         <!-- Card keempat -->
 										<MudItem xs="12" sm="6" md="6" Class="d-flex justify-start">
-											<Psmp.Bsui.Features.Payments.Component.CardStatistic ImageSrc="img/idr7.png" AvatarColor="Color.Success" Judul="@($"{"Completed"} ({_count12})")" CountCurrency="@_countcurrency12" CurrencyType="@("Rp")" IsLast="true"></Psmp.Bsui.Features.Payments.Component.CardStatistic>
+											<Smlp.Bsui.Features.Payments.Component.CardStatistic ImageSrc="img/idr7.png" AvatarColor="Color.Success" Judul="@($"{"Completed"} ({_count12})")" CountCurrency="@_countcurrency12" CurrencyType="@("Rp")" IsLast="true"></Smlp.Bsui.Features.Payments.Component.CardStatistic>
                                         </MudItem>
 									</MudGrid>
 								</MudCard>

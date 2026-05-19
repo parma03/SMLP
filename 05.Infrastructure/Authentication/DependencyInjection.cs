@@ -1,4 +1,4 @@
-﻿namespace Psmp.Infrastructure.Authentication;
+﻿namespace Smlp.Infrastructure.Authentication;
 
 public static class DependencyInjection
 {

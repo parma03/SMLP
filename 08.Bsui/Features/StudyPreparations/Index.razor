@@ -1,7 +1,7 @@
 ﻿@page "/StudyPreparation"
 @page "/StudyPreparation/{TabIndex:int}"
 
-@using Psmp.Shared.Scholarships.Constants
+@using Smlp.Shared.Scholarships.Constants
 
 <BrowserTabTitle>@DisplayTextFor.StudyPreparation</BrowserTabTitle>
 <MudBreadcrumbs Items="_breadcrumbItems"></MudBreadcrumbs>
@@ -10,49 +10,49 @@
     @if (IsShowIELTS)
     {
         <MudTabPanel Text="@DisplayTextFor.IELTS">
-            <Psmp.Bsui.Features.StudyPreparations.IELTS.Index>
+            <Smlp.Bsui.Features.StudyPreparations.IELTS.Index>
 
-            </Psmp.Bsui.Features.StudyPreparations.IELTS.Index>
+            </Smlp.Bsui.Features.StudyPreparations.IELTS.Index>
         </MudTabPanel>
     } 
     @if (IsShowGMAT)
     {
         <MudTabPanel Text="@DisplayTextFor.GMAT">
-            <Psmp.Bsui.Features.StudyPreparations.GMAT.Index>
+            <Smlp.Bsui.Features.StudyPreparations.GMAT.Index>
 
-            </Psmp.Bsui.Features.StudyPreparations.GMAT.Index>
+            </Smlp.Bsui.Features.StudyPreparations.GMAT.Index>
         </MudTabPanel>
     }
     @if (IsShowGRE)
     {
         <MudTabPanel Text="@DisplayTextFor.GRE">
-            <Psmp.Bsui.Features.StudyPreparations.GRE.Index>
+            <Smlp.Bsui.Features.StudyPreparations.GRE.Index>
 
-            </Psmp.Bsui.Features.StudyPreparations.GRE.Index>
+            </Smlp.Bsui.Features.StudyPreparations.GRE.Index>
         </MudTabPanel>
     }
     @if (IsShowEssay)
     {
         <MudTabPanel Text="@DisplayTextFor.Essay">
-            <Psmp.Bsui.Features.StudyPreparations.Essay.Index>
+            <Smlp.Bsui.Features.StudyPreparations.Essay.Index>
 
-            </Psmp.Bsui.Features.StudyPreparations.Essay.Index>
+            </Smlp.Bsui.Features.StudyPreparations.Essay.Index>
         </MudTabPanel>
     }
     @if (IsShowSponsorshipLetter)
     {
         <MudTabPanel Text="@DisplayTextFor.SponsorshipLetter">
-            <Psmp.Bsui.Features.StudyPreparations.SponsorshipLetter.Index>
+            <Smlp.Bsui.Features.StudyPreparations.SponsorshipLetter.Index>
 
-            </Psmp.Bsui.Features.StudyPreparations.SponsorshipLetter.Index>
+            </Smlp.Bsui.Features.StudyPreparations.SponsorshipLetter.Index>
         </MudTabPanel>
     }
     @if (IsShowVisaGuarantee)
     {
         <MudTabPanel Text="@DisplayTextFor.VisaGuarantee">
-            <Psmp.Bsui.Features.StudyPreparations.VisaGuarantee.Index>
+            <Smlp.Bsui.Features.StudyPreparations.VisaGuarantee.Index>
 
-            </Psmp.Bsui.Features.StudyPreparations.VisaGuarantee.Index>
+            </Smlp.Bsui.Features.StudyPreparations.VisaGuarantee.Index>
         </MudTabPanel>
     }
 </MudTabs>

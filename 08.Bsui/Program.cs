@@ -1,14 +1,14 @@
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
-using Psmp.Bsui.Common.Constants;
-using Psmp.Bsui.Services;
-using Psmp.Bsui.Services.Authentication;
-using Psmp.Bsui.Services.Authorization;
-using Psmp.Bsui.Services.Logging;
-using Psmp.Bsui.Services.Security;
-using Psmp.Client;
-using Psmp.Shared.Common.Constants;
-using Psmp.Shared.Localization;
-using PSMP.Shared;
+using Smlp.Bsui.Common.Constants;
+using Smlp.Bsui.Services;
+using Smlp.Bsui.Services.Authentication;
+using Smlp.Bsui.Services.Authorization;
+using Smlp.Bsui.Services.Logging;
+using Smlp.Bsui.Services.Security;
+using Smlp.Client;
+using Smlp.Shared.Common.Constants;
+using Smlp.Shared.Localization;
+using Smlp.Shared;
 using Syncfusion.Blazor;
 
 Console.WriteLine($"Starting {CommonValueFor.EntryAssemblySimpleName}...");

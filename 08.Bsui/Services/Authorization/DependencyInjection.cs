@@ -1,11 +1,11 @@
-﻿using Psmp.Bsui.Services.Authorization.IdAMan;
-using Psmp.Bsui.Services.Authorization.IS4IM;
-using Psmp.Bsui.Services.Authorization.None;
-using Psmp.Shared.Common.Constants;
-using Psmp.Shared.Services.Authentication.Constants;
-using Psmp.Shared.Services.Authorization.Constants;
+﻿using Smlp.Bsui.Services.Authorization.IdAMan;
+using Smlp.Bsui.Services.Authorization.IS4IM;
+using Smlp.Bsui.Services.Authorization.None;
+using Smlp.Shared.Common.Constants;
+using Smlp.Shared.Services.Authentication.Constants;
+using Smlp.Shared.Services.Authorization.Constants;
 
-namespace Psmp.Bsui.Services.Authorization;
+namespace Smlp.Bsui.Services.Authorization;
 
 public static class DependencyInjection
 {

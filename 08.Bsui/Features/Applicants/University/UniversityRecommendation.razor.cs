@@ -1,20 +1,18 @@
 ﻿/*
-* Pertamina Scholarship Management Portal
-* Copyright (c) 2024-2025 PT. Pertamina Persero
 */
 
 using System.Security.Claims;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
-using Psmp.Base.Universities.Enums;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Shared.Common.Constants;
-using Psmp.Shared.Common.Extensions;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.Masters.Queries;
-using Psmp.Shared.Universities.UniversityRecommendation.Queries;
+using Smlp.Base.Universities.Enums;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Shared.Common.Constants;
+using Smlp.Shared.Common.Extensions;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Masters.Queries;
+using Smlp.Shared.Universities.UniversityRecommendation.Queries;
 
-namespace Psmp.Bsui.Features.Applicants.University;
+namespace Smlp.Bsui.Features.Applicants.University;
 
 public partial class UniversityRecommendation
 {

@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components;
 using System.Security.Claims;
-using Psmp.Shared.Common.Responses;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Shared.Common.Constants;
-using Psmp.Shared.Projects.ProjectPlans.Queries;
+using Smlp.Shared.Common.Responses;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Shared.Common.Constants;
+using Smlp.Shared.Projects.ProjectPlans.Queries;
 using Syncfusion.Blazor.Grids;
-using Psmp.Bsui.Features.Projects.Constants;
-namespace Psmp.Bsui.Features.Projects.ProjectProposal;
+using Smlp.Bsui.Features.Projects.Constants;
+namespace Smlp.Bsui.Features.Projects.ProjectProposal;
 
 public partial class Index
 {

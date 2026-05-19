@@ -1,19 +1,17 @@
 ﻿/*
-* Pertamina Scholarship Management Portal
-* Copyright (c) 2024-2025 PT. Pertamina Persero
 */
 
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
-using Psmp.Bsui.Common.Constants;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Bsui.Features.Applicants.Selection.Models;
-using Psmp.Shared.Applicants.Commands.Create;
-using Psmp.Shared.Selections.SelectionPsychotests.Queries;
+using Smlp.Bsui.Common.Constants;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Bsui.Features.Applicants.Selection.Models;
+using Smlp.Shared.Applicants.Commands.Create;
+using Smlp.Shared.Selections.SelectionPsychotests.Queries;
 using Syncfusion.Blazor.DropDowns;
 
-namespace Psmp.Bsui.Features.Applicants.Selection.Components;
+namespace Smlp.Bsui.Features.Applicants.Selection.Components;
 
 public partial class DialogPsychotestSchedule
 {

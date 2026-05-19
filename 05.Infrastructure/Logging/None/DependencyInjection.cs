@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Psmp.Infrastructure.Logging.None;
+namespace Smlp.Infrastructure.Logging.None;
 
 public static class DependencyInjection
 {

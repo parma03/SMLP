@@ -2,10 +2,10 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
-using Psmp.Bsui.Common.Constants;
-using Psmp.Shared.Scholarships.Constants;
+using Smlp.Bsui.Common.Constants;
+using Smlp.Shared.Scholarships.Constants;
 
-namespace Psmp.Bsui.Features.Universities;
+namespace Smlp.Bsui.Features.Universities;
 
 public partial class Index
 {

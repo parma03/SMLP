@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Newtonsoft.Json;
-using Psmp.Base.ValueObjects;
-using Psmp.Domain.Entities;
+using Smlp.Base.ValueObjects;
+using Smlp.Domain.Entities;
 
-namespace Psmp.Infrastructure.Persistence.Common.Models;
+namespace Smlp.Infrastructure.Persistence.Common.Models;
 
 public class AuditEntry
 {

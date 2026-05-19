@@ -1,4 +1,4 @@
-﻿namespace Psmp.WebApi.Common.Filters.ApiException;
+﻿namespace Smlp.WebApi.Common.Filters.ApiException;
 
 public static class ProblemDetailsFor
 {

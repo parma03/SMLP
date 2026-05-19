@@ -1,8 +1,8 @@
 ﻿using MudBlazor;
-using Psmp.Shared.Common.Enums;
-using Psmp.Shared.Common.Requests;
+using Smlp.Shared.Common.Enums;
+using Smlp.Shared.Common.Requests;
 
-namespace Psmp.Bsui.Common.Extensions;
+namespace Smlp.Bsui.Common.Extensions;
 
 public static class MudBlazorExtensions
 {

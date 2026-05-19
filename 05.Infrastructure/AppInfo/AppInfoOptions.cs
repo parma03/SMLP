@@ -1,4 +1,4 @@
-﻿namespace Psmp.Infrastructure.AppInfo;
+﻿namespace Smlp.Infrastructure.AppInfo;
 
 public class AppInfoOptions
 {

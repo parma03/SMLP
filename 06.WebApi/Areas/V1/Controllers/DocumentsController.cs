@@ -1,17 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Psmp.Application.Documents.Commands.CreateDocument;
-using Psmp.Application.Documents.Commands.DeleteDocument;
-using Psmp.Application.Documents.Queries.GetDocumentFile;
-using Psmp.Application.Documents.Queries.GetDocuments;
-using Psmp.Shared.Common.Constants;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.Documents.Commands.CreateDocument;
-using Psmp.Shared.Documents.Constants;
-using Psmp.Shared.Documents.Queries.GetDocumentFile;
-using Psmp.Shared.Documents.Queries.GetDocuments;
-using Psmp.WebApi.Common.Extensions;
+using Smlp.Application.Documents.Commands.CreateDocument;
+using Smlp.Application.Documents.Commands.DeleteDocument;
+using Smlp.Application.Documents.Queries.GetDocumentFile;
+using Smlp.Application.Documents.Queries.GetDocuments;
+using Smlp.Shared.Common.Constants;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Documents.Commands.CreateDocument;
+using Smlp.Shared.Documents.Constants;
+using Smlp.Shared.Documents.Queries.GetDocumentFile;
+using Smlp.Shared.Documents.Queries.GetDocuments;
+using Smlp.WebApi.Common.Extensions;
 
-namespace Psmp.WebApi.Areas.V1.Controllers;
+namespace Smlp.WebApi.Areas.V1.Controllers;
 
 [ApiVersion(ApiVersioning.V1.Number)]
 public class DocumentsController : ApiControllerBase

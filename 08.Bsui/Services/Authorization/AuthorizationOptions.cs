@@ -1,6 +1,6 @@
-﻿using Psmp.Shared.Services.Authorization.Constants;
+﻿using Smlp.Shared.Services.Authorization.Constants;
 
-namespace Psmp.Bsui.Services.Authorization;
+namespace Smlp.Bsui.Services.Authorization;
 
 public class AuthorizationOptions
 {

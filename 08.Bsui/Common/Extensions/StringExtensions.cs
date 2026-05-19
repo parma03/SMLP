@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
-using Psmp.Shared.Common.Constants;
+using Smlp.Shared.Common.Constants;
 
-namespace Psmp.Bsui.Common.Extensions;
+namespace Smlp.Bsui.Common.Extensions;
 
 public static class StringExtensions
 {

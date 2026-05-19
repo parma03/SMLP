@@ -1,4 +1,4 @@
-﻿namespace Psmp.Bsui.Services.Authorization.IS4IM;
+﻿namespace Smlp.Bsui.Services.Authorization.IS4IM;
 
 public static class DependencyInjection
 {

@@ -1,4 +1,4 @@
-﻿namespace Psmp.Bsui.Features.Selections.TalentReview.Constants;
+﻿namespace Smlp.Bsui.Features.Selections.TalentReview.Constants;
 
 public static class RouteFor
 {

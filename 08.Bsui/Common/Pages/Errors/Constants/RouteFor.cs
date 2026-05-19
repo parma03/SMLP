@@ -1,4 +1,4 @@
-﻿namespace Psmp.Bsui.Common.Pages.Errors.Constants;
+﻿namespace Smlp.Bsui.Common.Pages.Errors.Constants;
 
 public static class RouteFor
 {

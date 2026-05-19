@@ -1,4 +1,4 @@
-﻿namespace Psmp.Infrastructure.BackgroundJob.Hangfire.Storages.SqlServer;
+﻿namespace Smlp.Infrastructure.BackgroundJob.Hangfire.Storages.SqlServer;
 
 public class SqlServerOptions
 {

@@ -1,15 +1,15 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
-using Psmp.Base.Selections.Enums;
-using Psmp.Base.Studies.Enums;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.Documents.Queries.GetDocumentFile;
-using Psmp.Shared.StudyPreparations.SponsorshipLetter.Commands.Update;
-using Psmp.Shared.StudyPreparations.SponsorshipLetter.Queries;
+using Smlp.Base.Selections.Enums;
+using Smlp.Base.Studies.Enums;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Documents.Queries.GetDocumentFile;
+using Smlp.Shared.StudyPreparations.SponsorshipLetter.Commands.Update;
+using Smlp.Shared.StudyPreparations.SponsorshipLetter.Queries;
 
-namespace Psmp.Bsui.Features.StudyPreparations.SponsorshipLetter;
+namespace Smlp.Bsui.Features.StudyPreparations.SponsorshipLetter;
 
 public partial class Detail
 {
@@ -57,7 +57,7 @@ public partial class Detail
         if (dataResponse.Result == null || dataResponse.Result.Id == Guid.Empty)
         {
             _snackbar.AddError("Data not found!!");
-            _navigationManager.NavigateTo(Psmp.Bsui.Features.StudyPreparations.Constants.RouteFor.StudyPreparationTab(4), true);
+            _navigationManager.NavigateTo(Smlp.Bsui.Features.StudyPreparations.Constants.RouteFor.StudyPreparationTab(4), true);
             StateHasChanged();
             return;
         }
@@ -100,7 +100,7 @@ public partial class Detail
     #region OnClick Event
     public async Task OnClickBack()
     {
-        _navigationManager.NavigateTo(Psmp.Bsui.Features.StudyPreparations.Constants.RouteFor.StudyPreparationTab(4), true);
+        _navigationManager.NavigateTo(Smlp.Bsui.Features.StudyPreparations.Constants.RouteFor.StudyPreparationTab(4), true);
         await Task.CompletedTask;
     }
 
@@ -190,11 +190,11 @@ public partial class Detail
 
         if (TypeConfirm == "Accepted")
         {
-            _navigationManager.NavigateTo(Psmp.Bsui.Features.StudyPreparations.Constants.RouteFor.StudyPreparationDetailAccepted("SponsorshipLetter", _dataItem.Id), true);
+            _navigationManager.NavigateTo(Smlp.Bsui.Features.StudyPreparations.Constants.RouteFor.StudyPreparationDetailAccepted("SponsorshipLetter", _dataItem.Id), true);
         }
         else if (TypeConfirm == "Rejected")
         {
-            _navigationManager.NavigateTo(Psmp.Bsui.Features.StudyPreparations.Constants.RouteFor.StudyPreparationTab(4), true);
+            _navigationManager.NavigateTo(Smlp.Bsui.Features.StudyPreparations.Constants.RouteFor.StudyPreparationTab(4), true);
         }
 
         _isLoading = false;

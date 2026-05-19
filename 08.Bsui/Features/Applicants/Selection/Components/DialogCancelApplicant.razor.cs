@@ -1,17 +1,15 @@
 ﻿/*
-* Pertamina Scholarship Management Portal
-* Copyright (c) 2024-2025 PT. Pertamina Persero
 */
 
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
-using Psmp.Bsui.Common.Constants;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Shared.Applicants.Commands.Cancel;
-using Psmp.Shared.Applicants.Constants;
+using Smlp.Bsui.Common.Constants;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Shared.Applicants.Commands.Cancel;
+using Smlp.Shared.Applicants.Constants;
 
-namespace Psmp.Bsui.Features.Applicants.Selection.Components;
+namespace Smlp.Bsui.Features.Applicants.Selection.Components;
 
 public partial class DialogCancelApplicant
 {

@@ -1,7 +1,7 @@
-﻿using Psmp.Shared.Services.Authorization.Models.GetAuthorizationInfo;
-using Psmp.Shared.Services.Authorization.Models.GetPositions;
+﻿using Smlp.Shared.Services.Authorization.Models.GetAuthorizationInfo;
+using Smlp.Shared.Services.Authorization.Models.GetPositions;
 
-namespace Psmp.Bsui.Services.Authorization;
+namespace Smlp.Bsui.Services.Authorization;
 
 public interface IAuthorizationService
 {

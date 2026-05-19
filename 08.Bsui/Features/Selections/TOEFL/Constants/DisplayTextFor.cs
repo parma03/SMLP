@@ -1,6 +1,6 @@
-﻿using Psmp.Shared.Common.Extensions;
+﻿using Smlp.Shared.Common.Extensions;
 
-namespace Psmp.Bsui.Features.Selections.TOEFL.Constants;
+namespace Smlp.Bsui.Features.Selections.TOEFL.Constants;
 
 public static class DisplayTextFor
 {

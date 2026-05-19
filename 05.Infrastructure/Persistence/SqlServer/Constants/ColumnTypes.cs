@@ -1,4 +1,4 @@
-﻿namespace Psmp.Infrastructure.Persistence.SqlServer.Constants;
+﻿namespace Smlp.Infrastructure.Persistence.SqlServer.Constants;
 
 public static class ColumnTypes
 {

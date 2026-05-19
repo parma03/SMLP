@@ -1,36 +1,36 @@
 ﻿using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.Masters.Queries;
-using Psmp.Shared.Scholarships.ScholarshipPosting.Queries;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Masters.Queries;
+using Smlp.Shared.Scholarships.ScholarshipPosting.Queries;
 using System.Security.Claims;
-using Psmp.Shared.Selections.SelectionPsychotests.Queries;
+using Smlp.Shared.Selections.SelectionPsychotests.Queries;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
-using Psmp.Base.Selections.Enums;
-using Psmp.Bsui.Common.Constants;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Shared.Selections.SelectionOverviews.Queries;
+using Smlp.Base.Selections.Enums;
+using Smlp.Bsui.Common.Constants;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Shared.Selections.SelectionOverviews.Queries;
 using Syncfusion.Blazor.Inputs;
 using Syncfusion.XlsIO;
 using System.Data;
-using Psmp.Shared.Common.Constants;
+using Smlp.Shared.Common.Constants;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
-using Psmp.Bsui.Features.Selections.Psychotest.Constants;
-using Psmp.Base.Scholarships.Enums;
+using Smlp.Bsui.Features.Selections.Psychotest.Constants;
+using Smlp.Base.Scholarships.Enums;
 using Syncfusion.Blazor.Grids;
-using Psmp.Shared.Selections.SelectionPsychotests.Commands.Update;
-using Psmp.Shared.Documents.Queries.GetDocuments;
-using Psmp.Shared.Common.Extensions;
-using Psmp.Shared.Documents.Commands.CreateDocument;
+using Smlp.Shared.Selections.SelectionPsychotests.Commands.Update;
+using Smlp.Shared.Documents.Queries.GetDocuments;
+using Smlp.Shared.Common.Extensions;
+using Smlp.Shared.Documents.Commands.CreateDocument;
 using Syncfusion.Blazor.Navigations;
-using Psmp.Shared.Selections.SelectionTalentReviews.Commands.Create;
-using Psmp.Shared.Documents.Queries.GetDocumentFile;
-using Psmp.Shared.Selections.SelectionOverviews.Commands.Update;
-using SelectionType = Psmp.Base.Selections.Enums.SelectionType;
+using Smlp.Shared.Selections.SelectionTalentReviews.Commands.Create;
+using Smlp.Shared.Documents.Queries.GetDocumentFile;
+using Smlp.Shared.Selections.SelectionOverviews.Commands.Update;
+using SelectionType = Smlp.Base.Selections.Enums.SelectionType;
 
-namespace Psmp.Bsui.Features.Selections.Psychotest;
+namespace Smlp.Bsui.Features.Selections.Psychotest;
 
 public partial class Index
 {

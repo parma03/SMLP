@@ -1,10 +1,10 @@
 ﻿using System.Linq.Expressions;
 using Microsoft.Extensions.Logging;
-using Psmp.Application.Services.BackgroundJob;
-using Psmp.Shared.Common.Constants;
-using Psmp.Shared.Common.Extensions;
+using Smlp.Application.Services.BackgroundJob;
+using Smlp.Shared.Common.Constants;
+using Smlp.Shared.Common.Extensions;
 
-namespace Psmp.Infrastructure.BackgroundJob.None;
+namespace Smlp.Infrastructure.BackgroundJob.None;
 
 public class NoneBackgroundJobService : IBackgroundJobService
 {

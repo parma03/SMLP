@@ -1,15 +1,13 @@
 ﻿/*
-* Pertamina Scholarship Management Portal
-* Copyright (c) 2024-2025 PT. Pertamina Persero
 */
 
 using System.Security.Claims;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Shared.Common.Extensions;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Shared.Common.Extensions;
 
-namespace Psmp.Bsui.Features.Applicants;
+namespace Smlp.Bsui.Features.Applicants;
 
 public partial class Index
 {

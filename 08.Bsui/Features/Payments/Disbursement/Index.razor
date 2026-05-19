@@ -1,8 +1,8 @@
-﻿@using Psmp.Base.Payments.Enums;
-@using Psmp.Shared.Applicants.Constants
-@using Psmp.Shared.Common.Responses
-@using Psmp.Shared.Payments.Queries
-@using Psmp.Bsui.Features.Payments.Component
+﻿@using Smlp.Base.Payments.Enums;
+@using Smlp.Shared.Applicants.Constants
+@using Smlp.Shared.Common.Responses
+@using Smlp.Shared.Payments.Queries
+@using Smlp.Bsui.Features.Payments.Component
 
 <style>
     .e-chip-list {
@@ -109,7 +109,7 @@ else
                                     <MudGrid Justify="Justify.Center">
                                         <!-- Card pertama -->
                                         <MudItem xs="12" sm="6" md="6" Class="d-flex justify-start">
-                                            <Psmp.Bsui.Features.Payments.Component.CardStatistic ImageSrc="img/dollars.png" AvatarColor="Color.Info" Judul="@($"{"Preparation"} ({_count1})")" CountCurrency="@_countcurrency1"></Psmp.Bsui.Features.Payments.Component.CardStatistic>
+                                            <Smlp.Bsui.Features.Payments.Component.CardStatistic ImageSrc="img/dollars.png" AvatarColor="Color.Info" Judul="@($"{"Preparation"} ({_count1})")" CountCurrency="@_countcurrency1"></Smlp.Bsui.Features.Payments.Component.CardStatistic>
                                         </MudItem>
 
                                         <!-- Divider Vertikal -->
@@ -121,7 +121,7 @@ else
 
                                         <!-- Card kedua -->
                                         <MudItem xs="12" sm="6" md="6" Class="d-flex justify-start">
-											<Psmp.Bsui.Features.Payments.Component.CardStatistic ImageSrc="img/idr7.png" AvatarColor="Color.Info" Judul="@($"{"Preparation"} ({_count2})")" CountCurrency="@_countcurrency2" CurrencyType="@("Rp")" IsLast="true"></Psmp.Bsui.Features.Payments.Component.CardStatistic>
+											<Smlp.Bsui.Features.Payments.Component.CardStatistic ImageSrc="img/idr7.png" AvatarColor="Color.Info" Judul="@($"{"Preparation"} ({_count2})")" CountCurrency="@_countcurrency2" CurrencyType="@("Rp")" IsLast="true"></Smlp.Bsui.Features.Payments.Component.CardStatistic>
                                         </MudItem>
                                     </MudGrid>
                                 </MudCard>
@@ -135,7 +135,7 @@ else
                                     <MudGrid Justify="Justify.Center">
                                         <!-- Card pertama -->
                                         <MudItem xs="12" sm="6" md="6" Class="d-flex justify-start">
-                                            <Psmp.Bsui.Features.Payments.Component.CardStatistic ImageSrc="img/dollars.png" AvatarColor="Color.Success" Judul="@($"{"Completed"} ({_count5})")" CountCurrency="@_countcurrency5"></Psmp.Bsui.Features.Payments.Component.CardStatistic>
+                                            <Smlp.Bsui.Features.Payments.Component.CardStatistic ImageSrc="img/dollars.png" AvatarColor="Color.Success" Judul="@($"{"Completed"} ({_count5})")" CountCurrency="@_countcurrency5"></Smlp.Bsui.Features.Payments.Component.CardStatistic>
                                         </MudItem>
 
                                         <!-- Divider Vertikal -->
@@ -147,7 +147,7 @@ else
 
                                         <!-- Card kedua -->
                                         <MudItem xs="12" sm="6" md="6" Class="d-flex justify-start">
-											<Psmp.Bsui.Features.Payments.Component.CardStatistic ImageSrc="img/idr7.png" AvatarColor="Color.Success" Judul="@($"{"Completed"} ({_count6})")" CountCurrency="@_countcurrency6" CurrencyType="@("Rp")" IsLast="true"></Psmp.Bsui.Features.Payments.Component.CardStatistic>
+											<Smlp.Bsui.Features.Payments.Component.CardStatistic ImageSrc="img/idr7.png" AvatarColor="Color.Success" Judul="@($"{"Completed"} ({_count6})")" CountCurrency="@_countcurrency6" CurrencyType="@("Rp")" IsLast="true"></Smlp.Bsui.Features.Payments.Component.CardStatistic>
                                         </MudItem>
                                     </MudGrid>
                                 </MudCard>
@@ -449,7 +449,7 @@ else
                       IsViewMode="@IsViewMode">
 </DialogAddDibursement>
 
-<Psmp.Bsui.Common.Components.DialogConfirmation
+<Smlp.Bsui.Common.Components.DialogConfirmation
     Visibility="VisibleDeletePopup"
     Title="Delete Confirmation"
     Content="Are you sure want to delete this data?"

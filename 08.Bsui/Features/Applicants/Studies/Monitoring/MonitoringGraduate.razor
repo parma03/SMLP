@@ -1,4 +1,4 @@
-﻿@using Psmp.Bsui.Features.Applicants.Studies.Monitoring.Components
+﻿@using Smlp.Bsui.Features.Applicants.Studies.Monitoring.Components
 
 @inject IWebHostEnvironment _webHostEnvironment
 @inject IOptions<HrisOptions> _hrisOptions
@@ -45,8 +45,8 @@ else
                 <MudGrid AlignItems="center">
                     <!-- Card Highest -->
                     <MudItem xs="5" md="4" Class="d-flex justify-center">
-                        <Psmp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardStatistic Icon="@Icons.Material.Rounded.TrendingUp" AvatarColor="Color.Success" Title="Highest GPA" Count="_gpaMaximum">
-                        </Psmp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardStatistic>
+                        <Smlp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardStatistic Icon="@Icons.Material.Rounded.TrendingUp" AvatarColor="Color.Success" Title="Highest GPA" Count="_gpaMaximum">
+                        </Smlp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardStatistic>
                     </MudItem>
 
                     <!-- Divider Vertikal -->
@@ -58,8 +58,8 @@ else
 
                     <!-- Card Lower -->
                     <MudItem xs="5" md="4" Class="d-flex justify-center">
-                        <Psmp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardStatistic Icon="@Icons.Material.Rounded.TrendingDown" AvatarColor="Color.Warning" Title="Lowest GPA" Count="_gpaMinimum">
-                        </Psmp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardStatistic>
+                        <Smlp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardStatistic Icon="@Icons.Material.Rounded.TrendingDown" AvatarColor="Color.Warning" Title="Lowest GPA" Count="_gpaMinimum">
+                        </Smlp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardStatistic>
                     </MudItem>
 
                     <!-- Divider Vertikal -->
@@ -71,8 +71,8 @@ else
 
                     <!-- Card Average -->
                     <MudItem xs="5" md="3" Class="d-flex justify-center">
-                        <Psmp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardStatistic Icon="@Icons.Material.Rounded.InsertChart" AvatarColor="Color.Primary" Title="GPA Average" Count="_gpaAverage">
-                        </Psmp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardStatistic>
+                        <Smlp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardStatistic Icon="@Icons.Material.Rounded.InsertChart" AvatarColor="Color.Primary" Title="GPA Average" Count="_gpaAverage">
+                        </Smlp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardStatistic>
                     </MudItem>
                 </MudGrid>
             </MudCard>
@@ -102,8 +102,8 @@ else
                         <MudGrid>
                             <!-- Card Highest -->
                             <MudItem xs="6" Class="d-flex justify-left">
-                                <Psmp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardDocument Icon="@Icons.Material.Filled.PictureAsPdf" Title="Last Exam Schedule" SubTitle="Last Exam Schedule.pdf" OnClickDownload="OnClickDownloadLastExam">
-                                </Psmp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardDocument>
+                                <Smlp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardDocument Icon="@Icons.Material.Filled.PictureAsPdf" Title="Last Exam Schedule" SubTitle="Last Exam Schedule.pdf" OnClickDownload="OnClickDownloadLastExam">
+                                </Smlp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardDocument>
                             </MudItem>
 
                             <!-- Vertical Devider-->
@@ -113,8 +113,8 @@ else
 
                             <!-- Card Lower -->
                             <MudItem xs="4" Class="d-flex justify-left">
-                                <Psmp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardStatus Icon="@Icons.Material.Rounded.Check">
-                                </Psmp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardStatus>
+                                <Smlp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardStatus Icon="@Icons.Material.Rounded.Check">
+                                </Smlp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardStatus>
                             </MudItem>
                         </MudGrid>
                     </MudCard>
@@ -129,8 +129,8 @@ else
                         <MudGrid>
                             <!-- Card Highest -->
                             <MudItem xs="6" Class="d-flex justify-left">
-                                <Psmp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardDocument Icon="@Icons.Material.Filled.PictureAsPdf" Title="Graduate Schedule" SubTitle="Graduate Schedule.pdf" OnClickDownload="OnClickDownloadGraduate">
-                                </Psmp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardDocument>
+                                <Smlp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardDocument Icon="@Icons.Material.Filled.PictureAsPdf" Title="Graduate Schedule" SubTitle="Graduate Schedule.pdf" OnClickDownload="OnClickDownloadGraduate">
+                                </Smlp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardDocument>
                             </MudItem>
 
                             <!-- Vertical Devider-->
@@ -140,8 +140,8 @@ else
 
                             <!-- Card Lower -->
                             <MudItem xs="4" Class="d-flex justify-left">
-                                <Psmp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardStatus Icon="@Icons.Material.Rounded.Check">
-                                </Psmp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardStatus>
+                                <Smlp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardStatus Icon="@Icons.Material.Rounded.Check">
+                                </Smlp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardStatus>
                             </MudItem>
                         </MudGrid>
                     </MudCard>
@@ -156,8 +156,8 @@ else
                         <MudGrid>
                             <!-- Card Highest -->
                             <MudItem xs="6" Class="d-flex justify-left">
-                                <Psmp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardDocument Icon="@Icons.Material.Filled.PictureAsPdf" Title="Transcript" SubTitle="Transcript.pdf" OnClickDownload="OnClickDownloadTranscript">
-                                </Psmp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardDocument>
+                                <Smlp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardDocument Icon="@Icons.Material.Filled.PictureAsPdf" Title="Transcript" SubTitle="Transcript.pdf" OnClickDownload="OnClickDownloadTranscript">
+                                </Smlp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardDocument>
                             </MudItem>
 
                             <!-- Vertical Devider-->
@@ -167,8 +167,8 @@ else
 
                             <!-- Card Lower -->
                             <MudItem xs="4" Class="d-flex justify-left">
-                                <Psmp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardStatus Icon="@Icons.Material.Rounded.Check">
-                                </Psmp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardStatus>
+                                <Smlp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardStatus Icon="@Icons.Material.Rounded.Check">
+                                </Smlp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardStatus>
                             </MudItem>
                         </MudGrid>
                     </MudCard>
@@ -183,8 +183,8 @@ else
                         <MudGrid>
                             <!-- Card Highest -->
                             <MudItem xs="6" Class="d-flex justify-left">
-                                <Psmp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardDocument Icon="@Icons.Material.Filled.PictureAsPdf" Title="Certificate of Completion" SubTitle="Certificate of Completion.pdf" OnClickDownload="OnClickDownloadCompletion">
-                                </Psmp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardDocument>
+                                <Smlp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardDocument Icon="@Icons.Material.Filled.PictureAsPdf" Title="Certificate of Completion" SubTitle="Certificate of Completion.pdf" OnClickDownload="OnClickDownloadCompletion">
+                                </Smlp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardDocument>
                             </MudItem>
 
                             <!-- Vertical Devider-->
@@ -194,8 +194,8 @@ else
 
                             <!-- Card Lower -->
                             <MudItem xs="4" Class="d-flex justify-left">
-                                <Psmp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardStatus Icon="@Icons.Material.Rounded.Check">
-                                </Psmp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardStatus>
+                                <Smlp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardStatus Icon="@Icons.Material.Rounded.Check">
+                                </Smlp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardStatus>
                             </MudItem>
                         </MudGrid>
                     </MudCard>
@@ -210,8 +210,8 @@ else
                         <MudGrid>
                             <!-- Card Highest -->
                             <MudItem xs="6" Class="d-flex justify-left">
-                                <Psmp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardDocument Icon="@Icons.Material.Filled.PictureAsPdf" Title="Course Final Project" SubTitle="Course Final Project.pdf" OnClickDownload="OnClickDownloadFinalProject">
-                                </Psmp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardDocument>
+                                <Smlp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardDocument Icon="@Icons.Material.Filled.PictureAsPdf" Title="Course Final Project" SubTitle="Course Final Project.pdf" OnClickDownload="OnClickDownloadFinalProject">
+                                </Smlp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardDocument>
                             </MudItem>
 
                             <!-- Vertical Devider-->
@@ -221,8 +221,8 @@ else
 
                             <!-- Card Lower -->
                             <MudItem xs="4" Class="d-flex justify-left">
-                                <Psmp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardStatus Icon="@Icons.Material.Rounded.Check">
-                                </Psmp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardStatus>
+                                <Smlp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardStatus Icon="@Icons.Material.Rounded.Check">
+                                </Smlp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardStatus>
                             </MudItem>
                         </MudGrid>
                     </MudCard>

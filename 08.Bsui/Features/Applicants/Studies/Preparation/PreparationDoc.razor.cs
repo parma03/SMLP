@@ -1,35 +1,33 @@
 ﻿/*
-* Pertamina Scholarship Management Portal
-* Copyright (c) 2024-2025 PT. Pertamina Persero
 */
 
 using System.Security.Claims;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
-using Psmp.Base.Selections.Enums;
-using Psmp.Base.Studies.Enums;
-using Psmp.Bsui.Common.Constants;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Shared.Applicants.Commands.Create;
-using Psmp.Shared.Applicants.Queries.GetApplicant;
-using Psmp.Shared.Applicants.Queries.GetApplicantStudyPreparation;
-using Psmp.Shared.Common.Constants;
-using Psmp.Shared.Common.Extensions;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.Documents.Commands.CreateDocument;
-using Psmp.Shared.Documents.Queries.GetDocumentFile;
-using Psmp.Shared.Documents.Queries.GetDocuments;
-using Psmp.Shared.StudyPreparations.Essay.Commands.Create;
-using Psmp.Shared.StudyPreparations.Gmat.Commands.Create;
-using Psmp.Shared.StudyPreparations.Gre.Commands.Create;
-using Psmp.Shared.StudyPreparations.Ielts.Commands.Create;
-using Psmp.Shared.StudyPreparations.SponsorshipLetter.Commands.Create;
-using Psmp.Shared.StudyPreparations.VisaGuarantee.Commands.Create;
+using Smlp.Base.Selections.Enums;
+using Smlp.Base.Studies.Enums;
+using Smlp.Bsui.Common.Constants;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Shared.Applicants.Commands.Create;
+using Smlp.Shared.Applicants.Queries.GetApplicant;
+using Smlp.Shared.Applicants.Queries.GetApplicantStudyPreparation;
+using Smlp.Shared.Common.Constants;
+using Smlp.Shared.Common.Extensions;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Documents.Commands.CreateDocument;
+using Smlp.Shared.Documents.Queries.GetDocumentFile;
+using Smlp.Shared.Documents.Queries.GetDocuments;
+using Smlp.Shared.StudyPreparations.Essay.Commands.Create;
+using Smlp.Shared.StudyPreparations.Gmat.Commands.Create;
+using Smlp.Shared.StudyPreparations.Gre.Commands.Create;
+using Smlp.Shared.StudyPreparations.Ielts.Commands.Create;
+using Smlp.Shared.StudyPreparations.SponsorshipLetter.Commands.Create;
+using Smlp.Shared.StudyPreparations.VisaGuarantee.Commands.Create;
 using Syncfusion.Blazor.Grids;
 using Syncfusion.Blazor.Inputs;
 
-namespace Psmp.Bsui.Features.Applicants.Studies.Preparation;
+namespace Smlp.Bsui.Features.Applicants.Studies.Preparation;
 
 public partial class PreparationDoc
 {

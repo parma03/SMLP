@@ -1,4 +1,4 @@
-﻿namespace Psmp.Bsui.Services.Logging.None;
+﻿namespace Smlp.Bsui.Services.Logging.None;
 
 public static class DependencyInjection
 {

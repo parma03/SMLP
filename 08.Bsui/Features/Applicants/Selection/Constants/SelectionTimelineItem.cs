@@ -1,12 +1,10 @@
 ﻿/*
-* Pertamina Scholarship Management Portal
-* Copyright (c) 2024-2025 PT. Pertamina Persero
 */
 
-using Psmp.Base.Selections.Enums;
-using Psmp.Bsui.Features.Applicants.Selection.Models;
+using Smlp.Base.Selections.Enums;
+using Smlp.Bsui.Features.Applicants.Selection.Models;
 
-namespace Psmp.Bsui.Features.Applicants.Selection.Constants;
+namespace Smlp.Bsui.Features.Applicants.Selection.Constants;
 
 public static class SelectionTimelineItem
 {

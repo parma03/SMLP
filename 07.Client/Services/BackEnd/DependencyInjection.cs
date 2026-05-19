@@ -1,21 +1,19 @@
 ﻿/*
-* Pertamina Scholarship Management Portal
-* Copyright (c) 2024-2025 PT. Pertamina Persero
 */
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Psmp.Client.Services.BackEnd.Applicants;
-using Psmp.Client.Services.BackEnd.Masters;
-using Psmp.Client.Services.BackEnd.Payments;
-using Psmp.Client.Services.BackEnd.Scholarships;
-using Psmp.Client.Services.BackEnd.Selections;
-using Psmp.Client.Services.BackEnd.SiteAdministrators;
-using Psmp.Client.Services.BackEnd.StudyMonitorings;
-using Psmp.Client.Services.BackEnd.StudyPreparations;
-using Psmp.Client.Services.BackEnd.Universities;
+using Smlp.Client.Services.BackEnd.Applicants;
+using Smlp.Client.Services.BackEnd.Masters;
+using Smlp.Client.Services.BackEnd.Payments;
+using Smlp.Client.Services.BackEnd.Scholarships;
+using Smlp.Client.Services.BackEnd.Selections;
+using Smlp.Client.Services.BackEnd.SiteAdministrators;
+using Smlp.Client.Services.BackEnd.StudyMonitorings;
+using Smlp.Client.Services.BackEnd.StudyPreparations;
+using Smlp.Client.Services.BackEnd.Universities;
 
-namespace Psmp.Client.Services.BackEnd;
+namespace Smlp.Client.Services.BackEnd;
 
 public static class DependencyInjection
 {
@@ -116,10 +114,10 @@ public static class DependencyInjection
         #endregion Emails
 
         #region Project
-        services.AddTransient<Psmp.Client.Services.BackEnd.Projects.ProjectPlansService>();
-        services.AddTransient<Psmp.Client.Services.BackEnd.Projects.ProjectCharterPlansService>();
-        services.AddTransient<Psmp.Client.Services.BackEnd.Projects.ProjectCharterRealisationService>();
-        services.AddTransient<Psmp.Client.Services.BackEnd.Projects.ProjectMonitoringService>();
+        services.AddTransient<Smlp.Client.Services.BackEnd.Projects.ProjectPlansService>();
+        services.AddTransient<Smlp.Client.Services.BackEnd.Projects.ProjectCharterPlansService>();
+        services.AddTransient<Smlp.Client.Services.BackEnd.Projects.ProjectCharterRealisationService>();
+        services.AddTransient<Smlp.Client.Services.BackEnd.Projects.ProjectMonitoringService>();
         #endregion
 
         #region Site Administrator

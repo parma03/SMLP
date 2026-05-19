@@ -1,18 +1,18 @@
 ﻿
 using Microsoft.Extensions.Options;
 //using Newtonsoft.Json;
-using Psmp.Client.Common.Extensions;
-using Psmp.Client.Services.UserInfo;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.Emails.Commands.SendEmail;
-using Psmp.Shared.Emails.Commands.SendEmailSchedule;
-using Psmp.Shared.Emails.Commands.SendEmailStudyPreparation;
+using Smlp.Client.Common.Extensions;
+using Smlp.Client.Services.UserInfo;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Emails.Commands.SendEmail;
+using Smlp.Shared.Emails.Commands.SendEmailSchedule;
+using Smlp.Shared.Emails.Commands.SendEmailStudyPreparation;
 
-//using Psmp.Shared.Emails.Queries.GetEmail;
+//using Smlp.Shared.Emails.Queries.GetEmail;
 using RestSharp;
-using static Psmp.Shared.Emails.Constants.ApiEndpoint.V1;
+using static Smlp.Shared.Emails.Constants.ApiEndpoint.V1;
 
-namespace Psmp.Client.Services.BackEnd;
+namespace Smlp.Client.Services.BackEnd;
 public class EmailService
 {
     private readonly RestClient _restClient;

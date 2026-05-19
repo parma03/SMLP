@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components;
-using Psmp.Shared.Common.Responses;
+using Smlp.Shared.Common.Responses;
 using System.Security.Claims;
-using Psmp.Shared.SiteAdministrators.Buddy.Queries;
+using Smlp.Shared.SiteAdministrators.Buddy.Queries;
 
-namespace Psmp.Bsui.Features.SiteAdministrator.Buddy;
+namespace Smlp.Bsui.Features.SiteAdministrator.Buddy;
 public partial class Index
 {
     [CascadingParameter]

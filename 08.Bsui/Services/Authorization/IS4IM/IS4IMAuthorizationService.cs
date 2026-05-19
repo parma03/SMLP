@@ -1,10 +1,10 @@
 ﻿using Microsoft.Extensions.Options;
-using Psmp.Shared.Services.Authorization.Constants;
-using Psmp.Shared.Services.Authorization.Models.GetAuthorizationInfo;
-using Psmp.Shared.Services.Authorization.Models.GetPositions;
+using Smlp.Shared.Services.Authorization.Constants;
+using Smlp.Shared.Services.Authorization.Models.GetAuthorizationInfo;
+using Smlp.Shared.Services.Authorization.Models.GetPositions;
 using RestSharp;
 
-namespace Psmp.Bsui.Services.Authorization.IS4IM;
+namespace Smlp.Bsui.Services.Authorization.IS4IM;
 
 public class IS4IMAuthorizationService : IAuthorizationService
 {

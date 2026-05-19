@@ -1,14 +1,14 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using Psmp.Base.Selections.Enums;
-using Psmp.Bsui.Common.Constants;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.Documents.Queries.GetDocumentFile;
-using Psmp.Shared.StudyMonitorings.Constants;
-using Psmp.Shared.StudyMonitorings.StudyPeriod.Queries;
+using Smlp.Base.Selections.Enums;
+using Smlp.Bsui.Common.Constants;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Documents.Queries.GetDocumentFile;
+using Smlp.Shared.StudyMonitorings.Constants;
+using Smlp.Shared.StudyMonitorings.StudyPeriod.Queries;
 
-namespace Psmp.Bsui.Features.StudyMonitoring.StudyPeriod;
+namespace Smlp.Bsui.Features.StudyMonitoring.StudyPeriod;
 
 public partial class DetailSemester
 {
@@ -63,7 +63,7 @@ public partial class DetailSemester
         if (dataAdmission.Result == null || dataAdmission.Result!.Items.Count == 0)
         {
             _snackbar.AddError("Data not found!!");
-            _navigationManager.NavigateTo(Psmp.Bsui.Features.StudyMonitoring.Constants.RouteFor.StudyMonitoringTab(0), true);
+            _navigationManager.NavigateTo(Smlp.Bsui.Features.StudyMonitoring.Constants.RouteFor.StudyMonitoringTab(0), true);
             StateHasChanged();
             return;
         }
@@ -72,7 +72,7 @@ public partial class DetailSemester
         if (data.Result == null || data.Result.Id == Guid.Empty)
         {
             _snackbar.AddError("Data not found!!");
-            _navigationManager.NavigateTo(Psmp.Bsui.Features.StudyMonitoring.Constants.RouteFor.StudyMonitoringDetail("StudyPeriod", AdmissionId), true);
+            _navigationManager.NavigateTo(Smlp.Bsui.Features.StudyMonitoring.Constants.RouteFor.StudyMonitoringDetail("StudyPeriod", AdmissionId), true);
             StateHasChanged();
             return;
         }
@@ -113,7 +113,7 @@ public partial class DetailSemester
     #region OnClick
     public async Task OnClickBack()
     {
-        _navigationManager.NavigateTo(Psmp.Bsui.Features.StudyMonitoring.Constants.RouteFor.StudyMonitoringDetail("StudyPeriod", AdmissionId), true);
+        _navigationManager.NavigateTo(Smlp.Bsui.Features.StudyMonitoring.Constants.RouteFor.StudyMonitoringDetail("StudyPeriod", AdmissionId), true);
         await Task.CompletedTask;
     }
     #endregion

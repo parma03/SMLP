@@ -1,13 +1,11 @@
 ﻿/*
-* Pertamina Scholarship Management Portal
-* Copyright (c) 2024-2025 PT. Pertamina Persero
 */
 
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using Psmp.Bsui.Features.Applicants.Selection.Models;
+using Smlp.Bsui.Features.Applicants.Selection.Models;
 
-namespace Psmp.Bsui.Features.Applicants.Selection.Components;
+namespace Smlp.Bsui.Features.Applicants.Selection.Components;
 
 public partial class SelectionStep
 {

@@ -2,10 +2,10 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components;
 using System.Security.Claims;
 using MudBlazor;
-using Psmp.Bsui.Common.Constants;
-using Psmp.Shared.Payments.Contants;
+using Smlp.Bsui.Common.Constants;
+using Smlp.Shared.Payments.Contants;
 
-namespace Psmp.Bsui.Features.Applicants.Payments.Reimbursements;
+namespace Smlp.Bsui.Features.Applicants.Payments.Reimbursements;
 public partial class DetailAcceptedPayment
 {
     #region Parameter

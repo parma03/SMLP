@@ -1,4 +1,4 @@
-﻿namespace Psmp.Bsui.Services.Geolocation;
+﻿namespace Smlp.Bsui.Services.Geolocation;
 
 public class GeolocationOptions
 {

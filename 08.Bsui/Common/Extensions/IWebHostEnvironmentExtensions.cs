@@ -1,4 +1,4 @@
-﻿namespace Psmp.Bsui.Common.Extensions;
+﻿namespace Smlp.Bsui.Common.Extensions;
 
 public static class IWebHostEnvironmentExtensions
 {

@@ -1,18 +1,16 @@
 ﻿/*
-* Pertamina Scholarship Management Portal
-* Copyright (c) 2024-2025 PT. Pertamina Persero
 */
 
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components;
 using System.Security.Claims;
 using MudBlazor;
-using Psmp.Bsui.Common.Constants;
-using Psmp.Bsui.Services.External.Location.Models;
-using Psmp.Shared.Common.Constants;
-using Psmp.Bsui.Common.Extensions;
+using Smlp.Bsui.Common.Constants;
+using Smlp.Bsui.Services.External.Location.Models;
+using Smlp.Shared.Common.Constants;
+using Smlp.Bsui.Common.Extensions;
 
-namespace Psmp.Bsui.Common.Pages;
+namespace Smlp.Bsui.Common.Pages;
 
 public partial class About
 {

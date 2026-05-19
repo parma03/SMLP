@@ -2,10 +2,10 @@
 using IdentityModel;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Psmp.Bsui.Services.Authorization;
-using Psmp.Shared.Services.Authorization.Constants;
+using Smlp.Bsui.Services.Authorization;
+using Smlp.Shared.Services.Authorization.Constants;
 
-namespace Psmp.Bsui.Services.Authentication.Extensions;
+namespace Smlp.Bsui.Services.Authentication.Extensions;
 
 public static class UserInformationReceivedContextExtensions
 {

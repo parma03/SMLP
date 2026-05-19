@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using Psmp.Bsui.Common.Extensions;
+using Smlp.Bsui.Common.Extensions;
 
-namespace Psmp.Bsui.Features.Audits.Components;
+namespace Smlp.Bsui.Features.Audits.Components;
 
 public partial class DialogFilter
 {

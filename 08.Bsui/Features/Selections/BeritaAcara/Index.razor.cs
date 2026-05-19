@@ -1,21 +1,21 @@
 ﻿using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components;
 using System.Security.Claims;
-using Psmp.Shared.Common.Responses;
-using Psmp.Base.Scholarships.Enums;
-using Psmp.Shared.Masters.Queries;
-using Psmp.Shared.Scholarships.ScholarshipPosting.Queries;
+using Smlp.Shared.Common.Responses;
+using Smlp.Base.Scholarships.Enums;
+using Smlp.Shared.Masters.Queries;
+using Smlp.Shared.Scholarships.ScholarshipPosting.Queries;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
-using Psmp.Shared.Common.Extensions;
+using Smlp.Shared.Common.Extensions;
 using Syncfusion.Blazor.Navigations;
-using Psmp.Shared.Selections.BeritaAcara.Queries;
-using RouteFor = Psmp.Bsui.Features.Selections.BeritaAcara.Constants.RouteFor;
+using Smlp.Shared.Selections.BeritaAcara.Queries;
+using RouteFor = Smlp.Bsui.Features.Selections.BeritaAcara.Constants.RouteFor;
 using Syncfusion.Blazor.Grids;
-using SelectionType = Psmp.Base.Selections.Enums.SelectionType;
-using Psmp.Bsui.Common.Extensions;
+using SelectionType = Smlp.Base.Selections.Enums.SelectionType;
+using Smlp.Bsui.Common.Extensions;
 
-namespace Psmp.Bsui.Features.Selections.BeritaAcara;
+namespace Smlp.Bsui.Features.Selections.BeritaAcara;
 
 public partial class Index
 {

@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Components.Authorization;
-using Psmp.Bsui.Services.Authentication.IdAMan;
-using Psmp.Bsui.Services.Authentication.IS4IM;
-using Psmp.Bsui.Services.Authentication.None;
-using Psmp.Shared.Common.Constants;
-using Psmp.Shared.Services.Authentication.Constants;
+using Smlp.Bsui.Services.Authentication.IdAMan;
+using Smlp.Bsui.Services.Authentication.IS4IM;
+using Smlp.Bsui.Services.Authentication.None;
+using Smlp.Shared.Common.Constants;
+using Smlp.Shared.Services.Authentication.Constants;
 
-namespace Psmp.Bsui.Services.Authentication;
+namespace Smlp.Bsui.Services.Authentication;
 
 public static class DependencyInjection
 {

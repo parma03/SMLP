@@ -1,6 +1,4 @@
 ﻿/*
-* Pertamina Scholarship Management Portal
-* Copyright (c) 2024-2025 PT. Pertamina Persero
 */
 
 using System.Data;
@@ -9,22 +7,22 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
-using Psmp.Base.Scholarships.Enums;
-using Psmp.Bsui.Common.Constants;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Bsui.Features.Scholarships.ScholarshipPlan.Constants;
-using Psmp.Shared.Common.Constants;
-using Psmp.Shared.Common.Extensions;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.Masters.Queries;
-using Psmp.Shared.Scholarships.ScholarshipPlan.Queries;
-using Psmp.Shared.Scholarships.ScholarshipPosting.Queries;
-using Psmp.Shared.Services.Authorization.Constants;
+using Smlp.Base.Scholarships.Enums;
+using Smlp.Bsui.Common.Constants;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Bsui.Features.Scholarships.ScholarshipPlan.Constants;
+using Smlp.Shared.Common.Constants;
+using Smlp.Shared.Common.Extensions;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Masters.Queries;
+using Smlp.Shared.Scholarships.ScholarshipPlan.Queries;
+using Smlp.Shared.Scholarships.ScholarshipPosting.Queries;
+using Smlp.Shared.Services.Authorization.Constants;
 using Syncfusion.Blazor.Grids;
 using Syncfusion.Blazor.Navigations;
 using Syncfusion.XlsIO;
 
-namespace Psmp.Bsui.Features.Scholarships.ScholarshipPlan;
+namespace Smlp.Bsui.Features.Scholarships.ScholarshipPlan;
 
 public partial class Index
 {

@@ -1,8 +1,8 @@
-﻿using Psmp.Shared.Services.HealthCheck.Constants;
-using Psmp.Shared.Services.HealthCheck.Queries.GetHealthCheck;
+﻿using Smlp.Shared.Services.HealthCheck.Constants;
+using Smlp.Shared.Services.HealthCheck.Queries.GetHealthCheck;
 using RestSharp;
 
-namespace Psmp.Client.Services.HealthCheck;
+namespace Smlp.Client.Services.HealthCheck;
 
 public class HealthCheckService
 {

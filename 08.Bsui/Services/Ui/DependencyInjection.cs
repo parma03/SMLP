@@ -1,7 +1,7 @@
-﻿using Psmp.Bsui.Services.Ui.SyncfusionBlazor;
-using Psmp.Bsui.Services.UI.MudBlazorUI;
+﻿using Smlp.Bsui.Services.Ui.SyncfusionBlazor;
+using Smlp.Bsui.Services.UI.MudBlazorUI;
 
-namespace Psmp.Bsui.Services.UI;
+namespace Smlp.Bsui.Services.UI;
 
 public static class DependencyInjection
 {

@@ -1,6 +1,6 @@
 ﻿@page "/UnivRegistration"
 
-@using Psmp.Shared.Scholarships.Constants
+@using Smlp.Shared.Scholarships.Constants
 
 <BrowserTabTitle>@DisplayTextFor.UnivRegistration</BrowserTabTitle>
 <MudBreadcrumbs Items="_breadcrumbItems"></MudBreadcrumbs>
@@ -9,17 +9,17 @@
     @if (IsShowUniversityRecommendation)
     {
         <MudTabPanel Text="@DisplayTextFor.UniversityRecommendation">
-            <Psmp.Bsui.Features.UnivRegistration.UniversityRecommendation.Index>
+            <Smlp.Bsui.Features.UnivRegistration.UniversityRecommendation.Index>
 
-            </Psmp.Bsui.Features.UnivRegistration.UniversityRecommendation.Index>
+            </Smlp.Bsui.Features.UnivRegistration.UniversityRecommendation.Index>
         </MudTabPanel>
     }
     @if (IsShowUniversityAdmission)
     {
         <MudTabPanel Text="@DisplayTextFor.UniversityAdmission">
-            <Psmp.Bsui.Features.UnivRegistration.UniversityAdmission.Index>
+            <Smlp.Bsui.Features.UnivRegistration.UniversityAdmission.Index>
 
-            </Psmp.Bsui.Features.UnivRegistration.UniversityAdmission.Index>
+            </Smlp.Bsui.Features.UnivRegistration.UniversityAdmission.Index>
         </MudTabPanel>
     }
 </MudTabs>

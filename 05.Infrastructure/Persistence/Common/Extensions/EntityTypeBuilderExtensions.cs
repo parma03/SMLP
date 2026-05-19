@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Psmp.Domain.Events;
-using Psmp.Domain.Interfaces;
-using Psmp.Infrastructure.Persistence.Common.Constants;
-using Psmp.Shared.Common.Constants;
+using Smlp.Domain.Events;
+using Smlp.Domain.Interfaces;
+using Smlp.Infrastructure.Persistence.Common.Constants;
+using Smlp.Shared.Common.Constants;
 
-namespace Psmp.Infrastructure.Persistence.Common.Extensions;
+namespace Smlp.Infrastructure.Persistence.Common.Extensions;
 
 public static class EntityTypeBuilderExtensions
 {

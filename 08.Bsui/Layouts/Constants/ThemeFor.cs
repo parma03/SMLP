@@ -1,6 +1,6 @@
 ﻿using MudBlazor;
 
-namespace Psmp.Bsui.Layouts.Constants;
+namespace Smlp.Bsui.Layouts.Constants;
 
 public class ThemeFor
 {

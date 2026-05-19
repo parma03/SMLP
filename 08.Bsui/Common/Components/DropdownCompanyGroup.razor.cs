@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Psmp.Shared.Masters.Queries;
+using Smlp.Shared.Masters.Queries;
 using Syncfusion.Blazor.DropDowns;
 
-namespace Psmp.Bsui.Common.Components;
+namespace Smlp.Bsui.Common.Components;
 
 public partial class DropdownCompanyGroup
 {

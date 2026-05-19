@@ -1,6 +1,6 @@
-﻿using Psmp.Shared.Common.Responses;
+﻿using Smlp.Shared.Common.Responses;
 
-namespace Psmp.Bsui.Common.Extensions;
+namespace Smlp.Bsui.Common.Extensions;
 
 public static class ErrorExtentions
 {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 
-namespace Psmp.Bsui.Features.StudyPreparations.Component;
+namespace Smlp.Bsui.Features.StudyPreparations.Component;
 
 public partial class CardStatistic
 {

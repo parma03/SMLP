@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
 
-namespace Psmp.Infrastructure.Logging;
+namespace Smlp.Infrastructure.Logging;
 
 public static class LoggingHelper
 {

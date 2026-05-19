@@ -1,4 +1,4 @@
-﻿namespace Psmp.Bsui.Features.Selections.CreateSK.Constants;
+﻿namespace Smlp.Bsui.Features.Selections.CreateSK.Constants;
 
 public static class RouteFor
 {

@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components;
 using System.Security.Claims;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.Masters.AdministrativeCriterias.Commands;
-using Psmp.Shared.Masters.AdministrativeCriterias.Queries;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Masters.AdministrativeCriterias.Commands;
+using Smlp.Shared.Masters.AdministrativeCriterias.Queries;
 using Microsoft.AspNetCore.Components.Web;
-using Psmp.Bsui.Common.Extensions;
+using Smlp.Bsui.Common.Extensions;
 
-namespace Psmp.Bsui.Features.SiteAdministrator.ValidationCriteria;
+namespace Smlp.Bsui.Features.SiteAdministrator.ValidationCriteria;
 
 public partial class Index
 {

@@ -1,4 +1,4 @@
-﻿namespace Psmp.Infrastructure.HealthCheck.Storages.SqlServer;
+﻿namespace Smlp.Infrastructure.HealthCheck.Storages.SqlServer;
 
 public class SqlServerOptions
 {

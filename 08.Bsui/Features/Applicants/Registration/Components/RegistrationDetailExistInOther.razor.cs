@@ -1,15 +1,13 @@
 ﻿/*
-* Pertamina Scholarship Management Portal
-* Copyright (c) 2024-2025 PT. Pertamina Persero
 */
 
 using Microsoft.AspNetCore.Components;
-using Psmp.Shared.Applicants.Constants;
+using Smlp.Shared.Applicants.Constants;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
-using Psmp.Base.Selections.Enums;
+using Smlp.Base.Selections.Enums;
 
-namespace Psmp.Bsui.Features.Applicants.Registration.Components;
+namespace Smlp.Bsui.Features.Applicants.Registration.Components;
 
 public partial class RegistrationDetailExistInOther
 {

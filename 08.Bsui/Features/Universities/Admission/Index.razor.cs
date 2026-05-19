@@ -4,26 +4,26 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
-using Psmp.Base.Scholarships.Enums;
-using Psmp.Base.Selections.Enums;
-using Psmp.Base.Universities.Enums;
-using Psmp.Bsui.Common.Constants;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Shared.Common.Constants;
-using Psmp.Shared.Common.Extensions;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.Documents.Commands.CreateDocument;
-using Psmp.Shared.Masters.Queries;
-using Psmp.Shared.Scholarships.ScholarshipPosting.Queries;
-using Psmp.Shared.Universities.Admission.Queries;
-using Psmp.Shared.Universities.AdmissionSuperiorLetter.Commands.Create;
-using Psmp.Shared.Universities.UniversityRecommendation.Queries;
+using Smlp.Base.Scholarships.Enums;
+using Smlp.Base.Selections.Enums;
+using Smlp.Base.Universities.Enums;
+using Smlp.Bsui.Common.Constants;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Shared.Common.Constants;
+using Smlp.Shared.Common.Extensions;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Documents.Commands.CreateDocument;
+using Smlp.Shared.Masters.Queries;
+using Smlp.Shared.Scholarships.ScholarshipPosting.Queries;
+using Smlp.Shared.Universities.Admission.Queries;
+using Smlp.Shared.Universities.AdmissionSuperiorLetter.Commands.Create;
+using Smlp.Shared.Universities.UniversityRecommendation.Queries;
 using Syncfusion.Blazor.Grids;
 using Syncfusion.Blazor.Inputs;
 using Syncfusion.XlsIO;
 using Syncfusion.Blazor.Navigations;
 
-namespace Psmp.Bsui.Features.Universities.Admission;
+namespace Smlp.Bsui.Features.Universities.Admission;
 
 public partial class Index
 {
@@ -480,7 +480,7 @@ public partial class Index
     #region Command Event
     public async Task OnCommandClicked(CommandClickEventArgs<GetAdmissionQueryResponse> args)
     {
-        _navigationManager.NavigateTo(Psmp.Bsui.Features.Universities.AdmissionDetail.Constants.RouteFor.Detail(args.RowData.Id), true);
+        _navigationManager.NavigateTo(Smlp.Bsui.Features.Universities.AdmissionDetail.Constants.RouteFor.Detail(args.RowData.Id), true);
         await Task.CompletedTask;
     }
     #endregion

@@ -1,6 +1,6 @@
 ﻿@page "/Project"
 
-@using Psmp.Shared.Scholarships.Constants
+@using Smlp.Shared.Scholarships.Constants
 
 <BrowserTabTitle>@DisplayTextFor.InnovationProject</BrowserTabTitle>
 <MudBreadcrumbs Items="_breadcrumbItems"></MudBreadcrumbs>
@@ -9,33 +9,33 @@
     @if (IsShowProjectProposal)
     {
         <MudTabPanel Text="@DisplayTextFor.ProjectProposal">
-            <Psmp.Bsui.Features.Projects.ProjectProposal.Index>
+            <Smlp.Bsui.Features.Projects.ProjectProposal.Index>
 
-            </Psmp.Bsui.Features.Projects.ProjectProposal.Index>
+            </Smlp.Bsui.Features.Projects.ProjectProposal.Index>
         </MudTabPanel>
     }
     @if (IsShowProjectMentoring)
     {
         <MudTabPanel Text="@DisplayTextFor.ProjectMentoring">
-            <Psmp.Bsui.Features.Projects.ProjectMentoring.Index>
+            <Smlp.Bsui.Features.Projects.ProjectMentoring.Index>
 
-            </Psmp.Bsui.Features.Projects.ProjectMentoring.Index>
+            </Smlp.Bsui.Features.Projects.ProjectMentoring.Index>
         </MudTabPanel>
     }
     @if (IsShowProjectCharterPlan)
     {
         <MudTabPanel Text="@DisplayTextFor.ProjectCharterPlan">
-            <Psmp.Bsui.Features.Projects.ProjectCharterPlan.Index>
+            <Smlp.Bsui.Features.Projects.ProjectCharterPlan.Index>
 
-            </Psmp.Bsui.Features.Projects.ProjectCharterPlan.Index>
+            </Smlp.Bsui.Features.Projects.ProjectCharterPlan.Index>
         </MudTabPanel>
     }
     @if (IsShowProjectCharterReal)
     {
         <MudTabPanel Text="@DisplayTextFor.ProjectCharterReal">
-            <Psmp.Bsui.Features.Projects.ProjectCharterReal.Index>
+            <Smlp.Bsui.Features.Projects.ProjectCharterReal.Index>
 
-            </Psmp.Bsui.Features.Projects.ProjectCharterReal.Index>
+            </Smlp.Bsui.Features.Projects.ProjectCharterReal.Index>
         </MudTabPanel>
     }
 </MudTabs>

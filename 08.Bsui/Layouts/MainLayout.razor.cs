@@ -2,14 +2,14 @@
 using Darnton.Blazor.DeviceInterop.Geolocation;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
-using Psmp.Base.ValueObjects;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Bsui.Services.Authentication;
-using Psmp.Bsui.Services.Telemetry;
-using Psmp.Shared.Services.Authentication.Constants;
+using Smlp.Base.ValueObjects;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Bsui.Services.Authentication;
+using Smlp.Bsui.Services.Telemetry;
+using Smlp.Shared.Services.Authentication.Constants;
 using Timer = System.Timers.Timer;
 
-namespace Psmp.Bsui.Layouts;
+namespace Smlp.Bsui.Layouts;
 
 public partial class MainLayout
 {

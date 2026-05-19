@@ -1,7 +1,7 @@
 ﻿using MudBlazor;
-using Psmp.Shared.Projects.Constants;
+using Smlp.Shared.Projects.Constants;
 
-namespace Psmp.Bsui.Features.Projects.Constants;
+namespace Smlp.Bsui.Features.Projects.Constants;
 
 public static class BreadcrumbFor
 {

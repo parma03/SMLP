@@ -1,4 +1,4 @@
-﻿namespace Psmp.Infrastructure.Persistence.Common.Constants;
+﻿namespace Smlp.Infrastructure.Persistence.Common.Constants;
 
 public static class TableGroupFor
 {

@@ -1,17 +1,17 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
-using Psmp.Bsui.Common.Constants;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.Masters.Queries;
-using Psmp.Shared.Selections.SelectionTOEFLs.Queries;
+using Smlp.Bsui.Common.Constants;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Masters.Queries;
+using Smlp.Shared.Selections.SelectionTOEFLs.Queries;
 using Syncfusion.Blazor.Grids;
-using RouteFor = Psmp.Bsui.Features.Selections.TOEFL.Constants.RouteFor;
-using DisplayTextFor = Psmp.Shared.Selections.Constants.DisplayTextFor;
-using Psmp.Shared.Selections.SelectionTOEFLs.Commands.Update;
+using RouteFor = Smlp.Bsui.Features.Selections.TOEFL.Constants.RouteFor;
+using DisplayTextFor = Smlp.Shared.Selections.Constants.DisplayTextFor;
+using Smlp.Shared.Selections.SelectionTOEFLs.Commands.Update;
 
-namespace Psmp.Bsui.Features.Selections.TOEFL;
+namespace Smlp.Bsui.Features.Selections.TOEFL;
 
 public partial class ScheduleDetail
 {

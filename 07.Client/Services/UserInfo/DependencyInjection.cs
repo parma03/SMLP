@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Psmp.Client.Services.UserInfo;
+namespace Smlp.Client.Services.UserInfo;
 
 public static class DependencyInjection
 {

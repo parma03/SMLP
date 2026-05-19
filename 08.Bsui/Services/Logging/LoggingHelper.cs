@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging.Console;
 
-namespace Psmp.Bsui.Services.Logging;
+namespace Smlp.Bsui.Services.Logging;
 
 public static class LoggingHelper
 {

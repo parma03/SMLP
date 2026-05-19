@@ -1,4 +1,4 @@
-﻿namespace Psmp.Infrastructure.Persistence;
+﻿namespace Smlp.Infrastructure.Persistence;
 
 public class PersistenceOptions
 {

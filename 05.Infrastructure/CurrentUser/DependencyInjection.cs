@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Psmp.Application.Services.CurrentUser;
+using Smlp.Application.Services.CurrentUser;
 
-namespace Psmp.InfrastructureCurrentUser;
+namespace Smlp.InfrastructureCurrentUser;
 
 public static class DependencyInjection
 {

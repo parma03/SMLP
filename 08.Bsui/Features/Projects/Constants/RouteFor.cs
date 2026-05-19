@@ -1,4 +1,4 @@
-﻿namespace Psmp.Bsui.Features.Projects.Constants;
+﻿namespace Smlp.Bsui.Features.Projects.Constants;
 
 public static class RouteFor
 {

@@ -2,16 +2,16 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
-using Psmp.Base.Scholarships.Enums;
-using Psmp.Base.Selections.Enums;
-using Psmp.Shared.Common.Extensions;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.Masters.Queries;
-using Psmp.Shared.Scholarships.ScholarshipPosting.Queries;
-using Psmp.Shared.Selections.SelectionOverviews.Queries;
+using Smlp.Base.Scholarships.Enums;
+using Smlp.Base.Selections.Enums;
+using Smlp.Shared.Common.Extensions;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Masters.Queries;
+using Smlp.Shared.Scholarships.ScholarshipPosting.Queries;
+using Smlp.Shared.Selections.SelectionOverviews.Queries;
 
-//namespace Psmp.Bsui.Features.Selections.Overview;
-namespace Psmp.Bsui.Features.Dashboards.DashboardsPayment;
+//namespace Smlp.Bsui.Features.Selections.Overview;
+namespace Smlp.Bsui.Features.Dashboards.DashboardsPayment;
 
 public partial class Index
 {

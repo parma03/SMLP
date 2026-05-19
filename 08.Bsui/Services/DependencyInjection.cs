@@ -1,14 +1,14 @@
-﻿using Psmp.Bsui.Services.AppInfo;
-using Psmp.Bsui.Services.Authentication;
-using Psmp.Bsui.Services.Authorization;
-using Psmp.Bsui.Services.External;
-using Psmp.Bsui.Services.FrontEnd;
-using Psmp.Bsui.Services.Geolocation;
-using Psmp.Bsui.Services.Security;
-using Psmp.Bsui.Services.Telemetry;
-using Psmp.Bsui.Services.UI;
+﻿using Smlp.Bsui.Services.AppInfo;
+using Smlp.Bsui.Services.Authentication;
+using Smlp.Bsui.Services.Authorization;
+using Smlp.Bsui.Services.External;
+using Smlp.Bsui.Services.FrontEnd;
+using Smlp.Bsui.Services.Geolocation;
+using Smlp.Bsui.Services.Security;
+using Smlp.Bsui.Services.Telemetry;
+using Smlp.Bsui.Services.UI;
 
-namespace Psmp.Bsui.Services;
+namespace Smlp.Bsui.Services;
 
 public static class DependencyInjection
 {

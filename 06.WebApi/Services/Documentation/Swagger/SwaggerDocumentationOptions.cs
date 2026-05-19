@@ -1,4 +1,4 @@
-﻿namespace Psmp.WebApi.Services.Documentation.Swagger;
+﻿namespace Smlp.WebApi.Services.Documentation.Swagger;
 
 public class SwaggerDocumentationOptions
 {

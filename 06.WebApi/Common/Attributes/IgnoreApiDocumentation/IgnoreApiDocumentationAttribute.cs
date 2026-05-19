@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Psmp.Shared.Common.Constants;
+using Smlp.Shared.Common.Constants;
 
-namespace Psmp.WebApi.Common.Attributes.IgnoreApiDocumentation;
+namespace Smlp.WebApi.Common.Attributes.IgnoreApiDocumentation;
 
 [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
 public class IgnoreApiDocumentationAttribute : ApiExplorerSettingsAttribute

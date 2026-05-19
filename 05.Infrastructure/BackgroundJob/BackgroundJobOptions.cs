@@ -1,4 +1,4 @@
-﻿namespace Psmp.Infrastructure.BackgroundJob;
+﻿namespace Smlp.Infrastructure.BackgroundJob;
 
 public class BackgroundJobOptions
 {

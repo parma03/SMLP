@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using Psmp.Bsui.Common.Constants;
-using Psmp.Bsui.Features.Audits.Constants;
-using Psmp.Shared.Audits.Queries.GetAudit;
-using Psmp.Shared.Common.Constants;
-using Psmp.Shared.Common.Extensions;
-using Psmp.Shared.Common.Responses;
+using Smlp.Bsui.Common.Constants;
+using Smlp.Bsui.Features.Audits.Constants;
+using Smlp.Shared.Audits.Queries.GetAudit;
+using Smlp.Shared.Common.Constants;
+using Smlp.Shared.Common.Extensions;
+using Smlp.Shared.Common.Responses;
 
-namespace Psmp.Bsui.Features.Audits;
+namespace Smlp.Bsui.Features.Audits;
 
 public partial class Details
 {

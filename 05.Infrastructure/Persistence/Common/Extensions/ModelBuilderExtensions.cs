@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 
-namespace Psmp.Infrastructure.Persistence.Common.Extensions;
+namespace Smlp.Infrastructure.Persistence.Common.Extensions;
 
 public static class ModelBuilderExtensions
 {

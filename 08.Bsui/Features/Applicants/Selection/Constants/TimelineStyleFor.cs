@@ -1,4 +1,4 @@
-﻿namespace Psmp.Bsui.Features.Applicants.Selection.Constants;
+﻿namespace Smlp.Bsui.Features.Applicants.Selection.Constants;
 
 public static class TimelineStyleFor
 {

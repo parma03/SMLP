@@ -1,11 +1,11 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
-using Psmp.Base.Selections.Enums;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Shared.Common.Constants;
+using Smlp.Base.Selections.Enums;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Shared.Common.Constants;
 
-namespace Psmp.Bsui.Layouts;
+namespace Smlp.Bsui.Layouts;
 
 public partial class NavMenu
 {

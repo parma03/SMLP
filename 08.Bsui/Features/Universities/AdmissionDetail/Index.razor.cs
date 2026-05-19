@@ -2,11 +2,11 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
-using Psmp.Bsui.Common.Constants;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Shared.Scholarships.Constants;
+using Smlp.Bsui.Common.Constants;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Shared.Scholarships.Constants;
 
-namespace Psmp.Bsui.Features.Universities.AdmissionDetail;
+namespace Smlp.Bsui.Features.Universities.AdmissionDetail;
 
 public partial class Index
 {
@@ -27,7 +27,7 @@ public partial class Index
         if (dataAdmission.Result == null || dataAdmission.Result.Id == Guid.Empty)
         {
             _snackbar.AddError("Data not found!!");
-            _navigationManager.NavigateTo(Psmp.Bsui.Features.Universities.Constants.RouteFor.UniversityAdmissionTab(1), true);
+            _navigationManager.NavigateTo(Smlp.Bsui.Features.Universities.Constants.RouteFor.UniversityAdmissionTab(1), true);
             StateHasChanged();
             return;
         }

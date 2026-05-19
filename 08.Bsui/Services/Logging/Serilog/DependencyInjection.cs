@@ -1,10 +1,10 @@
-﻿using Psmp.Bsui.Services.AppInfo;
-using Psmp.Shared.Common.Constants;
-using Psmp.Shared.Services.Logging.Constants;
+﻿using Smlp.Bsui.Services.AppInfo;
+using Smlp.Shared.Common.Constants;
+using Smlp.Shared.Services.Logging.Constants;
 using Serilog;
 using Serilog.Debugging;
 
-namespace Psmp.Bsui.Services.Logging.Serilog;
+namespace Smlp.Bsui.Services.Logging.Serilog;
 
 public static class DependencyInjection
 {

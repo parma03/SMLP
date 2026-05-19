@@ -1,17 +1,17 @@
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components;
-using Psmp.Shared.Common.Responses;
+using Smlp.Shared.Common.Responses;
 using System.Security.Claims;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Shared.Common.Constants;
-using Psmp.Shared.Projects.ProjectComments.Commands;
-using Psmp.Shared.Projects.ProjectComments.Queries;
-using Psmp.Shared.Projects.ProjectMonitorings.Queries;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Shared.Common.Constants;
+using Smlp.Shared.Projects.ProjectComments.Commands;
+using Smlp.Shared.Projects.ProjectComments.Queries;
+using Smlp.Shared.Projects.ProjectMonitorings.Queries;
 using Syncfusion.Blazor.Grids;
-using Psmp.Shared.Projects.ProjectMonitorings.Commands;
-using Psmp.Shared.Common.Extensions;
+using Smlp.Shared.Projects.ProjectMonitorings.Commands;
+using Smlp.Shared.Common.Extensions;
 
-namespace Psmp.Bsui.Features.Applicants.Projects.Components;
+namespace Smlp.Bsui.Features.Applicants.Projects.Components;
 public partial class ProjectMentoring
 {
     [CascadingParameter]

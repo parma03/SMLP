@@ -1,11 +1,11 @@
 ﻿using System.Net;
 using System.Net.Mime;
 using Newtonsoft.Json;
-using Psmp.Shared.Common.Extensions;
-using Psmp.Shared.Common.Responses;
+using Smlp.Shared.Common.Extensions;
+using Smlp.Shared.Common.Responses;
 using RestSharp;
 
-namespace Psmp.Client.Common.Extensions;
+namespace Smlp.Client.Common.Extensions;
 
 public static class RestResponseExtensions
 {

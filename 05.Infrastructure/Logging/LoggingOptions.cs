@@ -1,4 +1,4 @@
-﻿namespace Psmp.Infrastructure.Logging;
+﻿namespace Smlp.Infrastructure.Logging;
 
 public class LoggingOptions
 {

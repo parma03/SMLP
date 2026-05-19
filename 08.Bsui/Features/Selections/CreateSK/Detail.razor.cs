@@ -2,20 +2,20 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
-using Psmp.Base.Selections.Enums;
-using Psmp.Bsui.Common.Constants;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.Selections.BeritaAcara.Commands.Update;
-using Psmp.Shared.Selections.Constants;
-using Psmp.Shared.Selections.CreateSK.Commands.Update;
-using Psmp.Shared.Selections.CreateSK.Queries;
-using Psmp.Shared.Selections.SelectionOverviews.Commands.Update;
-using Psmp.Shared.Selections.SelectionTalentReviews.Commands.Update;
+using Smlp.Base.Selections.Enums;
+using Smlp.Bsui.Common.Constants;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Selections.BeritaAcara.Commands.Update;
+using Smlp.Shared.Selections.Constants;
+using Smlp.Shared.Selections.CreateSK.Commands.Update;
+using Smlp.Shared.Selections.CreateSK.Queries;
+using Smlp.Shared.Selections.SelectionOverviews.Commands.Update;
+using Smlp.Shared.Selections.SelectionTalentReviews.Commands.Update;
 using Syncfusion.Blazor.Inputs;
-using RouteFor = Psmp.Bsui.Features.Selections.CreateSK.Constants.RouteFor;
+using RouteFor = Smlp.Bsui.Features.Selections.CreateSK.Constants.RouteFor;
 
-namespace Psmp.Bsui.Features.Selections.CreateSK;
+namespace Smlp.Bsui.Features.Selections.CreateSK;
 
 public partial class Detail
 {

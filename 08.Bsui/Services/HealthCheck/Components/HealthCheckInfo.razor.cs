@@ -1,10 +1,10 @@
 ﻿using MudBlazor;
-using Psmp.Shared.Services.HealthCheck.Constants;
-using Psmp.Shared.Services.HealthCheck.Queries.GetHealthCheck;
+using Smlp.Shared.Services.HealthCheck.Constants;
+using Smlp.Shared.Services.HealthCheck.Queries.GetHealthCheck;
 
 using Timer = System.Timers.Timer;
 
-namespace Psmp.Bsui.Services.HealthCheck.Components;
+namespace Smlp.Bsui.Services.HealthCheck.Components;
 
 public partial class HealthCheckInfo
 {

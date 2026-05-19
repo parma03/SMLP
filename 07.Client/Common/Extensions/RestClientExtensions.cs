@@ -1,8 +1,8 @@
-﻿using Psmp.Client.Services.UserInfo;
-using Psmp.Shared.Common.Constants;
+﻿using Smlp.Client.Services.UserInfo;
+using Smlp.Shared.Common.Constants;
 using RestSharp;
 
-namespace Psmp.Client.Common.Extensions;
+namespace Smlp.Client.Common.Extensions;
 
 public static class RestClientExtensions
 {

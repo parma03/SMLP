@@ -1,6 +1,6 @@
 ﻿using Darnton.Blazor.DeviceInterop.Geolocation;
 
-namespace Psmp.Bsui.Services.Geolocation.None;
+namespace Smlp.Bsui.Services.Geolocation.None;
 
 public class NoneGeolocationService : IGeolocationService
 {

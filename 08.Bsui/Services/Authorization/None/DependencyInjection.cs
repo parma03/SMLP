@@ -1,4 +1,4 @@
-﻿namespace Psmp.Bsui.Services.Authorization.None;
+﻿namespace Smlp.Bsui.Services.Authorization.None;
 
 public static class DependencyInjection
 {

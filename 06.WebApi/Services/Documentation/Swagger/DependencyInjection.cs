@@ -5,14 +5,14 @@ using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Interfaces;
 using Microsoft.OpenApi.Models;
-using Psmp.Infrastructure.AppInfo;
-using Psmp.Shared.Common.Constants;
-using Psmp.Shared.Common.Extensions;
-using Psmp.WebApi.Services.BackEnd;
-using Psmp.WebApi.Services.Documentation.Swagger.Filters;
+using Smlp.Infrastructure.AppInfo;
+using Smlp.Shared.Common.Constants;
+using Smlp.Shared.Common.Extensions;
+using Smlp.WebApi.Services.BackEnd;
+using Smlp.WebApi.Services.Documentation.Swagger.Filters;
 using Swashbuckle.AspNetCore.SwaggerUI;
 
-namespace Psmp.WebApi.Services.Documentation.Swagger;
+namespace Smlp.WebApi.Services.Documentation.Swagger;
 
 public static class DependencyInjection
 {

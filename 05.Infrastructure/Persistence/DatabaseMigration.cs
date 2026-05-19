@@ -2,10 +2,10 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Psmp.Infrastructure.Persistence.SqlServer;
-using Psmp.Shared.Common.Constants;
+using Smlp.Infrastructure.Persistence.SqlServer;
+using Smlp.Shared.Common.Constants;
 
-namespace Psmp.Infrastructure.Persistence;
+namespace Smlp.Infrastructure.Persistence;
 
 public static class DatabaseMigration
 {

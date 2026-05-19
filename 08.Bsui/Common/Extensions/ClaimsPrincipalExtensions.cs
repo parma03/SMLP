@@ -1,9 +1,9 @@
 ﻿using System.Security.Claims;
 using IdentityModel;
-using Psmp.Bsui.Services.Authentication.Constants;
-using Psmp.Shared.Services.Authorization.Constants;
+using Smlp.Bsui.Services.Authentication.Constants;
+using Smlp.Shared.Services.Authorization.Constants;
 
-namespace Psmp.Bsui.Common.Extensions;
+namespace Smlp.Bsui.Common.Extensions;
 
 public static class ClaimsPrincipalExtensions
 {

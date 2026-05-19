@@ -1,9 +1,7 @@
 ﻿/*
-* Pertamina Scholarship Management Portal
-* Copyright (c) 2024-2025 PT. Pertamina Persero
 */
 
-namespace Psmp.Bsui.Features.Applicants.Registration.Models;
+namespace Smlp.Bsui.Features.Applicants.Registration.Models;
 
 public class ApplicantValidationModel
 {

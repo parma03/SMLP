@@ -5,16 +5,16 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.Extensions.Options;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Bsui.Services.Authentication.IdAMan;
-using Psmp.Bsui.Services.Authentication.IS4IM;
-using Psmp.Bsui.Services.Authorization;
-using Psmp.Client.Services.UserInfo;
-using Psmp.Shared.Common.Constants;
-using Psmp.Shared.Services.Authentication.Constants;
-using Psmp.Shared.Services.Authorization.Constants;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Bsui.Services.Authentication.IdAMan;
+using Smlp.Bsui.Services.Authentication.IS4IM;
+using Smlp.Bsui.Services.Authorization;
+using Smlp.Client.Services.UserInfo;
+using Smlp.Shared.Common.Constants;
+using Smlp.Shared.Services.Authentication.Constants;
+using Smlp.Shared.Services.Authorization.Constants;
 
-namespace Psmp.Bsui.Services.Authentication;
+namespace Smlp.Bsui.Services.Authentication;
 
 public class AuthorizedAuthenticationStateProvider : AuthenticationStateProvider
 {

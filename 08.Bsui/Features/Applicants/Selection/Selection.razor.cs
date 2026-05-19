@@ -1,6 +1,4 @@
 ﻿/*
-* Pertamina Scholarship Management Portal
-* Copyright (c) 2024-2025 PT. Pertamina Persero
 */
 
 using System.Security.Claims;
@@ -8,21 +6,21 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
-using Psmp.Base.Selections.Enums;
-using Psmp.Bsui.Common.Constants;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Bsui.Features.Applicants.Selection.Components;
-using Psmp.Bsui.Features.Applicants.Selection.Constants;
-using Psmp.Bsui.Features.Applicants.Selection.Models;
-using Psmp.Shared.Applicants.Queries.GetApplicantSchedule;
-using Psmp.Shared.Common.Constants;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.Scholarships.ScholarshipPosting.Queries;
-using Psmp.Shared.Selections.CreateSK.Queries;
-using Psmp.Shared.Selections.SelectionOverviews.Queries;
+using Smlp.Base.Selections.Enums;
+using Smlp.Bsui.Common.Constants;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Bsui.Features.Applicants.Selection.Components;
+using Smlp.Bsui.Features.Applicants.Selection.Constants;
+using Smlp.Bsui.Features.Applicants.Selection.Models;
+using Smlp.Shared.Applicants.Queries.GetApplicantSchedule;
+using Smlp.Shared.Common.Constants;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Scholarships.ScholarshipPosting.Queries;
+using Smlp.Shared.Selections.CreateSK.Queries;
+using Smlp.Shared.Selections.SelectionOverviews.Queries;
 using DialogOptions = MudBlazor.DialogOptions;
 
-namespace Psmp.Bsui.Features.Applicants.Selection;
+namespace Smlp.Bsui.Features.Applicants.Selection;
 
 public partial class Selection
 {

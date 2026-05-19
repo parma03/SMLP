@@ -1,7 +1,7 @@
-﻿using Psmp.Bsui.Services.Geolocation.Darnton;
-using Psmp.Bsui.Services.Geolocation.None;
+﻿using Smlp.Bsui.Services.Geolocation.Darnton;
+using Smlp.Bsui.Services.Geolocation.None;
 
-namespace Psmp.Bsui.Services.Geolocation;
+namespace Smlp.Bsui.Services.Geolocation;
 
 public static class DependencyInjection
 {

@@ -1,6 +1,6 @@
-﻿@using Psmp.Base.Payments.Enums
-@using Psmp.Bsui.Features.Applicants.Payments.Components
-@using Psmp.Shared.Payments.Queries
+﻿@using Smlp.Base.Payments.Enums
+@using Smlp.Bsui.Features.Applicants.Payments.Components
+@using Smlp.Shared.Payments.Queries
 @inject IWebHostEnvironment _webHostEnvironment
 @inject IOptions<HrisOptions> _hrisOptions
 
@@ -76,10 +76,10 @@ else
 						<MudGrid Justify="Justify.Center">
 							<!-- Card pertama -->
 							<MudItem xs="12" md="5" Class="d-flex justify-start">
-								<Psmp.Bsui.Features.Payments.Component.CardStatistic Icon="@Icons.Material.Rounded.Assignment" OnClickDownload="OnClickDownloadUSD" AvatarColor="Color.Tertiary"
+								<Smlp.Bsui.Features.Payments.Component.CardStatistic Icon="@Icons.Material.Rounded.Assignment" OnClickDownload="OnClickDownloadUSD" AvatarColor="Color.Tertiary"
 																					 Judul="Please Submit Your USD Bank Account"
                                                                                      Sub="@(_responseUsd is null  || _responseUsd?.Document is null  ? "-" :(_responseUsd.Document?.FileName?.Length > 19? _responseUsd.Document.FileName.Substring(0, 19) + "...": _responseUsd.Document.FileName))" ResponseUsd="_responseUsd">
-								</Psmp.Bsui.Features.Payments.Component.CardStatistic>
+								</Smlp.Bsui.Features.Payments.Component.CardStatistic>
 							</MudItem>
 
 							<!-- Divider Vertikal -->
@@ -91,7 +91,7 @@ else
 
 							<!-- Card kedua -->
 							<MudItem xs="12" md="5" Class="d-flex justify-start">
-								<Psmp.Bsui.Features.Payments.Component.CardStatistic Icon="@Icons.Material.Rounded.BarChart" AvatarColor="Color.Tertiary" Judul="Status" Status="@(_responseUsd is null ?  "Not Yet" : "Submitted")"></Psmp.Bsui.Features.Payments.Component.CardStatistic>
+								<Smlp.Bsui.Features.Payments.Component.CardStatistic Icon="@Icons.Material.Rounded.BarChart" AvatarColor="Color.Tertiary" Judul="Status" Status="@(_responseUsd is null ?  "Not Yet" : "Submitted")"></Smlp.Bsui.Features.Payments.Component.CardStatistic>
 							</MudItem>
 
 							<!-- Divider Vertikal -->
@@ -141,10 +141,10 @@ else
 						<MudGrid AlignItems="center">
 							<!-- Card pertama -->
 							<MudItem xs="12" md="5" Class="d-flex justify-start">
-								<Psmp.Bsui.Features.Payments.Component.CardStatistic Icon="@Icons.Material.Rounded.Assignment" OnClickDownload="OnClickDownloadIDR" AvatarColor="Color.Tertiary"
+								<Smlp.Bsui.Features.Payments.Component.CardStatistic Icon="@Icons.Material.Rounded.Assignment" OnClickDownload="OnClickDownloadIDR" AvatarColor="Color.Tertiary"
 																					 Judul="Please Submit Your IDR Bank Account"
                                                                                      Sub="@(_responseIdr is null  || _responseIdr?.Document is null ? "-" :(_responseIdr.Document?.FileName?.Length > 19? _responseIdr.Document.FileName.Substring(0, 19) + "...": _responseIdr.Document.FileName))" ResponseIdr="_responseIdr">
-								</Psmp.Bsui.Features.Payments.Component.CardStatistic>
+								</Smlp.Bsui.Features.Payments.Component.CardStatistic>
 							</MudItem>
 
 							<!-- Divider Vertikal -->
@@ -156,7 +156,7 @@ else
 
 							<!-- Card kedua -->
 							<MudItem xs="12" md="4" Class="d-flex justify-start">
-								<Psmp.Bsui.Features.Payments.Component.CardStatistic Icon="@Icons.Material.Rounded.BarChart" AvatarColor="Color.Tertiary" Judul="Status" Status="@(_responseIdr is null ? "Not Yet" : "Submitted")"></Psmp.Bsui.Features.Payments.Component.CardStatistic>
+								<Smlp.Bsui.Features.Payments.Component.CardStatistic Icon="@Icons.Material.Rounded.BarChart" AvatarColor="Color.Tertiary" Judul="Status" Status="@(_responseIdr is null ? "Not Yet" : "Submitted")"></Smlp.Bsui.Features.Payments.Component.CardStatistic>
 							</MudItem>
 
 							<!-- Divider Vertikal -->
@@ -188,9 +188,9 @@ else
 						<MudGrid Justify="Justify.Center">
 							<!-- Card pertama -->
 							<MudItem xs="12" md="5" Class="d-flex justify-start">
-								<Psmp.Bsui.Features.Payments.Component.CardStatistic Icon="@Icons.Material.Rounded.Assignment" OnClickDownload="OnClickDownloadOther" AvatarColor="Color.Tertiary"
+								<Smlp.Bsui.Features.Payments.Component.CardStatistic Icon="@Icons.Material.Rounded.Assignment" OnClickDownload="OnClickDownloadOther" AvatarColor="Color.Tertiary"
 																					 Judul="Please Submit Your Other Currency Bank Account" Sub="@(_responseOther is null || _responseOther?.Document is null ? "-" : _responseOther.Document?.FileName?.Length > 19 ? _responseOther.Document.FileName.Substring(0, 19) + "..." : _responseOther.Document.FileName)" ResponseOther="_responseOther">
-								</Psmp.Bsui.Features.Payments.Component.CardStatistic>
+								</Smlp.Bsui.Features.Payments.Component.CardStatistic>
 							</MudItem>
 
 							<!-- Divider Vertikal -->
@@ -202,7 +202,7 @@ else
 
 							<!-- Card kedua -->
 							<MudItem xs="12" md="5" Class="d-flex justify-start">
-								<Psmp.Bsui.Features.Payments.Component.CardStatistic Icon="@Icons.Material.Rounded.BarChart" AvatarColor="Color.Tertiary" Judul="Status" Status="@(_responseOther is null ? "Not Yet" : "Submitted")"></Psmp.Bsui.Features.Payments.Component.CardStatistic>
+								<Smlp.Bsui.Features.Payments.Component.CardStatistic Icon="@Icons.Material.Rounded.BarChart" AvatarColor="Color.Tertiary" Judul="Status" Status="@(_responseOther is null ? "Not Yet" : "Submitted")"></Smlp.Bsui.Features.Payments.Component.CardStatistic>
 							</MudItem>
 
 							<!-- Divider Vertikal -->

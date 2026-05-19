@@ -1,26 +1,26 @@
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Shared.Common.Constants;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.Projects.ProjectComments.Queries;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Shared.Common.Constants;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Projects.ProjectComments.Queries;
 using System.Security.Claims;
-using Psmp.Shared.Projects.ProjectCharterRealisations.Commands;
-using Psmp.Shared.Projects.ProjectComments.Commands;
-using Psmp.Shared.Projects.ProjectCharterRealisations.Queries;
-using Psmp.Base.Selections.Enums;
+using Smlp.Shared.Projects.ProjectCharterRealisations.Commands;
+using Smlp.Shared.Projects.ProjectComments.Commands;
+using Smlp.Shared.Projects.ProjectCharterRealisations.Queries;
+using Smlp.Base.Selections.Enums;
 using Syncfusion.Blazor.Inputs;
-using Psmp.Shared.Documents.Commands.CreateDocument;
+using Smlp.Shared.Documents.Commands.CreateDocument;
 using System.ComponentModel;
-using Psmp.Shared.Common.Extensions;
-using Psmp.Base.Project.Enums;
-using Psmp.Shared.Documents.Queries.GetDocuments;
+using Smlp.Shared.Common.Extensions;
+using Smlp.Base.Project.Enums;
+using Smlp.Shared.Documents.Queries.GetDocuments;
 using Syncfusion.Blazor.Grids;
 using Microsoft.JSInterop;
-using Psmp.Bsui.Common.Constants;
-using Psmp.Shared.Documents.Queries.GetDocumentFile;
+using Smlp.Bsui.Common.Constants;
+using Smlp.Shared.Documents.Queries.GetDocumentFile;
 
-namespace Psmp.Bsui.Features.Applicants.Projects.Components;
+namespace Smlp.Bsui.Features.Applicants.Projects.Components;
 public partial class ProjectCharterRealisation
 {
     [CascadingParameter]

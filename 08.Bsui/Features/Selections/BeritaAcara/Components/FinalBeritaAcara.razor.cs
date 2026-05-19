@@ -1,14 +1,14 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Psmp.Base.Selections.Enums;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.Documents.Commands.CreateDocument;
-using Psmp.Shared.Documents.Queries.GetDocumentFile;
-using Psmp.Shared.Selections.BeritaAcara.Commands.Update;
-using Psmp.Shared.Selections.BeritaAcara.Queries;
+using Smlp.Base.Selections.Enums;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Documents.Commands.CreateDocument;
+using Smlp.Shared.Documents.Queries.GetDocumentFile;
+using Smlp.Shared.Selections.BeritaAcara.Commands.Update;
+using Smlp.Shared.Selections.BeritaAcara.Queries;
 using Syncfusion.Blazor.Inputs;
 
-namespace Psmp.Bsui.Features.Selections.BeritaAcara.Components;
+namespace Smlp.Bsui.Features.Selections.BeritaAcara.Components;
 
 public partial class FinalBeritaAcara
 {

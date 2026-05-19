@@ -6,11 +6,11 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.HttpOverrides;
-using Psmp.Bsui.Services.Authentication.Constants;
-using Psmp.Bsui.Services.Authentication.Extensions;
-using Psmp.Bsui.Services.FrontEnd;
+using Smlp.Bsui.Services.Authentication.Constants;
+using Smlp.Bsui.Services.Authentication.Extensions;
+using Smlp.Bsui.Services.FrontEnd;
 
-namespace Psmp.Bsui.Services.Authentication.IdAMan;
+namespace Smlp.Bsui.Services.Authentication.IdAMan;
 
 public static class DependencyInjection
 {

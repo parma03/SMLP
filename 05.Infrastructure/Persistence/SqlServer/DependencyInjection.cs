@@ -1,15 +1,13 @@
 ﻿/*
-* Pertamina Scholarship Management Portal
-* Copyright (c) 2024-2025 PT. Pertamina Persero
 */
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
-using Psmp.Application.Services.Persistence;
-using Psmp.Infrastructure.Persistence.Common.Constants;
+using Smlp.Application.Services.Persistence;
+using Smlp.Infrastructure.Persistence.Common.Constants;
 
-namespace Psmp.Infrastructure.Persistence.SqlServer;
+namespace Smlp.Infrastructure.Persistence.SqlServer;
 
 public static class DependencyInjection
 {
@@ -22,7 +20,7 @@ public static class DependencyInjection
             options.UseSqlServer(sqlServerOptions.ConnectionString, builder =>
             {
                 builder.MigrationsAssembly(migrationsAssembly);
-                builder.MigrationsHistoryTable(TableNameFor.EfMigrationsHistory, nameof(PSMP));
+                builder.MigrationsHistoryTable(TableNameFor.EfMigrationsHistory, nameof(SMLP));
                 builder.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
             });
 

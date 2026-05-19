@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.StudyMonitorings.StudyPeriod.Queries;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.StudyMonitorings.StudyPeriod.Queries;
 using Syncfusion.Blazor.Grids;
-using Psmp.Bsui.Common.Constants;
-using Psmp.Shared.StudyMonitorings.Constants;
-using Psmp.Bsui.Common.Extensions;
+using Smlp.Bsui.Common.Constants;
+using Smlp.Shared.StudyMonitorings.Constants;
+using Smlp.Bsui.Common.Extensions;
 
-namespace Psmp.Bsui.Features.StudyMonitoring.StudyPeriod;
+namespace Smlp.Bsui.Features.StudyMonitoring.StudyPeriod;
 
 public partial class Detail
 {
@@ -59,7 +59,7 @@ public partial class Detail
         if (data.Result == null || data.Result!.Items.Count == 0)
         {
             _snackbar.AddError("Data not found!!");
-            _navigationManager.NavigateTo(Psmp.Bsui.Features.StudyMonitoring.Constants.RouteFor.StudyMonitoringTab(0), true);
+            _navigationManager.NavigateTo(Smlp.Bsui.Features.StudyMonitoring.Constants.RouteFor.StudyMonitoringTab(0), true);
             StateHasChanged();
             return;
         }
@@ -91,7 +91,7 @@ public partial class Detail
     #region Command Event
     public async Task OnCommandClicked(CommandClickEventArgs<GetStudyPeriodByAdmissionIdQueryResponse> args)
     {
-        _navigationManager.NavigateTo(Psmp.Bsui.Features.StudyMonitoring.Constants.RouteFor.StudyMonitoringDetailItem("StudyPeriod", Id, args.RowData.Id), true);
+        _navigationManager.NavigateTo(Smlp.Bsui.Features.StudyMonitoring.Constants.RouteFor.StudyMonitoringDetailItem("StudyPeriod", Id, args.RowData.Id), true);
         await Task.CompletedTask;
     }
     #endregion
@@ -99,7 +99,7 @@ public partial class Detail
     #region OnClick
     public async Task OnClickBack()
     {
-        _navigationManager.NavigateTo(Psmp.Bsui.Features.StudyMonitoring.Constants.RouteFor.StudyMonitoringTab(0), true);
+        _navigationManager.NavigateTo(Smlp.Bsui.Features.StudyMonitoring.Constants.RouteFor.StudyMonitoringTab(0), true);
         await Task.CompletedTask;
     }
     #endregion

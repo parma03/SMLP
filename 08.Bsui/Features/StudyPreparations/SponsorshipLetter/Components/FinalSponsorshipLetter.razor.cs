@@ -3,19 +3,19 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
-using Psmp.Base.Selections.Enums;
-using Psmp.Base.Studies.Enums;
-using Psmp.Bsui.Common.Constants;
-using Psmp.Bsui.Common.Extensions;
-using Psmp.Shared.Common.Constants;
-using Psmp.Shared.Common.Responses;
-using Psmp.Shared.Documents.Commands.CreateDocument;
-using Psmp.Shared.Documents.Queries.GetDocumentFile;
-using Psmp.Shared.StudyPreparations.SponsorshipLetter.Commands.Update;
-using Psmp.Shared.StudyPreparations.SponsorshipLetter.Queries;
+using Smlp.Base.Selections.Enums;
+using Smlp.Base.Studies.Enums;
+using Smlp.Bsui.Common.Constants;
+using Smlp.Bsui.Common.Extensions;
+using Smlp.Shared.Common.Constants;
+using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Documents.Commands.CreateDocument;
+using Smlp.Shared.Documents.Queries.GetDocumentFile;
+using Smlp.Shared.StudyPreparations.SponsorshipLetter.Commands.Update;
+using Smlp.Shared.StudyPreparations.SponsorshipLetter.Queries;
 using Syncfusion.Blazor.Inputs;
 
-namespace Psmp.Bsui.Features.StudyPreparations.SponsorshipLetter.Components;
+namespace Smlp.Bsui.Features.StudyPreparations.SponsorshipLetter.Components;
 
 public partial class FinalSponsorshipLetter
 {
@@ -62,7 +62,7 @@ public partial class FinalSponsorshipLetter
         if (dataResponse.Result == null || dataResponse.Result.Id == Guid.Empty)
         {
             _snackbar.AddError("Data not found!!");
-            _navigationManager.NavigateTo(Psmp.Bsui.Features.StudyPreparations.Constants.RouteFor.StudyPreparationTab(4), true);
+            _navigationManager.NavigateTo(Smlp.Bsui.Features.StudyPreparations.Constants.RouteFor.StudyPreparationTab(4), true);
             StateHasChanged();
             return;
         }
@@ -208,7 +208,7 @@ public partial class FinalSponsorshipLetter
     #region OnClick
     public async Task OnClickBack()
     {
-        _navigationManager.NavigateTo(Psmp.Bsui.Features.StudyPreparations.Constants.RouteFor.StudyPreparationTab(4), true);
+        _navigationManager.NavigateTo(Smlp.Bsui.Features.StudyPreparations.Constants.RouteFor.StudyPreparationTab(4), true);
         await Task.CompletedTask;
     }
     #endregion

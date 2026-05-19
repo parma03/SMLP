@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Psmp.Infrastructure.AppInfo;
+namespace Smlp.Infrastructure.AppInfo;
 
 public static class DependencyInjection
 {
