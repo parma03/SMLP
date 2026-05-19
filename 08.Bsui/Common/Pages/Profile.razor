@@ -1,0 +1,75 @@
+﻿@page "/Profile"
+@attribute [Authorize]
+
+@using Psmp.Client.Services.Hris
+@using Psmp.Shared.Common.Constants
+@inject IWebHostEnvironment _webHostEnvironment
+@inject IOptions<HrisOptions> _hrisOptions
+@inject HrisService _hrisService
+
+<MudBreadcrumbs Items="_breadcrumbItems"></MudBreadcrumbs>
+<BrowserTabTitle>@CommonDisplayTextFor.Profile</BrowserTabTitle>
+<PageHeader Title="@_displayName" />
+<ErrorViewer Error="@Error" />
+
+@if (_isLoading)
+{
+    <Loading IsVisible="_isLoading" Description="Get data from HRIS Plus ..." />
+}
+else
+{
+    <MudGrid Spacing="2">
+        <MudItem xs="12" sm="12">
+            <MudField Label="Employee Number">
+                @_employeeNumber
+            </MudField>
+        </MudItem>
+        <MudItem xs="12" sm="12">
+            <MudField Label="Email">
+                @_email
+            </MudField>
+        </MudItem>
+        <MudItem xs="12" sm="12">
+            <MudField Label="Company">
+                @_company
+            </MudField>
+        </MudItem>
+        <MudItem xs="12" sm="12">
+            <MudField Label="Position">
+                @_position
+            </MudField>
+        </MudItem>
+        <MudItem xs="12" sm="6">
+            <MudField Label="Birthday">
+                @((_birthday == DateOnly.MinValue) ? DefaultTextFor.Dash : _birthday.ToString("dd MMM yyyy"))
+            </MudField>
+        </MudItem>
+        <MudItem xs="12" sm="6">
+            <MudField Label="PRL">
+                @((_prl == 0) ? DefaultTextFor.Dash : _prl.ToString())
+            </MudField>
+        </MudItem>
+        <MudItem xs="12" sm="6">
+            <MudField Label="Hire Date">
+                @((_hiredate == DateOnly.MinValue) ? DefaultTextFor.Dash : _hiredate.ToString("dd MMM yyyy"))
+            </MudField>
+        </MudItem>
+        <MudItem xs="12" sm="6">
+            <MudField Label="MCU Status">
+                @_mcuStatus.ToString()
+            </MudField>
+        </MudItem>
+    </MudGrid>
+
+    <div class="bottom-right">
+        <b><i>*This data is provided by HRIS+</i></b>
+    </div>
+}
+
+<style>
+    .bottom-right {
+        position: absolute;
+        bottom: 1em;
+        right: 1em;
+    }
+</style>

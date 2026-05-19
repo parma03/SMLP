@@ -1,0 +1,33 @@
+﻿<style>
+    .dialog-header-red {
+        background-color: #f44336; /* merah */
+        color: white;
+        padding: 12px 16px;
+        font-weight: bold;
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+    }
+</style>
+
+<MudDialog>
+    <TitleContent>
+        <div class="dialog-header-red">
+            Application Status
+        </div>
+    </TitleContent>
+    <DialogContent>
+        <MudGrid>
+            <MudItem xs="2" Class="d-flex align-center justify-center mud-width-full">
+                @* <MudIcon Icon="@Icons.Material.Rounded.ErrorOutline" Color="Color.Error" Size="Size.Large" /> *@
+                <MudImage Src="img/Rejected.png" Alt="Rejected" Style="width: 60px; height: 57px;" />
+            </MudItem>
+            <MudItem xs="10">
+                For information, your applicant has been <b>rejected</b> because applying for the same scholarship program after you <b>cancelled</b> it is not allowed.<br />
+            </MudItem>
+        </MudGrid>
+    </DialogContent>
+    <DialogActions>
+        <SfButton Content="Close" CssClass="e-outline e-primary"
+                  OnClick="OnClickClose"></SfButton>
+    </DialogActions>
+</MudDialog>

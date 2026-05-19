@@ -1,0 +1,61 @@
+﻿@page "/Documents"
+@attribute [Authorize(Policy = Permissions.Psmp_Document_Index)]
+
+@using Psmp.Shared.Documents.Queries.GetDocuments
+
+@inject IJSRuntime _jsRuntime
+
+<BrowserTabTitle>@DisplayTextFor.Documents</BrowserTabTitle>
+<MudBreadcrumbs Items="_breadcrumbItems"></MudBreadcrumbs>
+<PageHeader Title="@DisplayTextFor.Documents" />
+<ErrorViewer Error="_error" />
+
+<MudTable Elevation="0" Hover="true" Breakpoint="Breakpoint.Sm"
+          FixedHeader="true" Height="@HeightFor.ScrollableTable"
+          @ref="_tableDocuments"
+          ServerData="@(new Func<TableState, Task<TableData<GetDocumentsDocument>>>(ReloadTableDocuments))">
+    <ToolBarContent>
+        <MudButton Variant="Variant.Filled" Color="Color.Tertiary" StartIcon="@Icons.Material.Filled.Refresh" OnClick="Refresh">@CommonDisplayTextFor.Refresh</MudButton>
+        @if (_user.HasPermission(Permissions.Psmp_Document_Create))
+        {
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.CloudUpload" Class="ml-2" OnClick="ShowDialogAdd">@CommonDisplayTextFor.Upload @DisplayTextFor.Document</MudButton>
+        }
+        <MudSpacer />
+        <MudTextField Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" Placeholder="@CommonDisplayTextFor.Search" T="string" ValueChanged="@(keyword => OnSearch(keyword))"></MudTextField>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh><MudTableSortLabel SortLabel="@nameof(GetDocumentsDocument.Title)" T="GetDocumentsDocument">@DisplayTextFor.Title</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortLabel="@nameof(GetDocumentsDocument.FileName)" T="GetDocumentsDocument">@CommonDisplayTextFor.FileName</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortLabel="@nameof(GetDocumentsDocument.EcmContentId)" T="GetDocumentsDocument">@DisplayTextFor.EcmContentId</MudTableSortLabel></MudTh>
+        <MudTh>@CommonDisplayTextFor.Download</MudTh>
+        <MudTh><MudTableSortLabel SortLabel="@nameof(GetDocumentsDocument.Created)" T="GetDocumentsDocument">@CommonDisplayTextFor.Created</MudTableSortLabel></MudTh>
+        <MudTh>@CommonDisplayTextFor.Action</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="@DisplayTextFor.Title">
+            <MudHighlighter Text="@context.Title" HighlightedText="@_searchKeyword" />
+        </MudTd>
+        <MudTd DataLabel="@CommonDisplayTextFor.FileName">
+            <MudHighlighter Text="@context.FileName" HighlightedText="@_searchKeyword" />
+        </MudTd>
+        <MudTd DataLabel="@DisplayTextFor.EcmContentId">
+            <MudHighlighter Text="@context.EcmContentId.ToSafeDisplayText()" HighlightedText="@_searchKeyword" />
+        </MudTd>
+        <MudTd>
+            <MudButton Variant="Variant.Filled" Color="Color.Info" StartIcon="@Icons.Material.Filled.CloudDownload" Size="Size.Small" OnClick="@(() => Download(context.Id))">
+                @CommonDisplayTextFor.Download
+            </MudButton>
+        </MudTd>
+        <MudTd DataLabel="@CommonDisplayTextFor.Created">
+            <MudHighlighter Text="@context.Created.ToLongDateTimeDisplayText()" HighlightedText="@_searchKeyword" />
+        </MudTd>
+        <MudTd>
+            <MudButton Variant="Variant.Filled" Color="Color.Dark" StartIcon="@Icons.Material.Filled.Delete" Size="Size.Small" OnClick="@(() => ShowDialogDelete(context))">
+                @CommonDisplayTextFor.Delete
+            </MudButton>
+        </MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>

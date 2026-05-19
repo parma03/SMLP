@@ -1,0 +1,32 @@
+﻿<style>
+    .dialog-header-green {
+        background-color: #4caf50;
+        color: white;
+        padding: 12px 16px;
+        font-weight: bold;
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+    }
+</style>
+
+<MudDialog>
+    <TitleContent>
+        <div class="dialog-header-green">
+            Application Status
+        </div>
+    </TitleContent>
+    <DialogContent>
+        <MudGrid>
+            <MudItem xs="2" Class="d-flex align-center justify-center mud-width-full">
+                <MudIcon Icon="@Icons.Material.Rounded.CheckCircle" Color="Color.Success" Size="Size.Large" />
+            </MudItem>
+            <MudItem xs="10">
+                Congratulations you have passed the administrative selection. Further notification for next selection stage(s) will be sent to your email.
+            </MudItem>
+        </MudGrid>
+    </DialogContent>
+    <DialogActions>
+        <SfButton Content="Close" CssClass="e-outline e-primary"
+                  OnClick="OnClickClose"></SfButton>
+    </DialogActions>
+</MudDialog>

@@ -1,0 +1,490 @@
+﻿@page "/Selection/BeritaAcara/Details/{Id:guid}/{Type:int}"
+
+<ErrorViewer Error="_error" />
+<LoadingDialog IsVisible=@_isLoadingData Text="Retrieving data form HRIS Service ..."></LoadingDialog>
+<MudBreadcrumbs Items="_breadcrumbItems"></MudBreadcrumbs>
+
+@if (_isLoading)
+{
+    <Loading IsVisible="_isLoading" />
+}
+else
+{
+    <div class="row">
+        <div class="col-md-12">
+            <MudGrid Spacing="2">
+                <MudItem xs="6">
+                    <MudCard>
+                        <MudCardHeader>
+                            <CardHeaderContent>
+                                <MudText Typo="Typo.h6">Specific Requirement</MudText>
+                            </CardHeaderContent>
+                        </MudCardHeader>
+                        <MudCardContent>
+                            <MudGrid>
+                                <MudItem xs="12">
+                                    <MudItem xs="12">
+                                        <MudGrid>
+                                            <MudItem xs="4">
+                                                <MudText>Scholarship Code</MudText>
+                                            </MudItem>
+                                            <MudItem xs="8">
+                                                <SfTextBox @bind-Value="_response!.ScholarshipCode" Enabled="false"></SfTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12">
+                                        <MudGrid>
+                                            <MudItem xs="4">
+                                                <MudText>Holding/Sub Holding/AP Service & Portfolio</MudText>
+                                            </MudItem>
+                                            <MudItem xs="8">
+                                                <SfTextBox @bind-Value="_response!.CompanyGroupName" Enabled="false"></SfTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12">
+                                        <MudGrid>
+                                            <MudItem xs="4">
+                                                <MudText>Company Name</MudText>
+                                            </MudItem>
+                                            <MudItem xs="8">
+                                                <SfTextBox @bind-Value="_response!.CompanyName" Enabled="false"></SfTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12">
+                                        <MudGrid>
+                                            <MudItem xs="4">
+                                                <MudText>Directorate/Function</MudText>
+                                            </MudItem>
+                                            <MudItem xs="8">
+                                                <SfTextBox @bind-Value="_response!.DirectorateName" Enabled="false"></SfTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12">
+                                        <MudGrid>
+                                            <MudItem xs="4">
+                                                <MudText>Division</MudText>
+                                            </MudItem>
+                                            <MudItem xs="8">
+                                                <SfTextBox @bind-Value="_response!.DivisionName" Enabled="false"></SfTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12">
+                                        <MudGrid>
+                                            <MudItem xs="4">
+                                                <MudText>Business Issues</MudText>
+                                            </MudItem>
+                                            <MudItem xs="8">
+                                                <SfTextBox @bind-Value="_response!.BusinessIssue" Enabled="false"></SfTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12">
+                                        <MudGrid>
+                                            <MudItem xs="4">
+                                                <MudText>Reference of Business Issues</MudText>
+                                            </MudItem>
+                                            <MudItem xs="8">
+                                                <SfTextBox @bind-Value="_response!.ReferenceOfBusinessIssue" Enabled="false"></SfTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12">
+                                        <MudGrid>
+                                            <MudItem xs="4">
+                                                <MudText>Performance Issues</MudText>
+                                            </MudItem>
+                                            <MudItem xs="8">
+                                                <SfTextBox @bind-Value="_response!.PerformanceIssue" Enabled="false"></SfTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12">
+                                        <MudGrid>
+                                            <MudItem xs="4">
+                                                <MudText>Competency Issues</MudText>
+                                            </MudItem>
+                                            <MudItem xs="8">
+                                                <SfTextBox @bind-Value="_response!.CompetencyIssue" Enabled="false"></SfTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12">
+                                        <MudGrid>
+                                            <MudItem xs="4">
+                                                <MudText>Degree</MudText>
+                                            </MudItem>
+                                            <MudItem xs="8">
+                                                <SfTextBox @bind-Value="_response!.Degree" Enabled="false"></SfTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12">
+                                        <MudGrid>
+                                            <MudItem xs="4">
+                                                <MudText>Faculty</MudText>
+                                            </MudItem>
+                                            <MudItem xs="8">
+                                                <SfTextBox @bind-Value="_response!.Faculty" Enabled="false"></SfTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12">
+                                        <MudGrid>
+                                            <MudItem xs="4">
+                                                <MudText>Major</MudText>
+                                            </MudItem>
+                                            <MudItem xs="8">
+                                                <SfTextBox @bind-Value="_response!.Major" Enabled="false"></SfTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12">
+                                        <MudGrid>
+                                            <MudItem xs="4">
+                                                <MudText>University Reference</MudText>
+                                            </MudItem>
+                                            <MudItem xs="8">
+                                                <SfTextBox @bind-Value="_response!.UniversityReference" Enabled="false"></SfTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12">
+                                        <MudGrid>
+                                            <MudItem xs="4">
+                                                <MudText>Universitu Location (Abord/Domestic)</MudText>
+                                            </MudItem>
+                                            <MudItem xs="8">
+                                                <SfTextBox @bind-Value="_response!.UniversityLocation" Enabled="false"></SfTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12">
+                                        <MudGrid>
+                                            <MudItem xs="4">
+                                                <MudText>Latest Education Background (Level & Major)</MudText>
+                                            </MudItem>
+                                            <MudItem xs="8">
+                                                <SfTextBox @bind-Value="_response!.EducationBackground" Enabled="false"></SfTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12">
+                                        <MudGrid>
+                                            <MudItem xs="4">
+                                                <MudText>Minimum Working Experience (Year & Field)</MudText>
+                                            </MudItem>
+                                            <MudItem xs="8">
+                                                <SfTextBox @bind-Value="_response!.MinimumWorkingExperience" Enabled="false"></SfTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12">
+                                        <MudGrid>
+                                            <MudItem xs="4">
+                                                <MudText>Scope (Internal Entity / Pertamina Group)</MudText>
+                                            </MudItem>
+                                            <MudItem xs="8">
+                                                <SfTextBox @bind-Value="_response!.Scope" Enabled="false"></SfTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12">
+                                        <MudGrid>
+                                            <MudItem xs="4">
+                                                <MudText>Awardee Quota</MudText>
+                                            </MudItem>
+                                            <MudItem xs="8">
+                                                <SfTextBox @bind-Value="_response!.AwardeQuota" Enabled="false"></SfTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12">
+                                        <MudGrid>
+                                            <MudItem xs="4">
+                                                <MudText>Batch</MudText>
+                                            </MudItem>
+                                            <MudItem xs="8">
+                                                <SfTextBox @bind-Value="_response!.Batch" Enabled="false"></SfTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12">
+                                        <MudGrid>
+                                            <MudItem xs="4">
+                                                <MudText>Selection Category</MudText>
+                                            </MudItem>
+                                            <MudItem xs="8">
+                                                <SfTextBox @bind-Value="_response!.SelectionCategory" Enabled="false"></SfTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12">
+                                        <MudGrid>
+                                            <MudItem xs="4">
+                                                <MudText>Posting Year</MudText>
+                                            </MudItem>
+                                            <MudItem xs="8">
+                                                <SfTextBox @bind-Value="_response!.PostingYear" Enabled="false"></SfTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                </MudItem>
+                            </MudGrid>
+                        </MudCardContent>
+                    </MudCard>
+                    <br />
+                    <MudCard>
+                        <MudCardHeader>
+                            <CardHeaderContent>
+                                <MudText Typo="Typo.h6">Administrative Selection Criteria</MudText>
+                            </CardHeaderContent>
+                        </MudCardHeader>
+                        <MudCardContent>
+                            <MudItem xs="12">
+                                <MudGrid>
+                                    <MudItem xs="4">
+                                        <MudText>Minimum PRL Individu/BS</MudText>
+                                    </MudItem>
+                                    <MudItem xs="8">
+                                        <SfTextBox @bind-Value="_response!.MinimumPRL" Enabled="false"></SfTextBox>
+                                    </MudItem>
+                                </MudGrid>
+                            </MudItem>
+                            <MudItem xs="12">
+                                <MudGrid>
+                                    <MudItem xs="4">
+                                        <MudText>Maximum Age</MudText>
+                                    </MudItem>
+                                    <MudItem xs="8">
+                                        <SfTextBox @bind-Value="_response!.MaximumAge" Enabled="false"></SfTextBox>
+                                    </MudItem>
+                                </MudGrid>
+                            </MudItem>
+                            <MudItem xs="12">
+                                <MudGrid>
+                                    <MudItem xs="4">
+                                        <MudText>Minimum Work Period (Year)</MudText>
+                                    </MudItem>
+                                    <MudItem xs="8">
+                                        <SfTextBox @bind-Value="_response!.MinimumWorkingPeriod" Enabled="false"></SfTextBox>
+                                    </MudItem>
+                                </MudGrid>
+                            </MudItem>
+                            <MudItem xs="12">
+                                <MudGrid>
+                                    <MudItem xs="4">
+                                        <MudText>Average Performance Rating Last 3 Years</MudText>
+                                    </MudItem>
+                                    <MudItem xs="8">
+                                        <SfTextBox @bind-Value="_response!.AveragePerformanceRating" Enabled="false"></SfTextBox>
+                                    </MudItem>
+                                </MudGrid>
+                            </MudItem>
+                            <MudItem xs="12">
+                                <MudGrid>
+                                    <MudItem xs="4">
+                                        <MudText>Indiciplinary Record Last 3 Years (SAP Based)</MudText>
+                                    </MudItem>
+                                    <MudItem xs="8">
+                                        <SfTextBox @bind-Value="_response!.MinimumPRL" Enabled="false"></SfTextBox>
+                                    </MudItem>
+                                </MudGrid>
+                            </MudItem>
+                            <MudItem xs="12">
+                                <MudGrid>
+                                    <MudItem xs="4">
+                                        <MudText>MCU Status</MudText>
+                                    </MudItem>
+                                    <MudItem xs="8">
+                                        <SfTextBox @bind-Value="_response!.MCUStatus" Enabled="false"></SfTextBox>
+                                    </MudItem>
+                                </MudGrid>
+                            </MudItem>
+                        </MudCardContent>
+                    </MudCard>
+                </MudItem>
+                <MudItem xs="6">
+                    <MudCard>
+                        <MudCardHeader>
+                            <CardHeaderContent>
+                                <MudText Typo="Typo.h6">DRHS</MudText>
+                            </CardHeaderContent>
+                        </MudCardHeader>
+                        <MudCardContent>
+                            <MudGrid>
+                                <MudItem xs="12">
+                                    <MudGrid>
+                                        <MudItem xs="4">
+                                            <SfButton OnClick="OnClickGetDRHS" Content="Get DRHS" CssClass="e-info"></SfButton>
+                                        </MudItem>
+
+                                    </MudGrid>
+                                </MudItem>
+                            </MudGrid>
+                            <MudGrid>
+                                <MudItem xs="12">
+                                    @if (DRHSContent is not null)
+                                    {
+                                        @((MarkupString)DRHSContent)
+                                    }
+                                    else
+                                    {
+                                        <Psmp.Bsui.Common.Pages.Errors.NotAvailableDocument></Psmp.Bsui.Common.Pages.Errors.NotAvailableDocument>
+                                    }
+
+                                </MudItem>
+                            </MudGrid>
+                        </MudCardContent>
+                    </MudCard>
+                    <br />
+                    <MudCard>
+                        <MudCardContent>
+                            <MudItem xs="12">
+                                <MudGrid Class="mb-2">
+                                    <MudItem xs="4">
+                                        <MudText>Innovation Project</MudText>
+                                    </MudItem>
+                                    <MudItem xs="8">
+                                        <SfTextBox @bind-Value="_response!.InnovationProject" Enabled="false"></SfTextBox>
+                                    </MudItem>
+                                </MudGrid>
+                            </MudItem>
+                            <MudItem xs="12">
+                                <MudGrid Class="">
+                                    <MudItem xs="4">
+                                        <MudChip Label="true" Color="Color.Primary" Variant="Variant.Filled" Class="">
+                                            <MudText>Mentor 1</MudText>
+                                        </MudChip>
+                                    </MudItem>
+                                </MudGrid>
+                            </MudItem>
+                            <MudItem xs="12">
+                                <MudGrid>
+                                    <MudItem xs="4">
+                                        <MudText>Mentor (Minimum Manager)</MudText>
+                                        <MudText Typo="Typo.subtitle2" Color="Color.Secondary" Style="font-style: italic; font-size: 0.8rem;">
+                                            <b>(Search without the two digits "00" front of the employee number)</b>
+                                        </MudText>
+                                    </MudItem>
+                                    <MudItem xs="8">
+                                        <SfTextBox @ref="_textBoxNopek" ID="txtNopek" Placeholder="Input Employee Number" Created="@CreateTextboxNopex" Enabled="false" @bind-Value=_response!.MentorId></SfTextBox>
+                                    </MudItem>
+                                </MudGrid>
+                            </MudItem>
+                            <MudItem xs="12">
+                                <MudGrid>
+                                    <MudItem xs="4">
+                                        <MudText>Mentor Name</MudText>
+                                    </MudItem>
+                                    <MudItem xs="8">
+                                        <SfTextBox @bind-Value="_response!.MentorName" Enabled="false"></SfTextBox>
+                                    </MudItem>
+                                </MudGrid>
+                            </MudItem>
+                            <MudItem xs="12">
+                                <MudGrid>
+                                    <MudItem xs="4">
+                                        <MudText>Mentor Email</MudText>
+                                    </MudItem>
+                                    <MudItem xs="8">
+                                        <SfTextBox @bind-Value="_response!.MentorEmail" Enabled="false"></SfTextBox>
+                                    </MudItem>
+                                </MudGrid>
+                            </MudItem>
+                            <MudItem xs="12">
+                                <MudGrid Class="mb-2">
+                                    <MudItem xs="4">
+                                        <MudText>Mentor Position</MudText>
+                                    </MudItem>
+                                    <MudItem xs="8">
+                                        <SfTextBox @bind-Value="_response!.MentorPosition" Enabled="false"></SfTextBox>
+                                    </MudItem>
+                                </MudGrid>
+                            </MudItem>
+                            <MudItem xs="12">
+                                <MudGrid Class="">
+                                    <MudItem xs="4">
+                                        <MudChip Label="true" Color="Color.Primary" Variant="Variant.Filled" Class="">
+                                            <MudText>Mentor 2</MudText>
+                                        </MudChip>
+                                    </MudItem>
+                                </MudGrid>
+                            </MudItem>
+                            <MudItem xs="12">
+                                <MudGrid>
+                                    <MudItem xs="4">
+                                        <MudText>Mentor (Minimum Manager)</MudText>
+                                        <MudText Typo="Typo.subtitle2" Color="Color.Secondary" Style="font-style: italic; font-size: 0.8rem;">
+                                            <b>(Search without the two digits "00" front of the employee number)</b>
+                                        </MudText>
+                                    </MudItem>
+                                    <MudItem xs="8">
+                                        <SfTextBox @ref="_textBoxNopek2" ID="txtNopekMentor2" Placeholder="Input Employee Number" Created="@CreateTextboxNopex2" Enabled="false" @bind-Value=_response!.MentorId2></SfTextBox>
+                                    </MudItem>
+                                </MudGrid>
+                            </MudItem>
+                            <MudItem xs="12">
+                                <MudGrid>
+                                    <MudItem xs="4">
+                                        <MudText>Mentor Name</MudText>
+                                    </MudItem>
+                                    <MudItem xs="8">
+                                        <SfTextBox @bind-Value="_response!.MentorName2" Enabled="false"></SfTextBox>
+                                    </MudItem>
+                                </MudGrid>
+                            </MudItem>
+                            <MudItem xs="12">
+                                <MudGrid>
+                                    <MudItem xs="4">
+                                        <MudText>Mentor Email</MudText>
+                                    </MudItem>
+                                    <MudItem xs="8">
+                                        <SfTextBox @bind-Value="_response!.MentorEmail2" Enabled="false"></SfTextBox>
+                                    </MudItem>
+                                </MudGrid>
+                            </MudItem>
+                            <MudItem xs="12">
+                                <MudGrid>
+                                    <MudItem xs="4">
+                                        <MudText>Mentor Position</MudText>
+                                    </MudItem>
+                                    <MudItem xs="8">
+                                        <SfTextBox @bind-Value="_response!.MentorPosition2" Enabled="false"></SfTextBox>
+                                    </MudItem>
+                                </MudGrid>
+                            </MudItem>
+                            <MudItem xs="12">
+                                <MudGrid>
+                                    <MudItem xs="12">
+                                        <SfButton OnClick="OnClickFailed" Content="Fail" IconCss="e-icons e-circle-close" CssClass="e-danger" Disabled="@_isDisabledButtonFailed"></SfButton>
+                                        <SfButton OnClick="OnClickPassed" Content="@_contentButtonSubmit" IconCss="e-icons e-save" CssClass="e-success" Disabled="@_isDisabledButtonApprove"></SfButton>
+                                    </MudItem>
+
+                                </MudGrid>
+                            </MudItem>
+                        </MudCardContent>
+                    </MudCard>
+                </MudItem>
+            </MudGrid>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <MudGrid Spacing="2">
+                <MudItem xs="12">
+                    <MudGrid>
+                        <MudItem xs="4">
+                            <SfButton OnClick="OnClickBack" Content="Back" IconCss="e-icons e-arrow-left" CssClass="e-secondary"></SfButton>
+                        </MudItem>
+
+                    </MudGrid>
+                </MudItem>
+            </MudGrid>
+        </div>
+    </div>
+}

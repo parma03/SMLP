@@ -1,0 +1,22 @@
+﻿@* <MudCard>
+    <MudCardContent>
+        <MudText Typo="Typo.body2">@Count</MudText>
+    </MudCardContent>
+    <MudCardActions>
+        <MudButton Variant="Variant.Text" Color="Color.Primary">@Judul</MudButton>
+    </MudCardActions>
+</MudCard> *@
+
+<MudCard Elevation="0">
+    <MudCardHeader>
+        <CardHeaderAvatar>
+            <MudAvatar Color="Color.Info">
+                <MudIcon Icon="@Icons.Material.Rounded.People"></MudIcon>
+            </MudAvatar>
+        </CardHeaderAvatar>
+        <CardHeaderContent>
+            <MudText>@Judul</MudText>
+            <MudText Typo="Typo.h5">@Count</MudText>
+        </CardHeaderContent>
+    </MudCardHeader>
+</MudCard>

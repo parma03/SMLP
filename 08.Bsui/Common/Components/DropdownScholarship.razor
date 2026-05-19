@@ -1,0 +1,9 @@
+﻿@using Psmp.Shared.Scholarships.ScholarshipPosting.Queries
+@using Syncfusion.Blazor.DropDowns
+
+<SfDropDownList ID="ddlScholarship" TValue="Guid" TItem="GetScholarshipPostingResponse"
+                AllowFiltering="true" FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains"
+                DataSource="@_scholarships">
+    <DropDownListFieldSettings Text="TitleBatch" Value="Id" />
+    <DropDownListEvents TItem="GetScholarshipPostingResponse" TValue="Guid" ValueChange="OnChangeAsync" />
+</SfDropDownList>

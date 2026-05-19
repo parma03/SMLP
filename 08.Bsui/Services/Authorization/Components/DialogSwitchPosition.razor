@@ -1,0 +1,58 @@
+﻿@using Psmp.Shared.Services.Authorization.Models.GetPositions
+
+@inject AuthenticationStateProvider _authenticationStateProvider
+@inject Authorization.IAuthorizationService _authorizationService
+
+<MudDialog>
+    <DialogContent>
+        <LoadingLinear IsVisible="_isLoading" />
+        <ErrorViewer Error="_error" />
+
+        @if (_positions is not null)
+        {
+            if (!_positions.Any())
+            {
+                <MudAlert Variant="Variant.Filled" Severity="Severity.Warning" Class="mb-4">
+                    You are not appointed to any @AuthenticationDisplayTextFor.Position.ToLower().
+                </MudAlert>
+            }
+            else if (_positions.Count == 1)
+            {
+                <MudAlert Variant="Variant.Filled" Severity="Severity.Info" Class="mb-4">
+                    You are only appointed as @_positions.Single().CompleteDetails.
+                </MudAlert>
+            }
+            else
+            {
+                <MudGrid>
+                    <MudItem xs="12">
+                        <MudSelect Variant="Variant.Outlined"
+                           Label="@($"{CommonDisplayTextFor.Select} {AuthenticationDisplayTextFor.Position}")"
+                           T="GetPositionsPosition" @bind-Value="_position">
+                            @foreach (var position in _positions)
+                            {
+                                <MudSelectItem Value="position">
+                                    @position.CompleteDetails
+                                </MudSelectItem>
+                            }
+                        </MudSelect>
+                    </MudItem>
+                </MudGrid>
+            }
+        }
+    </DialogContent>
+    <DialogActions>
+        @if (_positions is not null)
+        {
+            if (_positions.Count > 1)
+            {
+                <MudButton Variant="Variant.Filled" Color="Color.Default" OnClick="Cancel">@CommonDisplayTextFor.Cancel</MudButton>
+                <MudButton Variant="Variant.Filled" Color="Color.Dark" OnClick="Confirm">@CommonDisplayTextFor.Confirm</MudButton>
+            }
+            else
+            {
+                <MudButton Variant="Variant.Filled" Color="Color.Default" OnClick="Cancel">@CommonDisplayTextFor.Dismiss</MudButton>
+            }
+        }
+    </DialogActions>
+</MudDialog>

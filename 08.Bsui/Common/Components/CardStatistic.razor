@@ -1,0 +1,38 @@
+﻿<MudItem xs="12" Class="d-flex align-center">
+	<MudCard Elevation="0" Class="flex-grow-1">
+    <MudCardHeader>
+        <CardHeaderAvatar>
+            <MudAvatar Color="Color.Tertiary">
+                <MudIcon Icon="@Icon"></MudIcon>
+            </MudAvatar>
+        </CardHeaderAvatar>
+        <CardHeaderContent>
+            <MudText>@Judul</MudText>
+            @{
+                if (TypeCount == "int")
+                {
+                    <MudText Typo="Typo.h5">@Count</MudText>
+                }
+                else if (TypeCount == "decimal")
+                {
+                    <MudText Typo="Typo.h5">@Countdec</MudText>
+                }
+                else if (TypeCount == "float")
+                {
+                    <MudText Typo="Typo.h5">@CountFloat</MudText>
+                }
+                else if (TypeCount == "text")
+                {
+                    <MudText Typo="Typo.h5">@CountText</MudText>
+                }
+            }
+        </CardHeaderContent>
+    </MudCardHeader>
+</MudCard>
+@if (!IsLast)
+{
+	<MudHidden Breakpoint="Breakpoint.SmAndDown">
+		<MudDivider Vertical="true" Class="mx-2" Style="height: 90px; border-width: 2px; opacity: 0.5;" />
+	</MudHidden>
+}
+</MudItem>

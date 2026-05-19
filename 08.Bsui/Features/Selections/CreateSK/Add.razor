@@ -1,0 +1,15 @@
+﻿@page "/Selection/CreateSK/Add/{Id:guid}"
+@page "/Selection/CreateSK/Add/{Batch:int}/{Year:int}"
+@using Psmp.Bsui.Features.Selections.CreateSK.Components
+
+<ErrorViewer Error="_error" />
+<LoadingDialog IsVisible=@_isLoadingDialog Text="Loading..."></LoadingDialog>
+
+<MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6">
+    <MudTabPanel Text="Final SK">
+        <DraftingSKFinal Id="@Id" Batch="@Batch" Year="@Year"></DraftingSKFinal>
+    </MudTabPanel>
+    <MudTabPanel Text="Final SP Mentor">
+        <DraftingSPFinal Id="@Id" Batch="@Batch" Year="@Year"></DraftingSPFinal>
+    </MudTabPanel>
+</MudTabs>

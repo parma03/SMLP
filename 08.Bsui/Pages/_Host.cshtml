@@ -1,0 +1,79 @@
+﻿@page "/"
+
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.Extensions.Options
+@using Psmp.Bsui.Services.AppInfo
+@using Psmp.Bsui.Services.FrontEnd
+@using Psmp.Shared.Common.Constants
+
+@namespace Psmp.Bsui.Pages
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@inject IOptions<AppInfoOptions> _appInfoOptions
+@inject IOptions<FrontEndOptions> _frontEndOptions
+
+@{
+    var ipAddress = string.Empty;
+
+    var ptmnIpAddress = HttpContext.Request.Headers[HttpHeaderName.PtmnIpAddress].FirstOrDefault();
+
+    if (!string.IsNullOrWhiteSpace(ptmnIpAddress))
+    {
+        ipAddress = ptmnIpAddress;
+    }
+    else
+    {
+        var remoteIpAddress = HttpContext.Connection.RemoteIpAddress;
+
+        ipAddress = remoteIpAddress is not null ? remoteIpAddress.ToString() : DefaultTextFor.SystemBackgroundJob;
+    }
+
+    var initialApplicationState = new InitialApplicationState
+    {
+        IpAddress = ipAddress
+    };
+}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>@_appInfoOptions.Value.FullName</title>
+        <base href="~/" />
+        <link rel="shortcut icon" href='@Url.Content("~/favicon.ico")'>
+        <link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet" />
+        <link href="_content/Syncfusion.Blazor.Themes/material3.css" rel="stylesheet" />
+        <script src="_content/Syncfusion.Blazor.WordProcessor/scripts/syncfusion-blazor-documenteditor.min.js" type="text/javascript"></script>
+        <script src="_content/Syncfusion.Blazor.PdfViewer/scripts/syncfusion-blazor-pdfviewer.min.js" type="text/javascript"></script>
+        <link href="css/site.css" rel="stylesheet" />
+        <link href="Psmp.Bsui.styles.css" rel="stylesheet" />
+        <component type="typeof(HeadOutlet)" render-mode="ServerPrerendered" />
+    </head>
+    <body>
+        <component type="typeof(App)" param-InitialApplicationState="initialApplicationState" render-mode="ServerPrerendered" />
+	    <div id="blazor-error-ui">
+		    <div class="error-content">
+                Please click <span onclick="window.location.reload();" style="display:inline-flex; align-items:center; padding:4px 12px; border-radius:16px; font-weight:600; font-size:0.875rem; color:#fff; cursor:pointer; background:linear-gradient(135deg,#4279db,#1c4185); margin:0 4px; user-select:none;"> HERE </span>
+                to refresh the page or go back to <span onclick="window.location.href='/'" style="display:inline-flex; align-items:center; padding:4px 12px; border-radius:16px; font-weight:600; font-size:0.875rem; color:#fff; cursor:pointer; background:linear-gradient(135deg,#2bb673,#1f8f56); margin:0 4px; user-select:none;"> HOME </span>
+                If this issue persists, please contact support. Thank you.<a class="dismiss" style="color:#000;"></a>
+		    </div>
+	    </div>
+        <script src="_framework/blazor.server.js" autostart="false"></script>
+        <script>
+            Blazor.start({
+                configureSignalR: function (builder)
+                {
+                    builder.withUrl("@Html.Raw(_frontEndOptions.Value.BasePath)/_blazor", {
+                        skipNegotiation: true,
+                        transport: 1
+                    });
+                }
+            });
+        </script>
+        <script src="_content/MudBlazor/MudBlazor.min.js"></script>
+        <script src="_content/Syncfusion.Blazor.Core/scripts/syncfusion-blazor.min.js" type="text/javascript"></script>
+        <script src="js/downloadFile.js"></script>
+        <script src="js/backSite.js"></script>
+    </body>
+</html>

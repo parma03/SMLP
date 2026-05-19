@@ -1,0 +1,33 @@
+﻿<SfDialog Target="#target" Width="480px" Height="360px" ShowCloseIcon="true" Visible="@Visibility">
+    <DialogTemplates>
+        <Header>
+            <MudText Typo="Typo.h4"><b>Schedule Details</b></MudText>
+        </Header>
+        <Content>
+            <MudGrid>
+                <MudItem xs="12">
+                    <MudText>Test</MudText>
+                    <SfTextBox ID="txtTest"></SfTextBox>
+                </MudItem>
+                <MudItem xs="12">
+                    <MudText>Test Date</MudText>
+                    <SfTextBox ID="txtTestDate"></SfTextBox>
+                    @* <SfDropDownList ID="ddlCompanyAddTOEFL" TValue="string"></SfDropDownList> *@
+                </MudItem>
+                <MudItem xs="12">
+                    <MudText>Session</MudText>
+                    <SfTextBox ID="txtSession"></SfTextBox>
+                    @* <SfDropDownList ID="ddlCompanyAddTOEFL" TValue="string"></SfDropDownList> *@
+                </MudItem>
+            </MudGrid>
+        </Content>
+        <FooterTemplate>
+            <SfButton Content="No" CssClass="e-outline e-danger" IconCss="e-icons e-circle-close" OnClick="OnClickNo"></SfButton>
+            <SfProgressButton Content="Save" CssClass="e-success" IconCss="e-icons e-circle-check" EnableProgress="true" Duration="500"
+                              OnClick="OnClickSave">
+                <ProgressButtonSpinSettings Position="SpinPosition.Center"></ProgressButtonSpinSettings>
+                <ProgressButtonAnimationSettings Effect="Syncfusion.Blazor.SplitButtons.AnimationEffect.ZoomOut"></ProgressButtonAnimationSettings>
+            </SfProgressButton>
+        </FooterTemplate>
+    </DialogTemplates>
+</SfDialog>

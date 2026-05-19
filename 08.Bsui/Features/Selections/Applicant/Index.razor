@@ -1,0 +1,46 @@
+﻿@page "/SelectionApplicant"
+
+<BrowserTabTitle>@DisplayTextFor.Selection</BrowserTabTitle>
+<PageHeader Title="@DisplayTextFor.Selection" />
+<Loading IsVisible="@_isLoading" />
+
+<AuthorizeView Context="context">
+    <Authorized>
+        <MudText Typo="Typo.h5" Class="mt-4">@_greetings</MudText>
+        <MudText Typo="Typo.h4">@context.User.GetDisplayName()</MudText>
+    </Authorized>
+</AuthorizeView>
+@if(_applicantByUserResponses != null)
+{
+    @foreach (var item in _applicantByUserResponses)
+    {
+        <MudText Typo="Typo.h5" Color="Color.Primary" Class="mt-16"><b>@item.TitleBatch</b></MudText>
+        <MudText>Application date: @item.DueDate.ToString("dd MMM yyyy")</MudText>
+
+        <SfButton Content="Schedule Details" IsPrimary="true" CssClass="mt-8" IconCss="e-icons e-timeline-day" OnClick="OnClickScheduleDetail"></SfButton>
+        <MudCard Class="mt-2" Elevation="2">
+            <MudCardContent>
+                <div style="margin-top: 32px">
+                    <SfStepper ShowTooltip=true ActiveStep=@item.Stage>
+                        <ChildContent>
+                            <StepperSteps>
+                                <StepperStep IconCss="e-icons e-page-text-wrap" Label="Administration Selection" Text="Passed"></StepperStep>
+                                <StepperStep IconCss="e-icons e-spell-check" Label="TOEFL" Text="Passed"></StepperStep>
+                                <StepperStep IconCss="e-icons e-calculated-member" Label="Psychotest" Text="Passed"></StepperStep>
+                                <StepperStep IconCss="e-icons e-annotation-edit" Label="Talent Review Meeting" Text="Failed"></StepperStep>
+                            </StepperSteps>
+                        </ChildContent>
+                        <TooltipTemplate>
+                            <span class="step-label">@context.Text</span>
+                        </TooltipTemplate>
+                    </SfStepper>
+                </div>
+            </MudCardContent>
+        </MudCard>
+    }
+}
+
+<ScheduleDetail Visibility="@_isVisiblePopup"
+                DialogOpen="@DialogOpen" DialogClose="@DialogClose"
+                OnClickNo="@ClickedNo" OnClickSave="@ClickedSave">
+</ScheduleDetail>

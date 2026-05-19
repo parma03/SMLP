@@ -1,0 +1,40 @@
+﻿@page "/Dashboard"
+
+@using Psmp.Bsui.Services.AppInfo
+
+@inject IOptions<AppInfoOptions> _appInfoOptions
+
+
+<BrowserTabTitle>@CommonDisplayTextFor.Home</BrowserTabTitle>
+<PageHeader Title="@CommonDisplayTextFor.Home" />
+<AuthorizeView Context="context">
+    <Authorized>
+        @if (context.User.HasPermission(Permissions.Psmp_ScholarshipPlan_View)
+        || context.User.HasPermission(Permissions.Psmp_ScholarshipPosting_View)
+        || context.User.HasPermission(Permissions.Psmp_SelectionOverview_View)
+        || context.User.HasPermission(Permissions.Psmp_ScholarshipPosting_View))
+        {
+            <MudGrid Class="mt-12">
+                <MudItem xs="12" sm="6">
+                    Grid 1
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    Grid 2
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    Grid 3
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    Grid 4
+                </MudItem>
+            </MudGrid>
+        }
+        else
+        {
+            <MudText Typo="Typo.h4" Class="mt-16">@_greetings</MudText>
+            <MudText Typo="Typo.h3">@context.User.GetDisplayName()</MudText>
+            <MudText Typo="Typo.h5" Class="mt-12">Welcome to</MudText>
+            <MudText Typo="Typo.h4" Class="mt-4">@_appInfoOptions.Value.FullName</MudText>
+        }
+    </Authorized>
+</AuthorizeView>

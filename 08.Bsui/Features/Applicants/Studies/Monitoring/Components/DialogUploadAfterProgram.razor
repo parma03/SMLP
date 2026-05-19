@@ -1,0 +1,55 @@
+﻿<SfDialog Target="#target" Width="620px" ShowCloseIcon="true" @bind-Visible=Visibility>
+    <DialogTemplates>
+        <Header>After Program</Header>
+        <Content>
+            <MudGrid Spacing="2">
+                <MudItem xs="12">
+                    <MudItem xs="12" Class="mt-4">
+                        <MudText>Upload Pesentation Proof (Screenshot) <span style="color:red;">*</span></MudText>
+                        <MudText Typo="Typo.subtitle2" Color="Color.Secondary" Style="font-style: italic; font-size: 0.8rem;" Class="mb-2">
+                            <b>(Maximum Size 5 Mb)</b>
+                        </MudText>
+                        <SfUploader ID="uploaderTranscript" AutoUpload="true" SequentialUpload="false" AllowMultiple="false"
+                                    AllowedExtensions=".pdf" MaxFileSize="@MaxFileSize">
+                            <UploaderEvents ValueChange="ValueChangeFile" OnRemove="OnRemoveFile"></UploaderEvents>
+                        </SfUploader>
+                    </MudItem>
+                </MudItem>
+            </MudGrid>
+        </Content>
+        <FooterTemplate>
+            <SfButton Content="Cancel" CssClass="e-outline e-danger" IconCss="e-icons e-close" OnClick="OnClickNo"></SfButton>
+            <SfButton Content="Save" CssClass="e-success" IconCss="e-icons e-circle-check" OnClick="OnClickYes"></SfButton>
+        </FooterTemplate>
+    </DialogTemplates>
+    <DialogEvents OnOpen="@DialogOpen" Closed="@DialogClose"></DialogEvents>
+    <DialogPositionData X="center" Y="center"></DialogPositionData>
+    <DialogAnimationSettings Effect="DialogEffect.None"></DialogAnimationSettings>
+</SfDialog>
+
+@code {
+
+    [Parameter]
+    public bool Visibility { get; set; }
+
+    [Parameter]
+    public EventCallback DialogOpen { get; set; }
+
+    [Parameter]
+    public EventCallback DialogClose { get; set; }
+
+    [Parameter]
+    public EventCallback OnClickNo { get; set; }
+
+    [Parameter]
+    public EventCallback OnClickYes { get; set; }
+
+    [Parameter]
+    public EventCallback<UploadChangeEventArgs> ValueChangeFile { get; set; }
+
+    [Parameter]
+    public EventCallback<RemovingEventArgs> OnRemoveFile { get; set; }
+
+    [Parameter]
+    public long MaxFileSize { get; set; }
+}

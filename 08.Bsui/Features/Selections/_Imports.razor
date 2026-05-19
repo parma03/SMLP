@@ -1,0 +1,42 @@
+﻿@using Psmp.Bsui.Common.Components
+@using Psmp.Base.Selections.Enums
+@using Psmp.Client.Services.BackEnd.Applicants
+@using Psmp.Client.Services.BackEnd.Projects
+@using Psmp.Client.Services.Hris
+@using Psmp.Client.Services.Iam
+@using Psmp.Shared.Common.Responses
+@using Psmp.Shared.Documents.Options
+@using Psmp.Shared.Masters.Queries
+@using Psmp.Shared.Selections.Constants
+@using Psmp.Shared.Scholarships.ScholarshipPosting.Queries
+@using Psmp.Shared.Selections.SelectionAdministrations.Queries
+
+@using Psmp.Client.Services.BackEnd.Masters
+@using Psmp.Client.Services.BackEnd.Selections
+@using Psmp.Client.Services.BackEnd.Scholarships
+
+@inject CompanyService _companyService
+@inject SelectionTalentReviewFirstService _selectionTalentReviewFirstService
+@inject SelectionAdministrationService _selectionAdministrationService
+@inject ScholarshipPostingService _scholarshipPostingService
+@inject SelectionOverviewService _selectionOverviewService
+@inject SelectionTOEFLService _selectionTOEFLService
+@inject SelectionPsychotestService _selectionPsychotestService
+@inject SelectionTalentReviewService _selectionTalentReviewService
+@inject ScholarshipPostingApplicantService _scholarshipPostingApplicantService
+@inject CompanyGroupService _companyGroupService
+@inject DirectorateService _directorateService
+@inject DivisionService _divisionService
+@inject DocumentService _documentService
+@inject HrisService _hrisService
+@inject RegistrationService _registrationService
+@inject SelectionDecreesService _selectionDecreesService
+@inject IamService _iamService
+@inject EmailService _emailService
+@inject IOptions<DocumentOptions> _documentOptions
+@inject SelectionBeritaAcaraService _selectionBeritaAcaraService
+@inject ApplicantService _applicantService
+@inject ScholarshipPlanService _scholarshipPlanService
+@inject ProjectPlansService _projectPlansService
+@inject ProjectCharterPlansService _projectCharterPlansService
+@inject ProjectCharterRealisationService _projectCharterRealisationService

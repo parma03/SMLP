@@ -1,0 +1,10 @@
+﻿@using Psmp.Shared.Masters.Queries
+@using Psmp.Shared.Scholarships.ScholarshipPosting.Queries
+@using Syncfusion.Blazor.DropDowns
+
+<SfDropDownList ID="ddlScholarship" TValue="int" TItem="GetDivisionQueryResponse"
+                AllowFiltering="true" FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains"
+                DataSource="@_divisions">
+    <DropDownListFieldSettings Text="Name" Value="Id" />
+    <DropDownListEvents TItem="GetDivisionQueryResponse" TValue="int" ValueChange="OnChangeAsync" />
+</SfDropDownList>

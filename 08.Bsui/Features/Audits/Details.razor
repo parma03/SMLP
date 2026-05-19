@@ -1,0 +1,70 @@
+﻿@page "/Audits/Details/{AuditId:guid}"
+@attribute [Authorize(Policy = Permissions.Psmp_Audit_View)]
+
+<BrowserTabTitle>@DisplayTextFor.Audit</BrowserTabTitle>
+<MudBreadcrumbs Items="_breadcrumbItems"></MudBreadcrumbs>
+<Loading IsVisible="_isLoading" />
+<ErrorViewer Error="_error" />
+
+@if (_audit is not null)
+{
+    <PageHeader Title="@($"{_audit.ActionType} {_audit.EntityName}")"
+                SubTitleKey="@CommonDisplayTextFor.On"
+                SubTitleValue="@_audit.Created.ToLongDateTimeDisplayText()" />
+    <MudGrid>
+        <MudItem xs="12" sm="6">
+            <MudField Label="@DisplayTextFor.TableName">@_audit.TableName</MudField>
+        </MudItem>
+        <MudItem xs="12" sm="6">
+            <MudField Label="@DisplayTextFor.EntityId">@_audit.EntityId</MudField>
+        </MudItem>
+        <MudItem xs="12" sm="6">
+            <MudField Label="@DisplayTextFor.ActionName">@_audit.ActionName</MudField>
+        </MudItem>
+        <MudItem xs="12" sm="6">
+            <MudField Label="@DisplayTextFor.ClientApplicationId">@_audit.ClientApplicationId</MudField>
+        </MudItem>
+        <MudItem xs="12" sm="6">
+            <MudField Label="@CommonDisplayTextFor.By">@_audit.CreatedBy</MudField>
+        </MudItem>
+        <MudItem xs="12" sm="6">
+            <MudField Label="@DisplayTextFor.FromIpAddress">@_audit.FromIpAddress</MudField>
+        </MudItem>
+        <MudItem xs="12">
+            <MudField Label="@DisplayTextFor.FromGeolocation">
+                @if (_audit.FromGeolocation is null)
+                {
+                    @DefaultTextFor.Unknown
+                }
+                else
+                {
+                    <MudLink Href="@_audit.FromGeolocation.LocationUrl" Target="_blank">@_audit.FromGeolocation.LocationText</MudLink>
+                }
+            </MudField>
+        </MudItem>
+        <MudItem xs="12" sm="6">
+            <MudField Label="@DisplayTextFor.OldValues" Class="text-multiline font-monospace">
+                @if (string.IsNullOrWhiteSpace(_audit.OldValues))
+                {
+                    @DefaultTextFor.NA
+                }
+                else
+                {
+                    @_audit.OldValues.PrettifyJson()
+                }
+            </MudField>
+        </MudItem>
+        <MudItem xs="12" sm="6">
+            <MudField Label="@DisplayTextFor.NewValues" Class="text-multiline font-monospace">
+                @if (string.IsNullOrWhiteSpace(_audit.NewValues))
+                {
+                    @DefaultTextFor.NA
+                }
+                else
+                {
+                    @_audit.NewValues.PrettifyJson()
+                }
+            </MudField>
+        </MudItem>
+    </MudGrid>
+}

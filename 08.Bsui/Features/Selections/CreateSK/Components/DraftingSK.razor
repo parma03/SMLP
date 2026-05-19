@@ -1,0 +1,182 @@
+﻿@using Psmp.Shared.Selections.BeritaAcara.Queries
+@using Syncfusion.Blazor.DocumentEditor
+<LoadingDialog IsVisible=@_isLoadingDialog Text="Loading..."></LoadingDialog>
+<MudGrid Spacing="2">
+    @* <MudItem xs="12" sm="4">
+        <MudGrid>
+            <MudItem xs="12">
+                <SfTooltip ID="TooltipSuperior" Target="#txtHdrSuperior" Content="@_contentTooltipSuperior">
+                    <MudText id="txtHdrSuperior">
+                        Superior Letter (Position, Date & Subject) <SfIcon Name="IconName.CircleInfo"></SfIcon>
+                    </MudText>
+                </SfTooltip>
+                <MudGrid>
+                    <MudItem xs="12">
+                        <SfTextBox ID="txtSuperiorLetter" Placeholder="Position, Date & Subject" @bind-Value="_dataItem!.SuperiorLetter" Multiline="true" Enabled="@_isEnabled"></SfTextBox>
+                    </MudItem>
+                </MudGrid>
+            </MudItem>
+            <MudItem xs="12" Class="mt-4">
+                <SfTooltip ID="TooltipStudyStartDate" Target="#txtHdrStudyStartDate" Content="@_contentTooltipStudyStartDate">
+                    <MudText id="txtHdrStudyStartDate">
+                        Study Start Date <SfIcon Name="IconName.CircleInfo"></SfIcon>
+                    </MudText>
+                </SfTooltip>
+                <MudGrid>
+                    <MudItem xs="12">
+                        <SfDatePicker ID="txtStudyStart" Placeholder="Start Date" Format="dd.MM.yyyy" @bind-Value="_dataItem!.StudyStartDate" Enabled="@_isEnabled"></SfDatePicker>
+                    </MudItem>
+                </MudGrid>
+            </MudItem>
+            <MudItem xs="12" Class="mt-4">
+                <SfTooltip ID="TooltipStudyEndDate" Target="#txtHdrStudyEndDate" Content="@_contentTooltipStudyEndDate">
+                    <MudText id="txtHdrStudyEndDate">
+                        Study End Date <SfIcon Name="IconName.CircleInfo"></SfIcon>
+                    </MudText>
+                </SfTooltip>
+                <MudGrid>
+                    <MudItem xs="12">
+                        <SfDatePicker ID="txtStudyEnd" Placeholder="End Date" Format="dd.MM.yyyy" @bind-Value="_dataItem!.StudyEndDate" Enabled="@_isEnabled"></SfDatePicker>
+                    </MudItem>
+                </MudGrid>
+            </MudItem>
+        </MudGrid>
+    </MudItem> *@
+    <MudItem xs="12" Class="text-center">
+        <MudGrid Class="mb-2">
+            <MudItem xs="10">
+                <ErrorViewer Error="_errorDraft" />
+            </MudItem>
+            <MudItem xs="2">
+                <SfChip>
+                    <ChipItems>
+                        <ChipItem Text="@_dataItem!.Status.GetDescription()" CssClass="@_dataItem!.Status.GetCss()"></ChipItem>
+                    </ChipItems>
+                </SfChip>
+            </MudItem>
+        </MudGrid>
+        <SfDocumentEditorContainer @ref="_containerDocument" Height="1069px" ShowPropertiesPane="@ShowProperties" RestrictEditing="@ReadOnly" EnableToolbar="@Toolbar" ToolbarItems="@_toolbarItems" DocumentEditorSettings="_settingDocument">
+            <DocumentEditorContainerEvents Created="OnCreated"></DocumentEditorContainerEvents>
+        </SfDocumentEditorContainer>
+    </MudItem>
+</MudGrid>
+<MudGrid>
+    <MudItem xs="2" Style="text-align: left;">
+        <SfButton OnClick="OnClickBack" Content="Back" IconCss="e-icons e-arrow-left" CssClass="e-danger"></SfButton>
+    </MudItem>
+    <MudItem xs="10" Style="text-align: right;">
+        @if (_documentDraftId == Guid.Empty)
+        {
+            <SfButton OnClick="OnClickGenerateAsync" Content="Generate" IconCss="e-icons e-circle-check" CssClass="e-primary"></SfButton>
+        }
+        else
+        {
+            if (_contentButton == "Update")
+            {
+                <SfButton OnClick="OnClickUpdateAsync" Content="Update" IconCss="e-icons e-edit" CssClass="e-info m-4" Disabled="@_disableButton"></SfButton>
+            }
+            else if (_contentButton == "Save")
+            {
+                <SfButton OnClick="OnClickSaveAsync" Content="Save" IconCss="e-icons e-save" CssClass="e-info m-4" Disabled="@_disableButton"></SfButton>
+            }
+            <SfButton OnClick="OnClickPofficeAsync" Content="Continue to P-Office" IconCss="e-icons e-check" CssClass="e-info ml-1" Disabled="true"></SfButton>
+            <SfButton OnClick="OnClickPsignAsync" Content="Continue to P-Sign" IconCss="e-icons e-check" CssClass="e-info" Disabled="true"></SfButton>
+            <SfButton OnClick="OnClickDownloadWordAsync" Content="Download as Word" IconCss="e-icons e-download" CssClass="e-info" Disabled="@_disableButtonDownload"></SfButton>
+            <SfButton OnClick="OnClickDownloadPdfAsync" Content="Download as PDF" IconCss="e-icons e-download" CssClass="e-info" Disabled="@_disableButtonDownload"></SfButton>
+            <SfButton OnClick="OnClickRejectAsync" Content="Reject" IconCss="e-icons e-circle-close" CssClass="e-danger" Disabled="@_disableButtonReject"></SfButton>
+            <SfButton OnClick="OnClickReGenerateAsync" Content="Re-Generate" IconCss="e-icons e-circle-check" CssClass="e-success"></SfButton>
+        }
+    </MudItem>
+</MudGrid>
+
+<DialogConfirmation Visibility="@_isVisibleConfirmation"
+                    Title="@_titleConfirmation"
+                    Content="@_contentConfirmation"
+                    DialogOpen="DialogConfirmationOpen"
+                    DialogClose="DialogConfirmationClose"
+                    OnClickNo="ClickedNoConfirmation"
+                    OnClickYes="ClickedYesConfirmation"></DialogConfirmation>
+
+<style>
+    #edit_container {
+        width: 950px;
+    }
+
+    .title-bar-btn, .title-bar-btn:hover, .title-bar-btn:focus {
+        background: transparent;
+        box-shadow: none;
+        font-family: inherit;
+        border-color: transparent;
+        border-radius: 2px;
+        color: inherit;
+        font-size: 12px;
+        text-transform: capitalize;
+        height: 28px;
+        font-weight: 400;
+        margin-top: 2px;
+    }
+
+    #documenteditor_titlebar {
+        border-bottom: 1px solid #3f51b5;
+        height: 36px;
+        line-height: 26px;
+        width: 100%;
+        font-size: 12px;
+        padding-left: 15px;
+        padding-right: 10px;
+        font-family: inherit;
+    }
+
+    #documenteditor_title_contentEditor {
+        height: 26px;
+        max-width: 85%;
+        width: auto;
+        overflow: hidden;
+        display: inline-block;
+        padding-left: 4px;
+        padding-right: 4px;
+        margin: 5px;
+    }
+
+    .doc-edit-title {
+        text-transform: capitalize;
+        font-weight: 400;
+        font-family: inherit;
+        text-overflow: ellipsis;
+        outline: none;
+        white-space: pre;
+        overflow: hidden;
+        user-select: none;
+        cursor: text
+    }
+
+    .single-line {
+        cursor: text !important;
+        outline: none;
+    }
+
+    [contenteditable="true"].single-line {
+        white-space: nowrap;
+        border-color: #e4e4e4 !important;
+    }
+
+    [class^="e-de-icon-"],
+    [class*=" e-de-icon-"] {
+        font-family: 'Sample brower icons' !important;
+    }
+
+    .e-de-icon-Print:before {
+        content: "\e723";
+        font-family: 'Sample brower icons' !important;
+    }
+
+    .e-de-icon-Download:before {
+        content: "\e728";
+        font-family: 'Sample brower icons' !important;
+    }
+
+    .print-ctnr {
+        cursor: pointer;
+        margin-top: 6px;
+    }
+</style>

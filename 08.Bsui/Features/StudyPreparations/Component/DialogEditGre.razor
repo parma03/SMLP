@@ -1,0 +1,184 @@
+﻿@using Psmp.Shared.Documents.Queries.GetDocuments
+@using Psmp.Shared.StudyPreparations.Gre.Commands.Update
+@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.Popups
+
+<SfDialog Target="#target" Width="620px" ShowCloseIcon="true" @bind-Visible=Visibility>
+    <DialogTemplates>
+        <Header>@Title</Header>
+        <Content>
+            <div class="row">
+                <div class="col-md-12">
+                    <MudGrid Spacing="2">
+                        <MudItem xs="12">
+                            <MudCard>
+                                <MudCardContent>
+                                    <MudItem xs="12">
+                                        <MudGrid>
+                                            <MudItem xs="4">
+                                                <MudText>Name</MudText>
+                                            </MudItem>
+                                            <MudItem xs="8">
+                                                <SfTextBox ID="txtName" Placeholder="Input Name" @bind-Value="request!.Name" Enabled="false"></SfTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12">
+                                        <MudGrid>
+                                            <MudItem xs="4">
+                                                <MudText>Employee Number</MudText>
+                                            </MudItem>
+                                            <MudItem xs="8">
+                                                <SfTextBox ID="txtEmployeeNo" Placeholder="Input Employee Number" @bind-Value="request!.EmployeeNumber" Enabled="false"></SfTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12">
+                                        <MudGrid>
+                                            <MudItem xs="4">
+                                                <MudText>Category</MudText>
+                                            </MudItem>
+                                            <MudItem xs="8">
+                                                <SfTextBox ID="txtCategory" Placeholder="Input Category" @bind-Value="request!.Category" Enabled="false"></SfTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12">
+                                        <MudGrid>
+                                            <MudItem xs="4">
+                                                <MudText>Test Center</MudText>
+                                            </MudItem>
+                                            <MudItem xs="8">
+                                                <SfTextBox ID="txtTestCenter" Placeholder="Input Test Center" @bind-Value="request!.TestCenter" Enabled="true"></SfTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12">
+                                        <MudGrid>
+                                            <MudItem xs="4">
+                                                <MudText>Location Test</MudText>
+                                            </MudItem>
+                                            <MudItem xs="8">
+                                                <SfTextBox ID="txtLocationTest" Placeholder="Input Location Test" @bind-Value="request!.LocationTest" Enabled="true"></SfTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12">
+                                        <MudGrid>
+                                            <MudItem xs="4">
+                                                <MudText>Gre Score</MudText>
+                                            </MudItem>
+                                            <MudItem xs="8">
+                                                <SfNumericTextBox ID="txtGreScore" Placeholder="Input Gre Score" Format="n2" @bind-Value="request!.GreScore" Enabled="true" Min="0" Max="900"></SfNumericTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12">
+                                        <MudGrid>
+                                            <MudItem xs="4">
+                                                <MudText>Test Date</MudText>
+                                            </MudItem>
+                                            <MudItem xs="8">
+                                                <SfDatePicker TValue="DateOnly?" Format="dd.MM.yyyy" Placeholder="Choose a Date" FullScreen="true" ShowClearButton="true" @bind-Value="request!.TestDate" Enabled="true"></SfDatePicker>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12">
+                                        <MudGrid>
+                                            <MudItem xs="4">
+                                                @* <MudText>Certificate (.pdf) (Max. 5 Mb) <span style="color:red;">*</span></MudText> *@
+                                                <MudText>Certificate (.pdf) <span style="color:red;">*</span></MudText>
+                                                <MudText Typo="Typo.subtitle2" Color="Color.Secondary" Style="font-style: italic; font-size: 0.8rem;">
+                                                    <b>(Maximum Size 5 Mb)</b>
+                                                </MudText>
+                                            </MudItem>
+                                            <MudItem xs="8">
+                                                <SfUploader ID="uploaderGreCertificate" AutoUpload="true" SequentialUpload="false" AllowMultiple="false" MaxFileSize="@MaxFileSize"
+                                                            AllowedExtensions=".pdf">
+                                                    <UploaderEvents ValueChange="ValueChangeUploaderGreDoc" OnRemove="OnRemoveUploaderGreDoc"></UploaderEvents>
+                                                </SfUploader>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <br />
+                                    @if (listDocument!.Count() > 0)
+                                    {
+                                        <MudItem xs="12">
+                                            <SfGrid DataSource="@listDocument" AllowPaging="true" Width="100%" AllowResizing="true">
+                                                <GridPageSettings PageCount="5" PageSize="5" PageSizes="@(new string[] { "5", "8", "10", "15", "20", "All" })"></GridPageSettings>
+                                                <GridEvents CommandClicked="OnCommandClicked" TValue="GetDocumentsDocument"></GridEvents>
+                                                <GridColumns>
+                                                    <GridColumn Field=@nameof(GetDocumentsDocument.FileName) HeaderText="Filename" TextAlign="TextAlign.Left" Width="80%"> </GridColumn>
+                                                    <GridColumn HeaderText="Action" Width="20%" TextAlign="TextAlign.Center">
+                                                        <GridCommandColumns>
+                                                            <GridCommandColumn ID="btnDownload" Title="Download" ButtonOption="@(new CommandButtonOptions() {IconCss="e-icons e-download", CssClass="e-flat" })"> </GridCommandColumn>
+                                                            <GridCommandColumn ID="btnDelete" Title="Delete" ButtonOption="@(new CommandButtonOptions() {IconCss="e-icons e-delete", CssClass="e-flat" })"> </GridCommandColumn>
+                                                        </GridCommandColumns>
+                                                    </GridColumn>
+                                                </GridColumns>
+                                            </SfGrid>
+                                        </MudItem>
+                                    }
+                                </MudCardContent>
+
+                            </MudCard>
+                        </MudItem>
+                    </MudGrid>
+                </div>
+            </div>
+        </Content>
+        <FooterTemplate>
+            <SfButton Content="Cancel" CssClass="e-outline e-danger" IconCss="e-icons e-close" OnClick="OnClickNo"></SfButton>
+            @if (IsEnabled == true)
+            {
+                <SfButton Content="Save" CssClass="e-success" IconCss="e-icons e-circle-check" OnClick="OnClickYes"></SfButton>
+            }
+
+        </FooterTemplate>
+    </DialogTemplates>
+    <DialogEvents OnOpen="@DialogOpen" Closed="@DialogClose"></DialogEvents>
+    <DialogPositionData X="center" Y="top"></DialogPositionData>
+    <DialogAnimationSettings Effect="DialogEffect.None"></DialogAnimationSettings>
+</SfDialog>
+@code {
+    [Parameter]
+    public bool Visibility { get; set; }
+
+    [Parameter]
+    public string? Title { get; set; }
+
+    [Parameter]
+    public EventCallback DialogOpen { get; set; }
+
+    [Parameter]
+    public EventCallback DialogClose { get; set; }
+
+    [Parameter]
+    public EventCallback OnClickNo { get; set; }
+
+    [Parameter]
+    public EventCallback OnClickYes { get; set; }
+
+    [Parameter]
+    public UpdateGreRequest? request { get; set; }
+
+    [Parameter]
+    public EventCallback<CommandClickEventArgs<GetDocumentsDocument>> OnCommandClicked { get; set; }
+
+    [Parameter]
+    public bool IsEnabled { get; set; }
+
+    [Parameter]
+    public List<GetDocumentsDocument>? listDocument { get; set; }
+
+    [Parameter]
+    public EventCallback<RemovingEventArgs> OnRemoveUploaderGreDoc { get; set; }
+
+    [Parameter]
+    public EventCallback<UploadChangeEventArgs> ValueChangeUploaderGreDoc { get; set; }
+
+    [Parameter]
+    public long MaxFileSize { get; set; }
+
+}
+

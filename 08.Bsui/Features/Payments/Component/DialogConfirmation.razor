@@ -1,0 +1,185 @@
+﻿@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.Popups
+
+<style>
+	.e-btn.e-simulate,
+	.e-progress-btn.e-simulate {
+		background-color: #7E22CE !important;
+		border-color: #7E22CE !important;
+		color: #ffffff !important;
+		box-shadow: none !important;
+		background-image: none !important;
+	}
+
+	.e-btn.e-submit-sap,
+	.e-progress-btn.e-submit-sap {
+		background: linear-gradient(to right, #0B2E67, #1E4EA2) !important;
+		border: none !important;
+		color: #ffffff !important;
+		box-shadow: none !important;
+	}
+
+	.e-btn.e-simulate .e-btn-icon,
+	.e-btn.e-simulate .e-icons,
+	.e-progress-btn.e-simulate .e-btn-icon,
+	.e-progress-btn.e-simulate .e-icons {
+		color: #ffffff !important;
+	}
+
+	.e-btn.e-submit-sap .e-btn-icon,
+	.e-btn.e-submit-sap .e-icons,
+	.e-progress-btn.e-submit-sap .e-btn-icon,
+	.e-progress-btn.e-submit-sap .e-icons {
+		color: #ffffff !important;
+	}
+
+	.e-btn.e-simulate:hover,
+	.e-btn.e-simulate:focus,
+	.e-btn.e-simulate:active,
+	.e-progress-btn.e-simulate:hover,
+	.e-progress-btn.e-simulate:focus,
+	.e-progress-btn.e-simulate:active {
+		background-color: #6B21A8 !important;
+		border-color: #6B21A8 !important;
+		color: #ffffff !important;
+		box-shadow: none !important;
+		outline: none !important;
+		background-image: none !important;
+	}
+
+	.e-btn.e-submit-sap:hover,
+	.e-btn.e-submit-sap:focus,
+	.e-btn.e-submit-sap:active,
+	.e-progress-btn.e-submit-sap:hover,
+	.e-progress-btn.e-submit-sap:focus,
+	.e-progress-btn.e-submit-sap:active {
+		background: linear-gradient(to right, #1E4EA2, #0B2E67) !important;
+		color: #ffffff !important;
+		box-shadow: none !important;
+		outline: none !important;
+	}
+
+	.e-btn.e-outline.e-danger {
+		border: none !important;
+	}
+
+		.e-btn.e-outline.e-danger:hover,
+		.e-btn.e-outline.e-danger:focus,
+		.e-btn.e-outline.e-danger:active {
+			border: none !important;
+		}
+
+	.dialog-header-wrapper {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 16px;
+		padding: 8px 0;
+	}
+
+	.dialog-icon-circle {
+		width: 64px;
+		height: 64px;
+		border-radius: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-shrink: 0;
+	}
+
+		.dialog-icon-circle.simulate {
+			background-color: #E9D5FF;
+		}
+
+		.dialog-icon-circle.submit-sap {
+			background-color: #DBEAFE;
+		}
+
+		.dialog-icon-circle.simulate-data-error {
+			background-color: #FEF08A;
+		}
+
+		.dialog-icon-circle.simulate-data-success {
+			background-color: #BBF7D0;
+		}
+
+		.dialog-icon-circle .e-icons {
+			font-size: 28px;
+		}
+
+	.dialog-title-text {
+		font-size: 20px;
+		font-weight: 600;
+		margin: 0;
+		text-align: center;
+	}
+
+	.dialog-content-wrapper {
+		text-align: center;
+		padding: 8px 0;
+	}
+
+	.e-dialog .e-footer-content {
+		display: flex;
+		justify-content: center;
+		gap: 12px;
+	}
+
+	.dialog-icon-circle.simulate-data-success {
+		background-color: #BBF7D0;
+	}
+
+	.dialog-icon-circle.success {
+		background-color: #BBF7D0;
+	}
+
+	.dialog-icon-circle .e-icons {
+		font-size: 28px;
+	}
+</style>
+
+<SfDialog Target="#target" IsModal="true" Width="480px" ShowCloseIcon="false" Visible="@Visibility">
+	<DialogTemplates>
+		<Header>
+			<div class="dialog-header-wrapper">
+				@{
+					var meta = GetDialogMeta(Title);
+				}
+				<div class="@meta.IconCircleCss">
+					<span class="@meta.IconCss" style="color: @meta.IconColor;"></span>
+				</div>
+				<h3 class="dialog-title-text">@Title</h3>
+			</div>
+		</Header>
+		<Content>
+			<div class="dialog-content-wrapper">
+				@((MarkupString)Content)
+			</div>
+		</Content>
+		<FooterTemplate>
+			@if (ShowNoButton)
+			{
+				<SfButton Content="No" CssClass="e-danger" IconCss="e-icons e-circle-close" OnClick="OnClickNo"></SfButton>
+			}
+
+			@{
+				var meta = GetDialogMeta(Title);
+			}
+
+			@if (!IsProgressButton)
+			{
+				<SfButton Content="@meta.ButtonContent" CssClass="@meta.ButtonCss" IconCss="@meta.IconCss" OnClick="OnClickYes"></SfButton>
+			}
+			else
+			{
+				<SfProgressButton Content="@meta.ButtonContent" CssClass="@meta.ButtonCss" IconCss="@meta.IconCss" EnableProgress="true" Duration="@Duration" OnClick="OnClickYes">
+					<ProgressButtonSpinSettings Position="SpinPosition.Center"></ProgressButtonSpinSettings>
+					<ProgressButtonAnimationSettings Effect="Syncfusion.Blazor.SplitButtons.AnimationEffect.ZoomOut"></ProgressButtonAnimationSettings>
+				</SfProgressButton>
+			}
+		</FooterTemplate>
+	</DialogTemplates>
+	<DialogEvents OnOpen="@DialogOpen" Closed="@DialogClose"></DialogEvents>
+	<DialogPositionData X="@PositionX" Y="@PositionY"></DialogPositionData>
+	<DialogAnimationSettings Effect="DialogEffect.Zoom"></DialogAnimationSettings>
+</SfDialog>

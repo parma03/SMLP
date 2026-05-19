@@ -1,0 +1,106 @@
+﻿using System.Timers;
+using Darnton.Blazor.DeviceInterop.Geolocation;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
+using Psmp.Base.ValueObjects;
+using Psmp.Bsui.Common.Extensions;
+using Psmp.Bsui.Services.Authentication;
+using Psmp.Bsui.Services.Telemetry;
+using Psmp.Shared.Services.Authentication.Constants;
+using Timer = System.Timers.Timer;
+
+namespace Psmp.Bsui.Layouts;
+
+public partial class MainLayout
+{
+    [CascadingParameter]
+    private Task<AuthenticationState> AuthenticationStateTask { get; set; } = default!;
+
+    private readonly Timer _timerForRefreshTokens = new();
+
+    private bool _firstTimeRender;
+    private bool _drawerOpen;
+    private bool _usingApplicationInsights;
+    private bool _usingAuthentication;
+    private bool _usingGeolocation;
+    private GeolocationResult? _geolocationResult;
+    private bool _readyToRenderBody;
+    private bool _authorized;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _timerForRefreshTokens.Interval = TimeSpan.FromSeconds(_authenticationOptions.Value.RefreshRateInSeconds).TotalMilliseconds;
+        _timerForRefreshTokens.Elapsed += RefreshTokens;
+        _timerForRefreshTokens.AutoReset = false;
+
+        _usingApplicationInsights = _telemetryOptions.Value.Provider is TelemetryProvider.ApplicationInsights;
+        _usingAuthentication = _authenticationOptions.Value.Provider is not AuthenticationProvider.None;
+        _usingGeolocation = _geolocationOptions.Value.Enabled;
+
+        _firstTimeRender = true;
+        _drawerOpen = true;
+
+        await CheckAuthorize();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await ((AuthorizedAuthenticationStateProvider)_authenticationStateProvider).LoadIdentity();
+
+            if (_usingGeolocation)
+            {
+                _geolocationResult = await _geolocationService.GetCurrentPosition();
+
+                if (_geolocationResult.IsSuccess)
+                {
+                    var coordinates = _geolocationResult.Position.Coords;
+
+                    _userInfo.Geolocation = new Geolocation(coordinates.Latitude, coordinates.Longitude, coordinates.Accuracy);
+                }
+            }
+
+            _firstTimeRender = false;
+            _timerForRefreshTokens.Start();
+
+            await CheckAuthorize();
+
+            StateHasChanged();
+        }
+    }
+
+    private async Task CheckAuthorize()
+    {
+        if (_authenticationOptions.Value.AllowGuest)
+        {
+            _authorized = true;
+
+            return;
+        }
+
+        var user = (await AuthenticationStateTask).User;
+
+        if (user.Identity is not null && user.Identity.IsAuthenticated)
+        {
+            _authorized = user.GetPermissions().Any();
+
+            return;
+        }
+
+        _authorized = true;
+    }
+
+    private void DrawerToggle()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+
+    private void RefreshTokens(object? sender, ElapsedEventArgs e)
+    {
+        InvokeAsync(async () => await ((AuthorizedAuthenticationStateProvider)_authenticationStateProvider).RefreshTokensAsync());
+
+        _timerForRefreshTokens.Stop();
+        _timerForRefreshTokens.Start();
+    }
+}

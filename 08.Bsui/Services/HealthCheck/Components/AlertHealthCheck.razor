@@ -1,0 +1,23 @@
+﻿@using Psmp.Shared.Services.HealthCheck.Constants
+@using Psmp.Shared.Services.HealthCheck.Queries.GetHealthCheck
+
+@inject IOptions<BackEndOptions> _backEndOptions
+
+@if (_backEndOptions.Value.HealthCheck.UI.Enabled)
+{
+    <MudLink Href="@_backEndOptions.Value.HealthCheckUIUrl" Underline="Underline.None" Target="_blank">
+        <MudAlert Severity="@HealthCheckSeverity" Variant="Variant.Filled" Dense="true" Class="mr-6">Back-End @CommonDisplayTextFor.Service @nameof(GetHealthCheckResponse.Status): @HealthCheckStatusText</MudAlert>
+    </MudLink>
+}
+else
+{
+    <MudAlert Severity="@HealthCheckSeverity" Variant="Variant.Filled" Dense="true" Class="mr-6">Back-End @CommonDisplayTextFor.Service @nameof(GetHealthCheckResponse.Status): @HealthCheckStatusText</MudAlert>
+}
+
+@code {
+    [Parameter]
+    public Severity HealthCheckSeverity { get; set; }
+
+    [Parameter]
+    public string HealthCheckStatusText { get; set; } = HealthCheckStatus.Loading;
+}

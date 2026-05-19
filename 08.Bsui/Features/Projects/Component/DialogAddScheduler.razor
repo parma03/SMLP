@@ -1,0 +1,112 @@
+﻿@using Psmp.Shared.Projects.ProjectMonitorings.Commands
+<SfDialog Target="#target" Width="820px" ShowCloseIcon="true" @bind-Visible=Visibility>
+	<DialogTemplates>
+		<Header>Project Mentoring Schedule</Header>
+		<Content>
+			<div class="row">
+				<div class="col-md-12">
+					<MudGrid Spacing="2">
+						<MudItem xs="12">
+							<MudCard>
+								<MudCardContent>
+									<MudItem xs="12">
+										<MudGrid>
+											<MudItem xs="4">
+												<MudText>Title</MudText>
+											</MudItem>
+											<MudItem xs="8">
+												<SfTextBox ID="txtTitle" Placeholder="Title" @bind-Value="Request!.Title" Enabled="@IsRead"></SfTextBox>
+											</MudItem>
+										</MudGrid>
+									</MudItem>
+									<MudItem xs="12">
+										<MudGrid>
+											<MudItem xs="4">
+												<MudText>Presentation Link</MudText>
+											</MudItem>
+											<MudItem xs="8">
+                                                <SfTextBox ID="txtLink" Placeholder="Material Presentation Link" @bind-Value="Request!.PresentationLink" Enabled="@IsRead"></SfTextBox>
+											</MudItem>
+										</MudGrid>
+									</MudItem>
+									<MudItem xs="12">
+										<MudGrid>
+											<MudItem xs="4">
+												<MudText>Meeting Link</MudText>
+											</MudItem>
+											<MudItem xs="8">
+                                                <SfTextBox ID="txtMateriLink" Placeholder="Meeting Invitation Link" @bind-Value="Request!.MateriLink" Enabled="@IsRead"></SfTextBox>
+											</MudItem>
+										</MudGrid>
+									</MudItem>
+									<MudItem xs="12">
+										<MudGrid>
+											<MudItem xs="4">
+												<MudText>Mentoring Schedule Date</MudText>
+											</MudItem>
+											<MudItem xs="6">
+												<SfDatePicker TValue="DateOnly?" ID="txtSchedule" @bind-Value="Request!.MentorngSchedule" Enabled="@IsRead" Min="@DateTime.Today"></SfDatePicker>
+											</MudItem>
+										</MudGrid>
+									</MudItem>
+									<MudItem xs="12">
+										<MudGrid>
+											<MudItem xs="4">
+												<MudText>Mentoring Schedule Time</MudText>
+											</MudItem>
+											<MudItem xs="6">
+												<SfTimePicker TValue="TimeSpan?" ID="txtSchedule" @bind-Value="Request!.SessionStart" Enabled="@IsRead"></SfTimePicker>
+											</MudItem>
+										</MudGrid>
+									</MudItem>
+								</MudCardContent>
+							</MudCard>
+						</MudItem>
+					</MudGrid>
+				</div>
+			</div>
+		</Content>
+		<FooterTemplate>
+			@* <SfButton Content="Close" CssClass="e-outline e-danger" IconCss="e-icons e-close" OnClick="DialogClose"></SfButton> *@
+			@if(Request.Status == 2)
+			{
+				<SfButton Content="Close" CssClass="e-outline e-danger" IconCss="e-icons e-close" OnClick="DialogClose"></SfButton>
+			}
+			else
+			{
+				<SfButton Content="Cancel" CssClass="e-outline e-danger" IconCss="e-icons e-close" OnClick="DialogCancel"></SfButton>
+				<SfButton Content="Done" CssClass="e-outline e-success" IconCss="e-icons e-check" OnClick="DialogDone"></SfButton>
+			}
+        </FooterTemplate>
+    </DialogTemplates>
+    <DialogEvents OnOpen="@DialogOpen" Closed="@DialogClose"></DialogEvents>
+    <DialogPositionData X="center" Y="center"></DialogPositionData>
+    <DialogAnimationSettings Effect="DialogEffect.None"></DialogAnimationSettings>
+</SfDialog>
+
+@code {
+    [Parameter]
+    public bool IsRead { get; set; }
+
+    [Parameter]
+    public bool Visibility { get; set; }
+
+    [Parameter]
+    public string? Title { get; set; }
+
+    [Parameter]
+    public EventCallback DialogOpen { get; set; }
+
+    [Parameter]
+    public EventCallback DialogClose { get; set; }
+	[Parameter]
+	public EventCallback DialogCancel { get; set; }
+	[Parameter]
+	public EventCallback DialogDone { get; set; }
+
+    [Parameter]
+    public EventCallback OnClickYes { get; set; }
+    [Parameter]
+    public ProjectMonitoringRequest? Request { get; set; }
+
+}

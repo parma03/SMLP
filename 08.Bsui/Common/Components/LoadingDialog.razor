@@ -1,0 +1,21 @@
+﻿@using Syncfusion.Blazor.Spinner
+@using Syncfusion.Blazor.Popups
+
+<SfDialog AllowDragging="true" @bind-Visible="@IsVisible" IsModal="true" Width="320px" Target="#target">
+    <SfSpinner Size="40" Label="@Text" Type="SpinnerType.Fluent2" Visible="true"></SfSpinner>
+    <DialogAnimationSettings Effect="DialogEffect.Zoom"></DialogAnimationSettings>
+</SfDialog>
+
+<style>
+    .e-dialog .e-dlg-content {
+        padding: 0px;
+    }
+</style>
+
+@code {
+    [Parameter]
+    public bool IsVisible { get; set; }
+
+    [Parameter]
+    public string? Text { get; set; } = "Pelase wait...";
+}

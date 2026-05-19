@@ -1,0 +1,123 @@
+﻿@using Psmp.Bsui.Features.Applicants.Studies.Monitoring.Components
+@using Psmp.Bsui.Features.Studies
+@using Psmp.Shared.Studies.Constants
+@using Psmp.Shared.StudyMonitorings.StudyPeriod.Queries
+@using Psmp.Shared.Documents.Queries.GetDocuments;
+
+@inject IWebHostEnvironment _webHostEnvironment
+@inject IOptions<HrisOptions> _hrisOptions
+
+<ErrorViewer Error="@Error" />
+<LoadingDialog IsVisible=@_isLoadingDialog Text="Loading..."></LoadingDialog>
+
+@if (_isLoading)
+{
+    <Loading IsVisible="_isLoading" />
+}
+else
+{
+    <MudGrid Spacing="2" Class="mb-2">
+        <MudItem xs="12">
+            <MudText Typo="Typo.body1" HtmlTag="h3">
+                Hello <b>@_displayName</b>, welcome to study monitoring page.<br />
+                Please submit your transcript, thank you!
+            </MudText>
+        </MudItem>
+    </MudGrid>
+    <MudGrid Class="mb-2">
+        <MudItem xs="12">
+            <MudPaper Class="pa-4" Elevation="2">
+                <MudGrid AlignItems="center">
+                    <MudItem xs="12">
+                        <MudText Typo="Typo.h5" Color="Color.Primary" Class="ms-0">@_displayName</MudText>
+                    </MudItem>
+                </MudGrid>
+                <MudGrid Spacing="2">
+                    <MudItem xs="9" Class="d-flex align-center justify-start">
+                        <MudText Typo="Typo.h5" Color="Color.Primary" Class="ms-0">@_universityName</MudText>
+                    </MudItem>
+                </MudGrid>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+
+    <MudGrid Class="mb-2">
+        <MudItem xs="12">
+            <MudCard Class="pa-4" Elevation="2">
+                <MudGrid AlignItems="center">
+                    <!-- Card Highest -->
+                    <MudItem xs="5" md="4" Class="d-flex justify-center">
+                        <Psmp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardStatistic Icon="@Icons.Material.Rounded.TrendingUp" AvatarColor="Color.Success" Title="Highest GPA" Count="_gpaMaximum">
+                        </Psmp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardStatistic>
+                    </MudItem>
+
+                    <!-- Divider Vertikal -->
+                    <MudItem xs="0" md="0" Class="d-flex justify-start">
+                        <MudHidden Breakpoint="Breakpoint.SmAndDown">
+                            <MudDivider Vertical="true" Class="mud-divider-height-full" Style="height: 90px; border-width: 2px; opacity: 0.5;" />
+                        </MudHidden>
+                    </MudItem>
+
+                    <!-- Card Lower -->
+                    <MudItem xs="5" md="4" Class="d-flex justify-center">
+                        <Psmp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardStatistic Icon="@Icons.Material.Rounded.TrendingDown" AvatarColor="Color.Warning" Title="Lowest GPA" Count="_gpaMinimum">
+                        </Psmp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardStatistic>
+                    </MudItem>
+
+                    <!-- Divider Vertikal -->
+                    <MudItem xs="0" md="0" Class="d-flex justify-start">
+                        <MudHidden Breakpoint="Breakpoint.SmAndDown">
+                            <MudDivider Vertical="true" Class="mud-divider-height-full" Style="height: 90px; border-width: 2px; opacity: 0.5;" />
+                        </MudHidden>
+                    </MudItem>
+
+                    <!-- Card Average -->
+                    <MudItem xs="5" md="3" Class="d-flex justify-center">
+                        <Psmp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardStatistic Icon="@Icons.Material.Rounded.InsertChart" AvatarColor="Color.Primary" Title="GPA Average" Count="_gpaAverage">
+                        </Psmp.Bsui.Features.Applicants.Studies.Monitoring.Components.CardStatistic>
+                    </MudItem>
+                </MudGrid>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+
+    <MudGrid Class="mb-2">
+        <MudItem xs="12">
+            <MudCard Class="pa-4" Elevation="2">
+                <MudCardContent>
+                    <MudItem xs="12" Class="mb-4">
+                        <SfButton OnClick="OnClickAddAsync" Content="Add Transcript" IconCss="e-icons e-circle-add" CssClass="e-primary"></SfButton>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <SfGrid DataSource="@_dataGrid" Toolbar="@(new List<string>() { "Search" })" AllowFiltering="true" AllowPaging="true" AllowSorting="true" AllowResizing="true" AllowTextWrap="true">
+                            <GridPageSettings PageCount="8" PageSize="8" PageSizes="@SyncfusionGridValue.PageSize"></GridPageSettings>
+                            <GridEvents CommandClicked="OnCommandClicked" TValue="GetStudyPeriodByAdmissionIdQueryResponse"></GridEvents>
+                            <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Excel"></GridFilterSettings>
+                            <GridColumns>
+                                <GridColumn Field=@nameof(GetStudyPeriodByAdmissionIdQueryResponse.Id) Visible="false"></GridColumn>
+                                <GridColumn Field=@nameof(GetStudyPeriodByAdmissionIdQueryResponse.Semester) HeaderText="Semester" Width="150"></GridColumn>
+                                <GridColumn Field=@nameof(GetStudyPeriodByAdmissionIdQueryResponse.GpaScore) Format="N2" HeaderText="GPA Score" Width="150"></GridColumn>
+                                <GridColumn Field=@nameof(GetStudyPeriodByAdmissionIdQueryResponse.TranscriptDocumentId) Visible="false"></GridColumn>
+                                <GridColumn HeaderText="Transcript File" TextAlign="TextAlign.Center">
+                                    <GridCommandColumns>
+                                        <GridCommandColumn ID="btnDownloadTranscript" Title="TranscriptFile" ButtonOption="@(new CommandButtonOptions() {IconCss="e-icons e-download", CssClass="e-flat" })"> </GridCommandColumn>
+                                    </GridCommandColumns>
+                                </GridColumn>
+                            </GridColumns>
+                        </SfGrid>
+                    </MudItem>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+}
+
+<DialogAddStudyPeriod Visibility="VisiblePopup"
+                      DialogOpen="DialogOpen"
+                      DialogClose="DialogClose"
+                      OnClickNo="ClickedNo"
+                      OnClickYes="ClickedYes"
+                      ValueChangeTranscript="ValueChangeUploaderTranscript"
+                      OnRemoveTranscript="OnRemoveUploaderTranscript"
+                      MaxFileSize="_maximumFileSizeInBytes"
+                      request="_requestStudyPeriod" />

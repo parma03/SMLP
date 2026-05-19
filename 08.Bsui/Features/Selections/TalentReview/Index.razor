@@ -1,0 +1,369 @@
+﻿@using Psmp.Base.Scholarships.Enums
+@using Psmp.Bsui.Features.Selections.Components
+@using Psmp.Bsui.Features.Selections.TalentReview.Components
+@using Psmp.Shared.Documents.Queries.GetDocuments
+@using Psmp.Shared.Selections.SelectionTalentReviews.Queries
+
+<ErrorViewer Error="_error" />
+<LoadingDialog IsVisible=@_isLoadingDialog Text="Loading..."></LoadingDialog>
+
+<style>
+    .e-upload .e-file-select-wrap, .e-bigger.e-small .e-upload .e-file-select-wrap {
+        padding: 5px 0 5px 5px; /* Sesuaikan padding untuk tampilan yang lebih kompak */
+    }
+
+    .sf-uploader-compact .e-file-container {
+        margin: 2px 0; /* Mengurangi margin antar file */
+    }
+</style>
+
+@if (_isLoading)
+{
+    <Loading IsVisible="_isLoading" />
+}
+else
+{
+    <MudGrid Spacing="2">
+        <MudGrid Spacing="2" Class="mb-2">
+            <MudItem xs="12">
+                <MudText Typo="Typo.body2" HtmlTag="h3">Talent Review Meeting Filter</MudText>
+            </MudItem>
+        </MudGrid>
+		<MudGrid Spacing="2" Class="mb-4">
+			<MudItem xs="2">
+				<MudText>Categories</MudText>
+				<SfDropDownList ID="ddlSelectionCategory" TValue="int" TItem="DropdownItemResponse" DataSource="@_dropdownCategories" Placeholder="All Category">
+					<DropDownListFieldSettings Text="Description" Value="Id" />
+					<DropDownListEvents TItem="DropdownItemResponse" TValue="int" ValueChange="OnChangeCategory" />
+				</SfDropDownList>
+			</MudItem>
+			<MudItem xs="2">
+				<MudText>H/ SH/ AP&P</MudText>
+				<SfDropDownList ID="ddlSelectionCompaynGroup" TValue="int?" TItem="DropdownItemResponse" AllowFiltering="true" FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains" DataSource="@_dropdownCompanyGroups" Placeholder="All H/SH/AP&P">
+					<DropDownListFieldSettings Text="Description" Value="Id" />
+					<DropDownListEvents TItem="DropdownItemResponse" TValue="int?" ValueChange="OnChangeCompanyGroupAsync" />
+				</SfDropDownList>
+			</MudItem>
+			<MudItem xs="2">
+				<MudText>Company</MudText>
+				<SfDropDownList ID="ddlSelectionCompay" TValue="string?" TItem="DropdownItemStringResponse" AllowFiltering="true" FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains" DataSource="@_dropdownComapies" Placeholder="All Company">
+					<DropDownListFieldSettings Text="Description" Value="Id" />
+					<DropDownListEvents TItem="DropdownItemStringResponse" TValue="string?" ValueChange="OnChangeCompanyAsync" />
+				</SfDropDownList>
+			</MudItem>
+			<MudItem xs="2">
+				<MudText>Code</MudText>
+				<SfDropDownList ID="ddlSsholarshipCodes" TValue="Guid?" TItem="DropdownItemGuidResponse" AllowFiltering="true" FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains" DataSource="@_dropdownCodes" Placeholder="All Code">
+					<DropDownListFieldSettings Text="Description" Value="Id" />
+					<DropDownListEvents TItem="DropdownItemGuidResponse" TValue="Guid?" ValueChange="OnChangeCodeAsync" />
+				</SfDropDownList>
+			</MudItem>
+			<MudItem xs="2">
+				<MudText>Batch</MudText>
+				<SfDropDownList ID="ddlScholarshipBatch" TValue="int?" TItem="DropdownItemResponse" AllowFiltering="true" FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains" Placeholder="All Batch"
+								DataSource="@_dropdownBatchs">
+					<DropDownListFieldSettings Text="Description" Value="Id" />
+					<DropDownListEvents TItem="DropdownItemResponse" TValue="int?" ValueChange="OnChangeBatchAsync" />
+				</SfDropDownList>
+			</MudItem>
+			<MudItem xs="2">
+				<MudText>Year</MudText>
+				<SfDropDownList ID="ddlSelectionYear" TValue="int?" TItem="DropdownItemResponse" DataSource="@_dropdownYear" Placeholder="All Year" AllowFiltering="true" FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains">
+					<DropDownListFieldSettings Text="Description" Value="Id" />
+					<DropDownListEvents TItem="DropdownItemResponse" TValue="int?" ValueChange="OnChangeYear" />
+				</SfDropDownList>
+			</MudItem>
+		</MudGrid>
+		<MudGrid Spacing="2" Class="mb-4">
+			<MudItem xs="12">
+				<MudText Typo="Typo.body2" HtmlTag="h3">Applicant Filter</MudText>
+			</MudItem>
+			<MudItem xs="3">
+				<MudText>H/ SH/ AP&P</MudText>
+				<SfDropDownList ID="ddlSelectionCompaynGroupApplicantFilter" TValue="int?" TItem="DropdownItemResponse" AllowFiltering="true" FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains" DataSource="@_dropdownCompanyGroupsApplicantFilter" Placeholder="All H/SH/AP&P">
+					<DropDownListFieldSettings Text="Description" Value="Id" />
+					<DropDownListEvents TItem="DropdownItemResponse" TValue="int?" ValueChange="OnChangeCompanyGroupApplicantFilterAsync" />
+				</SfDropDownList>
+			</MudItem>
+			<MudItem xs="3">
+				<MudText>Company</MudText>
+				<SfDropDownList ID="ddlSelectionCompayApplicantFilter" TValue="string?" TItem="DropdownItemStringResponse" AllowFiltering="true" FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains" DataSource="@_dropdownComapiesApplicantFilter" Placeholder="All Company">
+					<DropDownListFieldSettings Text="Description" Value="Id" />
+					<DropDownListEvents TItem="DropdownItemStringResponse" TValue="string?" ValueChange="OnChangeCompanyApplicantFilterAsync" />
+				</SfDropDownList>
+			</MudItem>
+		</MudGrid>
+
+        <MudGrid Class="mb-1">
+            <MudItem xs="12">
+                <MudPaper Class="pa-4" Elevation="2">
+                    <MudGrid AlignItems="center">
+                        <!-- Card pertama -->
+                        <MudItem xs="3" Class="d-flex justify-center">
+                            <CardApplicantSummary Summary=@_applicantSummary></CardApplicantSummary>
+                        </MudItem>
+
+                        <!-- Divider Vertikal -->
+                        <MudItem xs="1" Class="d-flex justify-center">
+                            <MudDivider Vertical="true" Class="mud-divider-height-full" Style="height: 90px; border-width: 2px; opacity: 0.5;" />
+                        </MudItem>
+
+                        <!-- Card kedua -->
+                        <MudItem xs="3" Class="d-flex justify-center">
+                            <CardInprogressSummary Summary=@_inProgressSummary></CardInprogressSummary>
+                        </MudItem>
+
+                        <!-- Divider Vertikal -->
+                        <MudItem xs="1" Class="d-flex justify-center">
+                            <MudDivider Vertical="true" Class="mud-divider-height-full" Style="height: 90px; border-width: 2px; opacity: 0.5;" />
+                        </MudItem>
+
+                        <!-- Card ketiga -->
+                        <MudItem xs="3" Class="d-flex justify-center">
+                            <CardPassedSummary Summary=@_passedSummary></CardPassedSummary>
+                        </MudItem>
+                    </MudGrid>
+                </MudPaper>
+            </MudItem>
+        </MudGrid>
+
+        <MudGrid Class="mb-1">
+            <MudItem xs="12">
+                <MudPaper Class="pa-4" Elevation="2">
+                    <MudGrid AlignItems="center">
+                        <!-- Card pertama -->
+                        <MudItem xs="5" Class="d-flex justify-center">
+                            <CardFailedSummary Summary=@_failedSummary></CardFailedSummary>
+                        </MudItem>
+
+                        <!-- Divider Vertikal -->
+                        <MudItem xs="1" Class="d-flex justify-center">
+                            <MudDivider Vertical="true" Class="mud-divider-height-full" Style="height: 90px; border-width: 2px; opacity: 0.5;" />
+                        </MudItem>
+
+                        <!-- Card kedua -->
+                        <MudItem xs="5" Class="d-flex justify-center">
+                            <CardCancelSummary Summary=@_canceledSummary></CardCancelSummary>
+                        </MudItem>
+                    </MudGrid>
+                </MudPaper>
+            </MudItem>
+        </MudGrid>
+        
+        @* <MudItem xs="12">
+            <MudGrid Spacing="5">
+                <MudItem xs="3">
+                    <CardApplicantSummary Summary=@_applicantSummary />
+                </MudItem>
+                <MudItem xs="3">
+                    <CardInprogressSummary Summary=@_inProgressSummary />
+                </MudItem>
+                <MudItem xs="2">
+                    <CardPassedSummary Summary=@_passedSummary />
+                </MudItem>
+                <MudItem xs="2">
+                    <CardFailedSummary Summary=@_failedSummary />
+                </MudItem>
+                <MudItem xs="2">
+                    <CardCancelSummary Summary=@_canceledSummary />
+                </MudItem>
+            </MudGrid>
+        </MudItem> *@
+
+        <MudGrid Class="mb-2">
+            <MudItem xs="12">
+                <MudCard>
+                    <MudCardContent>
+                        @if (_isLoadingData)
+                        {
+                            <LoadingLinear IsVisible="_isLoadingData" />
+                        }
+                        else
+                        {
+                            <MudGrid>
+                                <MudItem xs="12">
+                                    <MudGrid Spacing="2" Class="mb-1">
+                                        <MudItem xs="12" md="6">
+                                            <MudGrid Class="d-flex align-center justify-start">
+                                                <MudItem>
+                                                    <MudText Typo="Typo.h6" Class="ms-0">List of Applicant</MudText>
+                                                </MudItem>
+                                            </MudGrid>
+                                        </MudItem>
+                                        <MudItem xs="12" md="6">
+                                            <MudGrid Class="d-flex flex-wrap align-center justify-start justify-md-end">
+                                                <MudItem>
+                                                    <SfProgressButton ID="zoomOutButton" Content="Export to Excel" @onclick="ExportExcel" EnableProgress="true" CssClass="fw-bold" IconCss="e-icons e-download" Style="background: linear-gradient(to right, #4279db, #1c4185); color: white;">
+                                                        <ProgressButtonSpinSettings Position="SpinPosition.Center"></ProgressButtonSpinSettings>
+                                                        <ProgressButtonAnimationSettings Effect="Syncfusion.Blazor.SplitButtons.AnimationEffect.ZoomOut"></ProgressButtonAnimationSettings>
+                                                    </SfProgressButton>
+                                                </MudItem>
+                                            </MudGrid>
+                                        </MudItem>
+                                    </MudGrid>
+
+                                    <SfGrid @ref="Grid" DataSource="@_selectionTalentReviews" Toolbar="@(new List<string>() { "Search" })" AllowExcelExport="true" AllowFiltering="true" AllowPaging="true" AllowSorting="true" AllowResizing="true" AllowTextWrap="true">
+                                        <GridPageSettings PageCount="8" PageSize="8" PageSizes="@SyncfusionGridValue.PageSize"></GridPageSettings>
+                                        <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Excel"></GridFilterSettings>
+                                        <GridEvents ExcelQueryCellInfoEvent="ExcelQueryCellInfoHandler" OnToolbarClick="ToolbarClickHandler" CommandClicked="OnCommandClicked" TValue="GetSelectionTalentReviewQueryResponse"></GridEvents>
+                                        <GridColumns>
+                                            <GridColumn Field=@nameof(GetSelectionTalentReviewQueryResponse.Id) IsPrimaryKey="true" Visible="false"></GridColumn>
+                                            <GridColumn Field=@nameof(GetSelectionTalentReviewQueryResponse.EmployeeNumber) Width="150" TextAlign="TextAlign.Center" HeaderText="Employee Number"> </GridColumn>
+                                            <GridColumn Field=@nameof(GetSelectionTalentReviewQueryResponse.Name) HeaderTextAlign="TextAlign.Center" Width="250"></GridColumn>
+                                            <GridColumn Field=@nameof(GetSelectionTalentReviewQueryResponse.Position) HeaderTextAlign="TextAlign.Center" Width="320"></GridColumn>
+                                            <GridColumn Field=@nameof(GetSelectionTalentReviewQueryResponse.Code) TextAlign="TextAlign.Center" Width="120"></GridColumn>
+                                            <GridColumn Field=@nameof(GetSelectionTalentReviewQueryResponse.Faculty) HeaderTextAlign="TextAlign.Center" Width="200"></GridColumn>
+                                            <GridColumn Field=@nameof(GetSelectionTalentReviewQueryResponse.Major) HeaderTextAlign="TextAlign.Center" Width="200"></GridColumn>
+                                            <GridColumn Field=@nameof(GetSelectionTalentReviewQueryResponse.Email) HeaderTextAlign="TextAlign.Center" Width="200"></GridColumn>
+                                            <GridColumn Field=@nameof(GetSelectionTalentReviewQueryResponse.BusinessIssue) HeaderTextAlign="TextAlign.Center" Width="200" HeaderText="Business Issue"></GridColumn>
+                                            <GridColumn Field=@nameof(GetSelectionTalentReviewQueryResponse.CompanyName) HeaderTextAlign="TextAlign.Center" Width="180" HeaderText="Company"></GridColumn>
+                                            <GridColumn Field=@nameof(GetSelectionTalentReviewQueryResponse.Mentor) HeaderTextAlign="TextAlign.Center" Width="180" HeaderText="Mentor 1"></GridColumn>
+                                            <GridColumn Field=@nameof(GetSelectionTalentReviewQueryResponse.MentorName2) HeaderTextAlign="TextAlign.Center" Width="180" HeaderText="Mentor 2"></GridColumn>
+                                            <GridColumn Field=@nameof(GetSelectionTalentReviewQueryResponse.TOEFLScore) HeaderText="TOEFL" Width="150" TextAlign="TextAlign.Center"></GridColumn>
+                                            <GridColumn Field=@nameof(GetSelectionTalentReviewQueryResponse.QualificationStatus) HeaderText="Psychotest" Width="150" TextAlign="TextAlign.Center"></GridColumn>
+
+                                            <GridColumn Field=@nameof(GetSelectionTalentReviewQueryResponse.Status) Width="120" HeaderText="Status" TextAlign="TextAlign.Center">
+                                                <Template>
+                                                    @{
+                                                        var data = (context as GetSelectionTalentReviewQueryResponse);
+                                                        if (data!.Status == ApplicantStatus.Passed)
+                                                        {
+                                                            <SfChip>
+                                                                <ChipItems>
+                                                                    <ChipItem Text="@data.Status.GetDescription()" CssClass="e-success"></ChipItem>
+                                                                </ChipItems>
+                                                            </SfChip>
+                                                        }
+                                                        else if (data!.Status == ApplicantStatus.Failed || data!.Status == ApplicantStatus.Rejected)
+                                                        {
+                                                            <SfChip>
+                                                                <ChipItems>
+                                                                    <ChipItem Text="@data.Status.GetDescription()" CssClass="e-danger"></ChipItem>
+                                                                </ChipItems>
+                                                            </SfChip>
+                                                        }
+                                                        else if (data!.Status == ApplicantStatus.Awaiting)
+                                                        {
+                                                            <SfChip>
+                                                                <ChipItems>
+                                                                    <ChipItem Text="@data.Status.ToString()" CssClass="e-warning"></ChipItem>
+                                                                </ChipItems>
+                                                            </SfChip>
+                                                        }
+                                                        else
+                                                        {
+                                                            <SfChip>
+                                                                <ChipItems>
+                                                                    <ChipItem Text="@data.Status.ToString().SplitWords()" CssClass="e-info"></ChipItem>
+                                                                </ChipItems>
+                                                            </SfChip>
+                                                        }
+                                                    }
+                                                </Template>
+                                            </GridColumn>
+                                            <GridColumn HeaderText="Action" Width="120" TextAlign="TextAlign.Center">
+                                                <GridCommandColumns>
+                                                    <GridCommandColumn Title="View" Type="CommandButtonType.None" ButtonOption="@(new CommandButtonOptions() {IconCss="e-icons e-eye", CssClass="e-flat" })"></GridCommandColumn>
+                                                    <GridCommandColumn Title="Edit" Type="CommandButtonType.Edit" ButtonOption="@(new CommandButtonOptions() {IconCss="e-icons e-edit", CssClass="e-flat" })"></GridCommandColumn>
+                                                </GridCommandColumns>
+                                            </GridColumn>
+                                        </GridColumns>
+                                    </SfGrid>
+                                </MudItem>
+
+                                @* <MudItem xs="12">
+                                    <MudGrid>
+                                        <MudItem xs="2" Class="mt-4">
+                                            <SfButton Content="Download" CssClass="e-outline e-info" IconCss="e-icons e-download"
+                                                      OnClick="OnClickDownloadAsync"></SfButton>
+                                        </MudItem>
+                                        <MudItem xs="2" Class="d-flex justify-end">
+                                            File Upload (.xls, .xlsx)
+                                        </MudItem>
+                                        <MudItem xs="6" Class="d-flex justify-end">
+                                            <SfUploader @ref="_uploadObj" ID="uploaderApplicants" AutoUpload="true" SequentialUpload="false" AllowMultiple="false"
+                                                        AllowedExtensions=".xls, .xlsx" MaxFileSize=@_maximumFileSizeInBytes>
+                                                <UploaderEvents ValueChange="ValueChangeUploaderApplicants" OnRemove="OnRemoveUploaderApplicants"></UploaderEvents>
+                                            </SfUploader>
+                                        </MudItem>
+                                        <MudItem xs="2" Class="d-flex justify-start">
+                                            <SfButton Content="Upload" CssClass="e-info" IconCss="e-icons e-upload-1"
+                                                      OnClick="OnClickUploadAsync"></SfButton>
+                                        </MudItem>
+                                    </MudGrid>
+                                </MudItem> *@
+
+                                <MudItem xs="12" Class="mt-8">
+                                    <MudText>File Upload (.xls, .xlsx) <span style="color:red;">*</span></MudText>
+                                    <MudText Typo="Typo.subtitle2" Color="Color.Secondary" Style="font-style: italic; font-size: 0.8rem;">
+                                        <b>(Maximum Size 5 Mb)</b>
+                                    </MudText>
+                                    <MudGrid Class="mt-0">
+                                        <MudItem xs="8" Class="d-flex align-center">
+                                            <SfUploader @ref="_uploadObj" ID="uploaderApplicants" AutoUpload="true" SequentialUpload="false" AllowMultiple="false"
+                                                        AllowedExtensions=".xls, .xlsx" MaxFileSize=@_maximumFileSizeInBytes>
+                                                <UploaderEvents ValueChange="ValueChangeUploaderApplicants" OnRemove="OnRemoveUploaderApplicants"></UploaderEvents>
+                                            </SfUploader>
+                                        </MudItem>
+                                        <MudItem xs="4">
+                                            <MudGrid Class="mud-grid mud-grid-spacing-xs-5 justify-start">
+                                                <SfButton Content="Upload" CssClass="e-info d-flex justify-start mt-6 mr-2" IconCss="e-icons e-upload-1"
+                                                          OnClick="OnClickUploadAsync"></SfButton>
+                                                <SfButton Content="Download" CssClass="e-outline e-info justify-end mt-6 mr-2" IconCss="e-icons e-download"
+                                                          OnClick="OnClickDownloadAsync"></SfButton>
+                                            </MudGrid>
+                                        </MudItem>
+                                    </MudGrid>
+                                </MudItem>
+                            </MudGrid>
+                        }
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+        </MudGrid>
+    </MudGrid>
+}
+
+<DialogViewTalentReview Visibility="VisiblePopupView"
+                        Title="@TitlePopupView"
+                        OnClickNo="ClickedNo"
+                        DialogOpen="DialogViewOpen" DialogClose="DialogViewClose"
+                        listCompany="_dropdownCompaniesAdd"
+                        response="_talentReviewResponse"
+                        statusListResponses="_applicantStatusResponse"
+                        qualificationStatusListResponses="_getSelectionPsychotestQualificationStatusResponse"
+                        Filename="@Filename"
+                        OnClickDownload="OnClickDownloadDocument">
+
+</DialogViewTalentReview>
+
+<DialogConfirmation Visibility="VisiblePopupDelete"
+                    Title="@DisplayTextFor.TalentReviewMeeting"
+                    Content="Are you sure want to delete this data?"
+                    DialogOpen="DialogDeleteOpen" DialogClose="DialogDeleteClose"
+                    OnClickNo="ClickedNoDelete" OnClickYes="ClickedYesDelete"></DialogConfirmation>
+
+@* <DialogCreateSPSelectionDecree Visibility="VisiblePopupWarrant"
+                               Title="@TitlePopupWarrant"
+                               DialogOpen="DialogWarrantOpen" DialogClose="DialogWarrantClose"
+                               OnClickNo="OnClickNoDialogWarrant" OnClickYes="OnClickYesDialogWarrant"
+                               OnRemoveWarrant="OnRemoveUploaderWarrant"
+                               ValueChangeWarrant="ValueChangeUploaderWarrant"
+                               listDocument="_getListDocumentWarrant"
+                               OnCommandClicked="OnCommandClickedDocumentWarrant">
+</DialogCreateSPSelectionDecree>
+<DialogCreateSKSelectionDecree Visibility="VisiblePopupDecree"
+                               Title="@TitlePopupDecree"
+                               DialogOpen="DialogDecreeOpen" DialogClose="DialogDecreeClose"
+                               OnClickNo="OnClickNoDialogDecree" OnClickYes="OnClickYesDialogDecree"
+                               OnRemoveDecree="OnRemoveUploaderDecree"
+                               ValueChangeDecree="ValueChangeUploaderDecree"
+                               listDocument="_getListDocuments"
+                               OnCommandClicked="OnCommandClickedDocument">
+</DialogCreateSKSelectionDecree> *@
+
+<style>
+    .e-chip-list {
+        display: inline !important
+    }
+</style>

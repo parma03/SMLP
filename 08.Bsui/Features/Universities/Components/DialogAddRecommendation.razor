@@ -1,0 +1,159 @@
+﻿@using Psmp.Base.Universities.Enums
+@using Psmp.Domain.Entities.Masters
+@using Psmp.Shared.Common.Responses
+@using Psmp.Shared.Masters.Queries;
+@using Psmp.Shared.Universities.UniversityRecommendation.Commands.Create
+@using Psmp.Shared.Universities.UniversityRecommendation.Constants
+
+<style>
+   .e-dialog {
+        z-index: 10000 !important;
+        top: 40% !important; /* Ubah nilai ini untuk menaikkan posisi */
+        left: 50% !important;
+        transform: translate(-50%, -40%) !important; /* Menggeser modal ke tengah dan sedikit naik */
+    }
+</style>
+
+<SfDialog Target="#target" Width="820px" ShowCloseIcon="true" AllowDragging="false" @bind-Visible="Visibility">
+    <DialogTemplates>
+        <Header>@Title @DisplayTextFor.UniversityRecommendation</Header>
+        <Content>
+            <div class="row">
+                <div class="col-md-12">
+                    <MudGrid Spacing="2">
+                        <MudItem xs="12">
+                            <MudCard>
+                                <MudCardContent>
+                                    <MudItem xs="12">
+                                        <MudGrid>
+                                            <MudItem xs="4">
+                                                <MudText>University</MudText>
+                                            </MudItem>
+                                            <MudItem xs="8">
+                                                <SfTextBox @ref="TextUniversity" ID="txtUniversity" Placeholder="Input University" @bind-Value="request!.University" Enabled="@IsEnabled"></SfTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12">
+                                        <MudGrid>
+                                            <MudItem xs="4">
+                                                <MudText>Country</MudText>
+                                            </MudItem>
+                                            <MudItem xs="8">
+                                                <SfTextBox @ref="TextCountry" ID="txtCountry" Placeholder="Input Country" @bind-Value="request!.Country" Enabled="@IsEnabled"></SfTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12">
+                                        <MudGrid>
+                                            <MudItem xs="4">
+                                                <MudText>Official Website</MudText>
+                                            </MudItem>
+                                            <MudItem xs="8">
+                                                <SfTextBox @ref="TextOfficialWebsite" ID="txtOfficialWebsite" Placeholder="Input Official Website" @bind-Value="request!.OfficialWebsite" Enabled="@IsEnabled"></SfTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    @* <MudItem xs="12">
+                                        <MudGrid>
+                                            <MudItem xs="4">
+                                                <MudText>Registration Link</MudText>
+                                            </MudItem>
+                                            <MudItem xs="8">
+                                                <SfTextBox @ref="TextRegistrationLink" ID="txtRegistrationLink" Placeholder="Input Registration Link" @bind-Value="request!.RegistrationLink" Enabled="@IsEnabled"></SfTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem> *@
+                                    <MudItem xs="12">
+                                        <MudGrid>
+                                            <MudItem xs="4">
+                                                <MudText>Category</MudText>
+                                            </MudItem>
+                                            <MudItem xs="8">
+                                                <SfDropDownList ID="ddlCategory" TValue="UniversityCategory" TItem="DropdownEnumResponse<UniversityCategory>" DataSource="@listCategories" Enabled="@IsEnabled" 
+                                                    @bind-Value="@request!.UniversityCategory" AllowFiltering="true" FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains" Placeholder="Select Category">
+                                                    <DropDownListFieldSettings Text="Description" Value="Id" />
+                                                </SfDropDownList>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12">
+                                        <MudGrid>
+                                            <MudItem xs="4">
+                                                <MudText>Subject</MudText>
+                                            </MudItem>
+                                            <MudItem xs="8">
+                                                <SfDropDownList ID="ddlSubject" TValue="int" TItem="GetScholarshipSubjectQueryResponse" DataSource="@listSubject" Enabled="@IsEnabled" @bind-Value="request!.ScholarshipSubject.Id"
+                                                                AllowFiltering="true" FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains" Placeholder="Select Subject">
+                                                    <DropDownListFieldSettings Text="Name" Value="Id" />
+                                                </SfDropDownList>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    @* <MudItem xs="12">
+                                        <MudGrid>
+                                            <MudItem xs="4">
+                                                <MudText>Deadline</MudText>
+                                            </MudItem>
+                                            <MudItem xs="6">
+                                                <SfDatePicker TValue="DateOnly" Format="dd/MM/yyyy" ID="txtDeadline" @bind-Value="request!.Dateline" Enabled="@IsEnabled"></SfDatePicker>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem> *@
+                                </MudCardContent>
+                            </MudCard>
+                        </MudItem>
+                    </MudGrid>
+                </div>
+            </div>
+        </Content>
+        <FooterTemplate>
+            <SfButton Content="Cancel" CssClass="e-outline e-danger" IconCss="e-icons e-close" OnClick="OnClickNo"></SfButton>
+            @if (IsEnabled == true)
+            {
+                <SfButton Content="Save" CssClass="e-success" IconCss="e-icons e-circle-check" OnClick="OnClickYes"></SfButton>
+            }
+        </FooterTemplate>
+    </DialogTemplates>
+    <DialogEvents OnOpen="@DialogOpen" Closed="@DialogClose"></DialogEvents>
+    <DialogPositionData X="center" Y="center"></DialogPositionData>
+    <DialogAnimationSettings Effect="DialogEffect.None"></DialogAnimationSettings>
+</SfDialog>
+
+@code {
+    [Parameter]
+    public bool IsEnabled { get; set; }
+
+    [Parameter]
+    public bool Visibility { get; set; }
+
+    [Parameter]
+    public string? Title { get; set; }
+
+    [Parameter]
+    public EventCallback DialogOpen { get; set; }
+
+    [Parameter]
+    public EventCallback DialogClose { get; set; }
+
+    [Parameter]
+    public EventCallback OnClickNo { get; set; }
+
+    [Parameter]
+    public EventCallback OnClickYes { get; set; }
+
+    [Parameter]
+    public List<GetScholarshipSubjectQueryResponse>? listSubject { get; set; }
+
+    [Parameter]
+    public List<DropdownEnumResponse<UniversityCategory>>? listCategories { get; set; }
+
+    [Parameter]
+    public CreateUniversityRecommendationRequest? request { get; set; }
+
+    private SfTextBox? TextUniversity { get; set; }
+    private SfTextBox? TextCountry { get; set; }
+    private SfTextBox? TextOfficialWebsite { get; set; }
+    private SfTextBox? TextRegistrationLink { get; set; }
+
+}

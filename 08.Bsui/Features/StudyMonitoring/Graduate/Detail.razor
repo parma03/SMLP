@@ -1,0 +1,90 @@
+﻿@page "/StudyMonitoring/Graduate/{Id:guid}"
+
+@using Psmp.Shared.StudyMonitorings.Constants
+@using Psmp.Shared.StudyMonitorings.StudyPeriod.Queries
+@using Syncfusion.Blazor.PdfViewerServer
+
+<BrowserTabTitle>@DisplayTextFor.StudyMonitoring</BrowserTabTitle>
+<MudBreadcrumbs Items="_breadcrumbItems"></MudBreadcrumbs>
+<ErrorViewer Error="_error" />
+<LoadingDialog IsVisible=@_isLoadingDialog Text="Loading..."></LoadingDialog>
+@if (_isLoading)
+{
+    <Loading IsVisible="_isLoading" />
+}
+else
+{
+    <MudCard>
+        <MudCardContent>
+            <MudGrid Spacing="2" Style="padding : 25px;">
+                <MudGrid Spacing="2">
+                    <MudItem xs="12">
+                        <MudText Typo="Typo.subtitle1" HtmlTag="h1">Graduate</MudText>
+                        <MudDivider Style="border-width: 2px; margin-bottom: 16px;" />
+                    </MudItem>
+                </MudGrid>
+                <MudGrid Spacing="2" Class="mb-4">
+                    <MudItem xs="3">
+                        <MudText>Name</MudText>
+                        <SfTextBox @bind-Value="_data!.Name" Enabled="false"></SfTextBox>
+                    </MudItem>
+                    <MudItem xs="3">
+                        <MudText>Company</MudText>
+                        <SfTextBox @bind-Value="_data!.CompanyName" Enabled="false"></SfTextBox>
+                    </MudItem>
+                    <MudItem xs="3">
+                        <MudText>Employee Number</MudText>
+                        <SfTextBox @bind-Value="_data!.EmployeeNumber" Enabled="false"></SfTextBox>
+                    </MudItem>
+                    <MudItem xs="3">
+                        <MudText>Email</MudText>
+                        <SfTextBox @bind-Value="_data!.Email" Enabled="false"></SfTextBox>
+                    </MudItem>
+                </MudGrid>
+                <MudGrid Spacing="2" Class="mb-4">
+                    <MudItem xs="12" Class="mb-2" Style="min-height:250px;">
+                        <MudText>Last Exam Schdule</MudText>
+                        <SfPdfViewerServer DocumentPath="@_documentLastExamp" Width="100%" Height="300px" />
+                    </MudItem>
+                    <MudItem xs="12" Class="mb-2" Style="min-height:250px;">
+                        <MudText>Graduation Schedule</MudText>
+                        <SfPdfViewerServer DocumentPath="@_documentGraduation" Width="100%" Height="300px" />
+                    </MudItem>
+                    <MudItem xs="12" Class="mb-2" Style="min-height:250px;">
+                        <MudText>Transcript File</MudText>
+                        <SfPdfViewerServer DocumentPath="@_documentTranscriptFile" Width="100%" Height="300px" />
+                    </MudItem>
+                    <MudItem xs="12" Class="mb-2" Style="min-height:250px;">
+                        <MudText>Certificate of Completion</MudText>
+                        <SfPdfViewerServer DocumentPath="@_documentCompletetion" Width="100%" Height="300px" />
+                    </MudItem>
+                    <MudItem xs="12" Class="mb-2" Style="min-height:250px;">
+                        <MudText>Thesis/Course Final Project/Disertation</MudText>
+                        <SfPdfViewerServer DocumentPath="@_documentCourseFinal" Width="100%" Height="300px" />
+                    </MudItem>
+                </MudGrid>
+
+                <MudGrid Spacing="2" Class="mb-4">
+                    <MudItem xs="4">
+                        <MudText>University</MudText>
+                        <SfTextBox @bind-Value="_data!.University" Enabled="false"></SfTextBox>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <MudText>Final GPA</MudText>
+                        <SfNumericTextBox @bind-Value="_data!.GpaFinalScore" Enabled="false"></SfNumericTextBox>
+                    </MudItem>
+                </MudGrid>
+                <MudGrid>
+                    <MudItem xs="12">
+                        <MudGrid>
+                            <MudItem xs="12">
+                                <SfButton OnClick="OnClickBack" Content="Back" IconCss="e-icons e-arrow-left" CssClass="e-danger"></SfButton>
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+                </MudGrid>
+            </MudGrid>
+        </MudCardContent>
+    </MudCard>
+
+}

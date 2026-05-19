@@ -1,0 +1,46 @@
+﻿@using Psmp.Shared.Documents.Options
+
+@inject IOptions<DocumentOptions> _documentOptions
+
+<MudDialog>
+    <DialogContent>
+        <LoadingLinear IsVisible="_isLoading" />
+        <ErrorViewer Error="_error" />
+        <EditForm Model="_model" OnInvalidSubmit="OnInvalidSubmit" OnValidSubmit="OnValidSubmit">
+            <FluentValidationValidator />
+            <MudGrid>
+                <MudItem xs="12">
+                    <MudTextField Label="@DisplayTextFor.Title"
+                                  Required="true"
+                                  Placeholder="@($"{DisplayTextFor.Document} {DisplayTextFor.Title}")"
+                                  @bind-Value="_model.DocumentType" />
+                </MudItem>
+                <MudItem xs="12">
+                    <MudPaper Elevation="0" Class="d-flex align-baseline">
+                        <MudPaper Elevation="0" Class="flex-grow-1">
+                            @if (_model.File is null)
+                            {
+                                <MudField Label="@CommonDisplayTextFor.File" HelperText="@CommonDisplayTextFor.Required">Please @CommonDisplayTextFor.Select.ToLower() a @CommonDisplayTextFor.File.</MudField>
+                            }
+                            else
+                            {
+                                <MudField Label="@CommonDisplayTextFor.File" HelperText="@CommonDisplayTextFor.Required">@_model.File.Name (@_model.File.Size.ToReadableFileSize())</MudField>
+                            }
+                        </MudPaper>
+                        <MudPaper Elevation="0" Class="ml-4">
+                            <InputFile id="inputFile" OnChange="OnDocumentFileSelected" hidden accept="@ContentTypesFor.DocumentFile.AllowedFileExtensions" />
+                            <MudButton Variant="Variant.Filled" Color="Color.Secondary" StartIcon="@Icons.Filled.CloudUpload" Size="Size.Small" HtmlTag="label" for="inputFile">@CommonDisplayTextFor.Select</MudButton>
+                        </MudPaper>
+                    </MudPaper>
+                </MudItem>
+            </MudGrid>
+            <BottomButtonPanel>
+                <MudButton Variant="Variant.Filled" Color="Color.Default" OnClick="Cancel">@CommonDisplayTextFor.Cancel</MudButton>
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" ButtonType="MudBlazor.ButtonType.Submit">@CommonDisplayTextFor.Add</MudButton>
+            </BottomButtonPanel>
+        </EditForm>
+    </DialogContent>
+</MudDialog>
+<MudOverlay Visible="_isLoading" DarkBackground="true" ZIndex="9999" LockScroll="true">
+    <MudProgressCircular Color="Color.Primary" Size="Size.Large" Indeterminate="true" />
+</MudOverlay>

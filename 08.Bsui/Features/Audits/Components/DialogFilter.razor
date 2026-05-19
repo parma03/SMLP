@@ -1,0 +1,40 @@
+﻿<MudDialog>
+    <DialogContent>
+        <MudGrid Class="mb-8">
+            <MudItem xs="12" sm="6">
+                <MudDatePicker Label="@DisplayTextFor.FromDate"
+                               Required="true"
+                               DisableToolbar="true"
+                               Editable="true"
+                               DateFormat="dd/MM/yyyy"
+                               TitleDateFormat="d MMMM yyyy"
+                               @bind-Date="Model.FromDate" />
+            </MudItem>
+            <MudItem xs="12" sm="6">
+                <MudTimePicker Label="@DisplayTextFor.FromTime"
+                               Required="true"
+                               Editable="true"
+                               @bind-Time="Model.FromTime" />
+            </MudItem>
+            <MudItem xs="12" sm="6">
+                <MudDatePicker Label="@DisplayTextFor.ToDate"
+                               Required="true"
+                               DisableToolbar="true"
+                               Editable="true"
+                               DateFormat="dd/MM/yyyy"
+                               TitleDateFormat="d MMMM yyyy"
+                               @bind-Date="Model.ToDate" />
+            </MudItem>
+            <MudItem xs="12" sm="6">
+                <MudTimePicker Label="@DisplayTextFor.ToTime"
+                               Required="true"
+                               Editable="true"
+                               @bind-Time="Model.ToTime" />
+            </MudItem>
+        </MudGrid>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Variant="Variant.Filled" Color="Color.Default" OnClick="Cancel">@CommonDisplayTextFor.Cancel</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="Apply">@CommonDisplayTextFor.Apply</MudButton>
+    </DialogActions>
+</MudDialog>

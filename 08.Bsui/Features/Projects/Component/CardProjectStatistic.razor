@@ -1,0 +1,40 @@
+﻿<MudCard Elevation="0">
+    <MudCardHeader>
+        <CardHeaderAvatar>
+            @if (Judul?.Contains("Paid") == true)
+            {
+                <MudAvatar Color="Color.Success">
+                    <MudIcon Icon="@Icon"></MudIcon>
+                </MudAvatar>
+            }
+            else
+            {
+                <MudAvatar Color="@AvatarColor">
+                    <MudIcon Icon="@Icon"></MudIcon>
+                </MudAvatar>
+            }
+        </CardHeaderAvatar>
+        <CardHeaderContent>
+            @if (!string.IsNullOrWhiteSpace(Judul))
+            {
+                <MudText>@Judul</MudText>
+            }
+            @if (Countdec > 0)
+            {
+                <MudText Typo="Typo.h5">@Countdec</MudText>
+            }
+            @if (!string.IsNullOrWhiteSpace(Count))
+            {
+                <MudText Typo="Typo.h5">@Count</MudText>
+            }
+            @if (!string.IsNullOrWhiteSpace(Sub))
+            {
+                <MudText Typo="Typo.h5">@Sub</MudText>
+            }
+            @if (CountDate.HasValue)
+            {
+                <MudText Typo="Typo.h5">@CountDate?.ToString("dd-MM-yyyy")</MudText>
+            }
+        </CardHeaderContent>
+    </MudCardHeader>
+</MudCard>

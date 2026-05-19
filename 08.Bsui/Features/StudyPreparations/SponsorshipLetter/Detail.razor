@@ -1,0 +1,166 @@
+﻿@page "/StudyPreparation/SponsorshipLetter/Detail/{Id:guid}"
+
+@using Syncfusion.Blazor.Inputs;
+@using Syncfusion.Blazor.PdfViewerServer;
+@using Psmp.Shared.StudyPreparations.SponsorshipLetter.Constants;
+
+<style>
+    #txtNotes {
+        height: 100px;
+    }
+</style>
+
+<BrowserTabTitle>@DisplayTextFor.SponsorshipLetter</BrowserTabTitle>
+<PageHeader Title="@DisplayTextFor.ActionSponsorshipLetter" />
+
+<ErrorViewer Error="_error" />
+<LoadingDialog IsVisible=@_isLoadingDialog Text="Loading..."></LoadingDialog>
+@if (_isLoading)
+{
+    <Loading IsVisible="_isLoading" />
+}
+else
+{
+    <MudGrid Spacing="2">        
+        <MudItem xs="12">
+            <MudGrid Spacing="2">
+                <MudItem xs="4">
+                    <MudGrid Spacing="2">
+                        <MudItem xs="12">
+                            <MudCard Style="height : 850px;">
+                                <MudCardContent>
+                                    <MudItem xs="12" Class="mt-4">
+                                        <MudText>Category</MudText>
+                                        <MudGrid>
+                                            <MudItem xs="12">
+                                                <SfTextBox ID="txtCategory" Placeholder="Category" Value="@DisplayTextFor.SponsorshipLetter" Enabled="@_isEnabled"></SfTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12" Class="mt-4">
+                                        <MudText>University Name</MudText>
+                                        <MudGrid>
+                                            
+                                            <MudItem xs="12">
+                                                <SfTextBox ID="txtUniversityName" Placeholder="University Name" @bind-Value="_dataItem!.UniversityName" Enabled="@_isEnabled"></SfTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12" Class="mt-4">
+                                        <MudText>Letter Addressed To (Department & Address)</MudText>
+                                        <MudGrid>
+                                            <MudItem xs="12">
+                                                <SfTextBox ID="txtAddressTo" Placeholder="Letter Addressed To (Department & Address)" @bind-Value="_dataItem!.AddressTo" Multiline="true" Enabled="@_isEnabled"></SfTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12" Class="mt-4">
+                                        <MudText>Study Program Master of...</MudText>
+                                        <MudGrid>
+                                            <MudItem xs="12">
+                                                <SfTextBox ID="txtStudy" Placeholder="Study Program Master of..." @bind-Value="_dataItem!.Study" Enabled="@_isEnabled"></SfTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12" Class="mt-4">
+                                        <MudText>Academic Year (Start-End)</MudText>
+                                        <MudGrid>
+                                            <MudItem xs="12">
+                                                <SfTextBox ID="txtAcademicYear" Placeholder="Study Period" @bind-Value="_dataItem!.AcademicYear" Enabled="@_isEnabled"></SfTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12" Class="mt-4">
+                                        <MudText>Bring Family</MudText>
+                                        <MudGrid>
+                                            <MudItem xs="12">
+                                                <SfTextBox ID="txtIsBringFamily" Placeholder="Bring Family" @bind-Value="@_bringFamily" Enabled="@_isEnabled"></SfTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12" Class="mt-4">
+                                        <MudText>Country</MudText>
+                                        <MudGrid>
+                                            <MudItem xs="12">
+                                                <SfTextBox ID="txtCountry" Placeholder="Country" @bind-Value="_dataItem!.Country" Enabled="@_isEnabled"></SfTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12" Class="mt-4">
+                                        <MudText>University Ranking</MudText>
+                                        <MudGrid>
+                                            <MudItem xs="12">
+                                                <SfTextBox ID="txtUniversityRank" Placeholder="9/QS/2024" @bind-Value="_dataItem!.UniversityRank" Enabled="@_isEnabled"></SfTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12" Class="mt-4">
+                                        <MudText>University Applicant Due Date</MudText>
+                                        <MudGrid>
+                                            <MudItem xs="12">
+                                                <SfDatePicker ID="txtUniversityDueDate" Format="dd.MM.yyyy" @bind-Value="_dataItem!.UniversityDueDate" Enabled="@_isEnabled"></SfDatePicker>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12" Class="mt-4">
+                                        <MudText>Comment</MudText>
+                                        <MudGrid>
+                                            <MudItem xs="12">
+                                                <SfTextArea ID="txtComment" @bind-Value="_dataItem!.Comment" RowCount=3 Width="100%" Disabled="true"></SfTextArea>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                </MudCardContent>
+                            </MudCard>
+                        </MudItem>
+                    </MudGrid>
+                </MudItem>
+                <MudItem xs="8">
+                    <MudGrid Spacing="2">
+                        <MudItem xs="12" Style="min-height:613px;">
+                            <MudText>Supporting Document</MudText>
+                            <MudGrid>
+                                <MudItem xs="12">
+                                    <SfPdfViewerServer DocumentPath="@_supportingDocument" Width="100%" Height="613px" />
+                                </MudItem>
+                            </MudGrid>
+                        </MudItem>
+                        <MudItem xs="12" Class="mt-4">
+                            <MudCard>
+                                <MudCardContent>
+                                    <MudItem xs="12" Class="mt-4">
+                                        <MudText>Notes</MudText>
+                                        <MudGrid>
+                                            <MudItem xs="12">
+                                                <SfTextBox ID="txtNotes" Placeholder="Notes" @bind-Value="_update!.Notes" Multiline="true" Enabled="@_isEnabledReject"></SfTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                </MudCardContent>
+                            </MudCard>
+                        </MudItem>
+                    </MudGrid>
+                </MudItem>
+            </MudGrid>
+        </MudItem>
+        <MudItem xs="12">
+            <MudGrid>
+                <MudItem xs="6" Style="text-align: left;">
+                    <SfButton OnClick="OnClickBack" Content="Back" IconCss="e-icons e-arrow-left" CssClass="e-danger"></SfButton>
+                </MudItem>
+                <MudItem xs="6" Style="text-align: right;">
+                    <SfButton OnClick="OnClickContinueAsync" Content="Continue" IconCss="e-icons e-save" CssClass="e-info" Disabled="@_isDisableButton"></SfButton>
+                    <SfButton OnClick="OnClickRejectAsync" Content="Reject" IconCss="e-icons e-circle-close" CssClass="e-danger" Disabled="@_isDisableButton"></SfButton>
+                </MudItem>
+            </MudGrid>
+        </MudItem>
+    </MudGrid>
+}
+
+<DialogConfirmation Visibility="VisiblePopupConfirm"
+                    Title="@DisplayTextFor.SponsorshipLetter"
+                    Content="@TitlePopupConfirm"
+                    DialogOpen="DialogConfirmOpen"
+                    DialogClose="DialogConfirmClose"
+                    OnClickNo="ClickedNoConfirm"
+                    OnClickYes="ClickedYesConfirm"></DialogConfirmation>

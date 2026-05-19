@@ -1,0 +1,212 @@
+﻿@using Psmp.Base.Payments.Enums
+@using Psmp.Shared.Common.Responses
+@using Psmp.Shared.Payments.Commands
+@using Psmp.Shared.Payments.Queries
+<SfDialog Target="#target" Width="820px" ShowCloseIcon="true" @bind-Visible=Visibility>
+    <DialogTemplates>
+        <Header>@Title</Header>
+        <Content>
+            <div class="row">
+                <div class="col-md-12">
+                    <MudGrid Spacing="2">
+                        <MudItem xs="12">
+                            <MudCard>
+                                <MudCardContent>
+                                    <MudItem xs="12">
+                                        <MudGrid>
+                                            <MudItem xs="12">
+                                                <MudText>Request ID</MudText>
+                                                <MudForm>
+                                                    <SfTextBox ID="txName" @bind-Value="RequestID" Enabled="false"></SfTextBox>
+                                                </MudForm>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12">
+                                        <MudGrid>
+                                            <MudItem xs="12" sm="6">
+                                                <MudText>Name</MudText>
+                                                <MudForm>
+                                                    <SfTextBox ID="txName" @bind-Value="Name" Enabled="false"></SfTextBox>
+                                                </MudForm>
+                                            </MudItem>
+                                            <MudItem xs="12" sm="6">
+                                                <MudText>Employee Number</MudText>
+                                                <MudForm>
+                                                    <SfTextBox ID="txtEmployeeNumber" @bind-Value="EmployeeNumber" Enabled="false"></SfTextBox>
+                                                </MudForm>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12">
+                                        <MudGrid>
+                                            <MudItem xs="12" sm="6">
+                                                <MudText>Payment Date</MudText>
+                                                <MudForm>
+                                                    <SfDatePicker TValue="DateOnly?" Format="dd.MM.yyyy" Placeholder="Choose a Date" FullScreen="false" ShowClearButton="true" Enabled="false" @bind-Value="Request.PaymentDate"></SfDatePicker>
+                                                </MudForm>
+                                            </MudItem>
+                                            <MudItem xs="12" sm="6">
+                                                <MudText>Wage Type</MudText>
+                                                <MudForm>
+                                                    <SfTextBox ID="txtEmployeeNumber" @bind-Value="WageType" Enabled="false"></SfTextBox>
+                                                </MudForm>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12">
+                                        <MudGrid>
+                                            <MudItem xs="12" sm="6">
+                                                <MudText>Currency</MudText>
+                                                <MudForm>
+                                                    <SfTextBox ID="txtEmployeeNumber" @bind-Value="Curency" Enabled="false"></SfTextBox>
+                                                </MudForm>
+                                            </MudItem>
+                                            <MudItem xs="12" sm="6">
+                                                <MudText>Total Amount</MudText>
+                                                <MudForm>
+                                                    <SfNumericTextBox ID="txtEmployeeNumber" @bind-Value="Ammount" Enabled="false"></SfNumericTextBox>
+                                                </MudForm>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12">
+                                        <MudGrid>
+                                            <MudItem xs="12" sm="6">
+                                                <MudText>Assignment Number</MudText>
+                                                <MudForm>
+                                                    <SfTextBox ID="Assignment Number" @bind-Value="AssignmentNumber" Enabled="false"></SfTextBox>
+                                                </MudForm>
+                                            </MudItem>
+                                            <MudItem xs="12" sm="6">
+                                                <MudText>Cost Center</MudText>
+                                                <MudForm>
+                                                    <SfTextBox ID="txtEmployeeNumber" @bind-Value="CostCenter" Enabled="false"></SfTextBox>
+                                                </MudForm>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12">
+                                        <MudGrid>
+                                            <MudItem xs="12">
+                                                <MudText>Notes</MudText>
+                                                <MudForm>
+                                                    <SfTextArea ID="txtNotes" RowCount="3" ColumnCount="1000" Placeholder="Input Notes" @bind-Value="Request!.Notes"></SfTextArea>
+                                                </MudForm>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <br />
+                                    @if (OverviewDetal is not null)
+                                    {
+                                        <MudItem xs="12">
+                                            <SfGrid DataSource="@OverviewDetal" AllowPaging="true" Width="100%" AllowResizing="true">
+                                                <GridPageSettings PageCount="5" PageSize="5" PageSizes="@(new string[] { "5", "8", "10", "15", "20", "All" })"></GridPageSettings>
+                                                @* <GridEvents CommandClicked="OnCommandClicked" TValue="GetDocumentsDocument"></GridEvents> *@
+                                                <GridColumns>
+                                                    <GridColumn Field=@nameof(GetPaymentOverviewDetailResponse.Item) HeaderText="Item" TextAlign="TextAlign.Left" Width="80%"> </GridColumn>
+                                                    <GridColumn Field=@nameof(GetPaymentOverviewDetailResponse.Category) HeaderText="Category" TextAlign="TextAlign.Left" Width="80%"> </GridColumn>
+                                                    <GridColumn Field=@nameof(GetPaymentOverviewDetailResponse.Currency) HeaderText="Currency" TextAlign="TextAlign.Center" Width="80%"> </GridColumn>
+                                                    <GridColumn Field=@nameof(GetPaymentOverviewDetailResponse.Ammount) HeaderText="Ammount" TextAlign="TextAlign.Right" Width="80%">
+                                                        <Template>
+                                                            @{
+                                                                var data = (context as GetPaymentOverviewDetailResponse);
+                                                                @($"{data!.Ammount.ToString("N2", new System.Globalization.CultureInfo("id-ID"))}")
+                                                            }
+                                                        </Template>
+                                                    </GridColumn>
+                                                    <GridColumn Field=@nameof(GetPaymentOverviewDetailResponse.WageType) HeaderText="Wage Type" TextAlign="TextAlign.Center" Width="80%"> </GridColumn>
+                                                    @* <GridColumn Field=@nameof(GetPaymentOverviewDetailResponse.Act) HeaderText="Item" TextAlign="TextAlign.Left" Width="80%"> </GridColumn> *@
+                                                </GridColumns>
+                                            </SfGrid>
+                                        </MudItem>
+                                    }
+                                </MudCardContent>
+                            </MudCard>
+                        </MudItem>
+                    </MudGrid>
+                </div>
+            </div>
+        </Content>
+        <FooterTemplate>
+            <SfButton Content="Cancel" CssClass="e-outline e-danger" IconCss="e-icons e-close" OnClick="OnClickNo"></SfButton>
+            @if (PaymentStatus == Base.Payments.Enums.PaymentStatus.RequestPreparation)
+            {
+                <SfButton Content="Continue To Approver" CssClass="e-success" IconCss="e-icons e-circle-check" OnClick="OnClickContinueApprover"></SfButton>
+            }
+            else if (PaymentStatus == Base.Payments.Enums.PaymentStatus.WaitingApproval && ApprovalPayment)
+            {
+                <SfButton Content="Ask To Revise" CssClass="e-danger" IconCss="e-icons e-close" OnClick="OnClickAskToRevise"></SfButton>
+                <SfButton Content="Approve" CssClass="e-success" IconCss="e-icons e-circle-check" OnClick="OnClickApprove"></SfButton>
+            }
+            else if (PaymentStatus == Base.Payments.Enums.PaymentStatus.NeedRevision)
+            {
+                <SfButton Content="Save" CssClass="e-success" IconCss="e-icons e-circle-check" OnClick="OnClickYes"></SfButton>
+            }
+            else if (PaymentStatus == Base.Payments.Enums.PaymentStatus.ReadyToRequest)
+            {
+                <SfButton Content="Save" CssClass="e-success" IconCss="e-icons e-circle-check" OnClick="OnClickYes"></SfButton>
+            }
+        </FooterTemplate>
+    </DialogTemplates>
+    <DialogEvents OnOpen="@DialogOpen" Closed="@DialogClose"></DialogEvents>
+    <DialogPositionData X="center" Y="top"></DialogPositionData>
+    <DialogAnimationSettings Effect="DialogEffect.None"></DialogAnimationSettings>
+</SfDialog>
+
+
+@code {
+    [Parameter]
+    public bool Visibility { get; set; }
+    [Parameter]
+    public bool ApprovalPayment { get; set; }
+    [Parameter]
+    public string? Title { get; set; }
+    [Parameter]
+    public PaymentStatus? PaymentStatus { get; set; }
+    [Parameter]
+    public string? RequestID { get; set; }
+    [Parameter]
+    public string? WageType { get; set; }
+    [Parameter]
+    public string? Curency { get; set; }
+    [Parameter]
+    public decimal? Ammount { get; set; }
+    [Parameter]
+    public string? AssignmentNumber { get; set; }
+    [Parameter]
+    public string? CostCenter { get; set; }
+    [Parameter]
+    public DateOnly? PaymentDate { get; set; }
+
+    [Parameter]
+    public EventCallback DialogOpen { get; set; }
+
+    [Parameter]
+    public EventCallback DialogClose { get; set; }
+
+    [Parameter]
+    public EventCallback OnClickNo { get; set; }
+
+    [Parameter]
+    public EventCallback OnClickYes { get; set; }
+
+    [Parameter]
+    public EventCallback OnClickContinueApprover { get; set; }
+    [Parameter]
+    public EventCallback OnClickAskToRevise { get; set; }
+    [Parameter]
+    public EventCallback OnClickApprove { get; set; }
+
+    [Parameter]
+    public string? Name { get; set; }
+    [Parameter]
+    public string? EmployeeNumber { get; set; }
+
+    [Parameter]
+    public bool IsEnabled { get; set; }
+    [Parameter]
+    public List<GetPaymentOverviewDetailResponse>? OverviewDetal { get; set; }
+    [Parameter]
+    public PaymentOverviewRequest Request { get; set; }
+}

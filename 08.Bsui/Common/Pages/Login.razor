@@ -1,0 +1,209 @@
+﻿@page "/Login"
+<!--Stylesheet-->
+<style type="text/css">
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    html, body {
+        background-image: url("./img/bg_login.png"); /* The image used */
+        background-color: #cccccc; /* Used if the image is unavailable */
+        background-position: center; /* Center the image */
+        background-repeat: no-repeat; /* Do not repeat the image */
+        background-size: cover; /* Resize the background image to cover the entire container */
+        width: 100%;
+    }
+
+    .form-box {
+        display: flex;
+        justify-content: right;
+        align-items: center;
+        height: 100vh;
+        margin: 0 96px;
+        font-family: 'Montserrat',sans-serif;
+    }
+
+    .wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0 20px;
+        width: 620px;
+        height: 500px;
+        margin-top: 0;
+        /* border-radius: 10px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5); */
+        /*background: rgba(255,255,255,0.7);*/
+        /* background: linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(255,255,255,0.35) 100%); */
+    }
+
+    .img-area {
+        flex: 1;
+        padding: 20px;
+        text-align: center;
+    }
+
+    .img-area img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .form-area {
+        flex: 1;
+        padding: 10px 20px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .form-area h3 {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    .form-box .e-btn.e-outline.e-primary {
+        background-color: white;
+        font-weight: bold
+    }
+
+    .form-box h3 {
+        font-weight: bolder;
+    }
+
+    .powered-by {
+        font-size: 12px;
+    }
+
+    .logo {
+        max-height: 72px;
+    }
+
+    .logo_bumn {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    .logo_pertamina {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    .login_title {
+        color: #001d82;
+        font-size: 56px;
+        font-weight: 500;
+        line-height: 42px;
+        text-align: left;
+    }
+
+    .login_subtitle {
+        padding-top: 16px;
+        color: #001d82;
+        font-size: 15px;
+        font-weight: normal;
+        text-align: left;
+        line-height: 1.2;
+    }
+
+    .login_button {
+        margin-top: 28px;
+        width: 60%;
+        background-color: none;
+        border: 2px solid #001d82;
+        color: #001d82;
+        font-size: 18px;
+        font-weight: 600;
+        border-radius: 5px;
+        cursor: pointer;
+        height: 48px;
+        text-align: center;
+    }
+
+    .login_button_icon {
+        content: url("./img/icon_ptm.png");
+        padding: 4px;
+    }
+
+    .position-absolute {
+        position: absolute;
+    }
+
+    .position-relative {
+        position: relative;
+    }
+
+    @@media (max-width: 1024px) {
+        .element_large {
+            display: none;
+        }
+
+        .form-box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0 24px;
+        }
+
+        .wrapper {
+            background: rgba(255,255,255,0.7);
+        }
+    }
+
+    @@media (max-width: 480px) {
+        html, body {
+            background-image: url("./img/bg_login.png");
+        }
+
+        .logo {
+            max-height: 48px;
+            padding-right: 0px;
+        }
+
+        .login_button {
+            width: 100%;
+        }
+
+        .wrapper {
+            background: rgba(255,255,255,0.7);
+        }
+    }
+</style>
+
+<div class="position-relative">
+    <div class="logo_bumn">
+        <MudImage Src="./img/logobumncoak.png" Fluid="true" Class="logo" />
+    </div>
+    <div class="logo_pertamina">
+        <MudImage Src="./img/logocoak.png" Fluid="true" Class="logo" />
+    </div>
+</div>
+
+<div class="form-box">
+    <div class="wrapper">
+        <div class="form-area">
+            <div class="login_title"></div>
+            <div class="login_title" style="margin-top:8px"><b>My Scholarship</b></div>
+            <div class="login_subtitle" style="margin-top:12px">Fungsi Shared Services Human Capital mendorong penerapan nilai AKHLAK dengan mengimplementasikan nilai <strong>Amanah</strong>, <strong>Adaptif</strong>, dan <strong>Kolaboratif</strong> dalam pengembangan dan penggunaan aplikasi My Scholarship.</div>
+            <div class="login_button" style="margin-top:24px">
+                <MudButton Color="Color.Primary" Label="Log in IdAMan" style="height:48px;" StartIcon="<image width='24' height='24' xlink:href='./img/icon_ptm.png' />"
+                           Disabled="@_processing" OnClick="OnClickLoginAsync">
+                    @if (_processing)
+                    {
+                        <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                        <MudText Class="ms-2"> Processing</MudText>
+                    }
+                    else
+                    {
+                        <MudText>Login with IdAMan</MudText>
+                    }
+                </MudButton>
+            </div>
+        </div>
+    </div>
+</div>

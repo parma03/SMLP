@@ -1,0 +1,96 @@
+﻿@using Psmp.Client.Services.BackEnd.Selections
+@using Psmp.Client.Services.Hris
+
+@inject IWebHostEnvironment _webHostEnvironment
+@inject IOptions<HrisOptions> _hrisOptions
+@inject ApplicantByPassService _applicantByPassService
+@inject ApplicantService _applicantService
+@inject SelectionOverviewService _selectionOverviewService
+
+<MudNavMenu>
+	<AuthorizeView>
+		<Authorized>
+			@if (context.User.GetPermissions().Any())
+			{
+				@if (context.User.HasPermission(Permissions.Scholarship))
+				{
+					<MudNavLink Icon="@Icons.Material.Filled.AdminPanelSettings" Match="NavLinkMatch.All" Href="@CommonRouteFor.SiteAdministrator">@Psmp.Shared.Scholarships.Constants.DisplayTextFor.SiteAdministrator</MudNavLink>
+				}
+
+				<MudNavLink Icon="@Icons.Material.Filled.Dashboard" Match="NavLinkMatch.All" Href="">@CommonDisplayTextFor.Dashboard</MudNavLink>
+				@if (context.User.HasPermission(Permissions.Scholarship))
+				{
+					<MudNavLink Icon="@Icons.Material.Filled.School" Match="NavLinkMatch.All" Href="@CommonRouteFor.Scholarships">@Psmp.Shared.Scholarships.Constants.DisplayTextFor.ScholarshipPlan</MudNavLink>
+				}
+
+				@if (context.User.HasPermission(Permissions.Selection))
+				{
+					<MudNavGroup Icon="@Icons.Material.Filled.FactCheck"
+								 ExpandIcon="@Icons.Material.Filled.ExpandMore"
+								 Title="@($"{@Psmp.Shared.Selections.Constants.DisplayTextFor.CompanySelection}")">
+						<MudNavLink Icon="@Icons.Material.Outlined.NoteAlt" Match="NavLinkMatch.All" Href="@CommonRouteFor.Selection">@Psmp.Shared.Selections.Constants.DisplayTextFor.OpenRegistration</MudNavLink>
+						<MudNavLink Icon="@Icons.Material.Rounded.NoteAlt" Match="NavLinkMatch.All" Href="@CommonRouteFor.SelectionClose">@Psmp.Shared.Selections.Constants.DisplayTextFor.CloseRegistration</MudNavLink>
+					</MudNavGroup>
+
+					<MudNavLink Icon="@Icons.Material.Filled.HomeRepairService" Match="NavLinkMatch.All" Href="@CommonRouteFor.StudyPreparation">@Psmp.Shared.Scholarships.Constants.DisplayTextFor.StudyPreparation</MudNavLink>
+					<MudNavLink Icon="@Icons.Material.Filled.Book" Match="NavLinkMatch.All" Href="@CommonRouteFor.UniversityRegistration">@Psmp.Shared.Scholarships.Constants.DisplayTextFor.UniversityRegistration</MudNavLink>
+					<MudNavLink Icon="@Icons.Material.Filled.MenuBook" Match="NavLinkMatch.All" Href="@CommonRouteFor.StudyMonitoring">@Psmp.Shared.Scholarships.Constants.DisplayTextFor.StudyMonitoring</MudNavLink>
+					<MudNavLink Icon="@Icons.Material.Filled.Payment" Match="NavLinkMatch.All" Href="@CommonRouteFor.Payment">@Psmp.Shared.Scholarships.Constants.DisplayTextFor.Payment</MudNavLink>
+					<MudNavLink Icon="@Icons.Material.Filled.Bookmark" Match="NavLinkMatch.All" Href="@CommonRouteFor.Project" Disabled="false">@Psmp.Shared.Scholarships.Constants.DisplayTextFor.InnovationProject</MudNavLink>
+
+				}
+				@if (context.User.HasPermission(Permissions.Payment))
+				{
+					<MudNavLink Icon="@Icons.Material.Filled.Payment" Match="NavLinkMatch.All" Href="@CommonRouteFor.Payment">@Psmp.Shared.Scholarships.Constants.DisplayTextFor.Payment</MudNavLink>
+				}
+				<MudNavGroup Icon="@Icons.Material.Filled.FactCheck"
+							 ExpandIcon="@Icons.Material.Filled.ExpandMore"
+							 Title="@($"{@Psmp.Shared.Selections.Constants.DisplayTextFor.Applicant}")">
+					<MudNavLink Icon="@Icons.Material.Filled.HowToReg" Match="NavLinkMatch.All" Href="@CommonRouteFor.Registration">@Psmp.Shared.Scholarships.Constants.DisplayTextFor.Registration</MudNavLink>
+					<MudNavLink Icon="@Icons.Material.Outlined.FactCheck" Match="NavLinkMatch.All" Href="@Psmp.Shared.Applicants.Constants.RouteFor.ApplicantSelection">@Psmp.Shared.Selections.Constants.DisplayTextFor.Selection</MudNavLink>
+
+					@if (_isAwardee)
+					{
+						<MudNavLink Icon="@Icons.Material.Outlined.School" Match="NavLinkMatch.All" Href="@Psmp.Shared.Applicants.Constants.RouteFor.ApplicantStudyPreparation">@Psmp.Shared.Studies.Constants.DisplayTextFor.StudyPreparation</MudNavLink>
+						<MudNavLink Icon="@Icons.Material.Filled.Apartment" Match="NavLinkMatch.All" Href="@Psmp.Shared.Applicants.Constants.RouteFor.ApplicantUniversity">@Psmp.Shared.Studies.Constants.DisplayTextFor.University</MudNavLink>
+						<MudNavLink Icon="@Icons.Material.Outlined.MonitorHeart" Match="NavLinkMatch.All" Href="@Psmp.Shared.Applicants.Constants.RouteFor.ApplicantStudyMonitoring">@Psmp.Shared.Studies.Constants.DisplayTextFor.StudyMonitoring</MudNavLink>
+						<MudNavLink Icon="@Icons.Material.Outlined.Payment" Match="NavLinkMatch.All" Href="@Psmp.Shared.Applicants.Constants.RouteFor.ApplicantPayment">@Psmp.Shared.Studies.Constants.DisplayTextFor.Payment</MudNavLink>
+						<MudNavLink Icon="@Icons.Material.Filled.Bookmark" Match="NavLinkMatch.All" Href="@CommonRouteFor.ProjectApplicant" Disabled="false">@Psmp.Shared.Scholarships.Constants.DisplayTextFor.InnovationProject</MudNavLink>
+					}
+				</MudNavGroup>
+			}
+			else
+			{
+				<MudNavLink Icon="@Icons.Material.Filled.Home" Match="NavLinkMatch.All" Href="@CommonRouteFor.Index">@CommonDisplayTextFor.Home</MudNavLink>
+				<MudNavLink Icon="@Icons.Material.Filled.HowToReg" Match="NavLinkMatch.All" Href="@CommonRouteFor.Registration">@Psmp.Shared.Scholarships.Constants.DisplayTextFor.Registration</MudNavLink>
+				<MudNavLink Icon="@Icons.Material.Outlined.FactCheck" Match="NavLinkMatch.All" Href="@Psmp.Shared.Applicants.Constants.RouteFor.ApplicantSelection">@Psmp.Shared.Selections.Constants.DisplayTextFor.Selection</MudNavLink>
+
+				@if (_isAwardee)
+				{
+					<MudNavLink Icon="@Icons.Material.Outlined.School" Match="NavLinkMatch.All" Href="@Psmp.Shared.Applicants.Constants.RouteFor.ApplicantStudyPreparation">@Psmp.Shared.Studies.Constants.DisplayTextFor.StudyPreparation</MudNavLink>
+					<MudNavLink Icon="@Icons.Material.Filled.Apartment" Match="NavLinkMatch.All" Href="@Psmp.Shared.Applicants.Constants.RouteFor.ApplicantUniversity">@Psmp.Shared.Studies.Constants.DisplayTextFor.University</MudNavLink>
+					<MudNavLink Icon="@Icons.Material.Outlined.MonitorHeart" Match="NavLinkMatch.All" Href="@Psmp.Shared.Applicants.Constants.RouteFor.ApplicantStudyMonitoring">@Psmp.Shared.Studies.Constants.DisplayTextFor.StudyMonitoring</MudNavLink>
+					<MudNavLink Icon="@Icons.Material.Outlined.Payment" Match="NavLinkMatch.All" Href="@Psmp.Shared.Applicants.Constants.RouteFor.ApplicantPayment">@Psmp.Shared.Studies.Constants.DisplayTextFor.Payment</MudNavLink>
+					@* @if (_isMentor)
+					{
+						<MudNavGroup Icon="@Icons.Material.Filled.FactCheck"
+									 ExpandIcon="@Icons.Material.Filled.ExpandMore"
+									 Title="@($"Mentor")">
+							<MudNavLink Icon="@Icons.Material.Filled.Bookmark" Match="NavLinkMatch.All" Href="@CommonRouteFor.Project" Disabled="false">@Psmp.Shared.Scholarships.Constants.DisplayTextFor.InnovationProject</MudNavLink>
+						</MudNavGroup>
+						<MudNavLink Icon="@Icons.Material.Filled.Bookmark" Match="NavLinkMatch.All" Href="@CommonRouteFor.ProjectApplicant" Disabled="false">@Psmp.Shared.Scholarships.Constants.DisplayTextFor.InnovationProject</MudNavLink>
+					}
+					else
+					{ *@
+						<MudNavLink Icon="@Icons.Material.Filled.Bookmark" Match="NavLinkMatch.All" Href="@CommonRouteFor.ProjectApplicant" Disabled="false">@Psmp.Shared.Scholarships.Constants.DisplayTextFor.InnovationProject</MudNavLink>
+					@* } *@
+				}
+				@if (_isMentor && !_isAwardee)
+				{
+					<MudNavLink Icon="@Icons.Material.Filled.Bookmark" Match="NavLinkMatch.All" Href="@CommonRouteFor.Project" Disabled="false">@Psmp.Shared.Scholarships.Constants.DisplayTextFor.InnovationProject</MudNavLink>
+				}
+			}
+		</Authorized>
+	</AuthorizeView>
+	<MudNavLink Icon="@Icons.Material.Filled.Countertops" Match="NavLinkMatch.All" Href="@CommonRouteFor.About">@CommonDisplayTextFor.About</MudNavLink>
+</MudNavMenu>

@@ -1,0 +1,21 @@
+﻿@page "/Common/Pages/Errors/CannotReachAuthenticationProvider"
+
+@using Microsoft.Extensions.Configuration
+@using Psmp.Bsui.Services.Authentication
+
+@inject IConfiguration configuration
+@inject IOptions<AuthenticationOptions> _authenticationOptions
+
+<div class="d-flex justify-space-around mt-16">
+    <div>
+        <MudText Typo="Typo.h3">
+            @AuthenticationDisplayTextFor.AuthenticationProvider Error
+        </MudText>
+        <MudText Typo="Typo.body1">
+            The system cannot reach @AuthenticationDisplayTextFor.AuthenticationProvider at <b>@_authenticationProviderUrl</b>
+        </MudText>
+    </div>
+    <div>
+        <img src="img/unauthorized.png" alt="Unauthorized" width="300" />
+    </div>
+</div>

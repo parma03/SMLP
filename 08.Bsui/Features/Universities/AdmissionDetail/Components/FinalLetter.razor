@@ -1,0 +1,120 @@
+﻿@using Syncfusion.Blazor.PdfViewerServer;
+
+<style>
+    .e-upload .e-file-select-wrap, .e-bigger.e-small .e-upload .e-file-select-wrap {
+        padding: 5px 0 5px 5px; /* Sesuaikan padding untuk tampilan yang lebih kompak */
+    }
+
+    .sf-uploader-compact .e-file-container {
+        margin: 2px 0; /* Mengurangi margin antar file */
+    }
+</style>
+
+<ErrorViewer Error="_error" />
+<LoadingDialog IsVisible=@_isLoadingDialog Text="Loading..."></LoadingDialog>
+@if (_isLoading)
+{
+    <Loading IsVisible="_isLoading" />
+}
+else
+{
+    @if (!IsRead)
+    {
+
+        <MudGrid Spacing="2">
+            <MudItem xs="12" Class="mt-4">
+                <h3>Surat Perintah Direktur SDM untuk Penetapan Peserta Tugas Belajar</h3>
+            </MudItem>
+            <hr />
+            <MudItem xs="12" Style="min-height:250px;">
+                <SfPdfViewerServer DocumentPath="@_documentPathWarrant" Width="100%" Height="700px" />
+            </MudItem>
+            <MudItem xs="12" Class="mt-4">
+                @* <MudText>File Upload (.pdf) (Max. 5 Mb) <span style="color:red;">*</span></MudText> *@
+                <MudText>File Upload (.pdf) <span style="color:red;">*</span></MudText>
+                <MudText Typo="Typo.subtitle2" Color="Color.Secondary" Style="font-style: italic; font-size: 0.8rem;">
+                    <b>(Maximum Size 5 Mb)</b>
+                </MudText>
+                <MudGrid Class="mt-0">
+                    <MudItem xs="7">
+                        <SfUploader @ref="_sfUploaderWarrant" ID="uploaderFinalWarrant" AutoUpload="true" SequentialUpload="false" AllowMultiple="false"
+                                    AllowedExtensions=".pdf" MaxFileSize=@_maximumFileSizeInBytes>
+                            <UploaderEvents ValueChange="ValueChangeUploaderFinalWarrant" OnRemove="OnRemoveUploaderFinalWarrant"></UploaderEvents>
+                        </SfUploader>
+                    </MudItem>
+                    <MudItem xs="2" Class="mt-1">
+                        <SfButton Content="Upload" CssClass="e-info" IconCss="e-icons e-upload-1"
+                                  OnClick="OnClickUploadWarrantAsync"></SfButton>
+                    </MudItem>
+                    <MudItem xs="1"></MudItem>
+                    <MudItem xs="2" Class="mt-1 justify-end">
+                        <SfButton Content="Download" CssClass="e-outline e-info" IconCss="e-icons e-download"
+                                  OnClick="OnClickDownloadWarrantAsync"></SfButton>
+                    </MudItem>
+                </MudGrid>
+            </MudItem>
+            <br />
+            <MudItem xs="12" Class="mt-4">
+                <h3>Surat Perjanjian Tugas Belajar</h3>
+            </MudItem>
+            <hr />
+            <MudItem xs="12" Style="min-height:250px;">
+                <SfPdfViewerServer DocumentPath="@_documentPathAgreement" Width="100%" Height="600px" />
+            </MudItem>
+            <MudItem xs="12" Class="mt-4">
+                @* <MudText>File Upload (.pdf) (Max. 5 Mb) <span style="color:red;">*</span></MudText> *@
+                <MudText>File Upload (.pdf) <span style="color:red;">*</span></MudText>
+                <MudText Typo="Typo.subtitle2" Color="Color.Secondary" Style="font-style: italic; font-size: 0.8rem;">
+                    <b>(Maximum Size 5 Mb)</b>
+                </MudText>
+                <MudGrid Class="mt-0">
+                    <MudItem xs="7">
+                        <SfUploader @ref="_sfUploaderAgreement" ID="uploaderFinalAgreement" AutoUpload="true" SequentialUpload="false" AllowMultiple="false"
+                                    AllowedExtensions=".pdf" MaxFileSize=@_maximumFileSizeInBytes>
+                            <UploaderEvents ValueChange="ValueChangeUploaderFinalAgreement" OnRemove="OnRemoveUploaderFinalAgreement"></UploaderEvents>
+                        </SfUploader>
+                    </MudItem>
+                    <MudItem xs="2" Class="mt-1">
+                        <SfButton Content="Upload" CssClass="e-info" IconCss="e-icons e-upload-1"
+                                  OnClick="OnClickUploadAgreementAsync"></SfButton>
+                    </MudItem>
+                    <MudItem xs="1"></MudItem>
+                    <MudItem xs="2" Class="mt-1 justify-end">
+                        <SfButton Content="Download" CssClass="e-outline e-info" IconCss="e-icons e-download"
+                                  OnClick="OnClickDownloadAgreementAsync"></SfButton>
+                    </MudItem>
+                </MudGrid>
+            </MudItem>
+            <MudItem xs="6" Style="text-align: left;">
+                <SfButton OnClick="OnClickBack" Content="Back" IconCss="e-icons e-arrow-left" CssClass="e-danger"></SfButton>
+            </MudItem>
+        </MudGrid>
+    }
+    else
+    {
+        <MudGrid Spacing="2">
+            <MudItem xs="12">
+                <MudGrid>
+                    <MudItem xs="6">
+                        <MudItem xs="12" Class="mt-4 mb-2">
+                            <h3>Surat Perintah Direktur SDM untuk Penetapan Peserta Tugas Belajar</h3>
+                        </MudItem>
+                        <hr />
+                        <MudItem xs="12" Style="min-height:250px;">
+                            <SfPdfViewerServer DocumentPath="@_documentPathWarrant" Width="100%" Height="850px" />
+                        </MudItem>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudItem xs="12" Class="mt-4 mb-2">
+                            <h3>Surat Perjanjian Tugas Belajar</h3>
+                        </MudItem>
+                        <hr />
+                        <MudItem xs="12" Style="min-height:250px;">
+                            <SfPdfViewerServer DocumentPath="@_documentPathAgreement" Width="100%" Height="850px" />
+                        </MudItem>
+                    </MudItem>
+                </MudGrid>
+            </MudItem>
+        </MudGrid>
+    }
+}

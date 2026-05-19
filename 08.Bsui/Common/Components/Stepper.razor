@@ -1,0 +1,496 @@
+﻿@using Psmp.Base.Payments.Enums
+@using Psmp.Shared.Common.Extensions
+@using Psmp.Shared.Payments.Queries
+
+<style>
+	/* Container */
+	.default-stepper-section {
+		width: 75%;
+		margin: 0 auto;
+		padding: 20px 0;
+	}
+
+		/* Stepper Base Styles */
+		.default-stepper-section .e-stepper,
+		.default-stepper-section .e-stepper * {
+			box-sizing: content-box !important;
+		}
+
+			/* Step Icon */
+			.default-stepper-section .e-stepper .e-stepper-item .e-step-icon {
+				width: 36px !important;
+				height: 36px !important;
+				line-height: 36px !important;
+				margin-top: 0 !important;
+				pointer-events: none !important;
+			}
+
+			.default-stepper-section .e-stepper .e-stepper-item {
+				pointer-events: none !important;
+			}
+
+			/* Progress Bar */
+			.default-stepper-section .e-stepper .e-stepper-progressbar {
+				--progress-top-position: 14px !important;
+				--progress-left-position: calc(36px / 2) !important;
+				--progress-bar-width: calc(100% - 36px) !important;
+				position: relative !important;
+				width: 70%;
+				margin-left: 100px;
+			}
+
+				.default-stepper-section .e-stepper .e-stepper-progressbar .e-progress {
+					position: absolute !important;
+					top: var(--progress-top-position, 14px) !important;
+					left: var(--progress-left-position, 0px) !important;
+					width: var(--progress-bar-width, calc(100% - 36px)) !important;
+					height: 4px !important;
+					transform: none !important;
+				}
+
+			.default-stepper-section .e-stepper .e-stepper-separator {
+				top: var(--progress-top-position, 14px) !important;
+			}
+
+	/* Active Step for Preparation Status */
+	.stepper-preparation .e-stepper-item.e-active .e-step {
+		background-color: #1E4EA2 !important;
+		border-color: #1E4EA2 !important;
+	}
+
+	.stepper-preparation .e-stepper-progressbar .e-progress {
+		background-color: #1E4EA2 !important;
+	}
+
+	/* Status Colors */
+	.step-status-requested {
+		background-color: #10b981 !important;
+		border-color: #10b981 !important;
+	}
+
+	.step-status-waiting {
+		background-color: #fff !important;
+		border-color: #fff !important;
+	}
+
+	.step-status-rejected {
+		background-color: #ef4444 !important;
+		border-color: #ef4444 !important;
+	}
+
+	.step-status-need-revision {
+		background-color: #f59e0b !important;
+		border-color: #f59e0b !important;
+	}
+
+	.step-status-posted {
+		background-color: #10b981 !important;
+		border-color: #10b981 !important;
+	}
+
+	.step-status-pending {
+		background-color: #fff !important;
+		border-color: #fff !important;
+	}
+
+	/* Step Icon Custom */
+	.step-icon-custom {
+		font-size: 20px !important;
+		color: #fff;
+	}
+
+	/* Step Labels */
+	.step-label-container {
+		text-align: center;
+		margin-top: 12px;
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.step-label-text {
+		font-weight: 600;
+		font-size: 14px;
+		margin-bottom: 6px;
+		display: block;
+		color: #333;
+		white-space: nowrap;
+	}
+
+	.step-label-user {
+		font-size: 12px;
+		color: #000000;
+		margin-bottom: 0;
+		display: block;
+		text-align: center;
+		white-space: normal;
+		max-width: 200px;
+		line-height: 1.4;
+		font-weight: 500;
+	}
+
+	.step-label-name {
+		font-size: 12px;
+		color: #666;
+		margin-bottom: 0;
+		display: block;
+		text-align: center;
+		white-space: normal;
+		max-width: 200px;
+		line-height: 1.4;
+	}
+
+	.step-label-date {
+		font-size: 11px;
+		color: #999;
+		font-style: italic;
+		display: block;
+	}
+
+	/* Status Text Colors */
+	.step-label-text-requested {
+		color: #10b981 !important;
+		font-weight: 700;
+	}
+
+	.step-label-text-waiting {
+		color: #1E4EA2 !important;
+		font-weight: 700;
+	}
+
+	.step-label-text-rejected {
+		color: #ef4444 !important;
+		font-weight: 700;
+	}
+
+	.step-label-text-need-revision {
+		color: #f59e0b !important;
+		font-weight: 700;
+	}
+
+	.step-label-text-posted {
+		color: #10b981 !important;
+		font-weight: 700;
+	}
+
+	.step-label-text-pending {
+		color: #6b7280 !important;
+		font-weight: 700;
+	}
+
+	@@media (max-width: 768px) {
+		.default-stepper-section {
+			width: 95% !important;
+		}
+
+			.default-stepper-section .e-stepper .e-stepper-item .e-step-icon {
+				width: 36px !important;
+				height: 36px !important;
+				line-height: 36px !important;
+				font-size: 16px !important;
+			}
+
+			.default-stepper-section .e-stepper .e-stepper-progressbar {
+				--progress-top-position: 14px !important;
+				--progress-left-position: calc(36px / 2) !important;
+				--progress-bar-width: calc(100% - 36px) !important;
+			}
+
+		.step-label-text {
+			font-size: 13px;
+		}
+
+		.step-label-name {
+			font-size: 12px;
+		}
+
+		.step-label-date {
+			font-size: 10px;
+		}
+	}
+
+	@@media (max-width: 480px) {
+		.default-stepper-section {
+			width: 92% !important;
+		}
+
+			.default-stepper-section .e-stepper .e-stepper-item .e-step-icon {
+				width: 28px !important;
+				height: 28px !important;
+				line-height: 28px !important;
+			}
+
+			.default-stepper-section .e-stepper .e-stepper-progressbar {
+				--progress-left-position: calc(28px / 2) !important;
+				--progress-bar-width: calc(100% - 28px) !important;
+			}
+
+				.default-stepper-section .e-stepper .e-stepper-progressbar .e-progress {
+					height: 3px !important;
+				}
+
+		.step-label-text {
+			font-size: 12px;
+		}
+
+		.step-label-name {
+			font-size: 11px;
+		}
+
+		.step-label-date {
+			font-size: 9px;
+		}
+	}
+</style>
+
+<div class="control-section">
+	<div class="default-stepper-section">
+		@if (StepperData != null && StepperData.Any())
+		{
+			<SfStepper ActiveStep="@GetActiveStepIndex()"
+					   StepType="StepperType.Indicator"
+					   Linear="true"
+					   ReadOnly="true"
+					   CssClass="@GetStepperCssClass()">
+				<ChildContent>
+					<StepperSteps>
+						@foreach (var step in StepperData)
+						{
+							<StepperStep Text="@((StepperData.IndexOf(step) + 1).ToString())"></StepperStep>
+						}
+					</StepperSteps>
+				</ChildContent>
+				<Template>
+					@{
+						var stepIndex = int.Parse(context.Text) - 1;
+						var stepInfo = StepperData[stepIndex];
+						var statusClass = GetStepStatusClass(stepIndex);
+						var textClass = GetStepTextClass(stepIndex);
+						var isWaitingApproval = IsWaitingApprovalStep(stepIndex);
+						var isPreparation = IsPreparationStep(stepIndex);
+						var displayText = GetDisplayText(stepIndex, stepInfo.Text);
+					}
+
+					<span class="e-step e-indicator @statusClass">
+						@if (isWaitingApproval || isPreparation)
+						{
+							<span style="color: #1E4EA2; font-weight: bold;">@context.Text</span>
+						}
+						else if (!string.IsNullOrEmpty(stepInfo.Icon))
+						{
+							<i class="@stepInfo.Icon step-icon-custom"></i>
+						}
+						else
+						{
+							<span>@context.Text</span>
+						}
+					</span>
+
+					<div class="step-label-container">
+						<span class="step-label-text @textClass">@displayText</span>
+
+						@RenderUserLabel(stepIndex)
+
+						@if (!isWaitingApproval)
+						{
+							@RenderNameLabel(stepIndex, stepInfo)
+						}
+					</div>
+				</Template>
+			</SfStepper>
+		}
+		else
+		{
+			<div style="text-align: center; padding: 20px; color: #999;">
+				No stepper data available
+			</div>
+		}
+	</div>
+</div>
+
+@code {
+	[Parameter]
+	public List<GetStepperResponse>? StepperData { get; set; }
+
+	[Parameter]
+	public PaymentStatus? CurrentPaymentStatus { get; set; }
+
+	// Helper Methods for Step Information
+	private bool IsWaitingApprovalStep(int stepIndex) =>
+		stepIndex == 1 && CurrentPaymentStatus == PaymentStatus.WaitingApproval;
+
+	private bool IsPreparationStep(int stepIndex) =>
+		stepIndex == 2 && CurrentPaymentStatus == PaymentStatus.RequestPreparation;
+
+	private string GetDisplayText(int stepIndex, string originalText)
+	{
+		if (stepIndex == 1 && CurrentPaymentStatus == PaymentStatus.Completed)
+		{
+			return "Approved";
+		}
+		return originalText;
+	}
+
+	private string GetStepperCssClass() =>
+		CurrentPaymentStatus == PaymentStatus.RequestPreparation ? "stepper-preparation" : string.Empty;
+
+	// Active Step Logic
+	private int GetActiveStepIndex()
+	{
+		if (StepperData == null || !StepperData.Any())
+			return 0;
+
+		if (CurrentPaymentStatus == PaymentStatus.Rejected)
+			return 1;
+
+		if (IsCompletedStatus())
+			return 2;
+
+		if (CurrentPaymentStatus == PaymentStatus.RequestPreparation)
+			return 2;
+
+		if (IsInProgressStatus())
+			return 1;
+
+		return 0;
+	}
+
+	private bool IsCompletedStatus() =>
+		CurrentPaymentStatus == PaymentStatus.Posted ||
+		CurrentPaymentStatus == PaymentStatus.Completed;
+
+	private bool IsInProgressStatus()
+	{
+		if (CurrentPaymentStatus == null)
+			return false;
+
+		// Status "In Progress"
+		return CurrentPaymentStatus == PaymentStatus.WaitingApproval ||
+			   CurrentPaymentStatus == PaymentStatus.Approved ||
+			   CurrentPaymentStatus == PaymentStatus.RequestPreparation ||
+			   CurrentPaymentStatus == PaymentStatus.RequestToBmc ||
+			   CurrentPaymentStatus == PaymentStatus.RequestToSSF ||
+			   CurrentPaymentStatus == PaymentStatus.ProcessSign ||
+			   CurrentPaymentStatus == PaymentStatus.ProcessToPOffice ||
+			   CurrentPaymentStatus == PaymentStatus.Pending ||
+			   CurrentPaymentStatus == PaymentStatus.NeedRevision;
+	}
+
+	// Status Class Logic
+	private string GetStepStatusClass(int stepIndex)
+	{
+		if (StepperData == null || CurrentPaymentStatus == null)
+			return string.Empty;
+
+		return stepIndex switch
+		{
+			0 => "step-status-requested",
+			1 => GetStep1StatusClass(),
+			2 => GetStep2StatusClass(),
+			_ => string.Empty
+		};
+	}
+
+	private string GetStep1StatusClass()
+	{
+		return CurrentPaymentStatus switch
+		{
+			PaymentStatus.Rejected => "step-status-rejected",
+			PaymentStatus.NeedRevision => "step-status-need-revision",
+			PaymentStatus.WaitingApproval or PaymentStatus.Pending => "step-status-waiting",
+			PaymentStatus.Posted or PaymentStatus.RequestPreparation or PaymentStatus.Completed => "step-status-requested",
+			_ => "step-status-pending"
+		};
+	}
+
+	private string GetStep2StatusClass()
+	{
+		return CurrentPaymentStatus switch
+		{
+			PaymentStatus.Posted or PaymentStatus.Completed => "step-status-posted",
+			PaymentStatus.RequestPreparation => "step-status-waiting",
+			_ => "step-status-pending"
+		};
+	}
+
+	// Text Class Logic
+	private string GetStepTextClass(int stepIndex)
+	{
+		if (StepperData == null || CurrentPaymentStatus == null)
+			return string.Empty;
+
+		return stepIndex switch
+		{
+			0 => "step-label-text-requested",
+			1 => GetStep1TextClass(),
+			2 => GetStep2TextClass(),
+			_ => string.Empty
+		};
+	}
+
+	private string GetStep1TextClass()
+	{
+		return CurrentPaymentStatus switch
+		{
+			PaymentStatus.Rejected => "step-label-text-rejected",
+			PaymentStatus.NeedRevision => "step-label-text-need-revision",
+			PaymentStatus.WaitingApproval or PaymentStatus.Pending => "step-label-text-waiting",
+			PaymentStatus.Posted or PaymentStatus.RequestPreparation or PaymentStatus.Completed => "step-label-text-requested",
+			_ => "step-label-text-pending"
+		};
+	}
+
+	private string GetStep2TextClass()
+	{
+		return CurrentPaymentStatus switch
+		{
+			PaymentStatus.Posted or PaymentStatus.Completed => "step-label-text-posted",
+			PaymentStatus.RequestPreparation => "step-label-text-waiting",
+			_ => "step-label-text-pending"
+		};
+	}
+
+	// Render Methods
+	private RenderFragment RenderUserLabel(int stepIndex) => __builder =>
+	{
+		var userLabel = stepIndex switch
+		{
+			0 => "Awardee",
+			1 => "Admin",
+			2 => "SAP Payroll",
+			_ => string.Empty
+		};
+
+		if (!string.IsNullOrEmpty(userLabel))
+		{
+			<span class="step-label-user">@userLabel</span>
+		}
+	};
+
+	private RenderFragment RenderNameLabel(int stepIndex, GetStepperResponse stepInfo) => __builder =>
+	{
+		var hasDate = stepInfo.Date != default;
+
+		if (stepIndex == 2)
+		{
+			// Step 3: Posted
+			if (hasDate && IsCompletedStatus())
+			{
+				<span class="step-label-name">@stepInfo.Date.ToString("dd.MM.yyyy")</span>
+			}
+		}
+		else
+		{
+			// Step lainnya
+			if (hasDate)
+			{
+				<span class="step-label-name">@($"{stepInfo.Date:dd.MM.yyyy}, By {stepInfo.Name}")</span>
+			}
+			else if (!string.IsNullOrEmpty(stepInfo.Name))
+			{
+				<span class="step-label-name">@($"By {stepInfo.Name}")</span>
+			}
+		}
+	};
+}

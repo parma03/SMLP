@@ -1,0 +1,26 @@
+﻿<div class="mb-6">
+    <MudText Typo="Typo.h5">@Title</MudText>
+        <div class="d-flex align-baseline mt-2 horizontal_line">
+            @if (!string.IsNullOrWhiteSpace(SubTitleKey))
+        {
+            <MudText Typo="Typo.subtitle1" Class="mr-2 mud-secondary-text">
+                <strong>@SubTitleKey</strong>
+            </MudText>
+        }
+        @if (!string.IsNullOrWhiteSpace(SubTitleValue))
+        {
+            <MudText Typo="Typo.subtitle1">@SubTitleValue</MudText>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string Title { get; set; } = default!;
+
+    [Parameter]
+    public string SubTitleKey { get; set; } = default!;
+
+    [Parameter]
+    public string SubTitleValue { get; set; } = default!;
+}

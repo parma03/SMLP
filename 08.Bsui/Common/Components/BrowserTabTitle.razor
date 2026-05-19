@@ -1,0 +1,18 @@
+﻿@using Psmp.Bsui.Services.AppInfo
+
+@inject IOptions<AppInfoOptions> _appInfoOptions
+
+@if (ChildContent is null)
+{
+    <PageTitle>@_appInfoOptions.Value.FullName</PageTitle>
+}
+else
+{
+    <PageTitle>@ChildContent | @_appInfoOptions.Value.FullName</PageTitle>
+}
+
+
+@code {
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+}

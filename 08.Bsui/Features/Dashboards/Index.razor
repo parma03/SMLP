@@ -1,0 +1,57 @@
+﻿@page "/"
+
+@using Psmp.Shared.Scholarships.Constants
+
+<BrowserTabTitle>@DisplayTextFor.OverView</BrowserTabTitle>
+<MudBreadcrumbs Items="_breadcrumbItems"></MudBreadcrumbs>
+
+<MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6" ActivePanelIndexChanged="@(e => OnTabChanged(e))">
+    @if (IsShowTrackList)
+    {
+        <MudTabPanel Text="@DisplayTextFor.TaskList">
+            <Psmp.Bsui.Features.Dashboards.DashboardsTrackList.Index></Psmp.Bsui.Features.Dashboards.DashboardsTrackList.Index>
+        </MudTabPanel>
+    }
+    @if (IsShowOverView)
+    {
+        <MudTabPanel Text="@DisplayTextFor.OverView">
+            <Psmp.Bsui.Features.Dashboards.DashboardsOverView.Index></Psmp.Bsui.Features.Dashboards.DashboardsOverView.Index>
+        </MudTabPanel>
+    }
+    @if (IsShowScholarshipPlans)
+    {
+        <MudTabPanel Text="@DisplayTextFor.ScholarshipPlans">
+            <Psmp.Bsui.Features.Dashboards.DashboardsScholarshipPlan.Index></Psmp.Bsui.Features.Dashboards.DashboardsScholarshipPlan.Index>
+        </MudTabPanel>
+    }
+    @if (IsShowCompanySelections)
+    {
+        <MudTabPanel Text="@DisplayTextFor.CompanySelections">
+            <Psmp.Bsui.Features.Dashboards.DashboardsCompanySelections.Index></Psmp.Bsui.Features.Dashboards.DashboardsCompanySelections.Index>
+        </MudTabPanel>
+    }
+    @if (IsShowUnivRegistration)
+    {
+        <MudTabPanel Text="@DisplayTextFor.UnivRegistration">
+            <Psmp.Bsui.Features.Dashboards.DashboardsUnivRegistration.Index></Psmp.Bsui.Features.Dashboards.DashboardsUnivRegistration.Index>
+        </MudTabPanel>
+    }
+    @if (IsShowStudyMonitoring)
+    {
+        <MudTabPanel Text="@DisplayTextFor.StudyMonitoring">
+            <Psmp.Bsui.Features.Dashboards.DashboardsStudyMonitoring.Index></Psmp.Bsui.Features.Dashboards.DashboardsStudyMonitoring.Index>
+        </MudTabPanel>
+    }
+    @if (IsShowPayment)
+    {
+        <MudTabPanel Text="@DisplayTextFor.Payment">
+            <Psmp.Bsui.Features.Dashboards.DashboardsPayment.Index></Psmp.Bsui.Features.Dashboards.DashboardsPayment.Index>
+        </MudTabPanel>
+    }
+</MudTabs>
+
+<style>
+    .mud-tabs-panels {
+        min-height: 500px;
+    }
+</style>

@@ -1,0 +1,18 @@
+﻿<MudCard Elevation="0">
+    <MudCardHeader>
+        <CardHeaderAvatar>
+            <MudAvatar Color="Color.Secondary">
+                <MudIcon Icon="@Icons.Material.Filled.Reviews"></MudIcon>
+            </MudAvatar>
+        </CardHeaderAvatar>
+        <CardHeaderContent>
+            <MudText>To Be Reviewed</MudText>
+            <MudText Typo="Typo.h5">@Summary</MudText>
+        </CardHeaderContent>
+    </MudCardHeader>
+</MudCard>
+
+@code {
+    [Parameter]
+    public string Summary { get; set; } = default!;
+}

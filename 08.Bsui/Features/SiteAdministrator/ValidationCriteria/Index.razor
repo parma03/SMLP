@@ -1,0 +1,97 @@
+﻿<style>
+    .e-chip-list {
+        display: inline !important
+    }
+
+    .panel {
+        background: #ffffff
+    }
+</style>
+<ErrorViewer Error="_error" />
+<LoadingDialog IsVisible=@_isLoading Text="Loading..."></LoadingDialog>
+@if (_isLoading)
+{
+    <Loading IsVisible="_isLoading" />
+}
+else
+{
+    <MudGrid Spacing="2">
+        <MudGrid Spacing="2">
+            <MudItem xs="3">
+                <MudText>Validation Criteria</MudText>
+                <SfDropDownList ID="ddlValidationCriteria" TValue="int" TItem="DropdownItemResponse" DataSource="@_dropdownValidationCriteria" Placeholder="Select...">
+                    <DropDownListFieldSettings Text="Description" Value="Id" />
+                    <DropDownListEvents TItem="DropdownItemResponse" TValue="int" ValueChange="OnChangeValidationCriteria" />
+                </SfDropDownList>
+            </MudItem>
+            <MudItem xs="3">
+                <MudText>University Location</MudText>
+                <SfDropDownList ID="ddlUniversityLocation" TValue="int" TItem="DropdownItemResponse" DataSource="@_dropdownUniversityLocation" Placeholder="Select...">
+                    <DropDownListFieldSettings Text="Description" Value="Id" />
+                    <DropDownListEvents TItem="DropdownItemResponse" TValue="int" ValueChange="OnChangeUniversityLocation" />
+                </SfDropDownList>
+            </MudItem>
+            <MudItem xs="3">
+                <MudText>Degree</MudText>
+                <SfDropDownList ID="ddDegree" TValue="int" TItem="DropdownItemResponse" DataSource="@_dropdownDegree" Placeholder="Select...">
+                    <DropDownListFieldSettings Text="Description" Value="Id" />
+                    <DropDownListEvents TItem="DropdownItemResponse" TValue="int" ValueChange="OnChangeDegree" />
+                </SfDropDownList>
+            </MudItem>
+        </MudGrid>
+        @if (_criteriaQueryResponses.Count > 0)
+        {
+            @if (_formindex == 1)
+            {
+
+
+                <MudItem xs="9" Class="" Style="display:none;">
+                    <MudText>@_criteriaQueryResponses[0].Name.SplitWords()</MudText>
+                    <SfTextBox ID="txtEmploymentStatus" Placeholder="Eg. PWTT" Enabled="true" @bind-Value="_criteriaQueryResponses[0].Value"></SfTextBox>
+                </MudItem>
+                <MudItem xs="9" Class="">
+                    <MudText>@_criteriaQueryResponses[1].Name.SplitWords()</MudText>
+                    <SfTextBox ID="txtEmploymentStatus" Placeholder="Eg. PWTT" Enabled="true" @bind-Value="_criteriaQueryResponses[1].Value"></SfTextBox>
+                </MudItem>
+                <MudItem xs="9" Class="">
+                    <MudText>@_criteriaQueryResponses[2].Name.SplitWords()</MudText>
+                    <SfTextBox ID="txtEmploymentStatus" Placeholder="Eg. PWTT" Enabled="true" @bind-Value="_criteriaQueryResponses[2].Value"></SfTextBox>
+                </MudItem>
+                <MudItem xs="9" Class="">
+                    <MudText>@_criteriaQueryResponses[3].Name.SplitWords()</MudText>
+                    <SfTextBox ID="txtEmploymentStatus" Placeholder="Eg. PWTT" Enabled="true" @bind-Value="_criteriaQueryResponses[3].Value"></SfTextBox>
+                </MudItem>
+                <MudItem xs="9" Class="">
+                    <MudText>@_criteriaQueryResponses[4].Name.SplitWords()</MudText>
+                    <SfTextBox ID="txtEmploymentStatus" Placeholder="Eg. PWTT" Enabled="true" @bind-Value="_criteriaQueryResponses[4].Value"></SfTextBox>
+                </MudItem>
+                <MudItem xs="9" Class="">
+                    <MudText>@_criteriaQueryResponses[5].Name.SplitWords()</MudText>
+                    <SfTextBox ID="txtEmploymentStatus" Placeholder="Eg. PWTT" Enabled="true" @bind-Value="_criteriaQueryResponses[5].Value"></SfTextBox>
+                </MudItem>
+                <MudItem xs="9" Class="">
+                    <MudText>@_criteriaQueryResponses[6].Name.SplitWords()</MudText>
+                    <SfTextBox ID="txtEmploymentStatus" Placeholder="Eg. PWTT" Enabled="true" @bind-Value="_criteriaQueryResponses[6].Value"></SfTextBox>
+                </MudItem>
+            }
+            @if (_formindex == 2)
+            {
+                <MudItem xs="9" Class="mt-8">
+                    <MudText>@_criteriaQueryResponses[7].Name.SplitWords()</MudText>
+                    <SfTextBox ID="txtTOEFLScore" Placeholder="Eg. 42" Enabled="true" @bind-Value="_criteriaQueryResponses[7].Value"></SfTextBox>
+                </MudItem>
+                <MudItem xs="9">
+                    <MudText>@_criteriaQueryResponses[8].Name.SplitWords()</MudText>
+                    <SfTextBox ID="txtPsychotest" Placeholder="Eg. 42" Enabled="true" @bind-Value="_criteriaQueryResponses[8].Value"></SfTextBox>
+                </MudItem>
+            }
+        }
+
+        <MudItem xs="2" Class="mt-4 justify-end">
+            <SfProgressButton IsPrimary="true" Content="Save" CssClass="e-info" EnableProgress="true" IconCss="e-icons e-save-as" OnClick="OnClickSave" Duration="3000">
+                <ProgressButtonSpinSettings Position="SpinPosition.Center"></ProgressButtonSpinSettings>
+                <ProgressButtonAnimationSettings Effect="Syncfusion.Blazor.SplitButtons.AnimationEffect.SlideRight"></ProgressButtonAnimationSettings>
+            </SfProgressButton>
+        </MudItem>
+    </MudGrid>
+}

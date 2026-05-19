@@ -1,0 +1,15 @@
+﻿<AuthorizeView>
+    <NotAuthorized>
+        <MudButton Size="Size.Small" StartIcon="@Icons.Material.Filled.Login" Color="Color.Inherit"
+                   Link="@Psmp.Bsui.Pages.Account.Constants.RouteFor.Login">@AuthenticationDisplayTextFor.Login</MudButton>
+    </NotAuthorized>
+    <Authorized>
+        <MudMenu Dense="true" Color="Color.Inherit" StartIcon="@Icons.Material.Filled.Person"
+                 EndIcon="@Icons.Material.Filled.KeyboardArrowDown" Label="@context.User.GetDisplayName()">
+            <MudMenuItem OnClick="NavigateToProfile">@AuthenticationDisplayTextFor.Profile</MudMenuItem>
+            @* <MudMenuItem OnClick="NavigateToMySession">@AuthenticationDisplayTextFor.MySession</MudMenuItem> *@
+            @* <MudMenuItem OnClick="ShowDialogSwitchPosition">@AuthenticationDisplayTextFor.SwitchPosition</MudMenuItem> *@
+            <MudMenuItem OnClick="NavigateToLogout">@AuthenticationDisplayTextFor.Logout</MudMenuItem>
+        </MudMenu>
+    </Authorized>
+</AuthorizeView>

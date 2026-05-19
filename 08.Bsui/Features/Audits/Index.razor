@@ -1,0 +1,68 @@
+﻿@page "/Audits"
+@attribute [Authorize(Policy = Permissions.Psmp_Audit_Index)]
+
+@inject IJSRuntime _jsRuntime
+
+@using Psmp.Shared.Audits.Queries.GetAudits
+
+<BrowserTabTitle>@DisplayTextFor.Audits</BrowserTabTitle>
+<MudBreadcrumbs Items="_breadcrumbItems"></MudBreadcrumbs>
+<PageHeader Title="@DisplayTextFor.Audits" />
+<ErrorViewer Error="_error" />
+
+<MudTable Elevation="0" Hover="true" Breakpoint="Breakpoint.Sm"
+          FixedHeader="true" Height="@HeightFor.ScrollableTable"
+          @ref="_tableAudits"
+          ServerData="@(new Func<TableState, Task<TableData<GetAuditsAudit>>>(ReloadTableAudits))"
+          MultiSelection="true" @bind-SelectedItems="_selectedAudits" CustomHeader="true">
+    <ToolBarContent>
+        <MudButton Variant="Variant.Filled" Color="Color.Tertiary" StartIcon="@Icons.Material.Filled.FilterAlt" OnClick="ShowDialogFilter">Set @CommonDisplayTextFor.Filter</MudButton>
+        @if (_selectedAudits.Any())
+        {
+            <MudButton Variant="Variant.Filled" Color="Color.Success" StartIcon="@Icons.Material.Filled.DownloadForOffline" Class="ml-2" OnClick="ExportAudits">@CommonDisplayTextFor.Export @CommonDisplayTextFor.Selected (@_selectedAudits.Count)</MudButton>
+        }
+        <MudSpacer />
+        <MudTextField Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" Placeholder="@CommonDisplayTextFor.Search" T="string" ValueChanged="@(keyword => OnSearch(keyword))"></MudTextField>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTHeadRow IgnoreCheckbox="true">
+            <MudTh colspan="6" Style="text-align: center; font-size: 1.2em;">
+                <MudText Typo="Typo.subtitle1">Displaying data from <b>@_filterModel.From.ToLongDateTimeDisplayText()</b> to <b>@_filterModel.To.ToLongDateTimeDisplayText()</b></MudText>
+            </MudTh>
+        </MudTHeadRow>
+        <MudTHeadRow IgnoreCheckbox="true">
+            <MudTh></MudTh>
+            <MudTh><MudTableSortLabel SortLabel="@nameof(GetAuditsAudit.Created)" T="GetAuditsAudit">@CommonDisplayTextFor.Created</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortLabel="@nameof(GetAuditsAudit.CreatedBy)" T="GetAuditsAudit">@CommonDisplayTextFor.By</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortLabel="@nameof(GetAuditsAudit.ActionType)" T="GetAuditsAudit">@DisplayTextFor.ActionType</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortLabel="@nameof(GetAuditsAudit.EntityName)" T="GetAuditsAudit">@DisplayTextFor.EntityName</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortLabel="@nameof(GetAuditsAudit.EntityId)" T="GetAuditsAudit">@DisplayTextFor.EntityId</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortLabel="@nameof(GetAuditsAudit.FromIpAddress)" T="GetAuditsAudit">@DisplayTextFor.FromIpAddress</MudTableSortLabel></MudTh>
+        </MudTHeadRow>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="@CommonDisplayTextFor.Created">
+            <MudLink Href="@RouteFor.Details(context.Id)">
+                <MudHighlighter Text="@context.Created.ToShortDateTimeDisplayText()" HighlightedText="@_searchKeyword" />
+            </MudLink>
+        </MudTd>
+        <MudTd DataLabel="@CommonDisplayTextFor.By">
+            <MudHighlighter Text="@context.CreatedBy" HighlightedText="@_searchKeyword" />
+        </MudTd>
+        <MudTd DataLabel="@DisplayTextFor.ActionType">
+            <MudHighlighter Text="@context.ActionType" HighlightedText="@_searchKeyword" />
+        </MudTd>
+        <MudTd DataLabel="@DisplayTextFor.EntityName">
+            <MudHighlighter Text="@context.EntityName" HighlightedText="@_searchKeyword" />
+        </MudTd>
+        <MudTd DataLabel="@DisplayTextFor.EntityId">
+            <MudHighlighter Text="@context.EntityId.ToString()" HighlightedText="@_searchKeyword" />
+        </MudTd>
+        <MudTd DataLabel="@DisplayTextFor.FromIpAddress">
+            <MudHighlighter Text="@context.FromIpAddress" HighlightedText="@_searchKeyword" />
+        </MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>

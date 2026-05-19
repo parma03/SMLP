@@ -1,0 +1,8 @@
+﻿<div class="right-buttons mt-6">
+    @ChildContent
+</div>
+
+@code {
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+}

@@ -1,0 +1,312 @@
+﻿@using Psmp.Base.Scholarships.Enums
+@using Psmp.Bsui.Features.Selections.Components
+@using Psmp.Shared.Selections.CreateSK.Queries
+@using Syncfusion.Blazor.Navigations
+<style>
+    .e-chip-list {
+        display: inline !important
+    }
+    .step-indicator {
+        margin-top: 30px;
+        padding: 30px;
+    }
+
+    #stepper1 {
+        margin-top: 50px;
+    }
+</style>
+<ErrorViewer Error="_error" />
+<LoadingDialog IsVisible=@_isLoadingButton Text="@IsLoadingButtonTitle"></LoadingDialog>
+
+@if (_isLoading)
+{
+    <Loading IsVisible="_isLoading" />
+}
+else
+{
+    <MudGrid Spacing="2">
+        <MudGrid Spacing="2" Class="mb-2">
+            <MudItem xs="12">
+                <MudText Typo="Typo.body2" HtmlTag="h3">Create SK Filter</MudText>
+            </MudItem>
+        </MudGrid>
+		<MudGrid Spacing="2" Class="mb-4">
+			<MudItem xs="2">
+				<MudText>Categories</MudText>
+				<SfDropDownList ID="ddlSelectionCategory" TValue="int" TItem="DropdownItemResponse" DataSource="@_dropdownCategories" Placeholder="All Category">
+					<DropDownListFieldSettings Text="Description" Value="Id" />
+					<DropDownListEvents TItem="DropdownItemResponse" TValue="int" ValueChange="OnChangeCategory" />
+				</SfDropDownList>
+			</MudItem>
+			<MudItem xs="2">
+				<MudText>H/ SH/ AP&P</MudText>
+				<SfDropDownList ID="ddlSelectionCompaynGroup" TValue="int?" TItem="DropdownItemResponse" AllowFiltering="true" FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains" DataSource="@_dropdownCompanyGroups" Placeholder="All H/SH/AP&P">
+					<DropDownListFieldSettings Text="Description" Value="Id" />
+					<DropDownListEvents TItem="DropdownItemResponse" TValue="int?" ValueChange="OnChangeCompanyGroupAsync" />
+				</SfDropDownList>
+			</MudItem>
+			<MudItem xs="2">
+				<MudText>Company</MudText>
+				<SfDropDownList ID="ddlSelectionCompay" TValue="string?" TItem="DropdownItemStringResponse" AllowFiltering="true" FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains" DataSource="@_dropdownComapies" Placeholder="All Company">
+					<DropDownListFieldSettings Text="Description" Value="Id" />
+					<DropDownListEvents TItem="DropdownItemStringResponse" TValue="string?" ValueChange="OnChangeCompanyAsync" />
+				</SfDropDownList>
+			</MudItem>
+			<MudItem xs="2">
+				<MudText>Code</MudText>
+				<SfDropDownList ID="ddlSsholarshipCodes" TValue="Guid?" TItem="DropdownItemGuidResponse" AllowFiltering="true" FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains" DataSource="@_dropdownCodes" Placeholder="All Code">
+					<DropDownListFieldSettings Text="Description" Value="Id" />
+					<DropDownListEvents TItem="DropdownItemGuidResponse" TValue="Guid?" ValueChange="OnChangeCodeAsync" />
+				</SfDropDownList>
+			</MudItem>
+			<MudItem xs="2">
+				<MudText>Batch</MudText>
+				<SfDropDownList ID="ddlScholarshipBatch" TValue="int?" TItem="DropdownItemResponse" AllowFiltering="true" FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains" Placeholder="All Batch"
+								DataSource="@_dropdownBatchs">
+					<DropDownListFieldSettings Text="Description" Value="Id" />
+					<DropDownListEvents TItem="DropdownItemResponse" TValue="int?" ValueChange="OnChangeBatchAsync" />
+				</SfDropDownList>
+			</MudItem>
+			<MudItem xs="2">
+				<MudText>Year</MudText>
+				<SfDropDownList ID="ddlSelectionYear" TValue="int?" TItem="DropdownItemResponse" DataSource="@_dropdownYear" Placeholder="All Year" AllowFiltering="true" FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains">
+					<DropDownListFieldSettings Text="Description" Value="Id" />
+					<DropDownListEvents TItem="DropdownItemResponse" TValue="int?" ValueChange="OnChangeYear" />
+				</SfDropDownList>
+			</MudItem>
+		</MudGrid>
+		<MudGrid Spacing="2" Class="mb-4">
+			<MudItem xs="12">
+				<MudText Typo="Typo.body2" HtmlTag="h3">Applicant Filter</MudText>
+			</MudItem>
+			<MudItem xs="3">
+				<MudText>H/ SH/ AP&P</MudText>
+				<SfDropDownList ID="ddlSelectionCompaynGroupApplicantFilter" TValue="int?" TItem="DropdownItemResponse" AllowFiltering="true" FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains" DataSource="@_dropdownCompanyGroupsApplicantFilter" Placeholder="All H/SH/AP&P">
+					<DropDownListFieldSettings Text="Description" Value="Id" />
+					<DropDownListEvents TItem="DropdownItemResponse" TValue="int?" ValueChange="OnChangeCompanyGroupApplicantFilterAsync" />
+				</SfDropDownList>
+			</MudItem>
+			<MudItem xs="3">
+				<MudText>Company</MudText>
+				<SfDropDownList ID="ddlSelectionCompayApplicantFilter" TValue="string?" TItem="DropdownItemStringResponse" AllowFiltering="true" FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains" DataSource="@_dropdownComapiesApplicantFilter" Placeholder="All Company">
+					<DropDownListFieldSettings Text="Description" Value="Id" />
+					<DropDownListEvents TItem="DropdownItemStringResponse" TValue="string?" ValueChange="OnChangeCompanyApplicantFilterAsync" />
+				</SfDropDownList>
+			</MudItem>
+		</MudGrid>
+
+        <MudGrid Class="mb-1">
+            <MudItem xs="12">
+                <MudPaper Class="pa-4" Elevation="2">
+                    <MudGrid AlignItems="center">
+                        <!-- Card pertama -->
+                        <MudItem xs="3" Class="d-flex justify-center">
+                            <CardApplicantSummary Summary=@_applicantSummary></CardApplicantSummary>
+                        </MudItem>
+
+                        <!-- Divider Vertikal -->
+                        <MudItem xs="1" Class="d-flex justify-center">
+                            <MudDivider Vertical="true" Class="mud-divider-height-full" Style="height: 90px; border-width: 2px; opacity: 0.5;" />
+                        </MudItem>
+
+                        <!-- Card kedua -->
+                        <MudItem xs="3" Class="d-flex justify-center">
+                            <CardInprogressSummary Summary=@_inProgressSummary></CardInprogressSummary>
+                        </MudItem>
+
+                        <!-- Divider Vertikal -->
+                        <MudItem xs="1" Class="d-flex justify-center">
+                            <MudDivider Vertical="true" Class="mud-divider-height-full" Style="height: 90px; border-width: 2px; opacity: 0.5;" />
+                        </MudItem>
+
+                        <!-- Card ketiga -->
+                        <MudItem xs="3" Class="d-flex justify-center">
+                            <CardApprovedSummary Summary=@_approvedSummary></CardApprovedSummary>
+                        </MudItem>
+                    </MudGrid>
+                </MudPaper>
+            </MudItem>
+        </MudGrid>
+
+        @* <MudItem xs="12">
+            <MudGrid Spacing="5">
+                <MudItem xs="4">
+                    <CardApplicantSummary Summary=@_applicantSummary />
+                </MudItem>
+                <MudItem xs="4">
+                    <CardInprogressSummary Summary=@_inProgressSummary />
+                </MudItem>
+                <MudItem xs="4">
+                    <CardApprovedSummary Summary=@_approvedSummary />
+                </MudItem>
+            </MudGrid>
+        </MudItem> *@
+        @*<MudItem xs="12">
+            <div class="step-indicator">
+                <SfStepper ID="stepper1" StepType=StepperType.Default LabelPosition="StepperLabelPosition.Top" ActiveStep="@_activeStep">
+                    <StepperSteps>
+                        <StepperStep Text="1" Label="@Stepper1"></StepperStep>
+                        <StepperStep Text="2" Label="@Stepper2"></StepperStep>
+                        <StepperStep Text="3" Label="@Stepper3"></StepperStep>
+                        <StepperStep Text="4" Label="@Stepper4"></StepperStep>
+                    </StepperSteps>
+                </SfStepper>
+            </div>
+        </MudItem> *@
+
+        <MudGrid Class="mb-2">
+            <MudItem xs="12">
+                <MudCard>
+                    <MudCardContent>
+                        @if (_isLoadingData)
+                        {
+                            <LoadingLinear IsVisible="_isLoadingData" />
+                        }
+                        else
+                        {
+                            <MudGrid>
+                                <MudItem xs="12">
+                                    <MudGrid Spacing="2" Class="mb-1">
+                                        <MudItem xs="12" md="6">
+                                            <MudGrid Class="d-flex align-center justify-start">
+                                                <MudItem>
+                                                    <MudText Typo="Typo.h6" Class="ms-0">List of Applicant</MudText>
+                                                </MudItem>
+                                            </MudGrid>
+                                        </MudItem>
+                                        <MudItem xs="12" md="6">
+                                            <MudGrid Class="d-flex flex-wrap align-center justify-start justify-md-end">
+                                                <MudItem>
+                                                    <SfProgressButton ID="zoomOutButton" Content="Export to Excel" @onclick="ExportExcel" EnableProgress="true" CssClass="fw-bold" IconCss="e-icons e-download" Style="background: linear-gradient(to right, #4279db, #1c4185); color: white;">
+                                                        <ProgressButtonSpinSettings Position="SpinPosition.Center"></ProgressButtonSpinSettings>
+                                                        <ProgressButtonAnimationSettings Effect="Syncfusion.Blazor.SplitButtons.AnimationEffect.ZoomOut"></ProgressButtonAnimationSettings>
+                                                    </SfProgressButton>
+                                                </MudItem>
+                                            </MudGrid>
+                                        </MudItem>
+                                    </MudGrid>
+                                    <AuthorizeView Context="_context">
+                                        <Authorized>
+                                            @if (_context.User.HasPermission(Permissions.Psmp_SelectionDecree_Crud))
+                                            {
+                                                <MudItem xs="12" md="8" Class="mt-4 mb-4">
+                                                    <MudGrid Class="d-flex flex-wrap justify-start align-center">
+                                                        <MudItem Class="ml-1 pa-2 ma-0">
+                                                            <SfButton OnClick="OnClickCreateDraft" Content="Create Draft SK/SP" CssClass="e-info"></SfButton>
+                                                        </MudItem>
+                                                        <MudItem Class="ml-1 pa-2 ma-0">
+                                                            <SfButton OnClick="OnClickCreateFinal" Content="Create Final SK/SP" CssClass="e-info"></SfButton>
+                                                        </MudItem>
+                                                        <MudItem Class="ml-1 pa-2 ma-0">
+                                                            <SfButton OnClick="OnClickSendSK" Content="Send SK" CssClass="e-info"></SfButton>
+                                                        </MudItem>
+                                                    </MudGrid>
+                                                </MudItem>
+                                            }
+                                        </Authorized>
+                                    </AuthorizeView>
+                                    <SfGrid @ref="Grid" DataSource="@_selectionCreateSK" Toolbar="@(new List<string>() { "Search" })" AllowExcelExport="true" AllowFiltering="true" AllowPaging="true" AllowSorting="true" AllowResizing="true" AllowTextWrap="true">
+                                        <GridPageSettings PageCount="5" PageSize="10" PageSizes="@(new string[] { "10", "15", "20", "All" })"></GridPageSettings>
+                                        <GridEvents ExcelQueryCellInfoEvent="ExcelQueryCellInfoHandler" OnToolbarClick="ToolbarClickHandler" RowDataBound="RowBound" CommandClicked="OnCommandClicked" TValue="GetSelectionCreateSKQueryResponse"></GridEvents>
+                                        <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Excel"></GridFilterSettings>
+                                        <GridColumns>
+                                            <GridColumn Field=@nameof(GetSelectionCreateSKQueryResponse.Id) IsPrimaryKey="true" Visible="false"></GridColumn>
+                                            <GridColumn Field=@nameof(GetSelectionCreateSKQueryResponse.EmployeeNumber) Width="200" HeaderText="Employee Number"></GridColumn>
+                                            <GridColumn Field=@nameof(GetSelectionCreateSKQueryResponse.Name) Width="200"></GridColumn>
+                                            <GridColumn Field=@nameof(GetSelectionCreateSKQueryResponse.Position) Width="200"></GridColumn>
+                                            <GridColumn Field=@nameof(GetSelectionCreateSKQueryResponse.Code) Width="200"></GridColumn>
+                                            <GridColumn Field=@nameof(GetSelectionCreateSKQueryResponse.Faculty) Width="200"></GridColumn>
+                                            <GridColumn Field=@nameof(GetSelectionCreateSKQueryResponse.BussinesIssue) Width="200" HeaderText="Bussines Issue"></GridColumn>
+                                            <GridColumn Field=@nameof(GetSelectionCreateSKQueryResponse.CompanyName) Width="150" HeaderText="Company"></GridColumn>
+                                            <GridColumn Field=@nameof(GetSelectionCreateSKQueryResponse.Mentor) Width="200" HeaderText="Mentor 1"></GridColumn>
+                                            <GridColumn Field=@nameof(GetSelectionCreateSKQueryResponse.MentorName2) Width="200" HeaderText="Mentor 2"></GridColumn>
+                                            <GridColumn Field=@nameof(GetSelectionCreateSKQueryResponse.ToeflScore) HeaderText="TOEFL" Width="200"></GridColumn>
+                                            <GridColumn Field=@nameof(GetSelectionCreateSKQueryResponse.QualificationStatus) Width="200" HeaderText="Psychotest"></GridColumn>
+                                            <GridColumn Field=@nameof(GetSelectionCreateSKQueryResponse.Status) Width="150" HeaderText="Status" TextAlign="TextAlign.Center">
+                                                <Template>
+                                                    @{
+                                                        var data = (context as GetSelectionCreateSKQueryResponse);
+                                                        if (data!.Status == ApplicantStatus.Passed)
+                                                        {
+                                                            <SfChip>
+                                                                <ChipItems>
+                                                                    <ChipItem Text="@data.Status.GetDescription()" CssClass="e-success"></ChipItem>
+                                                                </ChipItems>
+                                                            </SfChip>
+                                                        }
+                                                        else if (data!.Status == ApplicantStatus.Failed || data!.Status == ApplicantStatus.Rejected)
+                                                        {
+                                                            <SfChip>
+                                                                <ChipItems>
+                                                                    <ChipItem Text="@data.Status.GetDescription()" CssClass="e-danger"></ChipItem>
+                                                                </ChipItems>
+                                                            </SfChip>
+                                                        }
+                                                        else if (data!.Status == ApplicantStatus.Awaiting)
+                                                        {
+                                                            <SfChip>
+                                                                <ChipItems>
+                                                                    <ChipItem Text="@data.Status.ToString()" CssClass="e-warning"></ChipItem>
+                                                                </ChipItems>
+                                                            </SfChip>
+                                                        }
+                                                        else
+                                                        {
+                                                            <SfChip>
+                                                                <ChipItems>
+                                                                    <ChipItem Text="@data.Status.ToString().SplitWords()" CssClass="e-info"></ChipItem>
+                                                                </ChipItems>
+                                                            </SfChip>
+                                                        }
+                                                    }
+                                                </Template>
+                                            </GridColumn>
+                                            <GridColumn HeaderText="Action" Width="150" TextAlign="TextAlign.Center" HeaderTextAlign="TextAlign.Center" Visible="true">
+                                                <GridCommandColumns>
+                                                    <GridCommandColumn Title="Action" Type="CommandButtonType.None" ButtonOption="@(new CommandButtonOptions() {IconCss="e-icons e-edit", CssClass="e-flat" })"></GridCommandColumn>
+                                                    <GridCommandColumn Title="View Detail" Type="CommandButtonType.Delete" ButtonOption="@(new CommandButtonOptions() {IconCss="e-icons e-eye", CssClass="e-flat" })"></GridCommandColumn>
+                                                </GridCommandColumns>
+                                            </GridColumn>
+                                        </GridColumns>
+                                    </SfGrid>
+                                </MudItem>
+                            </MudGrid>
+                        }
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+        </MudGrid>
+    </MudGrid>
+
+}
+<DialogCreateSKSelectionDecree Visibility="VisiblePopupDecree"
+                     Title="@TitlePopupDecree"
+                     DialogOpen="DialogDecreeOpen" DialogClose="DialogDecreeClose"
+                               OnClickNo="OnClickNoDialogDecree" OnClickYes="OnClickYesDialogDecree"
+                     OnRemoveDecree="OnRemoveUploaderDecree"
+                     ValueChangeDecree="ValueChangeUploaderDecree"
+                     listDocument="_getListDocuments"
+                     OnCommandClicked="OnCommandClickedDocument">
+</DialogCreateSKSelectionDecree>
+
+<DialogCreateSPSelectionDecree Visibility="VisiblePopupWarrant"
+                               Title="@TitlePopupWarrant"
+                               DialogOpen="DialogWarrantOpen" DialogClose="DialogWarrantClose"
+                               OnClickNo="OnClickNoDialogWarrant" OnClickYes="OnClickYesDialogWarrant"
+                               OnRemoveWarrant="OnRemoveUploaderWarrant"
+                               ValueChangeWarrant="ValueChangeUploaderWarrant"
+                               listDocument="_getListDocumentWarrant"
+                               OnCommandClicked="OnCommandClickedDocumentWarrant">
+</DialogCreateSPSelectionDecree>
+
+<DialogConfirmation Visibility="VisiblePopupDelete"
+                    Title="@DisplayTextFor.Decree"
+                    Content="Are you sure want to delete this data?"
+                    DialogOpen="DialogDeleteOpen" DialogClose="DialogDeleteClose"
+                    OnClickNo="ClickedNoDelete" OnClickYes="ClickedYesDelete"></DialogConfirmation>
+
+<style>
+    .e-removeDeletecommand .e-unboundcell .e-unboundcelldiv button.e-Deletebutton {
+        display: none;
+    }
+</style>

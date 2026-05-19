@@ -1,0 +1,57 @@
+﻿<style>
+    .e-chip-list {
+        display: inline !important
+    }
+
+    .panel {
+        background: #ffffff
+    }
+</style>
+<ErrorViewer Error="_error" />
+<LoadingDialog IsVisible=@_isLoading Text="Loading..."></LoadingDialog>
+@if (_isLoading)
+{
+    <Loading IsVisible="_isLoading" />
+}
+else
+{
+    <MudGrid>
+        <MudItem xs="12">
+            <MudCard>
+                <MudCardContent>
+                    @if (_isLoadingData)
+                    {
+                        <LoadingLinear IsVisible="_isLoadingData" />
+                    }
+                    else
+                    {
+                        <MudText>List of Letter Template</MudText>
+                        <MudItem xs="12" Class="mt-4">
+                            <MudGrid>
+                                <MudItem xs="2" Class="mt-4 justify-end">
+                                    <SfButton Content="Add" IconCss="e-icons e-circle-add" CssClass="e-info" OnClick="OnClickAdd"></SfButton>
+                                </MudItem>
+                            </MudGrid>
+                        </MudItem>
+                        <br />
+                        <SfGrid DataSource="@_lettertemplate" Toolbar="@(new List<string>() { "Search" })" AllowPaging="true">
+                            <GridColumns>
+                                <GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn> 
+                                <GridColumn Field="Lettertemplate" Width="200" HeaderText="Letter Template"></GridColumn>
+                                <GridColumn Field="Hshap" Width="200" HeaderText="H/SH/APS&P"></GridColumn>
+                                <GridColumn Field="Receiver" Width="200" HeaderText="Letter Receiver"></GridColumn>
+                                <GridColumn HeaderText="Action" Width="150" TextAlign="TextAlign.Center" HeaderTextAlign="TextAlign.Center" Visible="true">
+                                    <GridCommandColumns>
+                                        <GridCommandColumn Title="Edit" Type="CommandButtonType.Edit" ButtonOption="@(new CommandButtonOptions() {IconCss="e-icons e-edit", CssClass="e-flat" })"></GridCommandColumn>
+                                        <GridCommandColumn Title="Delete" Type="CommandButtonType.Delete" ButtonOption="@(new CommandButtonOptions() {IconCss="e-icons e-delete", CssClass="e-flat" })"></GridCommandColumn>
+                                    </GridCommandColumns>
+                                </GridColumn>
+                            </GridColumns>
+                        </SfGrid>
+                    }
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+}
+

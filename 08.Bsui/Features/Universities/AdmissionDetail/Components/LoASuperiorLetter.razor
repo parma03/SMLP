@@ -1,0 +1,135 @@
+﻿@using Psmp.Shared.Common.Responses
+@using Syncfusion.Blazor.PdfViewerServer;
+
+<ErrorViewer Error="_error" />
+<LoadingDialog IsVisible=@_isLoadingDialog Text="Loading..."></LoadingDialog>
+@if (_isLoading)
+{
+    <Loading IsVisible="_isLoading" />
+}
+else
+{
+    <MudGrid Spacing="2">        
+        <MudItem xs="12">
+            <MudGrid Spacing="2">
+                <MudItem xs="4">
+                    <MudGrid Spacing="2">
+                        <MudItem xs="12">
+                            <MudCard Style="height : 700px;">
+                                <MudCardContent>
+                                    <MudItem xs="12" Class="mt-4">
+                                        <MudText>Name</MudText>
+                                        <MudGrid>
+                                            <MudItem xs="12">
+                                                <SfTextBox ID="txtName" @bind-Value="_data!.Name" Enabled="@IsEnabled"></SfTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12" Class="mt-4">
+                                        <MudText>Company</MudText>
+                                        <MudGrid>
+                                            <MudItem xs="12">
+                                                <SfTextBox ID="txtCompany" @bind-Value="_data!.CompanyName" Enabled="@IsEnabled"></SfTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12" Class="mt-4">
+                                        <MudText>Employee Number</MudText>
+                                        <MudGrid>
+                                            <MudItem xs="12">
+                                                <SfTextBox ID="txtEmployeeNumber" @bind-Value="_data!.EmployeeNumber" Enabled="@IsEnabled"></SfTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12" Class="mt-4">
+                                        <MudText>Study Program Master of...</MudText>
+                                        <MudGrid>
+                                            <MudItem xs="12">
+                                                <SfTextBox ID="txtStudy" @bind-Value="_data!.Study" Enabled="@IsEnabled"></SfTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12" Class="mt-4">
+                                        <MudText>Full/Part Time</MudText>
+                                        <MudGrid>
+                                            <MudItem xs="12">
+                                                <SfDropDownList ID="ddlTime"
+                                                                TValue="int"
+                                                                TItem="DropdownItemResponse"
+                                                                DataSource="@_dropdownStudyTime"
+                                                                Enabled="@IsEnabled"
+                                                                @bind-Value="_valIsFulltime">
+                                                    <DropDownListFieldSettings Text="Description" Value="Id" />
+                                                </SfDropDownList>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12" Class="mt-4">
+                                        <MudGrid>
+                                            <MudItem xs="6">
+                                                <MudText>Start Date</MudText>
+                                                <MudGrid>
+                                                    <MudItem xs="12">
+                                                        <SfDatePicker ID="txtStartDate" Format="dd.MM.yyyy" @bind-Value="_data!.StudyStart" Enabled="@IsEnabled"></SfDatePicker>
+                                                    </MudItem>
+                                                </MudGrid>
+                                            </MudItem>
+                                            <MudItem xs="6">
+                                                <MudText>EndDate</MudText>
+                                                <MudGrid>
+                                                    <MudItem xs="12">
+                                                        <SfDatePicker ID="txtEndDate" Format="dd.MM.yyyy" @bind-Value="_data!.StudyEnd" Enabled="@IsEnabled"></SfDatePicker>
+                                                    </MudItem>
+                                                </MudGrid>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                </MudCardContent>
+                            </MudCard>
+                        </MudItem>
+                    </MudGrid>
+                </MudItem>
+                <MudItem xs="8">
+                    <MudGrid Spacing="2">
+                        <MudItem xs="12" Style="min-height:250px;">
+                            <MudText>Letter of Acceptance</MudText>
+                            <MudGrid>
+                                <MudItem xs="12">
+                                    <SfPdfViewerServer DocumentPath="@_documentPathLoA" Width="100%" Height="350px" />
+                                </MudItem>
+                            </MudGrid>
+                        </MudItem>
+                        <MudItem xs="12" Class="mt-1" Style="min-height:250px;">
+                            <MudText>Superior (Min. VP) Approval Letter</MudText>
+                            <MudGrid>
+                                <MudItem xs="12">
+                                    <SfPdfViewerServer DocumentPath="@_documentPathSuperiorApproval" Width="100%" Height="350px" />
+                                </MudItem>
+                            </MudGrid>
+                        </MudItem>
+                    </MudGrid>
+                </MudItem>
+            </MudGrid>
+        </MudItem>
+        <MudItem xs="12">
+            <MudGrid>
+                <MudItem xs="6" Style="text-align: left;">
+                    <SfButton OnClick="OnClickBack" Content="Back" IconCss="e-icons e-arrow-left" CssClass="e-danger"></SfButton>
+                </MudItem>
+                <MudItem xs="6" Style="text-align: right;">
+                    <SfButton OnClick="OnClickContinueAsync" Content="Continue" IconCss="e-icons e-save" CssClass="e-info" Disabled="@_disableButton"></SfButton>
+                    <SfButton OnClick="OnClickRejectAsync" Content="Reject" IconCss="e-icons e-circle-close" CssClass="e-danger" Disabled="@_disableButton"></SfButton>
+                </MudItem>
+            </MudGrid>
+        </MudItem>
+    </MudGrid>
+
+    <DialogConfirmation Visibility="@_isVisibleConfirmation"
+                        Title="@_titleConfirmation"
+                        Content="@_contentConfirmation"
+                        DialogOpen="DialogConfirmationOpen"
+                        DialogClose="DialogConfirmationClose"
+                        OnClickNo="ClickedNoConfirmation"
+                        OnClickYes="ClickedYesConfirmation"></DialogConfirmation>
+}
+

@@ -1,0 +1,65 @@
+﻿@using Syncfusion.Blazor.PdfViewerServer
+
+<style>
+    .e-upload .e-file-select-wrap, .e-bigger.e-small .e-upload .e-file-select-wrap {
+        padding: 5px 0 5px 5px; /* Sesuaikan padding untuk tampilan yang lebih kompak */
+    }
+
+    .sf-uploader-compact .e-file-container {
+        margin: 2px 0; /* Mengurangi margin antar file */
+    }
+</style>
+
+<ErrorViewer Error="_error" />
+<LoadingDialog IsVisible=@_isLoadingDialog Text="Loading..."></LoadingDialog>
+@if (_isLoading)
+{
+    <Loading IsVisible="_isLoading" />
+}
+else
+{
+    <MudGrid Spacing="2">
+		<MudItem xs="12" Class="mt-8" Style="min-height:670px;">
+            <SfPdfViewerServer DocumentPath="@_finalDocument" Width="100%" Height="700px" />
+        </MudItem>
+        @if (_data.PaymentStatus != Base.Payments.Enums.PaymentStatus.RequestPreparation)
+        {
+            <MudItem xs="12" Class="mt-4">
+                @* <MudText>File Upload (.pdf) (Max. 5 Mb) <span style="color:red;">*</span></MudText> *@
+                <MudText>File Upload (.pdf) <span style="color:red;">*</span></MudText>
+                <MudText Typo="Typo.subtitle2" Color="Color.Secondary" Style="font-style: italic; font-size: 0.8rem;">
+                    <b>(Maximum Size 5 Mb)</b>
+                </MudText>
+                <MudGrid Class="mt-0">
+                    <MudItem xs="7">
+                        <SfUploader @ref="_sfUploaderFinal" ID="uploaderFinal" AutoUpload="true" SequentialUpload="false" AllowMultiple="false"
+                                    AllowedExtensions=".pdf" MaxFileSize=@_maximumFileSizeInBytes>
+                            <UploaderEvents ValueChange="ValueChangeUploaderFinal" OnRemove="OnRemoveUploaderFinal"></UploaderEvents>
+                        </SfUploader>
+                    </MudItem>
+                    <MudItem xs="2" Class="mt-1">
+                        <SfButton Content="Upload Final Letter" CssClass="e-info" IconCss="e-icons e-upload-1"
+                                  OnClick="OnClickUploadFinalAsync"></SfButton>
+                    </MudItem>
+                    <MudItem xs="1"></MudItem>
+                    <MudItem xs="2" Class="mt-1 justify-end">
+                        <SfButton Content="Download Final Letter" CssClass="e-outline e-info" IconCss="e-icons e-download"
+                                  OnClick="OnClickDownloadFinalAsync"></SfButton>
+                    </MudItem>
+                </MudGrid>
+            </MudItem>
+        }
+        else
+        {
+            <MudItem xs="12" Class="mt-4">
+                <MudItem xs="2" Class="mt-1 justify-end">
+                    <SfButton Content="Download Final Letter" CssClass="e-outline e-info" IconCss="e-icons e-download"
+                              OnClick="OnClickDownloadFinalAsync"></SfButton>
+                </MudItem>
+            </MudItem>
+        }
+        @*    <MudItem xs="6" Style="text-align: left;">
+            <SfButton OnClick="OnClickBack" Content="Back" IconCss="e-icons e-arrow-left" CssClass="e-danger"></SfButton>
+        </MudItem> *@
+    </MudGrid>
+}

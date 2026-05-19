@@ -1,0 +1,67 @@
+﻿@inject IDialogService DialogService
+@inject ISnackbar Snackbar
+
+<style>
+    .no-uppercase {
+    text-transform: none;
+    white-space: nowrap;
+    }
+</style>
+
+<MudDialog>
+    <DialogContent>
+        @if (CondStatus)
+        {
+            <div class="d-flex flex-column align-items-center mt-6 px-6 pb-0">
+                <MudAvatar Size="Size.Large" Class="bg-yellow mb-4 approve-avatar" Color="Color.Success" Variant="Variant.Filled" Style="width:72px; height:72px; margin-left:13.5rem !important;">
+                    <MudIcon Icon="@Icons.Material.Filled.Check" Size="Size.Large" Style="display:block;" />
+                </MudAvatar>
+                <MudText Typo="Typo.h6" Align="Align.Center" Class="font-weight-bold mb-2">Approve Request</MudText>
+                <MudText Typo="Typo.body1" Align="Align.Center" Class="mb-4">
+                    Apakah anda yakin melanjutkan permintaan ini?
+                </MudText>
+            </div>
+        }
+        else
+        {
+            <div class="d-flex flex-column align-items-center mt-6 px-6 pb-0">
+                <MudAvatar Size="Size.Large" Class="bg-yellow mb-4 approve-avatar" Color="Color.Error" Variant="Variant.Filled" Style="width:72px; height:72px; margin-left:13.5rem !important;">
+                    <MudIcon Icon="@Icons.Material.Filled.Close" Size="Size.Large" Style="display:block;" />
+                </MudAvatar>
+                <MudText Typo="Typo.h6" Align="Align.Center" Class="font-weight-bold mb-2">Reject Request</MudText>
+                <MudText Typo="Typo.body1" Align="Align.Center" Class="mb-4">
+                    Apakah anda yakin melanjutkan permintaan ini?
+                </MudText>
+            </div>
+        }
+
+        <div class="text-start mb-3">
+            <MudText Typo="Typo.body2" Class="mb-2 fw-bold">Comment</MudText>
+            <SfTextArea Placeholder="Comment..." @bind-Value="Comment" CssClass="e-outline" RowCount="3" ColumnCount="172" FloatLabelType="FloatLabelType.Never" />
+        </div>
+    </DialogContent>
+
+    <DialogActions>
+        <div class="d-flex justify-content-center w-100 mt-6 px-6 pb-0 mb-6">
+            <MudButton Variant="Variant.Filled" Color="Color.Default" OnClick="Cancel" Class="mb-4 no-uppercase mr-3">@CommonDisplayTextFor.Cancel</MudButton>
+            @if (CondStatus)
+            {
+                <MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="() => Approve()" Class="mb-4 no-uppercase">Approve</MudButton>
+            }
+            else
+            {
+                <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="() => Approve()" Class="mb-4 no-uppercase">Rejected</MudButton>
+            }
+        </div>
+	</DialogActions>
+</MudDialog>
+
+@* <MudDialog>
+    <DialogContent>
+        <MudText Typo="Typo.body1">Data entered will be simulated. Are you sure continue?</MudText>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Variant="Variant.Filled" Color="Color.Default" OnClick="Cancel" Class="mb-4 no-uppercase">@CommonDisplayTextFor.Cancel</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="Continue" Class="mb-4 no-uppercase">@CommonDisplayTextFor.Continue</MudButton>
+    </DialogActions>
+</MudDialog> *@

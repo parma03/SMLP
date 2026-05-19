@@ -1,0 +1,124 @@
+@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.Popups
+@using Syncfusion.Blazor.Inputs
+
+<style>
+	.dialog-header-wrapper {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		padding: 8px 0;
+	}
+
+	.dialog-title-text {
+		font-size: 18px;
+		font-weight: 600;
+		margin: 0;
+	}
+
+	.dialog-content-wrapper {
+		padding: 10px 0;
+	}
+
+	.e-dialog .e-footer-content {
+		display: flex;
+		justify-content: flex-end;
+		gap: 10px;
+		padding-top: 15px;
+	}
+
+	.e-btn.e-save-sap,
+	.e-btn.e-save-sap:not(:disabled) {
+		background: linear-gradient(to right, #0B2E67, #1E4EA2) !important;
+		border: none !important;
+		color: #ffffff !important;
+	}
+
+		.e-btn.e-save-sap:not(:disabled):hover {
+			background: linear-gradient(to right, #1E4EA2, #0B2E67) !important;
+			color: #ffffff !important;
+		}
+
+		.e-btn.e-save-sap:disabled {
+			opacity: 0.6;
+			cursor: not-allowed;
+		}
+
+	.info-banner {
+		background: #e3f2fd;
+		border-left: 4px solid #1976d2;
+		padding: 12px 16px;
+		border-radius: 4px;
+		margin-bottom: 16px;
+		display: flex;
+		align-items: center;
+		gap: 10px;
+	}
+
+	.info-banner-icon {
+		color: #1976d2;
+		font-size: 20px;
+	}
+
+	.info-banner-text {
+		color: #0d47a1;
+		font-size: 14px;
+		line-height: 1.5;
+		margin: 0;
+	}
+
+	.textarea-label {
+		font-weight: 500;
+		font-size: 14px;
+		margin-bottom: 8px;
+		color: #424242;
+	}
+</style>
+
+<SfDialog Target="#target" IsModal="true" Width="820px" ShowCloseIcon="true" Visible="@Visibility">
+	<DialogTemplates>
+		<Header>@Title</Header>
+		<Content>
+			<div class="row">
+				<div class="col-md-12">
+					<MudGrid Spacing="2">
+						<MudItem xs="12">
+							<MudCard Elevation="0">
+								<MudCardContent>
+									<div class="info-banner">
+										<i class="e-icons e-info info-banner-icon"></i>
+										<p class="info-banner-text">
+											<strong>Note:</strong> This action will manually update the status. Please provide a clear response message
+										</p>
+									</div>
+
+									<MudItem xs="12">
+										<MudGrid>
+											<MudItem xs="12" sm="12">
+												<div class="textarea-label">Message Response SAP</div>
+												<MudForm>
+													<SfTextArea ID="txInput1" RowCount="4" ColumnCount="1000" Placeholder="Enter your response message here..." @bind-Value="Request.MessageResponse" Enabled="true"></SfTextArea>
+												</MudForm>
+											</MudItem>
+										</MudGrid>
+									</MudItem>
+								</MudCardContent>
+							</MudCard>
+						</MudItem>
+					</MudGrid>
+				</div>
+			</div>
+		</Content>
+		<FooterTemplate>
+			<SfButton Content="Cancel" CssClass="e-danger" IconCss="e-icons e-close" OnClick="OnClickCancel"></SfButton>
+			<SfButton Content="@(IsLoading ? "Saving..." : "Save")"
+					  CssClass="e-save-sap"
+					  IconCss="@(IsLoading ? "e-icons e-spinner e-spin" : "e-icons e-save")"
+					  OnClick="OnClickSave"
+					  Disabled="@IsSaveDisabled">
+			</SfButton>
+		</FooterTemplate>
+	</DialogTemplates>
+	<DialogEvents Closed="@DialogClose"></DialogEvents>
+	<DialogAnimationSettings Effect="DialogEffect.Zoom"></DialogAnimationSettings>
+</SfDialog>

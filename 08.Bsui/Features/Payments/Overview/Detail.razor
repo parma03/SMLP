@@ -1,0 +1,384 @@
+﻿@page "/payment-overview/detail/{RequestId}"
+@using Psmp.Shared.Payments.Queries.PaymentOverviewDetails
+
+<style>
+	.e-upload .e-file-select-wrap, .e-bigger.e-small .e-upload .e-file-select-wrap {
+		padding: 5px 0 5px 5px; /* Sesuaikan padding untuk tampilan yang lebih kompak */
+	}
+
+	.sf-uploader-compact .e-file-container {
+		margin: 2px 0; /* Mengurangi margin antar file */
+	}
+
+	.e-btn:disabled,
+	.e-btn[disabled] {
+		opacity: 0.4 !important;
+		cursor: not-allowed !important;
+	}
+
+	.mud-tooltip {
+		white-space: pre-wrap !important;
+		max-width: 300px !important;
+		padding: 12px 16px !important;
+		word-break: break-word !important;
+		overflow-wrap: break-word !important;
+	}
+
+	.mud-popover .mud-popover-paper {
+		padding: 12px 16px !important;
+		word-break: break-word !important;
+		overflow-wrap: break-word !important;
+	}
+
+	.mud-tooltip-root-default .mud-tooltip,
+	.mud-tooltip-root-error .mud-tooltip {
+		padding-top: 12px !important;
+		padding-bottom: 12px !important;
+		padding-left: 16px !important;
+		padding-right: 16px !important;
+		word-break: break-word !important;
+		overflow-wrap: break-word !important;
+	}
+</style>
+
+<MudBreadcrumbs Items="_breadcrumbItems" Style="padding-left:2px;"></MudBreadcrumbs>
+@* <Loading IsVisible="_isSimulating" /> *@
+@if (_isLoading || _isSimulating)
+{
+	<Loading IsVisible="_isLoading || _isSimulating" />
+}
+else
+{
+	<MudGrid Class="mb-2">
+		<MudItem xs="12">
+			<MudPaper Class="pa-4" Elevation="2">
+				<MudGrid AlignItems="center">
+					<MudItem xs="12">
+						<MudText Typo="Typo.body1" HtmlTag="h3">
+                            Hello <b>@_displayName</b>, welcome to request @_monthName.<br />
+						</MudText>
+					</MudItem>
+					<MudDivider Class="mb-2" />
+					<MudItem xs="9">
+						<MudText Typo="Typo.h5" Color="Color.Primary" Class="ms-0">@_displayName</MudText>
+					</MudItem>
+				</MudGrid>
+
+				<MudGrid Class="mb-2">
+                    <!--  Request ID -->
+                    <MudItem xs="12" Class="mt-2">
+                        <MudGrid>
+                            <MudItem xs="12" sm="2" md="2">
+                                <MudText>Request ID <span style="color:red;">*</span></MudText>
+                            </MudItem>
+                            <MudItem xs="12" sm="6" md="6">
+                                <SfTextBox ID="txtRequestId"
+                                           @bind-Value="_requestId"
+                                           Width="100%"
+                                           Placeholder="Input Request ID"
+                                           Enabled="!IsRequestIdInputDisabled">
+                                </SfTextBox>
+                            </MudItem>
+                            <MudItem xs="12" sm="4" md="4">
+                                <SfButton Content="Input Request Id" CssClass="e-info" IconCss="e-icons e-upload-1"
+                                          OnClick="OnClickUploadAsync" Disabled="IsRequestIdInputDisabled">
+                                </SfButton>
+                            </MudItem>
+                            @if (IsRequestIdInputDisabled)
+                            {
+                                <MudItem xs="12" sm="4" md="4">
+                                    <MudText Typo="Typo.subtitle2"
+                                            Color="Color.Secondary"
+                                            Style="font-style: italic; font-size: 0.8rem;">
+                                        <b>
+                                            @if (IsRequestIdDisabled)
+                                            {
+                                                @($"Request ID disabled: " + $"{_approvalWindow.from:dd MMM yyyy} – {_approvalWindow.to:dd MMM yyyy}")
+                                            }
+                                            else
+                                            {
+                                                @("All items have been posted to SAP")
+                                            }
+                                        </b>
+                                    </MudText>
+                                </MudItem>
+                            }
+                        </MudGrid>
+					</MudItem>
+
+					@* <!-- Payment Date + Total Amount -->
+					<MudItem xs="12" Class="mt-2">
+						<MudGrid>
+							<MudItem xs="6">
+								<MudGrid>
+									<MudItem xs="4" Class="d-flex align-center">
+										<MudText>Payment Date</MudText>
+									</MudItem>
+									<MudItem xs="8">
+										<SfDatePicker TValue="DateTime?"
+													  @bind-Value="_paymentDate"
+													  ID="dpPaymentDate"
+													  Width="100%"
+													  Placeholder="Select date" Enabled="false">
+										</SfDatePicker>
+									</MudItem>
+								</MudGrid>
+							</MudItem>
+
+							<!-- Total Amount -->
+							<MudItem xs="6">
+								<MudGrid>
+									<MudItem xs="4" Class="d-flex align-center">
+										<MudText>Total Amount</MudText>
+									</MudItem>
+									<MudItem xs="8">
+										<SfTextBox ID="txtTotalAmount"
+												   @bind-Value="_totalAmount"
+												   Width="100%"
+												   Placeholder="0.00" Enabled="false">
+										</SfTextBox>
+									</MudItem>
+								</MudGrid>
+							</MudItem>
+
+						</MudGrid>
+					</MudItem>
+
+					<!-- NOTES -->
+					<MudItem xs="12" Class="mt-4">
+						<MudItem xs="12" class="mb-2">
+							<MudGrid>
+								<MudItem xs="2">
+									<MudText>Notes <span style="color:red;">*</span></MudText>
+								</MudItem>
+								<MudItem xs="10">
+									<SfTextArea ID="txtNotes"
+												RowCount="3"
+												ColumnCount="1000"
+												Placeholder="Input Notes"
+												@bind-Value="_notes">
+									</SfTextArea>
+								</MudItem>
+							</MudGrid>
+						</MudItem>
+					</MudItem> *@
+
+				</MudGrid>
+
+				<MudGrid Class="mb-2">
+					<MudItem xs="12" Class="mt-4">
+						@* <MudText>File Upload<span style="color:red;">*</span></MudText>
+						<MudText Typo="Typo.subtitle2" Color="Color.Secondary" Style="font-style: italic; font-size: 0.8rem;">
+							<b>(Maximum Size 5 Mb)</b>
+						</MudText> *@
+						<MudGrid Class="mt-0" Justify="Justify.FlexStart">
+							
+							@* <MudItem xs="12" sm="5">
+								<SfUploader @ref="_uploadObj" ID="uploaderApplicants" AutoUpload="true" SequentialUpload="false" AllowMultiple="false"
+											AllowedExtensions=".xls, .xlsx" MaxFileSize=@_maximumFileSizeInBytes>
+									<UploaderEvents ValueChange="ValueChangeUploaderApplicants" OnRemove="OnRemoveUploaderApplicants"></UploaderEvents>
+								</SfUploader>
+							</MudItem> *@
+							@* <MudItem xs="12" sm="1" Class="mt-1">
+								<SfButton Content="Generate Request Id" CssClass="e-info" IconCss="e-icons e-upload-1"
+										  OnClick="OnClickUploadAsync"></SfButton>
+							</MudItem> *@
+							<MudItem xs="12" sm="6" Class="d-flex justify-start">
+                                <SfButton Content="Download For BMC" OnClick="OnClickDownloadForBMCAsync" CssClass="e-outline e-info" IconCss="e-icons e-download" Style="height: fit-content;"></SfButton>
+							</MudItem>
+						</MudGrid>
+					</MudItem>
+				</MudGrid>
+
+				<MudGrid Class="mb-2">
+					<MudItem xs="12">
+						<MudCard Class="pa-4" Elevation="2">
+							<MudCardContent>
+								<MudGrid>
+									<MudItem xs="12">
+										<MudGrid Spacing="2" Class="mb-1">
+											<MudItem xs="12" md="8">
+												<MudGrid Class="d-flex align-center justify-start">
+													<MudItem>
+														<MudText Typo="Typo.h6" Class="ms-0">Overview Payment</MudText>
+													</MudItem>
+												</MudGrid>
+											</MudItem>
+										</MudGrid>
+                                        <SfGrid @ref="Grid" DataSource="@_paymentOverviewDetails" Toolbar="@(new List<string>() { "Search" })" AllowExcelExport="true" AllowFiltering="true" AllowPaging="true" AllowSorting="true" AllowResizing="true" AllowTextWrap="true">
+                                            <GridPageSettings PageCount="5" PageSize="10" PageSizes="@(new string[] { "10", "15", "20", "All" })"></GridPageSettings>
+                                            <GridEvents TValue="GetPaymentOverviewDetailPeriodResponse" CommandClicked="OnCommandClicked"></GridEvents>
+											<GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Excel"></GridFilterSettings>
+											<GridColumns>
+                                                <GridColumn Field=@nameof(GetPaymentOverviewDetailPeriodResponse.Item) HeaderText="Line Item" Width="150"></GridColumn>
+												<GridColumn Field=@nameof(GetPaymentOverviewDetailPeriodResponse.RequestId) HeaderText="Request Id" Width="150"></GridColumn>
+                                                <GridColumn Field=@nameof(GetPaymentOverviewDetailPeriodResponse.ApplicantName) HeaderText="Name" Width="150"></GridColumn>
+                                                <GridColumn Field=@nameof(GetPaymentOverviewDetailPeriodResponse.ApplicantNumber) HeaderText="Employee Number" Width="150"></GridColumn>
+                                                <GridColumn Field=@nameof(GetPaymentOverviewDetailPeriodResponse.CompanyName) HeaderText="Company" Width="150"></GridColumn>
+                                                <GridColumn Field=@nameof(GetPaymentOverviewDetailPeriodResponse.Category) HeaderText="Category" Width="150"></GridColumn>
+                                                <GridColumn Field=@nameof(GetPaymentOverviewDetailPeriodResponse.Currency) HeaderText="Currency" Width="150"></GridColumn>
+                                                <GridColumn Field=@nameof(GetPaymentOverviewDetailPeriodResponse.Ammount) HeaderText="Amount" Width="150">
+                                                    <Template>
+                                                        @{
+                                                            var data = (context as GetPaymentOverviewDetailPeriodResponse);
+                                                        }
+                                                        <div style="text-align:right;">
+                                                            @($"{data!.Ammount.ToString("N2", new System.Globalization.CultureInfo("id-ID"))}")
+                                                        </div>
+                                                    </Template>
+                                                </GridColumn>
+
+                                                <GridColumn Field=@nameof(GetPaymentOverviewDetailPeriodResponse.WageType) HeaderText="Wage Type" Width="150"></GridColumn>
+												@* <GridColumn Field=@nameof(GetPaymentOverviewDetailPeriodResponse.TypeResponse) HeaderText="Status" Width="150"></GridColumn> *@
+												<GridColumn HeaderText="Status" Width="150">
+													<Template>
+														@{
+															var item = (context as GetPaymentOverviewDetailPeriodResponse);
+
+															if (!string.IsNullOrEmpty(item?.TypeResponse))
+															{
+																var statusDescription = item.TypeResponse.ToLower() switch
+																{
+																	"s" => "Success",
+																	"e" => "Failed"
+																};
+																var chipClass = item.TypeResponse.ToLower() switch
+																{
+																	"s" => "e-success",
+																	"e" => "e-danger",
+																	_ => "e-info"
+																};
+
+																// <SfChip>
+																// 	<ChipItems>
+																// 		<ChipItem Text="@statusDescription" CssClass="@chipClass"></ChipItem>
+																// 	</ChipItems>
+																// </SfChip>
+																if(statusDescription == "Failed")
+																{
+																	<div style="display: flex; justify-content: center;">
+																		<MudTooltip Color="Color.Error" Placement="MudBlazor.Placement.Bottom" Arrow="true">
+																			<ChildContent>
+																				<SfChip>
+																					<ChipItems>
+																						<ChipItem Text="@statusDescription" CssClass="@chipClass"></ChipItem>
+																					</ChipItems>
+																				</SfChip>
+																			</ChildContent>
+																			<TooltipContent>
+																				<MudText Typo="Typo.body2" Style="max-width: 300px; white-space: normal; word-break: break-word; overflow-wrap: break-word;">
+																					@item.MessageResponse
+																				</MudText>
+																			</TooltipContent>
+																		</MudTooltip>
+																	</div>
+																}
+																else
+																{
+																	<div style="display: flex; justify-content: center;">
+																		<SfChip>
+																			<ChipItems>
+																				<ChipItem Text="@statusDescription" CssClass="@chipClass"></ChipItem>
+																			</ChipItems>
+																		</SfChip>
+																	</div>
+																}
+																
+															}
+														}
+													</Template>
+												</GridColumn>
+												<GridColumn HeaderText="Action" TextAlign="TextAlign.Center" Width="150">
+													<Template>
+														@{
+															var item = (context as GetPaymentOverviewDetailPeriodResponse);
+														}
+														<div class="d-flex justify-center">
+															<SfButton IconCss="e-icons e-eye"
+																	  CssClass="e-flat"
+																	  OnClick="@(() => OnClickView(item))"
+																	  Title="View">
+															</SfButton>
+
+															@if (item != null && !string.IsNullOrEmpty(item.TypeResponse) && item.TypeResponse.Equals("e", StringComparison.OrdinalIgnoreCase) && item.IsSimulate)
+															{
+																<SfButton IconCss="e-icons e-edit-notes"
+																		  CssClass="e-flat"
+																		  OnClick="@(() => OnClickEditStatusToSap(item))"
+																		  Title="Fix Error">
+																</SfButton>
+															}
+														</div>
+													</Template>
+												</GridColumn>
+											</GridColumns>
+										</SfGrid>
+									</MudItem>
+								</MudGrid>
+							</MudCardContent>
+						</MudCard>
+					</MudItem>
+				</MudGrid>
+				<MudGrid>
+					<MudItem xs="12" md="2">
+						<MudGrid Class="d-flex flex-wrap justify-start align-center">
+							<MudItem Class="ml-1 pa-2 ma-0">
+								<SfButton OnClick="OnClickBack" Content="Back" IconCss="e-icons e-arrow-left" CssClass="e-danger"></SfButton>
+							</MudItem>
+						</MudGrid>
+					</MudItem>
+					<MudItem xs="12" md="10" sm="10" lg="10">
+						<MudGrid Class="d-flex flex-wrap align-center justify-start justify-md-end">
+							@if (CanSimulate)
+							{
+								<MudItem Class="ml-1 pa-2 ma-0">
+									<SfButton Content="Simulate SAP" OnClick="@(() => OnClickPostingSap(1))" IconCss="e-icons e-refresh" Style="background: #7E22CE; color: white;"></SfButton>
+								</MudItem>
+							}
+							@if (CanRepost)
+							{
+								<MudItem Class="ml-0 pa-2 ma-0">
+									<SfButton Content="RePosting SAP" OnClick="@(() => OnClickPostingSap(3))" IconCss="e-icons e-repeat" Style="background: linear-gradient(to right, #4279db, #1c4185); color: white;"></SfButton>
+								</MudItem>
+							}
+							@if (CanPostToSap)
+							{
+								<MudItem Class="ml-0 pa-2 ma-0">
+									<SfButton Content="Posting to SAP" OnClick="@(() => OnClickPostingSap(2))" IconCss="e-icons e-check" Style="background: linear-gradient(to right, #4279db, #1c4185); color: white;"></SfButton>
+								</MudItem>
+							}
+							@if (CanComplete)
+							{
+								<MudItem Class="ml-0 pa-2 ma-0">
+									<SfButton Content="Complete" IconCss="e-icons e-check" OnClick="@(() => OnClickPostingSap(5))" Style="background: linear-gradient(to right, #4279db, #1c4185); color: white;"></SfButton>
+								</MudItem>
+							}
+						</MudGrid>
+					</MudItem>
+				</MudGrid>
+			</MudPaper>
+		</MudItem>
+	</MudGrid>
+
+}
+
+<Psmp.Bsui.Features.Payments.Component.DialogConfirmation Visibility="_visibleConfirmationDialog"
+														  Title="@_dialogTitle"
+														  Content="@_dialogContent"
+														  OnClickYes="OnConfirmationYes"
+														  OnClickNo="OnConfirmationClose"
+														  DialogClose="OnConfirmationClose"
+														  IsProgressButton="@_isProgressButton"
+														  ShowNoButton="@_showNoButton"
+														  Duration="500">
+</Psmp.Bsui.Features.Payments.Component.DialogConfirmation>
+
+<Psmp.Bsui.Features.Payments.Component.DialogEditStatusSap Visibility="_visibleEditDialog"
+														   Title="Edit Status"
+														   OnClickCancel="OnCloseEditDialog"
+														   DialogClose="OnCloseEditDialog"
+														   OnClickSave="OnSaveStatusToSap"
+														   Request="@_requestResponseSap"
+														   IsLoading="_isSavingStatusToSap">
+</Psmp.Bsui.Features.Payments.Component.DialogEditStatusSap>
+

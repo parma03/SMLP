@@ -1,0 +1,162 @@
+﻿@page "/Selection/Psychotest/ScheduleDetails/{Type:int}/{Id:guid}"
+@using Psmp.Shared.Selections.SelectionPsychotests.Queries
+@using Psmp.Shared.Selections.SelectionTOEFLs.Queries
+
+<ErrorViewer Error="_error" />
+<MudBreadcrumbs Items="_breadcrumbItems"></MudBreadcrumbs>
+
+@if (_isLoading)
+{
+    <Loading IsVisible="_isLoading" />
+}
+else
+{
+    <MudGrid Spacing="2">
+        <MudItem xs="12">
+            <MudCard>
+                <MudCardContent>
+                    <MudItem xs="12">
+                        <MudGrid>
+                            <MudItem xs="4">
+                                <MudText>Schedule Test</MudText>
+                            </MudItem>
+                            <MudItem xs="8">
+                                <SfDateRangePicker ID="dTestDatePsychotest" Format="dd.MM.yyyy" TValue="DateTimeOffset?" StartDate="@_response!.ScheduleStartDate" EndDate="@_response!.ScheduleEndDate" Placeholder="Choose a Date">
+                                </SfDateRangePicker>
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudGrid>
+                            <MudItem xs="4">
+                                <MudText>Daily Session</MudText>
+                            </MudItem>
+                            <MudItem xs="8">
+                                <SfNumericTextBox ID="txtDailySessionPsychotest" Placeholder="Input Daily Session" Format="n0" @bind-Value="_response!.Session" Enabled="false"></SfNumericTextBox>
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudGrid>
+                            <MudItem xs="6">
+                                <MudGrid>
+                                    <MudItem xs="8">
+                                        <MudText>Session Start</MudText>
+                                    </MudItem>
+                                    <MudItem xs="4">
+                                        <SfTimePicker TValue="TimeOnly" Step=60 Format="HH:mm" ShowClearButton="true" FullScreen="true" @bind-Value="_response!.Session1Start"></SfTimePicker>
+                                    </MudItem>
+                                </MudGrid>
+                            </MudItem>
+                            <MudItem xs="6">
+                                <MudGrid>
+                                    <MudItem xs="3">
+                                    </MudItem>
+                                    <MudItem xs="5">
+                                        <MudText>Session End</MudText>
+                                    </MudItem>
+                                    <MudItem xs="4">
+                                        <SfTimePicker TValue="TimeOnly" Step=60 Format="HH:mm" ShowClearButton="true" FullScreen="true" @bind-Value="_response!.Session1End"></SfTimePicker>
+                                    </MudItem>
+                                </MudGrid>
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+                    @*  <MudItem xs="12">
+                <MudGrid>
+                <MudItem xs="6">
+                <MudGrid>
+                <MudItem xs="8">
+                <MudText>Session 2 Start</MudText>
+                </MudItem>
+                <MudItem xs="4">
+                <SfTimePicker TValue="DateTimeOffset" Step=60 Format="HH:mm" ShowClearButton="true" FullScreen="true" @bind-Value="_response!.Session2Start" Enabled="true"></SfTimePicker>
+                </MudItem>
+                </MudGrid>
+                </MudItem>
+                <MudItem xs="6">
+                <MudGrid>
+                <MudItem xs="3">
+                </MudItem>
+                <MudItem xs="5">
+                <MudText>Session 2 End</MudText>
+                </MudItem>
+                <MudItem xs="4">
+                <SfTimePicker TValue="DateTimeOffset" Step=60 Format="HH:mm" ShowClearButton="true" FullScreen="true" @bind-Value="_response!.Session2End" Enabled="true"></SfTimePicker>
+                </MudItem>
+                </MudGrid>
+                </MudItem>
+                </MudGrid>
+                </MudItem> *@
+                    <MudItem xs="12">
+                        <MudGrid>
+                            <MudItem xs="4">
+                                <MudText>Daily Applicants</MudText>
+                            </MudItem>
+                            <MudItem xs="8">
+                                <SfNumericTextBox ID="txtDailyApplicantsPsychotest" Placeholder="Input Daily Applicants" Format="n0" @bind-Value="_response!.Applicants"></SfNumericTextBox>
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudGrid>
+                            <MudItem xs="4">
+                                <MudText>Location</MudText>
+                            </MudItem>
+                            <MudItem xs="8">
+                                <SfTextBox ID="txtLocationPsychotest" Placeholder="Input Location" @bind-Value="_response!.Location"></SfTextBox>
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+        <MudItem xs="6">
+            <MudText>Company</MudText>
+            <DropdownCompany OnChangeAsync="@OnChangeCompanyAsync" />
+        </MudItem>
+        <MudItem xs="12">
+            <MudCard>
+                <MudCardContent>
+                    @if (_isLoadingData)
+                    {
+                        <LoadingLinear IsVisible="_isLoadingData" />
+                    }
+                    else
+                    {
+                        <MudText>List of Applicant</MudText>
+                        <SfGrid DataSource="@_listApplicants" Toolbar="@(new List<string>() { "Search" })" AllowPaging="true">
+                            <GridEvents CommandClicked="OnCommandClicked" TValue="GetSelectionPsychotestApplicantsQueryResponse"></GridEvents>
+                            <GridColumns>
+                                <GridColumn Field=@nameof(GetSelectionPsychotestApplicantsQueryResponse.Id) IsPrimaryKey="true" Visible="false"></GridColumn>
+                                <GridColumn Field=@nameof(GetSelectionPsychotestApplicantsQueryResponse.EmployeeNumber) Width="200" HeaderText="Employee Number"></GridColumn>
+                                <GridColumn Field=@nameof(GetSelectionPsychotestApplicantsQueryResponse.Name) Width="250"></GridColumn>
+                                <GridColumn Field=@nameof(GetSelectionPsychotestApplicantsQueryResponse.Email) Width="300"></GridColumn>
+                                <GridColumn Field=@nameof(GetSelectionPsychotestApplicantsQueryResponse.CompanyCode) Width="150" HeaderText="Company"></GridColumn>
+                                <GridColumn HeaderText="Action" Width="150" TextAlign="TextAlign.Center" HeaderTextAlign="TextAlign.Center" Visible="true">
+                                    <GridCommandColumns>
+                                        <GridCommandColumn Title="Delete" Type="CommandButtonType.Delete" ButtonOption="@(new CommandButtonOptions() {IconCss="e-icons e-delete", CssClass="e-flat" })"></GridCommandColumn>
+                                    </GridCommandColumns>
+                                </GridColumn>
+                            </GridColumns>
+                        </SfGrid>
+                    }
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+        <MudItem xs="12">
+            <MudGrid>
+                <MudItem xs="4">
+                    <SfButton OnClick="OnClickSave" Content="Save" IconCss="e-icons e-save" CssClass="e-info"></SfButton>
+                    <SfButton OnClick="OnClickCancel" Content="Cancel" IconCss="e-icons e-circle-close" CssClass="e-secondary"></SfButton>
+                </MudItem>
+
+            </MudGrid>
+        </MudItem>
+    </MudGrid>
+}
+<DialogConfirmation Visibility="VisiblePopupDelete"
+                    Title="@DisplayTextFor.ScheduleTest"
+                    Content="Are you sure want to delete this data?"
+                    DialogOpen="DialogDeleteOpen" DialogClose="DialogDeleteClose"
+                    OnClickNo="ClickedNoDelete" OnClickYes="ClickedYesDelete"></DialogConfirmation>

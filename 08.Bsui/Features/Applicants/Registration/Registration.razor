@@ -1,0 +1,64 @@
+﻿@page "/Registration"
+
+@using Psmp.Shared.Applicants.Constants;
+@inject IWebHostEnvironment _webHostEnvironment
+@inject IOptions<HrisOptions> _hrisOptions
+
+<BrowserTabTitle>@DisplayTextFor.Registration</BrowserTabTitle>
+<PageHeader Title="@DisplayTextFor.Registration" />
+<ErrorViewer Error="@Error" />
+<LoadingDialog IsVisible=@_isLoadingDialog Text="Loading..."></LoadingDialog>
+
+@if (_isLoading)
+{
+    <Loading IsVisible="@_isLoading" />
+}
+else
+{
+    <MudCard Elevation="2">
+        <MudCardHeader>
+            <CardHeaderContent>
+                <MudText Typo="Typo.h5" Class="mt-4">List of Scholarship Program</MudText>
+            </CardHeaderContent>
+        </MudCardHeader>
+        <MudCardContent>
+            @if (IsLoadingGrid)
+            {
+                <LoadingLinear IsVisible="@IsLoadingGrid" />
+            }
+            else
+            {
+                <SfGrid DataSource="@Postings" GridLines="GridLine.Default" Toolbar="@(new List<string>() { "Search" })"
+                        AllowSorting="true" AllowFiltering="true" AllowPaging="true" AllowResizing="true" AllowTextWrap="true">
+                    <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Excel"></GridFilterSettings>
+                    <GridPageSettings PageCount="8" PageSize="8" PageSizes="@SyncfusionGridValue.PageSize"></GridPageSettings>
+                    <GridTextWrapSettings WrapMode="WrapMode.Header"></GridTextWrapSettings>
+                    <GridColumns>
+                        <GridColumn Field=@nameof(GetScholarshipPostingResponse.Id) IsPrimaryKey="true" Visible="false"></GridColumn>
+                        <GridColumn Field=@nameof(GetScholarshipPostingResponse.CompanyGroupName) HeaderText="H/ SH/ AP&P" TextAlign="TextAlign.Center"></GridColumn>
+                        <GridColumn Field=@nameof(GetScholarshipPostingResponse.DegreeName) HeaderText="Degree" TextAlign="TextAlign.Center"></GridColumn>
+                        <GridColumn Field=@nameof(GetScholarshipPostingResponse.Faculty) HeaderText="Faculty" HeaderTextAlign="TextAlign.Center"></GridColumn>
+                        <GridColumn Field=@nameof(GetScholarshipPostingResponse.Major) HeaderText="Major" HeaderTextAlign="TextAlign.Center"></GridColumn>
+                        <GridColumn Field=@nameof(GetScholarshipPostingResponse.UniversityLocation) HeaderText="Location" TextAlign="TextAlign.Center"></GridColumn>
+                        <GridColumn Field=@nameof(GetScholarshipPostingResponse.ScholarshipScope) HeaderText="Scope" TextAlign="TextAlign.Center"></GridColumn>
+                        <GridColumn Field=@nameof(GetScholarshipPostingResponse.AwardeeQuota) HeaderText="Quota" TextAlign="TextAlign.Center"></GridColumn>
+                        <GridColumn Field=@nameof(GetScholarshipPostingResponse.DueDate) HeaderText="Application Due Date" Format="dd.MM.yyyy" TextAlign="TextAlign.Center"></GridColumn>
+                        <GridColumn HeaderText="Action" Width="80" TextAlign="TextAlign.Center">
+                            <Template>
+                                @{
+                                    var _data = (context as GetScholarshipPostingResponse);
+                                }
+                                <div>
+                                    @if (_data is not null)
+                                    {
+                                        <SfButton @onclick="@((args) => OnCommandClick(_data))" IconCss="e-icons e-eye" CssClass="e-flat"></SfButton>
+                                    }
+                                </div>
+                            </Template>
+                        </GridColumn>
+                    </GridColumns>
+                </SfGrid>
+            }
+        </MudCardContent>
+    </MudCard>
+}

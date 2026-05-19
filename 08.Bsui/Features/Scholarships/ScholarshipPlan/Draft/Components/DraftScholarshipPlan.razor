@@ -1,0 +1,142 @@
+﻿@using Psmp.Bsui.Features.Scholarships.Components
+@using Psmp.Shared.Scholarships.ScholarshipPlan.Queries
+@using Syncfusion.Blazor.DocumentEditor
+<ErrorViewer Error="_error" />
+
+@if (_isLoading)
+{
+    <Loading IsVisible="_isLoading" />
+}
+else
+{
+    <MudGrid Spacing="2">
+        <MudGrid Class="mb-2">
+            <MudItem xs="12">
+                <MudCard Class="pa-4" Elevation="2">
+                    <MudCardContent>
+                        @if (_isLoadingData)
+                        {
+                            <LoadingLinear IsVisible="_isLoadingData" />
+                        }
+                        else
+                        {
+                            <MudGrid>
+                                <MudItem xs="12">
+                                    <CardTitle Title="List of Scholarship Plan" />
+                                </MudItem>
+                                <MudItem xs="12">
+                                    <SfGrid @ref="@Grid" DataSource="@_scholarshipPlans" Toolbar="@(new List<string>() { "Search" })"
+                                            AllowFiltering="true" AllowPaging="true" AllowSorting="true" AllowResizing="true" AllowTextWrap="true" AllowSelection="true">
+                                        <GridPageSettings PageCount="8" PageSize="8" PageSizes="@SyncfusionGridValue.PageSize"></GridPageSettings>
+                                        <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Excel"></GridFilterSettings>
+                                        <GridSelectionSettings CheckboxMode="CheckboxSelectionType.ResetOnRowClick" Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
+                                        <GridEvents RowSelected="GetSelectedRecords" RowDeselected="CelearSelectedRecords" CommandClicked="OnCommandClicked" TValue="GetScholarshipPlanResponse"></GridEvents>
+                                        <GridColumns>
+                                            <GridColumn Type="ColumnType.CheckBox" Width="80"></GridColumn>
+                                            <GridColumn Field=@nameof(GetScholarshipPlanResponse.Id) IsPrimaryKey="true" Visible="false"></GridColumn>
+                                            <GridColumn Field=@nameof(GetScholarshipPlanResponse.Code) HeaderText="Scholarship Code" Width="150" TextAlign="TextAlign.Center"></GridColumn>
+                                            <GridColumn Field=@nameof(GetScholarshipPlanResponse.CompanyGroupName) HeaderText="H/ SH/ APS&P" Width="250" HeaderTextAlign="TextAlign.Center"></GridColumn>
+                                            <GridColumn Field=@nameof(GetScholarshipPlanResponse.DegreeName) HeaderText="Degree" Width="100" HeaderTextAlign="TextAlign.Center" TextAlign="TextAlign.Center"></GridColumn>
+                                            <GridColumn Field=@nameof(GetScholarshipPlanResponse.Faculty) HeaderText="Faculty" Width="250" HeaderTextAlign="TextAlign.Center"></GridColumn>
+                                            <GridColumn Field=@nameof(GetScholarshipPlanResponse.Major) HeaderText="Major" HeaderTextAlign="TextAlign.Center" Width="250"></GridColumn>
+                                            <GridColumn Field=@nameof(GetScholarshipPlanResponse.UniversityLocation) HeaderText="Location" HeaderTextAlign="TextAlign.Center" TextAlign="TextAlign.Center" Width="150"></GridColumn>
+                                            <GridColumn Field=@nameof(GetScholarshipPlanResponse.ScholarshipScope) HeaderText="Scope" HeaderTextAlign="TextAlign.Center" Width="250"></GridColumn>
+                                            <GridColumn Field=@nameof(GetScholarshipPlanResponse.AwardeeQuota) HeaderText="Quota" TextAlign="TextAlign.Center" Width="120"></GridColumn>
+                                            <GridColumn Field=@nameof(GetScholarshipPlanResponse.PostingYear) HeaderText="Posting Year" TextAlign="TextAlign.Center" Width="100"></GridColumn>
+                                            <GridColumn Field=@nameof(GetScholarshipPlanResponse.Status) HeaderText="Status" TextAlign="TextAlign.Center" Width="150">
+                                                <Template>
+                                                    <SfChip>
+                                                        <ChipItems>
+                                                            @{
+                                                                var data = (context as GetScholarshipPlanResponse);
+                                                                if (data!.Status == ScholarshipPlanStatus.Approved)
+                                                                {
+                                                                    <ChipItem Text="@data.Status.GetDescription()" CssClass="e-success"></ChipItem>
+                                                                }
+                                                                else if (data!.Status == ScholarshipPlanStatus.Rejected)
+                                                                {
+                                                                    <ChipItem Text="@data.Status.GetDescription()" CssClass="e-danger"></ChipItem>
+                                                                }
+                                                                else if (data!.Status == ScholarshipPlanStatus.WaitingForApproval)
+                                                                {
+                                                                    <ChipItem Text="@data.Status.GetDescription()" CssClass="e-warning"></ChipItem>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <ChipItem Text="@data.Status.GetDescription()" CssClass="e-info"></ChipItem>
+                                                                }
+                                                            }
+                                                        </ChipItems>
+                                                    </SfChip>
+                                                </Template>
+                                            </GridColumn>
+                                            <GridColumn HeaderText="Action" Width="120" TextAlign="TextAlign.Center" HeaderTextAlign="TextAlign.Center">
+                                                <GridCommandColumns>
+                                                    <GridCommandColumn Title="Reject" Type="CommandButtonType.Edit" ButtonOption="@(new CommandButtonOptions() {IconCss="e-icons e-trash", CssClass="e-flat" })"></GridCommandColumn>
+                                                </GridCommandColumns>
+                                            </GridColumn>
+                                        </GridColumns>
+                                    </SfGrid>
+                                </MudItem>
+                                @if (!_isDrafting)
+                                {
+                                    <MudItem xs="12" Style="text-align: right;">
+                                        <SfButton Content="Submit" CssClass="e-primary" IconCss="e-icons e-save" OnClick="OnClickSubmit"></SfButton>
+                                    </MudItem>
+                                }
+                            </MudGrid>
+                        }
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+        </MudGrid>
+    </MudGrid>
+    <MudGrid>
+        <MudItem xs="12" Class="text-center">
+            <SfDocumentEditorContainer @ref="_containerDocument" Height="950px" ShowPropertiesPane="@ShowProperties" RestrictEditing="@ReadOnly" EnableToolbar="@Toolbar" ToolbarItems="@_toolbarItems" DocumentEditorSettings="_settingDocument">
+                <DocumentEditorContainerEvents Created="OnCreated"></DocumentEditorContainerEvents>
+            </SfDocumentEditorContainer>
+        </MudItem>
+        @if (_isDrafting)
+        {
+            <MudItem xs="12">
+                <MudGrid>
+                    <MudItem xs="12" Style="text-align: right;">
+                        @if (_contentButton == "Update")
+                        {
+                            <SfButton OnClick="OnClickUpdateAsync" Content="Update" IconCss="e-icons e-edit" CssClass="e-info m-4" Disabled="@_disableButton"></SfButton>
+                        }
+                        else if (_contentButton == "Save")
+                        {
+                            <SfButton OnClick="OnClickSaveAsync" Content="Save" IconCss="e-icons e-save" CssClass="e-info m-4" Disabled="@_disableButton"></SfButton>
+                        }
+                        <SfButton OnClick="OnClickDownloadWordAsync" Content="Download as Word" IconCss="e-icons e-download" CssClass="e-info ml-1" Disabled="@_disableButtonDownload"></SfButton>
+                        <SfButton OnClick="OnClickDownloadPdfAsync" Content="Download as PDF" IconCss="e-icons e-download" CssClass="e-info" Disabled="@_disableButtonDownload"></SfButton>
+                        <SfButton OnClick="OnClickDownloadExcelAsync" Content="Download as Excel" IconCss="e-icons e-download" CssClass="e-info" Disabled="@_disableButtonDownload"></SfButton>
+                    </MudItem>
+                </MudGrid>
+            </MudItem>            
+        }
+    </MudGrid>    
+
+    <DialogConfirmation Visibility="VisiblePopup"
+                        Title="@DisplayTextFor.DraftScholarshipPlan"
+                        Content="Are you sure want to reject this data?"
+                        DialogOpen="DialogOpen" DialogClose="DialogClose"
+                        OnClickNo="ClickedNo" OnClickYes="ClickedYes"
+                        PositionY="150"></DialogConfirmation>
+
+    <DialogConfirmation Visibility="VisiblePopupSubmit"
+                        Title="@DisplayTextFor.DraftScholarshipPlan"
+                        Content="Are you sure want to submit this data?"
+                        DialogOpen="DialogOpenSubmit" DialogClose="DialogCloseSubmit"
+                        OnClickNo="ClickedNoSubmit" OnClickYes="ClickedYesSubmit"
+                        PositionY="150"></DialogConfirmation>
+}
+
+<style>
+    .e-chip-list {
+        display: inline !important
+    }
+
+</style>

@@ -1,0 +1,178 @@
+﻿
+@using Syncfusion.Blazor.Inputs;
+@using Syncfusion.Blazor.PdfViewerServer;
+@using Psmp.Shared.StudyPreparations.SponsorshipLetter.Constants;
+
+<style>
+    .e-upload .e-file-select-wrap, .e-bigger.e-small .e-upload .e-file-select-wrap {
+        padding: 5px 0 5px 5px; /* Sesuaikan padding untuk tampilan yang lebih kompak */
+    }
+
+    .sf-uploader-compact .e-file-container {
+        margin: 2px 0; /* Mengurangi margin antar file */
+    }
+</style>
+
+<ErrorViewer Error="_error" />
+<LoadingDialog IsVisible=@_isLoadingDialog Text="Loading..."></LoadingDialog>
+@if (_isLoading)
+{
+    <Loading IsVisible="_isLoading" />
+}
+else
+{
+    <MudGrid Spacing="2">        
+        <MudItem xs="12">
+            <MudGrid Spacing="2">
+                <MudItem xs="4">
+                    <MudGrid Spacing="2">
+                        <MudItem xs="12">
+                            <MudCard Style="height : 850px;">
+                                <MudCardContent>
+                                    <MudItem xs="12" Class="mt-4">
+                                        <MudText>Category</MudText>
+                                        <MudGrid>
+                                            <MudItem xs="12">
+                                                <SfTextBox ID="txtCategory" Placeholder="Category" Value="@DisplayTextFor.SponsorshipLetter" Enabled="@_isEnabled"></SfTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12" Class="mt-4">
+                                        <MudText>University Name</MudText>
+                                        <MudGrid>
+                                            
+                                            <MudItem xs="12">
+                                                <SfTextBox ID="txtUniversityName" Placeholder="University Name" @bind-Value="_dataItem!.UniversityName" Enabled="@_isEnabled"></SfTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12" Class="mt-4">
+                                        <MudText>Letter Addressed To (Department & Address)</MudText>
+                                        <MudGrid>
+                                            <MudItem xs="12">
+                                                <SfTextBox ID="txtAddressTo" Placeholder="Letter Addressed To (Department & Address)" @bind-Value="_dataItem!.AddressTo" Multiline="true" Enabled="@_isEnabled"></SfTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12" Class="mt-4">
+                                        <MudText>Study Program Master of...</MudText>
+                                        <MudGrid>
+                                            <MudItem xs="12">
+                                                <SfTextBox ID="txtStudy" Placeholder="Study Program Master of..." @bind-Value="_dataItem!.Study" Enabled="@_isEnabled"></SfTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12" Class="mt-4">
+                                        <MudText>Academic Year (Start-End)</MudText>
+                                        <MudGrid>
+                                            <MudItem xs="12">
+                                                <SfTextBox ID="txtAcademicYear" Placeholder="Study Period" @bind-Value="_dataItem!.AcademicYear" Enabled="@_isEnabled"></SfTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12" Class="mt-4">
+                                        <MudText>Bring Family</MudText>
+                                        <MudGrid>
+                                            <MudItem xs="12">
+                                                <SfTextBox ID="txtIsBringFamily" Placeholder="Bring Family" @bind-Value="@_bringFamily" Enabled="@_isEnabled"></SfTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12" Class="mt-4">
+                                        <MudText>Country</MudText>
+                                        <MudGrid>
+                                            <MudItem xs="12">
+                                                <SfTextBox ID="txtCountry" Placeholder="Country" @bind-Value="_dataItem!.Country" Enabled="@_isEnabled"></SfTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12" Class="mt-4">
+                                        <MudText>University Ranking</MudText>
+                                        <MudGrid>
+                                            <MudItem xs="12">
+                                                <SfTextBox ID="txtUniversityRank" Placeholder="9/QS/2024" @bind-Value="_dataItem!.UniversityRank" Enabled="@_isEnabled"></SfTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12" Class="mt-4">
+                                        <MudText>University Applicant Due Date</MudText>
+                                        <MudGrid>
+                                            <MudItem xs="12">
+                                                <SfDatePicker ID="txtUniversityDueDate" Format="dd.MM.yyyy" @bind-Value="_dataItem!.UniversityDueDate" Enabled="@_isEnabled"></SfDatePicker>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12" Class="mt-4">
+                                        <MudText>Comment</MudText>
+                                        <MudGrid>
+                                            <MudItem xs="12">
+                                                <SfTextArea ID="txtComment" @bind-Value="_dataItem!.Comment" RowCount=3 Width="100%" Disabled="true"></SfTextArea>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                </MudCardContent>
+                            </MudCard>
+                        </MudItem>
+                    </MudGrid>
+                </MudItem>
+                <MudItem xs="8">
+                    <MudGrid Spacing="2">
+                        <MudItem xs="12" Style="min-height:670px;">
+                            <MudText>Supporting Document</MudText>
+                            <MudGrid>
+                                <MudItem xs="12">
+                                    <SfPdfViewerServer DocumentPath="@_supportingDocument" Width="100%" Height="670px" />
+                                </MudItem>
+                            </MudGrid>
+                        </MudItem>
+                        <MudItem xs="12" Class="mt-4">
+                            <MudCard>
+                                <MudCardContent>
+                                    <MudItem xs="12" Class="mt-4">
+                                        <MudText>Notes</MudText>
+                                        <MudGrid>
+                                            <MudItem xs="12">
+                                                <SfTextBox ID="txtNotes" Placeholder="Notes" @bind-Value="_dataItem!.Notes" Multiline="true" Enabled="@_isEnabled"></SfTextBox>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                </MudCardContent>
+                            </MudCard>
+                        </MudItem>
+                    </MudGrid>
+                </MudItem>
+            </MudGrid>
+        </MudItem>
+        <br/>
+        <MudItem xs="12" Class="mt-8" Style="min-height:550px;">
+            <SfPdfViewerServer DocumentPath="@_finalDocument" Width="100%" Height="700px" />
+        </MudItem>
+        <MudItem xs="12" Class="mt-4">
+            @* <MudText>File Upload (.pdf) (Max. 5 Mb) <span style="color:red;">*</span></MudText> *@
+            <MudText>File Upload (.pdf) <span style="color:red;">*</span></MudText>
+            <MudText Typo="Typo.subtitle2" Color="Color.Secondary" Style="font-style: italic; font-size: 0.8rem;">
+                <b>(Maximum Size 5 Mb)</b>
+            </MudText>
+            <MudGrid Class="mt-0">
+                <MudItem xs="7">
+                    <SfUploader @ref="_sfUploaderFinal" ID="uploaderFinal" AutoUpload="true" SequentialUpload="false" AllowMultiple="false"
+                                AllowedExtensions=".pdf" MaxFileSize=@_maximumFileSizeInBytes>
+                        <UploaderEvents ValueChange="ValueChangeUploaderFinal" OnRemove="OnRemoveUploaderFinal"></UploaderEvents>
+                    </SfUploader>
+                </MudItem>
+                <MudItem xs="2" Class="mt-1">
+                    <SfButton Content="Upload Final Letter" CssClass="e-info" IconCss="e-icons e-upload-1"
+                              OnClick="OnClickUploadFinalAsync"></SfButton>
+                </MudItem>
+                <MudItem xs="1"></MudItem>
+                <MudItem xs="2" Class="mt-1 justify-end">
+                    <SfButton Content="Download Final Letter" CssClass="e-outline e-info" IconCss="e-icons e-download"
+                              OnClick="OnClickDownloadFinalAsync"></SfButton>
+                </MudItem>
+            </MudGrid>
+        </MudItem>
+        <MudItem xs="6" Style="text-align: left;">
+            <SfButton OnClick="OnClickBack" Content="Back" IconCss="e-icons e-arrow-left" CssClass="e-danger"></SfButton>
+        </MudItem>
+    </MudGrid>
+}

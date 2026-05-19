@@ -1,0 +1,22 @@
+﻿@if (IsVisible)
+{
+    <div class="loading">
+        <MudProgressCircular Color="Color.Primary" Size="Size.Large" Indeterminate="true" Class="mb-3" />
+        @if (string.IsNullOrWhiteSpace(Description))
+        {
+            <MudText Typo="Typo.body1">Retrieving data from the server...</MudText>
+        }
+        else
+        {
+            <MudText Typo="Typo.body1">@Description</MudText>
+        }
+    </div>
+}
+
+@code {
+    [Parameter]
+    public bool IsVisible { get; set; }
+
+    [Parameter]
+    public string Description { get; set; } = default!;
+}

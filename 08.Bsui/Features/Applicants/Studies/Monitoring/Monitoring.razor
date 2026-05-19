@@ -1,0 +1,39 @@
+﻿@page "/ApplicantStudyMonitoring"
+@page "/ApplicantStudyMonitoring/{TabIndex:int}"
+
+@using Psmp.Shared.StudyMonitorings.Constants
+
+@inject IWebHostEnvironment _webHostEnvironment
+@inject IOptions<HrisOptions> _hrisOptions
+
+<BrowserTabTitle>@DisplayTextFor.StudyMonitoring</BrowserTabTitle>
+<PageHeader Title="@DisplayTextFor.StudyMonitoring" />
+@* <MudBreadcrumbs Items="_breadcrumbItems"></MudBreadcrumbs> *@
+
+@if (_canView)
+{
+    <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6" ActivePanelIndex="@_activeTabIndex"
+             ActivePanelIndexChanged="@(e => OnTabChanged(e))">
+
+        <MudTabPanel Text="@DisplayTextFor.StudyPeriod">
+            <MonitoringStudyPeriod />
+        </MudTabPanel>
+        <MudTabPanel Text="@DisplayTextFor.Graduate">
+            <MonitoringGraduate />
+        </MudTabPanel>
+        <MudTabPanel Text="@DisplayTextFor.AfterProgram">
+            <MonitoringAfterProgram />
+        </MudTabPanel>
+    </MudTabs>
+}
+else
+{
+    <br />
+    <MudText Typo="Typo.h4">Not available @DisplayTextFor.StudyMonitoring</MudText>
+}
+
+<style>
+    .mud-tabs-panels {
+        min-height: 500px;
+    }
+</style>

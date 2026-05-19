@@ -1,0 +1,35 @@
+﻿@using Psmp.Shared.Selections.SelectionOverviews.Queries
+@using Psmp.Bsui.Features.Dashboards.Component
+
+<AuthorizeView Context="context">
+    <Authorized>
+        @if (context.User.HasPermission(Permissions.Psmp_ScholarshipPlan_View)
+        || context.User.HasPermission(Permissions.Psmp_ScholarshipPosting_View)
+        || context.User.HasPermission(Permissions.Psmp_SelectionOverview_View)
+        || context.User.HasPermission(Permissions.Psmp_ScholarshipPosting_View))
+        {
+
+            <MudItem xs="12">
+                <MudGrid Spacing="5">
+                    <MudItem xs="12">
+                        <MudPaper Style="height: 100%;">
+                            <MudCardContent>
+                                <MudGrid>
+                                    <MudItem xs="12">
+                                        <MudCard Style="box-shadow: none;">
+                                            <MudCardMedia Image="/img/tracklist.png" Height="700" Style="object-fit: cover;" />
+                                        </MudCard>
+                                    </MudItem>
+                                </MudGrid>
+                            </MudCardContent>
+                        </MudPaper>
+                    </MudItem>
+                </MudGrid>
+            </MudItem>
+        }
+        else
+        {
+            <Psmp.Bsui.Features.Applicants.Index />
+        }
+    </Authorized>
+</AuthorizeView>

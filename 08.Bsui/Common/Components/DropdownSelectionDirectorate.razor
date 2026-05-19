@@ -1,0 +1,9 @@
+﻿@using Psmp.Shared.Masters.Queries
+@using Syncfusion.Blazor.DropDowns
+
+<SfDropDownList ID="ddlDirectorate" TValue="int" TItem="GetDirectorateQueryResponse"
+                AllowFiltering="true" FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains"
+                DataSource="@_directorates" @bind-Value="@DirectorateValue">
+    <DropDownListFieldSettings Text="Name" Value="Id" />
+    <DropDownListEvents TItem="GetDirectorateQueryResponse" TValue="int" ValueChange="OnChangeAsync" />
+</SfDropDownList>

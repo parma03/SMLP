@@ -1,0 +1,45 @@
+﻿@page "/ApplicantStudyPreparation"
+
+@inject IWebHostEnvironment _webHostEnvironment
+@inject IOptions<HrisOptions> _hrisOptions
+
+@using Psmp.Shared.Studies.Constants
+
+<BrowserTabTitle>@DisplayTextFor.StudyPreparation</BrowserTabTitle>
+<PageHeader Title="@DisplayTextFor.StudyPreparation" />
+
+@if (_isCanView)
+{
+    <MudBreadcrumbs Items="_breadcrumbItems"></MudBreadcrumbs>
+    <ErrorViewer Error="@Error" />
+    <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6" ActivePanelIndex="@_activeTabIndex" ActivePanelIndexChanged="@(e => OnTabChanged(e))">
+        @if (IsShowPreparationDocument)
+        {
+            <MudTabPanel Text="@DisplayTextFor.PreparationDocument">
+                <PreparationDoc>
+
+                </PreparationDoc>
+            </MudTabPanel>
+        }
+        @* @if (IsShowBuddyList)
+        {
+            <MudTabPanel Text="@DisplayTextFor.BuddyList">
+                <PreparationBuddy>
+
+                </PreparationBuddy>
+            </MudTabPanel>
+        } *@
+    </MudTabs>
+}
+else
+{
+    <br />
+    <MudText Typo="Typo.h4">Not available @DisplayTextFor.StudyPreparation</MudText>
+}
+
+
+<style>
+    .mud-tabs-panels {
+        min-height: 500px;
+    }
+</style>

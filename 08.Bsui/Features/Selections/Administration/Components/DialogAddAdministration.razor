@@ -1,0 +1,271 @@
+﻿@using Psmp.Base.Scholarships.Enums
+@using Psmp.Shared.Selections.SelectionAdministrations.Commands.CreateSelectionAdministration
+@using Psmp.Shared.Selections.SelectionTalentReviews.Commands.Create
+@using Psmp.Shared.Selections.SelectionTalentReviews.Queries
+@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.Popups
+
+<SfDialog @bind-Visible=Visibility Width="80%" IsModal="true">
+    <DialogTemplates>
+        <Header>
+            <MudText Typo="Typo.h5">@Title</MudText>
+        </Header>
+        <Content>
+            <MudGrid Spacing="2">
+                <MudItem xs="12">
+                    <MudItem xs="12">
+                        <MudGrid>
+                            <MudItem xs="4">
+                                <MudText>Employee Number <span style="color:red;">*</span></MudText>
+                                <MudText Typo="Typo.subtitle2" Color="Color.Secondary" Style="font-style: italic; font-size: 0.8rem;">
+                                    <b>(Search without the two digits "00" in front of the employee number)</b>
+                                </MudText>
+                            </MudItem>
+                            <MudItem xs="4">
+                                <SfTextBox @ref="TextBoxNopek" ID="txtNopek" Placeholder="Input Employee Number"
+                                           Created="@CreateTextboxNopek" @bind-Value="request!.EmployeeNumber" Enabled="@(ActionType != "edit" && IsEnabled)"></SfTextBox>
+                            </MudItem>
+                            <MudItem xs="4">
+                                <SfMessage Severity="MessageSeverity.Error" ShowIcon="false" Variant="MessageVariant.Text" ShowCloseIcon="true" @bind-Visible="@IsShowError">@ErrorMessage</SfMessage>
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudGrid>
+                            <MudItem xs="4">
+                                <MudText>Username</MudText>
+                            </MudItem>
+                            <MudItem xs="8">
+                                <SfTextBox ID="txtUsername" Placeholder="Input Username" @bind-Value="request!.Name" Enabled="false"></SfTextBox>
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudGrid>
+                            <MudItem xs="4">
+                                <MudText>Company</MudText>
+                            </MudItem>
+                            <MudItem xs="8">
+                                <SfDropDownList ID="ddlCompanyAddAdministration" TValue="string" TItem="GetCompanyQueryResponse" DataSource="@listCompany" @bind-Value="request!.CompanyCode" Enabled="false"
+                                                AllowFiltering="true" FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains" Placeholder="Select Company">
+                                    <DropDownListFieldSettings Text="Name" Value="Code" />
+                                </SfDropDownList>
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudGrid>
+                            <MudItem xs="4">
+                                <MudText>Email</MudText>
+                            </MudItem>
+                            <MudItem xs="8">
+                                <SfTextBox ID="txtEmail" Placeholder="Input Email" @bind-Value="request!.Email" Enabled="false"></SfTextBox>
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudGrid>
+                            <MudItem xs="4">
+                                <MudText>Employment Status</MudText>
+                            </MudItem>
+                            <MudItem xs="4">
+                                <SfDropDownList TItem="EmploymentStatusResponse" TValue="EmploymentStatus" DataSource="@EmploymentStatusResponse" @bind-Value="@(request!.EmploymentStatus)"
+                                                Placeholder="Select Status" FloatLabelType="FloatLabelType.Never" Enabled="false">
+                                    <DropDownListFieldSettings Value="Value" Text="Text"></DropDownListFieldSettings>
+                                </SfDropDownList>
+                            </MudItem>
+                           @*  <MudItem xs="4">
+                                <SfTextBox ID="txtEmploymentStatus" Placeholder="Employment Status"
+                                           Value="Active" Enabled="false"></SfTextBox>
+                            </MudItem> *@
+                        </MudGrid>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudGrid>
+                            <MudItem xs="4">
+                                <MudText>PRL Individu/BS</MudText>
+                            </MudItem>
+                            <MudItem xs="4">
+                                <SfNumericTextBox ID="txtPRL" Placeholder="Input PRL" Format="n0" @bind-Value="request!.PRL"
+                                                  Enabled="false"></SfNumericTextBox>
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudGrid>
+                            <MudItem xs="4">
+                                <MudText>Work Period (Year)</MudText>
+                            </MudItem>
+                            <MudItem xs="4">
+                                <SfNumericTextBox ID="txtWorkPeriod" Placeholder="Input Work Period" Format="n0" @bind-Value="request!.WorkPeriod"
+                                                  Enabled="false"></SfNumericTextBox>
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudGrid>
+                            <MudItem xs="4">
+                                <MudText>Average Performance Rating Last 3 Years</MudText>
+                            </MudItem>
+                            <MudItem xs="4">
+                                <SfNumericTextBox ID="txtAveragePerformance" Placeholder="Input Average Performance Rating Last 3 Years" Format="n2"
+                                                  @bind-Value="request!.AveragePerformance" Enabled="false"></SfNumericTextBox>
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudGrid>
+                            <MudItem xs="4">
+                                <MudText>Indisciplinary Record Last 3 Years (SAP Based)</MudText>
+                            </MudItem>
+                            <MudItem xs="4">
+                                <SfDropDownList ID="ddlIndiciplinary" TValue="IndiciplinaryStatus" TItem="IndiciplinaryStatusResponse" DataSource="@IndiciplinaryStatusResponse" @bind-Value="request!.IndisciplinaryRecord"
+                                                Placeholder="Select IndisciplinaryRecord" Enabled="false">
+                                    <DropDownListFieldSettings Text="Text" Value="Value" />
+                                </SfDropDownList>
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudGrid>
+                            <MudItem xs="4">
+                                <MudText>MCU Status</MudText>
+                            </MudItem>
+                            <MudItem xs="4">
+                                <SfDropDownList TItem="MCUStatusResponse" TValue="McuStatus" Placeholder="Select Status" DataSource="@MCUStatusResponse" @bind-Value="@(request!.MCUStatus)"
+                                                FloatLabelType="FloatLabelType.Never" Enabled="false">
+                                    <DropDownListFieldSettings Value="Value" Text="Text"></DropDownListFieldSettings>
+                                </SfDropDownList>
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudGrid>
+                            <MudItem xs="4">
+                                <MudText>Status <span style="color:red;">*</span></MudText>
+                            </MudItem>
+                            <MudItem xs="4">
+                                <SfDropDownList TItem="ApplicantStatusResponse" TValue="ApplicantStatus" DataSource="@statusListResponses" @bind-Value="@(request!.ApplicationStatus)"
+                                                Placeholder="Select Status" FloatLabelType="FloatLabelType.Never" Enabled="@IsEnabled">
+                                    <DropDownListFieldSettings Value="Value" Text="Text"></DropDownListFieldSettings>
+                                </SfDropDownList>
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+                </MudItem>
+            </MudGrid>
+        </Content>
+        <FooterTemplate>
+            <SfButton Content="Cancel" CssClass="e-outline e-danger" IconCss="e-icons e-close" OnClick="OnClickNo"></SfButton>
+            @if (IsEnabled == true)
+            {
+                <SfButton Content="Save" CssClass="e-success" IconCss="e-icons e-circle-check" OnClick="OnClickYes"></SfButton>
+            }
+        </FooterTemplate>
+    </DialogTemplates>
+    <DialogEvents OnOpen="@DialogOpen" Closed="@DialogClose"></DialogEvents>
+    <DialogAnimationSettings Effect="DialogEffect.Zoom"></DialogAnimationSettings>
+</SfDialog>
+
+@code {
+    [Parameter]
+    public bool Visibility { get; set; }
+
+    [Parameter]
+    public string? ActionType { get; set; }
+
+    [Parameter]
+    public string? Title { get; set; }
+
+    [Parameter]
+    public EventCallback DialogOpen { get; set; }
+
+    [Parameter]
+    public EventCallback DialogClose { get; set; }
+
+    [Parameter]
+    public EventCallback OnClickNo { get; set; }
+
+    [Parameter]
+    public EventCallback OnClickYes { get; set; }
+
+    [Parameter]
+    public List<GetCompanyQueryResponse>? listCompany { get; set; }
+
+    [Parameter]
+    public CreateAdministrationApplicantRequest? request { get; set; }
+
+    [Parameter]
+    public IEnumerable<ApplicantStatusResponse>? statusListResponses { get; set; }
+
+    [Parameter]
+    public IEnumerable<MCUStatusResponse>? MCUStatusResponse { get; set; }
+
+    [Parameter]
+    public IEnumerable<EmploymentStatusResponse>? EmploymentStatusResponse { get; set; }
+
+    [Parameter]
+    public IEnumerable<IndiciplinaryStatusResponse>? IndiciplinaryStatusResponse { get; set; }
+
+    private SfTextBox? TextBoxNopek { get; set; }
+
+    [Parameter]
+    public EventCallback OnClickSearch { get; set; }
+
+    [Parameter]
+    public bool IsEnabled { get; set; }
+
+    private async void CreateTextboxNopek()
+    {
+        // var click = EventCallback.Factory.Create<MouseEventArgs>(this, OnClickSearch);
+        // var click = EventCallback.Factory.Create<MouseEventArgs>(this, async () =>
+        // {
+        //     if (!string.IsNullOrEmpty(request!.EmployeeNumber))
+        //     {
+        //         request.EmployeeNumber = $"00{request.EmployeeNumber}"; // Tambahkan "00"
+        //     }
+
+        //     // Lakukan pencarian
+        //     await OnClickSearch.InvokeAsync();
+
+        //     // Hapus "00" dari nilai EmployeeNumber setelah pencarian
+        //     if (!string.IsNullOrEmpty(request.EmployeeNumber) && request.EmployeeNumber.StartsWith("00"))
+        //     {
+        //         request.EmployeeNumber = request.EmployeeNumber.Substring(2);
+        //     }
+        // });
+
+        // await TextBoxNopek!.AddIconAsync("append", "e-icons e-search", new Dictionary<string, object>()
+        // {
+        //     { "onclick", click }
+        // });
+		var click = EventCallback.Factory.Create<MouseEventArgs>(this, async () =>
+	   {
+		   var employeeId = $"00000000{request.EmployeeNumber}";
+		   request.EmployeeNumber = employeeId[^8..];
+
+		   // var mentorIdForSearch = request?.EmployeeNumber is not null ? request.EmployeeNumber : null;
+		   await OnClickSearch.InvokeAsync();
+	   });
+
+		await TextBoxNopek!.AddIconAsync("append", "e-icons e-search", new Dictionary<string, object>() { { "onclick", click } });
+    }
+
+    [Parameter]
+    public bool IsShowError { get; set; } = false;
+
+    [Parameter]
+    public string ErrorMessage { get; set; } = string.Empty;
+}
+
+<style>
+    .e-dlg-header, .e-dlg-header * {
+        font-size: x-large;
+        font-weight: bold;
+    }
+
+    .e-dialog .e-dlg-content {
+        padding: 0 20px;
+        border-radius: 8px;
+    }
+</style>

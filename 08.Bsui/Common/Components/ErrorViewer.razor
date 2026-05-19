@@ -1,0 +1,18 @@
+﻿@using Psmp.Shared.Common.Responses
+
+@if (Error is not null)
+{
+    <MudPaper Elevation="0" Class="mb-6">
+        @foreach (var errorDetail in Error.Details)
+        {
+            <MudAlert Variant="Variant.Filled" Severity="Severity.Error" Class="mt-4">
+                @errorDetail
+            </MudAlert>
+        }
+    </MudPaper>
+}
+
+@code {
+    [Parameter]
+    public ErrorResponse? Error { get; set; }
+}

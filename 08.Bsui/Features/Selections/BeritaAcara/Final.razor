@@ -1,0 +1,27 @@
+﻿@page "/Selection/BeritaAcaraFinal/{Batch:int}/{Year:int}"
+@using Psmp.Bsui.Features.Selections.BeritaAcara.Components
+@using System.Security.Claims
+
+<MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6">
+    <MudTabPanel Text="Final Berita Acara">
+        <FinalBeritaAcara Type="Final" Batch="@Batch" Year="@Year"></FinalBeritaAcara>
+    </MudTabPanel>
+</MudTabs>
+
+@code {
+    [CascadingParameter]
+    protected Task<AuthenticationState> AuthenticationStateTask { get; set; } = default!;
+
+    protected ClaimsPrincipal _user = default!;
+    protected ErrorResponse? _error;
+    protected bool _isLoadingDialog = false;
+
+    [Parameter]
+    public string? Type { get; set; }
+    
+    [Parameter]
+    public int Batch { get; set; }
+    
+    [Parameter]
+    public int Year { get; set; }
+}

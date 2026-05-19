@@ -1,0 +1,30 @@
+﻿@using Psmp.Bsui.Common.Components
+@using Psmp.Base.Selections.Enums
+@using Psmp.Base.Scholarships.Enums
+@using Psmp.Shared.Common.Responses
+@using Psmp.Shared.Scholarships.Constants
+@using Psmp.Shared.Masters.Queries
+
+@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.SplitButtons
+@using Syncfusion.Blazor.Calendars
+@using Syncfusion.Blazor.Cards
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Grids
+@using Syncfusion.Blazor.Inputs
+
+@using Psmp.Client.Services.BackEnd.Masters
+@using Psmp.Client.Services.BackEnd.Scholarships
+
+@inject CompanyService _companyService
+@inject CompanyGroupService _companyGroupService
+@inject DirectorateService _directorateService
+@inject DivisionService _divisionService
+@inject DegreeService _degreeService
+@inject FungsiService _fungsiService
+@inject FacultyService _facultyService
+@inject ScholarshipSubjectService _scholarshipSubjectService
+@inject ScholarshipPlanService _scholarshipPlanService
+@inject AdministrativeCriteriaService _administrativeCriteriaService
+@inject IOptions<DocumentOptions> _documentOptions
+@inject DocumentService _documentService

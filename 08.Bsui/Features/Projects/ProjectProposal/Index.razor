@@ -1,0 +1,147 @@
+﻿@using Psmp.Bsui.Features.Projects.Component
+@using Psmp.Client.Services.Hris
+@using Psmp.Shared.Common.Responses
+@using Psmp.Shared.Projects.ProjectPlans.Queries
+@using Psmp.Shared.Selections.SelectionOverviews.Queries
+@using Psmp.Bsui.Features.Projects.ProjectProposal;
+@inject IWebHostEnvironment _webHostEnvironment
+@inject IOptions<HrisOptions> _hrisOptions
+<style>
+	.e-chip-list {
+		display: inline !important
+	}
+
+	.e-upload .e-file-select-wrap, .e-bigger.e-small .e-upload .e-file-select-wrap {
+		padding: 5px 0 5px 5px; /* Sesuaikan padding untuk tampilan yang lebih kompak */
+	}
+
+	.sf-uploader-compact .e-file-container {
+		margin: 2px 0; /* Mengurangi margin antar file */
+	}
+</style>
+
+<MudGrid Spacing="2">
+    <MudGrid Class="mb-2">
+        <MudItem xs="12">
+            <MudPaper Class="pa-4" Elevation="2">
+                <MudGrid AlignItems="center">
+                    <!-- Card pertama -->
+                    <MudItem xs="5" md="3" Class="d-flex justify-start">
+                        <CardProjectStatistic Judul="Total Awardee" Count="@_countAll.ToString()"></CardProjectStatistic>
+                    </MudItem>
+
+                    <!-- Divider Vertikal -->
+                    <MudItem xs="0" md="0" Class="d-flex justify-start">
+                        <MudHidden Breakpoint="Breakpoint.SmAndDown">
+                            <MudDivider Vertical="true" Class="mud-divider-height-full" Style="height: 90px; border-width: 2px; opacity: 0.5;" />
+                        </MudHidden>
+                    </MudItem>
+
+                    <!-- Card kedua -->
+                    <MudItem xs="5" md="3" Class="d-flex justify-start">
+                        <CardProjectStatistic Icon="@Icons.Material.Rounded.Assignment" AvatarColor="Color.Warning" Judul="Waiting for Approval" Count="@($"{_countWaitingForApproval}/{_countAll}")"></CardProjectStatistic>
+                    </MudItem>
+
+                    <!-- Divider Vertikal -->
+                    <MudItem xs="0" md="0" Class="d-flex justify-start">
+                        <MudHidden Breakpoint="Breakpoint.SmAndDown">
+                            <MudDivider Vertical="true" Class="mud-divider-height-full" Style="height: 90px; border-width: 2px; opacity: 0.5;" />
+                        </MudHidden>
+                    </MudItem>
+
+                    <!-- Card ketiga -->
+                    <MudItem xs="5" md="3" Class="d-flex justify-start">
+                        <CardProjectStatistic Icon="@Icons.Material.Rounded.AssignmentTurnedIn" AvatarColor="Color.Success" Judul=" Approved" Count="@($"{_countApproved}/{_countAll}")"></CardProjectStatistic>
+                    </MudItem>
+
+                    <!-- Divider Vertikal -->
+                    <MudItem xs="0" md="0" Class="d-flex justify-start">
+                        <MudHidden Breakpoint="Breakpoint.SmAndDown">
+                            <MudDivider Vertical="true" Class="mud-divider-height-full" Style="height: 90px; border-width: 2px; opacity: 0.5;" />
+                        </MudHidden>
+                    </MudItem>
+
+                    <!-- Card ketiga -->
+                    <MudItem xs="5" md="2" Class="d-flex justify-start">
+                        <CardProjectStatistic Icon="@Icons.Material.Rounded.AssignmentLate" AvatarColor="Color.Error" Judul="Rejected" Count="@($"{_countRejected}/{_countAll}")"></CardProjectStatistic>
+                    </MudItem>
+                </MudGrid>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+	<MudGrid Class="mb-2">
+		<MudItem xs="12">
+			<MudCard Class="pa-4" Elevation="2">
+				<MudCardContent>
+					<MudItem xs="12">
+                        <MudText Typo="Typo.subtitle2" Class="ms-0">List of Student</MudText>
+                        <MudDivider Style="border-width: 2px; margin-bottom: 16px;" />
+                        @* <MudItem xs="12" Class="mb-4">
+                            <SfButton Content="Download" CssClass="e-info" IconCss="e-icons e-download"></SfButton>
+                        </MudItem> *@
+                        <SfGrid @ref="Grid" DataSource="@_projectPlanResponses" Toolbar="@(new List<string>() { "Search" })" AllowFiltering="true" AllowPaging="true" AllowSorting="true" AllowResizing="true" AllowTextWrap="true">
+							<GridEvents CommandClicked="OnCommandClicked" TValue="GetProjectPlanResponse"></GridEvents>
+                            <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Excel"></GridFilterSettings>
+                            <GridPageSettings PageCount="8" PageSize="8" PageSizes="@SyncfusionGridValue.PageSize"></GridPageSettings>
+                            <GridColumns>
+								<GridColumn Field=@nameof(GetProjectPlanResponse.Name) HeaderText="Name" Width="100"></GridColumn>
+								<GridColumn Field=@nameof(GetProjectPlanResponse.EmployeeNumber) HeaderText="Employee Number" Width="100"></GridColumn>
+								<GridColumn Field=@nameof(GetProjectPlanResponse.Email) HeaderText="Email" Width="100"></GridColumn>
+								<GridColumn Field=@nameof(GetProjectPlanResponse.CompanyName) HeaderText="Company" Width="100"></GridColumn>
+								<GridColumn Field=@nameof(GetProjectPlanResponse.Title) HeaderText="Title" Width="250"></GridColumn>
+								<GridColumn Field=@nameof(GetProjectPlanResponse.Status) HeaderText="Status" HeaderTextAlign="TextAlign.Center" TextAlign="TextAlign.Center" Width="200">
+									<Template>
+										@{
+											var data = (context as GetProjectPlanResponse);
+											if (data!.Status == Base.Project.Enums.ProjectPlanStatus.Approved)
+											{
+												<SfChip>
+													<ChipItems>
+														<ChipItem Text="@data.Status.GetDescription().ToString()" CssClass="e-success"></ChipItem>
+													</ChipItems>
+												</SfChip>
+											}
+											else if (data!.Status == Base.Project.Enums.ProjectPlanStatus.Rejected)
+											{
+												<SfChip>
+													<ChipItems>
+														<ChipItem Text="@data.Status.GetDescription().ToString()" CssClass="e-danger"></ChipItem>
+													</ChipItems>
+												</SfChip>
+											}
+											else if (data!.Status == Base.Project.Enums.ProjectPlanStatus.WaitingApproval)
+											{
+												<SfChip>
+													<ChipItems>
+														<ChipItem Text="@data.Status.GetDescription().ToString()" CssClass="e-warning"></ChipItem>
+													</ChipItems>
+												</SfChip>
+											}
+										}
+									</Template>
+								</GridColumn>
+								<GridColumn HeaderText="Action" TextAlign="TextAlign.Center" Width="150">
+									<GridCommandColumns>
+										<GridCommandColumn Type="CommandButtonType.None" ButtonOption="@(new CommandButtonOptions() { IconCss="e-icons e-eye", CssClass="e-flat" })" Title="View"></GridCommandColumn>
+                                        <GridCommandColumn Type="CommandButtonType.Edit" ButtonOption="@(new CommandButtonOptions() { IconCss="e-icons e-circle-info", CssClass="e-flat" })" Title="Info"></GridCommandColumn>
+									</GridCommandColumns>
+								</GridColumn>
+							</GridColumns>
+						</SfGrid>
+					</MudItem>
+				</MudCardContent>
+			</MudCard>
+		</MudItem>
+	</MudGrid>
+</MudGrid>
+
+<DialogViewScholarshipPlan 
+    Visibility="VisiblePopup"
+    Title="@TitlePopup"
+    IdScholarshipPlan="@IdScholarshipPlan"
+    DialogOpen="DialogOpen" 
+    DialogClose="DialogClose"
+    OnClickNo="ClickedNo" 
+    IsEnabled="@IsEnabled"
+></DialogViewScholarshipPlan>
+

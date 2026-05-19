@@ -1,0 +1,18 @@
+﻿<MudCard Elevation="0">
+    <MudCardHeader>
+        <CardHeaderAvatar>
+            <MudAvatar Color="Color.Success">
+                <MudIcon Icon="@Icons.Material.Filled.CheckCircle"></MudIcon>
+            </MudAvatar>
+        </CardHeaderAvatar>
+        <CardHeaderContent>
+            <MudText>Approved</MudText>
+            <MudText Typo="Typo.h5">@Summary</MudText>
+        </CardHeaderContent>
+    </MudCardHeader>
+</MudCard>
+
+@code {
+    [Parameter]
+    public string Summary { get; set; } = default!;
+}

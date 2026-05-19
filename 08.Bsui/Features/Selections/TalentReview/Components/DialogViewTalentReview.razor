@@ -1,0 +1,202 @@
+﻿@using Psmp.Shared.Selections.SelectionPsychotests.Queries
+@using Psmp.Shared.Selections.SelectionTalentReviews.Commands.Create
+@using Psmp.Shared.Selections.SelectionTalentReviews.Queries
+@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.Popups
+
+<SfDialog Width="60%" @bind-Visible=Visibility IsModal="true">
+    <DialogTemplates>
+        <Header>
+            <MudText Typo="Typo.h5">@Title</MudText>
+        </Header>
+        <Content>
+            <MudGrid Spacing="2">
+                <MudItem xs="12">
+                    <MudGrid>
+                        <MudItem xs="4">
+                            <MudText>Username</MudText>
+                        </MudItem>
+                        <MudItem xs="8">
+                            <SfTextBox ID="txtName" Placeholder="Input Name" @bind-Value="response!.Name" Enabled="false"></SfTextBox>
+                        </MudItem>
+                    </MudGrid>
+                </MudItem>
+                <MudItem xs="12">
+                    <MudGrid>
+                        <MudItem xs="4">
+                            <MudText>Company</MudText>
+                        </MudItem>
+                        <MudItem xs="8">
+                            <SfDropDownList ID="ddlCompanyAddTalentReview" TValue="string" TItem="GetCompanyQueryResponse" DataSource="@listCompany" @bind-Value="response!.CompanyCode" Enabled="false"
+                                            AllowFiltering="true" FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains" Placeholder="Select Company">
+                                <DropDownListFieldSettings Text="Name" Value="Code" />
+                            </SfDropDownList>
+                        </MudItem>
+                    </MudGrid>
+                </MudItem>
+                <MudItem xs="12">
+                    <MudGrid>
+                        <MudItem xs="4">
+                            <MudText>Employee Number</MudText>
+                        </MudItem>
+                        <MudItem xs="8">
+                            <SfTextBox ID="txtEmployeeNo" Placeholder="Input Employee Number" @bind-Value="response!.EmployeeNumber" Enabled="false"></SfTextBox>
+                        </MudItem>
+                    </MudGrid>
+                </MudItem>
+                <MudItem xs="12">
+                    <MudGrid>
+                        <MudItem xs="4">
+                            <MudText>Email</MudText>
+                        </MudItem>
+                        <MudItem xs="8">
+                            <SfTextBox ID="txtEmail" Placeholder="Input Email" @bind-Value="response!.Email" Enabled="false"></SfTextBox>
+                        </MudItem>
+                    </MudGrid>
+                </MudItem>
+                <MudItem xs="12">
+                    <MudGrid>
+                        <MudItem xs="4">
+                            <MudText>TOEFL Score</MudText>
+                        </MudItem>
+                        <MudItem xs="8">
+                            <SfNumericTextBox ID="txtTOEFLScore" Placeholder="Input TOEFL Score" @bind-Value="response!.TOEFLScore" Format="n0" Enabled="false"></SfNumericTextBox>
+                        </MudItem>
+                    </MudGrid>
+                </MudItem>
+                <MudItem xs="12">
+                    <MudGrid>
+                        <MudItem xs="4">
+                            <MudText>Psychotest Status</MudText>
+                        </MudItem>
+                        <MudItem xs="8">
+                            <SfDropDownList TItem="GetSelectionPsychotestQualificationStatusResponse" TValue="SelectionQualificationStatus" Width="300px" Placeholder="Select Status" DataSource="@qualificationStatusListResponses" @bind-Value="@(response!.QualificationStatus)" FloatLabelType="FloatLabelType.Always" Enabled="false">
+                                <DropDownListFieldSettings Value="Value" Text="Text"></DropDownListFieldSettings>
+                            </SfDropDownList>
+                        </MudItem>
+                    </MudGrid>
+                </MudItem>
+                <MudItem xs="12">
+                    <MudGrid>
+                        <MudItem xs="4">
+                            <MudText>Talent Review Meeting Status</MudText>
+                        </MudItem>
+                        <MudItem xs="8">
+                            <SfDropDownList TItem="ApplicantStatusResponse" TValue="ApplicantStatus" Width="300px" Placeholder="Select Status" DataSource="@statusListResponses" @bind-Value="@(response!.Status)" FloatLabelType="FloatLabelType.Always" Enabled="false">
+                                <DropDownListFieldSettings Value="Value" Text="Text"></DropDownListFieldSettings>
+                            </SfDropDownList>
+                        </MudItem>
+                    </MudGrid>
+                </MudItem>
+                <MudItem xs="12">
+                    <MudGrid>
+                        <MudItem xs="4">
+                            <MudText>Mentor</MudText>
+                        </MudItem>
+                        <MudItem xs="8">
+                            <SfTextBox ID="txtMentor" Placeholder="Input Mentor" @bind-Value="response!.Mentor" Enabled="false"></SfTextBox>
+                        </MudItem>
+                    </MudGrid>
+                </MudItem>
+                <MudItem xs="12">
+                    <MudGrid>
+                        <MudItem xs="4">
+                            <MudText>Mentor 2</MudText>
+                        </MudItem>
+                        <MudItem xs="8">
+                            <SfTextBox ID="txtMentor2" Placeholder="Input Mentor 2" @bind-Value="response!.MentorName2" Enabled="false"></SfTextBox>
+                        </MudItem>
+                    </MudGrid>
+                </MudItem>
+                <MudItem xs="12">
+                    <MudGrid>
+                        <MudItem xs="4">
+                            <MudText>Innovation Project</MudText>
+                        </MudItem>
+                        <MudItem xs="8">
+                            <SfTextBox ID="txtInovationProject" Placeholder="Input Inovation Project" @bind-Value="response!.InovationProject" Enabled="false"></SfTextBox>
+                        </MudItem>
+                    </MudGrid>
+                </MudItem>
+                <MudItem xs="12">
+                    <MudGrid>
+                        <MudItem xs="4">
+                            <MudText>SK</MudText>
+                        </MudItem>
+                        <MudItem xs="8">
+                            @if (string.IsNullOrEmpty(Filename))
+                            {
+                                <table>
+                                    <tr>
+                                        <td>Document Not Available</td>
+                                    </tr>
+                                </table>
+                            }
+                            else
+                            {
+                                <table>
+                                    <tr>
+                                        <td>@Filename</td>
+                                        <td><SfButton OnClick="OnClickDownload" CssClass="e-flat" IconCss="e-icons e-download"></SfButton></td>
+                                    </tr>
+                                </table>
+                            }
+                        </MudItem>
+                    </MudGrid>
+                </MudItem>
+            </MudGrid>
+        </Content>
+        <FooterTemplate>
+            <SfButton Content="Cancel" CssClass="e-outline e-danger" IconCss="e-icons e-close" OnClick="OnClickNo"></SfButton>
+        </FooterTemplate>
+    </DialogTemplates>
+    <DialogEvents OnOpen="@DialogOpen" Closed="@DialogClose"></DialogEvents>
+    <DialogAnimationSettings Effect="DialogEffect.Zoom"></DialogAnimationSettings>
+</SfDialog>
+
+@code {
+    [Parameter]
+    public bool Visibility { get; set; }
+
+    [Parameter]
+    public string? Title { get; set; }
+
+    [Parameter]
+    public EventCallback DialogOpen { get; set; }
+
+    [Parameter]
+    public EventCallback DialogClose { get; set; }
+
+    [Parameter]
+    public EventCallback OnClickDownload { get; set; }
+
+    [Parameter]
+    public EventCallback OnClickNo { get; set; }
+
+    [Parameter]
+    public List<GetCompanyQueryResponse>? listCompany { get; set; }
+
+    [Parameter]
+    public GetSelectionTalentReviewQueryResponse? response { get; set; }
+
+    [Parameter]
+    public IEnumerable<ApplicantStatusResponse>? statusListResponses { get; set; }
+
+    [Parameter]
+    public IEnumerable<GetSelectionPsychotestQualificationStatusResponse>? qualificationStatusListResponses { get; set; }
+
+    [Parameter]
+    public string? Filename { get; set; }
+}
+
+<style>
+    .e-dlg-header, .e-dlg-header * {
+        font-size: x-large;
+        font-weight: bold;
+    }
+
+    .e-dialog .e-dlg-content {
+        padding: 0 20px;
+        border-radius: 8px;
+    }
+</style>

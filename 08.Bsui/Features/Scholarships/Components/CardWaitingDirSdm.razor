@@ -1,0 +1,18 @@
+﻿<MudCard>
+    <MudCardHeader>
+        <CardHeaderAvatar>
+            <MudAvatar Color="Color.Warning">
+                <MudIcon Icon="@Icons.Material.Filled.Timer"></MudIcon>
+            </MudAvatar>
+        </CardHeaderAvatar>
+        <CardHeaderContent>
+            <MudText>Awaiting Dir.SDM</MudText>
+            <MudText Typo="Typo.h5">@Summary</MudText>
+        </CardHeaderContent>
+    </MudCardHeader>
+</MudCard>
+
+@code {
+    [Parameter]
+    public string Summary { get; set; } = default!;
+}

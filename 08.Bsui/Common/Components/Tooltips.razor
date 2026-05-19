@@ -1,0 +1,63 @@
+﻿<style>
+    @@media (max-width: 600px) {
+        .payment-tooltip-row {
+            flex-wrap: wrap;
+            align-items: flex-start;
+        }
+        .payment-tooltip-chip {
+            margin-bottom: 4px;
+        }
+        .payment-tooltip-desc {
+            width: 100%;
+            margin-left: 0 !important;
+            margin-top: 2px;
+            white-space: normal;
+        }
+    }
+
+    .payment-desc::before {
+        content: ": ";
+        font-weight: 700;
+    }
+
+    @@media (max-width: 650px) {
+        .payment-desc::before {
+            content: "";
+        }
+    }
+</style>
+
+<MudBreakpointProvider OnBreakpointChanged="OnBreakpointChanged">
+    <MudTooltip Placement="@_tooltipPlacement" Arrow="true" Style="background-color: rgba(var(--mud-palette-info-rgb), 0.3); backdrop-filter: blur(5px); border-radius: 10px; padding: 6px;">
+        <ChildContent>
+            <MudIconButton Icon="@Icons.Material.Filled.Info" Color="Color.Info" Style="bottom:0.4rem;" />
+        </ChildContent>
+        <TooltipContent>
+            <MudPaper Class="pa-4" Style="background-color: transparent" Elevation="0">
+                <MudText Typo="Typo.subtitle1" Align="Align.Left" Class="mb-2" Style="font-weight:700;">
+                    Payment Status
+                </MudText>
+                <MudList T="string" Dense="true">
+                    <MudStack Direction="Row" AlignItems="AlignItems.Start" Spacing="1">
+                        @foreach (var item in PaymentStatuses.Select((value, index) => new { value, index }))
+                        {
+                            <MudPaper Elevation="0" Class="bg-transparent d-flex align-center payment-tooltip-row" Style="background-color: transparent; box-shadow: none; border: none;">
+                                <MudText Class="me-2" Style="min-width:18px;">
+                                    @(item.index + 1).
+                                </MudText>
+
+                                <MudChip Size="Size.Small" Variant="Variant.Filled" Class="payment-tooltip-chip" Color="@(item.value.Color ?? Color.Default)" Style="@(item.value.BgColor != null ? $"background-color:{item.value.BgColor}; color:white;" : null)">
+                                    @item.value.Label
+                                </MudChip>
+
+                                <MudListItem Class="ms-2 payment-tooltip-desc" Style="font-weight:700; text-shadow:0 1px 2px rgba(255,255,255,0.8);">
+                                    <span class="payment-desc">@item.value.Description</span>
+                                </MudListItem>
+                            </MudPaper>
+                        }
+                    </MudStack>
+                </MudList>
+            </MudPaper>
+        </TooltipContent>
+    </MudTooltip>
+</MudBreakpointProvider>

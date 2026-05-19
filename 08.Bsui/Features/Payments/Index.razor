@@ -1,0 +1,42 @@
+﻿@page "/Payment"
+@page "/Payment/{ApplicantId:guid}"
+
+@using Psmp.Shared.Payments.Contants;
+@using Psmp.Bsui.Features.Applicants.Payments.Components
+
+@* <BrowserTabTitle>@DisplayTextFor.Payment</BrowserTabTitle>
+<PageHeader Title="@DisplayTextFor.Payment" /> *@
+<MudBreadcrumbs Items="_breadcrumbItems"></MudBreadcrumbs>
+
+<MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6" @key="ApplicantId?.ToString()" ActivePanelIndexChanged="@(_ => PaymentFilters.ResetCompanyGroup())">
+    
+    @if(ApplicantId == null)
+    {
+        <MudTabPanel Text="@DisplayTextFor.Overview">
+            <Psmp.Bsui.Features.Payments.Overview.Index></Psmp.Bsui.Features.Payments.Overview.Index>
+        </MudTabPanel>
+        <CascadingValue Value="PaymentFilters">
+            <MudTabPanel Text="@DisplayTextFor.Reimbursement">
+                <Psmp.Bsui.Features.Payments.Reimbursements.Index></Psmp.Bsui.Features.Payments.Reimbursements.Index>
+            </MudTabPanel>
+            <MudTabPanel Text="@DisplayTextFor.Disbursement">
+                <Psmp.Bsui.Features.Payments.Disbursement.Index></Psmp.Bsui.Features.Payments.Disbursement.Index>
+            </MudTabPanel>
+            <MudTabPanel Text="@DisplayTextFor.BankAccount">
+                <Psmp.Bsui.Features.Payments.BankAccount.Index></Psmp.Bsui.Features.Payments.BankAccount.Index>
+            </MudTabPanel>
+        </CascadingValue>
+    }
+    else
+    {
+        <CascadingValue Value="PaymentFilters">
+            <MudTabPanel Text="@DisplayTextFor.Reimbursement">
+                <Psmp.Bsui.Features.Payments.Reimbursements.Index ApplicantId="@ApplicantId"></Psmp.Bsui.Features.Payments.Reimbursements.Index>
+            </MudTabPanel>
+            <MudTabPanel Text="@DisplayTextFor.Disbursement">
+                <Psmp.Bsui.Features.Payments.Disbursement.Index ApplicantId="@ApplicantId"></Psmp.Bsui.Features.Payments.Disbursement.Index>
+            </MudTabPanel>
+        </CascadingValue>
+    }
+
+</MudTabs>

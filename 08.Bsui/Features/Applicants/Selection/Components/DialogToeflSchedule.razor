@@ -1,0 +1,50 @@
+﻿@using Psmp.Bsui.Features.Applicants.Selection.Models
+@using Psmp.Shared.Applicants.Commands.Create
+@using Psmp.Shared.Selections.SelectionTOEFLs.Queries
+
+<MudDialog>
+    <TitleContent>
+        <h3>
+            TOEFL
+        </h3>
+    </TitleContent>
+    <DialogContent>
+        <MudGrid>
+            <MudItem xs="4">
+                <MudText>Test Date</MudText>
+            </MudItem>
+            <MudItem xs="6">
+                <SfDropDownList ID="ddlToeflSchedule" TValue="Guid" TItem="ScheduleTestModel"
+                                DataSource="@ScheduleTestModels"
+                                AllowFiltering="true" FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains"
+                                Placeholder="Select TOEFL Schedule">
+                    <DropDownListEvents TItem="ScheduleTestModel" TValue="Guid" ValueChange="@OnChangeToeflScheduleAsync"></DropDownListEvents>
+                    <DropDownListFieldSettings Value="ScheduleId" Text="ScheduleDate"></DropDownListFieldSettings>
+                </SfDropDownList>
+            </MudItem>
+            <MudItem xs="4">
+                <MudText>Session</MudText>
+            </MudItem>
+            <MudItem xs="6">
+                <SfDropDownList ID="ddlSession" TValue="Guid" TItem="SessionTestModel"
+                                DataSource="@SessionTestModels"
+                                Placeholder="Select Session">
+                    <DropDownListEvents TItem="SessionTestModel" TValue="Guid" ValueChange="@OnChangeToeflScheduleSessionAsync"></DropDownListEvents>
+                    <DropDownListFieldSettings Value="ScheduleId" Text="Session"></DropDownListFieldSettings>
+                </SfDropDownList>
+            </MudItem>
+        </MudGrid>
+    </DialogContent>
+    <DialogActions>
+        <MudGrid>
+            <MudItem xs="12" sm="12" Class="mt-4 mr-4 mb-2 d-flex justify-end">
+                <SfButton Content="Close" CssClass="e-info e-outline mr-4" OnClick="OnClickClose"></SfButton>
+                <SfProgressButton Content="Save" IsPrimary="true" CssClass="e-primary" EnableProgress="true"
+                                  OnClick="OnClickYesAsync">
+                    <ProgressButtonSpinSettings Position="SpinPosition.Center"></ProgressButtonSpinSettings>
+                    <ProgressButtonAnimationSettings Effect="Syncfusion.Blazor.SplitButtons.AnimationEffect.ZoomOut"></ProgressButtonAnimationSettings>
+                </SfProgressButton>
+            </MudItem>
+        </MudGrid>
+    </DialogActions>
+</MudDialog>

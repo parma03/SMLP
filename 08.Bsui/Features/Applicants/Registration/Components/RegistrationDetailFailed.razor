@@ -1,0 +1,47 @@
+﻿@using Psmp.Bsui.Features.Applicants.Registration.Models
+
+<style>
+    .dialog-header-red {
+        background-color: #f44336; /* merah */
+        color: white;
+        padding: 12px 16px;
+        font-weight: bold;
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+    }
+
+</style>
+
+<MudDialog>
+    <TitleContent>
+        <div class="dialog-header-red">
+            Application Status
+        </div>
+    </TitleContent>
+    <DialogContent>
+        <MudGrid>
+            <MudItem xs="2" Class="d-flex align-center justify-center mud-width-full">
+                <MudIcon Icon="@Icons.Material.Rounded.ErrorOutline" Color="Color.Error" Size="Size.Large" />
+            </MudItem>
+            <MudItem xs="10">
+                We like to inform that you are <b>not eligible</b> to apply Pertamina Scholarship due to:<br />
+                @foreach (var response in ValidationResponse)
+                {
+                    @response.Value
+                    <br />
+                }
+                Thank you
+            </MudItem>
+
+        </MudGrid>
+    </DialogContent>
+    <DialogActions>
+        <SfButton Content="Close" CssClass="e-outline e-primary"
+                  OnClick="OnClickClose"></SfButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [Parameter]
+    public List<ApplicantValidationModel> ValidationResponse { get; set; } = default!;
+}

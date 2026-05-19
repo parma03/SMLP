@@ -1,0 +1,174 @@
+﻿@page "/Selection/Psychotest/Schedule/{Type:int}/{Id:guid}"
+
+@using Psmp.Bsui.Features.Selections.Components
+@using Psmp.Bsui.Features.Selections.Psychotest.Components
+@using Psmp.Shared.Selections.SelectionPsychotests.Queries
+@using Psmp.Shared.Selections.SelectionTOEFLs.Queries
+
+<ErrorViewer Error="_error" />
+<MudBreadcrumbs Items="_breadcrumbItems"></MudBreadcrumbs>
+
+@if (_isLoading)
+{
+    <Loading IsVisible="_isLoading" />
+}
+else
+{
+    <MudGrid Spacing="2">
+        <MudItem xs="12">
+            <MudPaper Class="pa-4" Elevation="2">
+                <MudGrid AlignItems="center">
+                    <!-- Card pertama -->
+                    <MudItem xs="3" Class="d-flex justify-center">
+                        <CardScheduleSummary Summary=@_scheduleSummary></CardScheduleSummary>
+                    </MudItem>
+
+                    <!-- Divider Vertikal -->
+                    <MudItem xs="1" Class="d-flex justify-center">
+                        <MudDivider Vertical="true" Class="mud-divider-height-full" Style="height: 90px; border-width: 2px; opacity: 0.5;" />
+                    </MudItem>
+
+                    <!-- Card kedua -->
+                    <MudItem xs="3" Class="d-flex justify-center">
+                        <CardScheduleDoneSummary Summary=@_doneSummary></CardScheduleDoneSummary>
+                    </MudItem>
+
+                    <!-- Divider Vertikal -->
+                    <MudItem xs="1" Class="d-flex justify-center">
+                        <MudDivider Vertical="true" Class="mud-divider-height-full" Style="height: 90px; border-width: 2px; opacity: 0.5;" />
+                    </MudItem>
+
+                    <!-- Card ketiga -->
+                    <MudItem xs="3" Class="d-flex justify-center">
+                        <CardScheduleNotStartedSummary Summary=@_notStartedSummary></CardScheduleNotStartedSummary>
+                    </MudItem>
+                </MudGrid>
+            </MudPaper>
+        </MudItem>
+        @* <MudItem xs="12">
+            <MudGrid Spacing="5">
+                <MudItem xs="4">
+                    <CardScheduleSummary Summary=@_scheduleSummary />
+                </MudItem>
+                <MudItem xs="4">
+                    <CardScheduleDoneSummary Summary=@_doneSummary />
+                </MudItem>
+                <MudItem xs="4">
+                    <CardScheduleNotStartedSummary Summary=@_notStartedSummary />
+                </MudItem>
+            </MudGrid>
+        </MudItem> *@
+        <MudItem xs="12">
+            <MudCard>
+                <MudCardContent>
+                    @if (_isLoadingData)
+                    {
+                        <LoadingLinear IsVisible="_isLoadingData" />
+                    }
+                    else
+                    {
+                        <MudGrid>
+                            <MudItem xs="12">
+                                <CardTitle Title="List of Schedule Test" />
+                            </MudItem>
+                            <MudItem xs="12">
+                                <MudGrid>
+                                    <MudItem xs="4">
+                                        <SfButton Content="Create Schedule Test" IsPrimary="true" CssClass="e-primary" IconCss="e-icons e-circle-add"
+                                                  OnClick="OnClickAddScheduleAsync"></SfButton>
+                                    </MudItem>
+                                </MudGrid>
+                            </MudItem>
+                            <br />
+
+                            <MudItem xs="12">
+                                <SfGrid DataSource="@_getSelectionPsychotestScheduleListResponse" Toolbar="@(new List<string>() { "Search" })"
+                                        AllowFiltering="true" AllowPaging="true" AllowSorting="true" AllowResizing="true" AllowTextWrap="true">
+                                    <GridPageSettings PageCount="8" PageSize="8" PageSizes="@SyncfusionGridValue.PageSize"></GridPageSettings>
+                                    <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Excel"></GridFilterSettings>
+                                    <GridEvents CommandClicked="OnCommandClicked" TValue="GetSelectionPsychotestScheduleListResponse"></GridEvents>
+                                    <GridColumns>
+                                        <GridColumn Field=@nameof(GetSelectionPsychotestScheduleListResponse.Id) IsPrimaryKey="true" Visible="false"></GridColumn>
+                                        <GridColumn Field=@nameof(GetSelectionPsychotestScheduleListResponse.ScholarshipPostingCode) HeaderText="Scholarship Code"
+                                                    TextAlign="TextAlign.Center" Width="160"></GridColumn>
+                                        <GridColumn Field=@nameof(GetSelectionPsychotestScheduleListResponse.ScheduleStartDate) HeaderText="Test Date"
+                                                    TextAlign="TextAlign.Center" Width="160">
+                                            <Template>
+                                                @{
+                                                    var data = (context as GetSelectionPsychotestScheduleListResponse);
+                                                    @data!.ScheduleStartDate!.Value.ToString("dd.MM.yyyy")
+                                                }
+                                            </Template>
+                                        </GridColumn>
+                                        <GridColumn Field=@nameof(GetSelectionPsychotestScheduleListResponse.Session) HeaderText="Session"
+                                                    TextAlign="TextAlign.Center" Width="120"></GridColumn>
+                                        <GridColumn Field=@nameof(GetSelectionPsychotestScheduleListResponse.Applicants) HeaderText="Applicant"
+                                                    TextAlign="TextAlign.Center" Width="150"></GridColumn>
+                                        <GridColumn Field=@nameof(GetSelectionPsychotestScheduleListResponse.Status) HeaderText="Status"
+                                                    TextAlign="TextAlign.Center" Width="160">
+                                            <Template>
+                                                @{
+                                                    var data = (context as GetSelectionPsychotestScheduleListResponse);
+
+                                                    if (data!.Status == ScheduleStatus.Done)
+                                                    {
+                                                        <SfChip>
+                                                            <ChipItems>
+                                                                <ChipItem Text="@data.Status.ToString()" CssClass="e-success"></ChipItem>
+                                                            </ChipItems>
+                                                        </SfChip>
+                                                    }
+                                                    else
+                                                    {
+                                                        <SfChip>
+                                                            <ChipItems>
+                                                                <ChipItem Text="@data.Status.ToString().SplitWords()" CssClass="e-info"></ChipItem>
+                                                            </ChipItems>
+                                                        </SfChip>
+                                                    }
+                                                }
+                                            </Template>
+                                        </GridColumn>
+                                        <GridColumn Field=@nameof(GetSelectionPsychotestScheduleListResponse.Modified) HeaderText="Modified Date"
+                                                    TextAlign="TextAlign.Center" Width="160">
+                                            <Template>
+                                                @{
+                                                    var item = (GetSelectionPsychotestScheduleListResponse)context;
+                                                    string displayValue = item.Modified?.ToString("yyyy-MM-dd HH:mm") ?? "-";
+                                                }
+                                                @displayValue
+                                            </Template>
+                                        </GridColumn>
+                                        <GridColumn HeaderText="Action" Width="150" TextAlign="TextAlign.Center">
+                                            <GridCommandColumns>
+                                                <GridCommandColumn Title="Edit" Type="CommandButtonType.Edit" ButtonOption="@(new CommandButtonOptions() {IconCss="e-icons e-edit", CssClass="e-flat" })"></GridCommandColumn>
+                                                <GridCommandColumn Title="Delete" Type="CommandButtonType.Delete" ButtonOption="@(new CommandButtonOptions() {IconCss="e-icons e-delete", CssClass="e-flat" })"></GridCommandColumn>
+                                            </GridCommandColumns>
+                                        </GridColumn>
+                                    </GridColumns>
+                                </SfGrid>
+                            </MudItem>
+                        </MudGrid>
+                    }
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+        <MudItem xs="4" Class="mt-4">
+            <SfButton OnClick="OnClickBack" Content="Back" IconCss="e-icons e-arrow-left" CssClass="e-outline e-danger"></SfButton>
+        </MudItem>
+    </MudGrid>
+}
+
+<DialogAddPsychotestSchedule Visibility="VisiblePopup"
+                          Title="@TitlePopup"
+                          DialogOpen="DialogOpen" DialogClose="DialogClose"
+                          OnClickNo="ClickedNo" OnClickYes="ClickedYes"
+                          response="_psychotestScheduleSelected"
+                          OnChangeValueScheduleDate="OnChangeValueScheduleDate">
+</DialogAddPsychotestSchedule>
+
+<DialogConfirmation Visibility="VisiblePopupDelete"
+                    Title="@DisplayTextFor.ScheduleTest"
+                    Content="Are you sure want to delete this data?"
+                    DialogOpen="DialogDeleteOpen" DialogClose="DialogDeleteClose"
+                    OnClickNo="ClickedNoDelete" OnClickYes="ClickedYesDelete"></DialogConfirmation>

@@ -1,0 +1,50 @@
+﻿<style>
+    .e-chip-list {
+        display: inline !important
+    }
+    .panel{
+        background:#ffffff
+    }
+</style> 
+<ErrorViewer Error="_error" />
+<LoadingDialog IsVisible=@_isLoading Text="Loading..."></LoadingDialog>
+@if (_isLoading)
+{
+    <Loading IsVisible="_isLoading" />
+}
+else
+{
+    <MudGrid Spacing="2">
+        <MudItem xs="9">
+            <MudText>Mail Template</MudText>
+            <SfDropDownList ID="ddlTemplate" TValue="int" TItem="DropdownItemResponse" DataSource="@_dropdownTemplate" Placeholder="Select...">
+                <DropDownListFieldSettings Text="Description" Value="Id" />
+                <DropDownListEvents TItem="DropdownItemResponse" TValue="int" ValueChange="OnChangeTemplate" />
+            </SfDropDownList>
+        </MudItem>
+        <MudItem xs="9">
+            <MudText>Subject</MudText>
+            <SfTextBox ID="txtSubject" Value="Pengumuman Seleksi Administrasi" Placeholder="e.g. Administration Selection Announcement" Enabled="true"></SfTextBox>
+        </MudItem>
+        <MudItem xs="9">
+            <MudText>Section</MudText>
+            <SfTextBox ID="txtSubject" Value="Administration Selection" Placeholder="e.g. Administration Selection" Enabled="true"></SfTextBox>
+        </MudItem>
+        <MudItem xs="9">
+            <MudText>Body Email</MudText>
+            <SfRichTextEditor EditorMode="EditorMode.HTML" >
+                <p>Semangat Pagi dan Salam Sejahtera.</p>
+                <p>Kepada Bapak/Ibu <b>_applicant_</b>,</p>
+                <p>Terima kasih atas partisipasinya dalam mengikuti Proses Seleksi Tugas Belajar Perusahaan Tahun 2024. Bersama ini disampaikan bahwa Bapak/Ibu LOLOS Seleksi Administrasi dan dapat melanjutkan proses seleksi berikutnya yaitu</p>
+            </SfRichTextEditor>
+        </MudItem>
+    </MudGrid>
+    <MudGrid Spacing="2">
+        <MudItem xs="2" Class="mt-4 justify-end">
+            <SfProgressButton IsPrimary="true" Content="Save" CssClass="e-info" EnableProgress="true" IconCss="e-icons e-save-as" OnClick="OnClickSave" Duration="3000">
+                <ProgressButtonSpinSettings Position="SpinPosition.Center"></ProgressButtonSpinSettings>
+                <ProgressButtonAnimationSettings Effect="Syncfusion.Blazor.SplitButtons.AnimationEffect.SlideRight"></ProgressButtonAnimationSettings>
+            </SfProgressButton>
+        </MudItem>
+    </MudGrid>
+}

@@ -1,0 +1,162 @@
+﻿@using Psmp.Shared.Selections.SelectionOverviews.Queries
+@using Psmp.Bsui.Features.Dashboards.Component
+
+<AuthorizeView Context="context">
+    <Authorized>
+        @if (context.User.HasPermission(Permissions.Psmp_ScholarshipPlan_View)
+        || context.User.HasPermission(Permissions.Psmp_ScholarshipPosting_View)
+        || context.User.HasPermission(Permissions.Psmp_SelectionOverview_View)
+        || context.User.HasPermission(Permissions.Psmp_ScholarshipPosting_View))
+        {
+            <MudGrid Spacing="2">
+                <MudItem xs="3">
+                    <MudText>Categories</MudText>
+                    <DropdownSelectionCategory OnChange="@OnChangeCategory" />
+                </MudItem>
+                <MudItem xs="3">
+                    <MudText>Company</MudText>
+                    <DropdownCompany OnChangeAsync="@OnChangeCompanyAsync" />
+                </MudItem>
+                <MudItem xs="3">
+                    <MudText>Batch</MudText>
+                    <DropdownSelectionScholarship OnChangeAsync="@OnChangeBatchAsync" />
+                </MudItem>
+            </MudGrid>
+
+            <MudGrid>
+                <MudItem xs="12">
+                    <MudPaper Class="pa-4" Elevation="2">
+                        <MudGrid>
+                            <MudItem xs="4" Class="d-flex">
+                                <Psmp.Bsui.Features.Dashboards.Component.CardStatistic Judul="@_judul1" Count="@_count1"></Psmp.Bsui.Features.Dashboards.Component.CardStatistic>
+                            </MudItem>
+
+                            <MudItem xs="4" Class="d-flex">
+                                <Psmp.Bsui.Features.Dashboards.Component.CardStatistic Judul="@_judul2" Count="@_count2"></Psmp.Bsui.Features.Dashboards.Component.CardStatistic>
+                            </MudItem>
+
+                            <MudItem xs="4" Class="d-flex">
+                                <Psmp.Bsui.Features.Dashboards.Component.CardStatistic Judul="@_judul3" Count="@_count3"></Psmp.Bsui.Features.Dashboards.Component.CardStatistic>
+                            </MudItem>
+                        </MudGrid>
+                    </MudPaper>
+                </MudItem>
+            </MudGrid>
+
+            <MudGrid>
+                <MudItem xs="12">
+                    <MudPaper Class="pa-4" Elevation="2">
+                        <MudGrid>
+                            <MudItem xs="4">
+                                <Psmp.Bsui.Features.Dashboards.Component.CardStatistic Judul="@_judul4" Count="@_count1"></Psmp.Bsui.Features.Dashboards.Component.CardStatistic>
+                            </MudItem>
+
+                            <MudItem xs="4">
+                                <Psmp.Bsui.Features.Dashboards.Component.CardStatistic Judul="@_judul5" Count="@_count2"></Psmp.Bsui.Features.Dashboards.Component.CardStatistic>
+                            </MudItem>
+
+                            <MudItem xs="4">
+                                <Psmp.Bsui.Features.Dashboards.Component.CardStatistic Judul="@_judul6" Count="@_count3"></Psmp.Bsui.Features.Dashboards.Component.CardStatistic>
+                            </MudItem>
+                        </MudGrid>
+                    </MudPaper>
+                </MudItem>
+            </MudGrid>
+
+            <MudItem xs="12">
+                <MudGrid Spacing="5">
+                    <!-- Card Kiri -->
+                    <MudItem xs="6">
+                        <MudPaper Style="height: 100%;">
+                            <MudCardContent>
+                                <MudText Typo="Typo.h6">All Batch</MudText>
+                                <MudDivider Style="border-width: 2px; margin-bottom: 16px;" />
+                                <MudGrid>
+                                    <MudItem xs="12">
+                                        <MudChart ChartType="ChartType.Pie" InputData="@_data" InputLabels="@_labels" Width="300px" Height="300px" />
+                                    </MudItem>
+                                    @* <MudItem xs="4" Class="d-flex align-center justify-center">
+                                <MudList Class="d-flex flex-column align-center">
+                                @foreach (var label in _labels)
+                                {
+                                <MudListItem Class="mb-1 d-flex justify-center">
+                                <!-- Mengurangi margin bawah -->
+                                <MudText Align="Align.Left">@label</MudText>
+                                </MudListItem>
+                                }
+                                </MudList>
+                                </MudItem> *@
+                                </MudGrid>
+                            </MudCardContent>
+                        </MudPaper>
+                    </MudItem>
+
+                    <!-- Card Kanan -->
+                    <MudItem xs="6">
+                        <MudPaper Style="height: 100%;">
+                            <MudCardContent>
+                                <MudText Typo="Typo.h6">Task</MudText>
+                                <MudDivider Style="border-width: 2px; margin-bottom: 16px;" />
+                                <MudGrid>
+                                    <MudItem xs="12">
+                                        <!-- Membatasi tinggi komponen dan mengaktifkan scroll -->
+                                        <div style="max-height: 400px; overflow-y: auto;">
+                                            <!-- Card pertama -->
+                                            <MudCard Class="mb-3">
+                                                <Psmp.Bsui.Features.Dashboards.Component.CardTask JudulTask="@_judultask1" DateTask="@_datetask" ValueTask="@_valuetask1"></Psmp.Bsui.Features.Dashboards.Component.CardTask>
+                                            </MudCard>
+
+                                            <!-- Card kedua -->
+                                            <MudCard Class="mb-3">
+                                                <Psmp.Bsui.Features.Dashboards.Component.CardTask JudulTask="@_judultask2" DateTask="@_datetask" ValueTask="@_valuetask2"></Psmp.Bsui.Features.Dashboards.Component.CardTask>
+                                            </MudCard>
+
+                                            <!-- Card ketiga -->
+                                            <MudCard Class="mb-3">
+                                                <Psmp.Bsui.Features.Dashboards.Component.CardTask JudulTask="@_judultask1" DateTask="@_datetask" ValueTask="@_valuetask1"></Psmp.Bsui.Features.Dashboards.Component.CardTask>
+                                            </MudCard>
+
+                                            <!-- Card keempat -->
+                                            <MudCard Class="mb-3">
+                                                <Psmp.Bsui.Features.Dashboards.Component.CardTask JudulTask="@_judultask2" DateTask="@_datetask" ValueTask="@_valuetask2"></Psmp.Bsui.Features.Dashboards.Component.CardTask>
+                                            </MudCard>
+
+                                            <!-- Card kelima -->
+                                            <MudCard>
+                                                <Psmp.Bsui.Features.Dashboards.Component.CardTask JudulTask="@_judultask2" DateTask="@_datetask" ValueTask="@_valuetask2"></Psmp.Bsui.Features.Dashboards.Component.CardTask>
+                                            </MudCard>
+                                        </div>
+                                    </MudItem>
+                                </MudGrid>
+                            </MudCardContent>
+                        </MudPaper>
+                    </MudItem>
+                </MudGrid>
+            </MudItem>
+
+            <MudItem xs="12">
+                <MudGrid Spacing="5">
+                    <MudItem xs="12">
+                        <MudPaper Style="height: 100%;">
+                            <MudCardContent>
+                                <MudText Typo="Typo.h6">Students Location</MudText>
+                                <MudDivider Style="border-width: 2px; margin-bottom: 16px;" />
+                                <MudGrid>
+                                    <MudItem xs="12">
+                                        <MudCard Style="box-shadow: none;">
+                                            <MudCardMedia Image="/img/blazor_map.png" Height="400" Style="object-fit: cover;" />
+                                        </MudCard>
+                                    </MudItem>
+                                </MudGrid>
+                            </MudCardContent>
+                        </MudPaper>
+                    </MudItem>
+                </MudGrid>
+            </MudItem>
+        }
+        else
+        {
+            <Psmp.Bsui.Features.Applicants.Index />
+        }
+    </Authorized>
+</AuthorizeView>

@@ -1,0 +1,181 @@
+﻿@using Psmp.Base.Universities.Enums
+@using Psmp.Domain.Entities.Masters
+@using Psmp.Shared.Common.Responses
+@using Psmp.Shared.Masters.Queries;
+@using Psmp.Shared.Universities.UniversityRecommendation.Commands.Create
+@using Psmp.Shared.Universities.UniversityRecommendation.Constants
+
+@* <style>
+   .e-dialog {
+        z-index: 10000 !important;
+        top: 40% !important;
+        left: 50% !important;
+        transform: translate(-50%, -40%) !important;
+    }
+</style> *@
+
+<SfDialog Target="#target" Width="820px" IsModal="true" ShowCloseIcon="true" AllowDragging="false" @bind-Visible="Visibility">
+    <DialogTemplates>
+        <Header>View Detail Bank Account</Header>
+        <Content>
+            <div class="row">
+                <div class="col-md-12">
+                    <MudGrid Spacing="2">
+                        <MudItem xs="12">
+                            <MudCard Elevation="0">
+                                <MudCardContent Class="ml-2">
+                                    <MudItem xs="12">
+                                        <MudGrid>
+                                            <MudItem xs="12" sm="6">
+                                                <MudText Typo="Typo.subtitle2" Class="mb-1" Style="font-weight:700;">Name</MudText>
+                                                <MudForm>
+                                                    <SfTextBox @bind-Value="Response.Name" Enabled="false" />
+                                                </MudForm>
+                                            </MudItem>
+                                            <MudItem xs="12" sm="6">
+                                                <MudText Typo="Typo.subtitle2" Class="mb-1" Style="font-weight:700;">Employee Number</MudText>
+                                                <MudForm>
+                                                    <SfTextBox @bind-Value="Response.EmployeeNumber" Enabled="false"></SfTextBox>
+                                                </MudForm>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12">
+                                        <MudGrid>
+                                            <MudItem xs="12" sm="6">
+                                                <MudText Typo="Typo.subtitle2" Class="mb-1" Style="font-weight:700;">Email</MudText>
+                                                <MudForm>
+                                                    <SfTextBox @bind-Value="Response.Email" Enabled="false" />
+                                                </MudForm>
+                                            </MudItem>
+                                            <MudItem xs="12" sm="6">
+                                                <MudText Typo="Typo.subtitle2" Class="mb-1" Style="font-weight:700;">Bank Name</MudText>
+                                                <MudForm>
+                                                    <SfTextBox @bind-Value="Response.BankName" Enabled="false"></SfTextBox>
+                                                </MudForm>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12">
+                                        <MudGrid>
+                                            <MudItem xs="12" sm="6">
+                                                <MudText Typo="Typo.subtitle2" Class="mb-1" Style="font-weight:700;">Account Holder</MudText>
+                                                <MudForm>
+                                                    <SfTextBox @bind-Value="Response.AccountHolder" Enabled="false" />
+                                                </MudForm>
+                                            </MudItem>
+                                            <MudItem xs="12" sm="6">
+                                                <MudText Typo="Typo.subtitle2" Class="mb-1" Style="font-weight:700;">Account Number</MudText>
+                                                <MudForm>
+                                                    <SfTextBox @bind-Value="Response.AccountHolder" Enabled="false"></SfTextBox>
+                                                </MudForm>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12">
+                                        <MudGrid>
+                                            <MudItem xs="12" sm="6">
+                                                <MudText Typo="Typo.subtitle2" Class="mb-1" Style="font-weight:700;">Currency</MudText>
+                                                <MudForm>
+                                                    <SfTextBox @bind-Value="Response.Currency" Enabled="false" />
+                                                </MudForm>
+                                            </MudItem>
+                                            <MudItem xs="12" sm="6">
+                                                <MudText Typo="Typo.subtitle2" Class="mb-1" Style="font-weight:700;">Bank Country</MudText>
+                                                <MudForm>
+                                                    <SfTextBox @bind-Value="Response.BankCountry" Enabled="false"></SfTextBox>
+                                                </MudForm>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12">
+                                        <MudGrid>
+                                            <MudItem xs="12" sm="6">
+                                                <MudText Typo="Typo.subtitle2" Class="mb-1" Style="font-weight:700;">Bank City</MudText>
+                                                <MudForm>
+                                                    <SfTextBox @bind-Value="Response.BankCity" Enabled="false" />
+                                                </MudForm>
+                                            </MudItem>
+                                            <MudItem xs="12" sm="6">
+                                                <MudText Typo="Typo.subtitle2" Class="mb-1" Style="font-weight:700;">Bank Branch</MudText>
+                                                <MudForm>
+                                                    <SfTextBox @bind-Value="Response.BankBranch" Enabled="false"></SfTextBox>
+                                                </MudForm>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="12">
+                                        <MudGrid>
+                                            <MudItem xs="12" sm="12">
+                                                <MudText Typo="Typo.subtitle2" Class="mb-1" Style="font-weight:700;">SAP Status</MudText>
+                                                <MudForm>
+                                                    <SfDropDownList TItem="string" TValue="string" Placeholder="Select Status" DataSource="@_sapStatuses" @bind-Value="SapStatusDisplay"></SfDropDownList>
+                                                </MudForm>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                </MudCardContent>
+                            </MudCard>
+                        </MudItem>
+                    </MudGrid>
+                </div>
+            </div>
+        </Content>
+        <FooterTemplate>
+            <SfButton Content="Cancel" CssClass="e-outline e-danger" IconCss="e-icons e-close" OnClick="OnClickNo"></SfButton>
+            <SfButton Content="Save" CssClass="e-success" IconCss="e-icons e-circle-check" OnClick="OnClickYes"></SfButton>
+        </FooterTemplate>
+    </DialogTemplates>
+    <DialogEvents OnOpen="@DialogOpen" Closed="@DialogClose"></DialogEvents>
+    <DialogPositionData X="center" Y="center"></DialogPositionData>
+    <DialogAnimationSettings Effect="DialogEffect.None"></DialogAnimationSettings>
+</SfDialog>
+
+@code {
+    [Parameter]
+    public bool IsEnabled { get; set; }
+
+    [Parameter]
+    public bool Visibility { get; set; }
+
+    // [Parameter]
+    // public string? Title { get; set; }
+
+    [Parameter]
+    public EventCallback DialogOpen { get; set; }
+
+    [Parameter]
+    public EventCallback DialogClose { get; set; }
+
+    [Parameter]
+    public EventCallback OnClickNo { get; set; }
+
+    [Parameter]
+    public EventCallback OnClickYes { get; set; }
+
+    [Parameter]
+    public Shared.Payments.Queries.GetListApplicantBankAccountResponse Response { get; set; }
+
+    // [Parameter]
+    // public List<GetScholarshipSubjectQueryResponse>? listSubject { get; set; }
+
+    // [Parameter]
+    // public List<DropdownEnumResponse<UniversityCategory>>? listCategories { get; set; }
+
+    // [Parameter]
+    // public CreateUniversityRecommendationRequest? request { get; set; }
+
+    // private SfTextBox? TextUniversity { get; set; }
+    // private SfTextBox? TextCountry { get; set; }
+    // private SfTextBox? TextOfficialWebsite { get; set; }
+    // private SfTextBox? TextRegistrationLink { get; set; }
+
+    private List<string> _sapStatuses = new() { "In SAP", "Not In SAP" };
+
+    private string SapStatusDisplay
+    {
+        get => Response?.IsVerified == true ? "In SAP" : "Not In SAP";
+        set => Response.IsVerified = value == "In SAP";
+    }
+
+}

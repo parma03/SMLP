@@ -1,0 +1,9 @@
+﻿@if (IsVisible)
+{
+    <MudProgressLinear Color="Color.Primary" Striped="true" Indeterminate="true" Class="my-4" />
+}
+
+@code {
+    [Parameter]
+    public bool IsVisible { get; set; }
+}

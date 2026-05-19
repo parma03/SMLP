@@ -1,0 +1,19 @@
+.logo {
+    margin: 16px;
+    background-image: url(~/../img/logo.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: left center;
+    min-height: 44px;
+}
+
+.mud-main-content .main-content {
+    position: relative;
+    height: 100%;
+    min-height: calc(100vh - 64px);
+    padding: 12px 24px 24px 24px;
+    background-image: url(./img/bg_web.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}

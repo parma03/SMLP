@@ -1,0 +1,155 @@
+﻿@page "/MySession"
+@attribute [Authorize]
+
+@using IdentityModel
+@using Psmp.Shared.Services.Authentication.Constants
+
+@inject IWebHostEnvironment _webHostEnvironment
+
+<BrowserTabTitle>@AuthenticationDisplayTextFor.MySession</BrowserTabTitle>
+<MudBreadcrumbs Items="_breadcrumbItems"></MudBreadcrumbs>
+<PageHeader Title="@AuthenticationDisplayTextFor.MySession" />
+<AuthorizeView Context="authorizeContext">
+    <Authorized>
+        <MudTabs Color="Color.Dark" PanelClass="pa-6">
+            <MudTabPanel Text="@CommonDisplayTextFor.GeneralInfo">
+                <MudGrid>
+                    <MudItem xs="12" sm="6">
+                        <MudField Label="@AuthenticationDisplayTextFor.Username">
+                            @authorizeContext.User.GetUsername()
+                        </MudField>
+                    </MudItem>
+                    <MudItem xs="12" sm="6">
+                        <MudField Label="@AuthenticationDisplayTextFor.UserId">
+                            @authorizeContext.User.GetUserId()
+                        </MudField>
+                    </MudItem>
+                    <MudItem xs="12" sm="6">
+                        <MudField Label="@AuthenticationDisplayTextFor.DisplayName">
+                            @authorizeContext.User.GetDisplayName()
+                        </MudField>
+                    </MudItem>
+                    <MudItem xs="12" sm="6">
+                        <MudField Label="@AuthenticationDisplayTextFor.AuthenticationTime">
+                            @authorizeContext.User.GetAuthenticationTime().ToCompleteDateTimeDisplayText()
+                        </MudField>
+                    </MudItem>
+                    <MudItem xs="12" sm="6">
+                        <MudField Label="@AuthenticationDisplayTextFor.EmployeeId">
+                            @authorizeContext.User.GetEmployeeId()
+                        </MudField>
+                    </MudItem>
+                    <MudItem xs="12" sm="6">
+                        <MudField Label="@AuthenticationDisplayTextFor.CompanyCode">
+                            @authorizeContext.User.GetCompanyCode()
+                        </MudField>
+                    </MudItem>
+                    <MudItem xs="12" sm="6">
+                        <MudField Label="@AuthenticationDisplayTextFor.Position">
+                            @authorizeContext.User.GetPositionName().ToSafeDisplayText()
+                        </MudField>
+                    </MudItem>
+                    <MudItem xs="12" sm="6">
+                        <MudField Label="@AuthenticationDisplayTextFor.PositionId">
+                            @authorizeContext.User.GetPositionId().ToSafeDisplayText()
+                        </MudField>
+                    </MudItem>
+                </MudGrid>
+            </MudTabPanel>
+            <MudTabPanel Text="@AuthorizationDisplayTextFor.Permissions">
+                @if (authorizeContext.User.GetPermissions().Any())
+                {
+                    <MudSimpleTable Elevation="0" Outlined="true" Bordered="true" Striped="true" Hover="true">
+                        <tbody>
+                            @foreach (var permission in authorizeContext.User.GetPermissions().OrderBy(x => x))
+                            {
+                                <tr>
+                                    <td>@permission</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </MudSimpleTable>
+                }
+                else
+                {
+                    <MudAlert Variant="Variant.Filled" Severity="Severity.Info">
+                        @DefaultTextFor.NA
+                    </MudAlert>
+                }
+            </MudTabPanel>
+            <MudTabPanel Text="@AuthorizationDisplayTextFor.CustomParameters">
+                @{
+                    var customParameters = authorizeContext.User.GetCustomParameters(true);
+
+                    if (customParameters.Any())
+                    {
+                        <MudSimpleTable Elevation="0" Outlined="true" Bordered="true" Striped="true" Hover="true">
+                            <thead>
+                                <tr>
+                                    <th>@AuthorizationDisplayTextFor.Key</th>
+                                    <th>@AuthorizationDisplayTextFor.Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var customParameter in customParameters.OrderBy(x => x.Key))
+                                {
+                                    <tr>
+                                        <td>@customParameter.Key</td>
+                                        <td>@customParameter.Value</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </MudSimpleTable>
+                    }
+                    else
+                    {
+                        <MudAlert Variant="Variant.Filled" Severity="Severity.Info">
+                            @DefaultTextFor.NA
+                        </MudAlert>
+                    }
+                }
+            </MudTabPanel>
+            <MudTabPanel Text="@AuthenticationDisplayTextFor.MyClaims">
+                <MudSimpleTable Elevation="0" Outlined="true" Bordered="true" Striped="true" Hover="true">
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var claim in authorizeContext.User.Claims.OrderBy(x => x.Type))
+                        {
+                            if (claim.Type == OidcConstants.TokenResponse.AccessToken)
+                            {
+                                if (!_inProductionEnvironment)
+                                {
+                                    _accessToken = claim.Value;
+
+                                    <tr>
+                                        <td>@claim.Type</td>
+                                        <td>
+                                            <MudButton Variant="Variant.Filled" Size="Size.Small" OnClick="ShowMessageBoxAccessToken">View Access Token</MudButton>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td>@claim.Type</td>
+                                    <td>@claim.Value</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </MudSimpleTable>
+                <MudMessageBox @ref="_messageBoxAccessToken" Title="@AuthenticationDisplayTextFor.AccessToken">
+                    <MessageContent>
+                        <textarea readonly="readonly" class="access-token">@_accessToken</textarea>
+                    </MessageContent>
+                </MudMessageBox>
+            </MudTabPanel>
+        </MudTabs>
+    </Authorized>
+</AuthorizeView>

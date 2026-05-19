@@ -1,0 +1,240 @@
+﻿@using Psmp.Bsui.Features.Scholarships.Components
+@using Psmp.Shared.Scholarships.ScholarshipPosting.Queries
+
+<ErrorViewer Error="_error" />
+
+@if (_isLoading)
+{
+    <Loading IsVisible="_isLoading" />
+}
+else
+{
+    <MudGrid Spacing="2">
+        <MudItem xs="3" Class="mb-1">
+            <MudText>Company</MudText>
+            <DropdownCompany OnChangeAsync="@OnChangeCompanyAsync" />
+        </MudItem>
+        <MudGrid Class="mb-1">
+            <MudItem xs="12">
+                <MudPaper Class="pa-4" Elevation="2">
+                    <MudGrid AlignItems="center">
+                        <!-- Card pertama -->
+                        <MudItem xs="3" Class="d-flex justify-center">
+                            <CardToBeReviewed Summary=@_countToBeReviewed></CardToBeReviewed>
+                        </MudItem>
+
+                        <!-- Divider Vertikal -->
+                        <MudItem xs="1" Class="d-flex justify-center">
+                            <MudDivider Vertical="true" Class="mud-divider-height-full" Style="height: 90px; border-width: 2px; opacity: 0.5;" />
+                        </MudItem>
+
+                        <!-- Card kedua -->
+                        <MudItem xs="3" Class="d-flex justify-center">
+                            <CardWaitingForApproval Summary=@_countWaitingForApproval></CardWaitingForApproval>
+                        </MudItem>
+
+                        <!-- Divider Vertikal -->
+                        <MudItem xs="1" Class="d-flex justify-center">
+                            <MudDivider Vertical="true" Class="mud-divider-height-full" Style="height: 90px; border-width: 2px; opacity: 0.5;" />
+                        </MudItem>
+
+                        <!-- Card ketiga -->
+                        <MudItem xs="3" Class="d-flex justify-center">
+                            <CardPublished Summary=@_countPublished></CardPublished>
+                        </MudItem>
+                    </MudGrid>
+                </MudPaper>
+            </MudItem>
+        </MudGrid>
+        <MudGrid Class="mb-1">
+            <MudItem xs="12">
+                <MudPaper Class="pa-4" Elevation="2">
+                    <MudGrid AlignItems="center">
+                        <!-- Card pertama -->
+                        <MudItem xs="5" Class="d-flex justify-center">
+                            <CardClosed Summary=@_countClosed></CardClosed>
+                        </MudItem>
+
+                        <!-- Divider Vertikal -->
+                        <MudItem xs="1" Class="d-flex justify-center">
+                            <MudDivider Vertical="true" Class="mud-divider-height-full" Style="height: 90px; border-width: 2px; opacity: 0.5;" />
+                        </MudItem>
+
+                        <!-- Card kedua -->
+                        <MudItem xs="5" Class="d-flex justify-center">
+                            <CardCompleted Summary=@_countCompleted></CardCompleted>
+                        </MudItem>
+                    </MudGrid>
+                </MudPaper>
+            </MudItem>
+        </MudGrid>
+        @* <MudItem xs="12">
+            <MudGrid Spacing="2">
+                <MudItem xs="4">
+                    <CardToBeReviewed Summary=@_countToBeReviewed />
+                </MudItem>
+                <MudItem xs="4">
+                    <CardWaitingForApproval Summary=@_countWaitingForApproval />
+                </MudItem>
+                <MudItem xs="4">
+                    <CardPublished Summary=@_countPublished />
+                </MudItem>
+                <MudItem xs="6">
+                    <CardClosed Summary=@_countClosed />
+                </MudItem>
+                <MudItem xs="6">
+                    <CardCompleted Summary=@_countCompleted />
+                </MudItem>
+            </MudGrid>
+        </MudItem> *@
+        <MudGrid Class="mb-2">
+            <MudItem xs="12">
+                <MudCard>
+                    <MudCardContent>
+                        @if (_isLoadingData)
+                        {
+                            <LoadingLinear IsVisible="_isLoadingData" />
+                        }
+                        else
+                        {
+                            <MudGrid>
+                                <MudItem xs="12">
+                                    <CardTitle Title="List of Scholarship Posting Requirements" />
+                                </MudItem>
+
+                                @if (IsAllowScholarshipPostingCrud)
+                                {
+                                    <MudItem xs="12" md="8">
+                                        <MudGrid Class="d-flex align-center justify-start">
+                                            <MudItem>
+                                                <SfButton Content="Publish" IsPrimary="true" CssClass="e-primary" OnClick="OnClickPublish"></SfButton>
+                                                @* <SfButton Content="Email Blast" CssClass="e-outline e-primary"></SfButton> *@
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                }
+                                <MudItem xs="12" md="4">
+                                    <MudGrid Class="d-flex flex-wrap align-center justify-start justify-md-end">
+                                        <MudItem Class="">
+                                            <SfProgressButton ID="zoomOutButton" Content="Export to Excel" @onclick="ExportExcel" EnableProgress="true" CssClass="fw-bold" IconCss="e-icons e-download" Style="background: linear-gradient(to right, #4279db, #1c4185); color: white;">
+                                                <ProgressButtonSpinSettings Position="SpinPosition.Center"></ProgressButtonSpinSettings>
+                                                <ProgressButtonAnimationSettings Effect="Syncfusion.Blazor.SplitButtons.AnimationEffect.ZoomOut"></ProgressButtonAnimationSettings>
+                                            </SfProgressButton>
+                                        </MudItem>
+                                    </MudGrid>
+                                </MudItem>
+
+                                <MudItem xs="12">
+                                    <SfGrid @ref="Grid" DataSource="@_scholarshipPosting" Toolbar="@(new List<string>() { "Search" })" AllowExcelExport="true"
+                                            AllowFiltering="true" AllowPaging="true" AllowSorting="true" AllowResizing="true" AllowTextWrap="true">
+                                        <GridPageSettings PageCount="8" PageSize="8" PageSizes="@SyncfusionGridValue.PageSize"></GridPageSettings>
+                                        <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Excel"></GridFilterSettings>
+                                        <GridTextWrapSettings WrapMode="WrapMode.Content"></GridTextWrapSettings>
+                                        <GridSelectionSettings CheckboxMode="CheckboxSelectionType.ResetOnRowClick" Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
+                                        <GridEvents ExcelQueryCellInfoEvent="ExcelQueryCellInfoHandler" OnToolbarClick="ToolbarClickHandler" RowSelected="GetSelectedRecords" RowDeselected="CelearSelectedRecords" TValue="GetScholarshipPostingResponse"></GridEvents>
+                                        <GridColumns>
+                                            <GridColumn Type="ColumnType.CheckBox" Width="80">
+                                            </GridColumn>
+                                            <GridColumn Field=@nameof(GetScholarshipPostingResponse.Id) IsPrimaryKey="true" Visible="false"></GridColumn>
+                                            <GridColumn Field=@nameof(GetScholarshipPostingResponse.Code) HeaderText="Scholarship Code" Width="150" TextAlign="TextAlign.Center"></GridColumn>
+                                            <GridColumn Field=@nameof(GetScholarshipPostingResponse.SelectionType) HeaderText="Selection Type" Width="120" TextAlign="TextAlign.Center"></GridColumn>
+                                            <GridColumn Field=@nameof(GetScholarshipPostingResponse.PostingDate) Width="150" HeaderText="Posting Date" TextAlign="TextAlign.Center" Format="dd.MM.yyyy" Type="ColumnType.Date"></GridColumn>
+                                            <GridColumn Field=@nameof(GetScholarshipPostingResponse.DueDate) Width="150" HeaderText="Due Date" TextAlign="TextAlign.Center" Format="dd.MM.yyyy" Type="ColumnType.Date"></GridColumn>
+                                            <GridColumn Field=@nameof(GetScholarshipPostingResponse.CompanyGroupName) Width="200" HeaderTextAlign="TextAlign.Center" HeaderText="H/ SH/ APS&P"></GridColumn>
+                                            <GridColumn Field=@nameof(GetScholarshipPostingResponse.DegreeName) Width="100" TextAlign="TextAlign.Center" HeaderText="Degree"></GridColumn>
+                                            <GridColumn Field=@nameof(GetScholarshipPostingResponse.Faculty) Width="200" HeaderTextAlign="TextAlign.Center" HeaderText="Faculty"></GridColumn>
+                                            <GridColumn Field=@nameof(GetScholarshipPostingResponse.Major) Width="320" HeaderTextAlign="TextAlign.Center" HeaderText="Major"></GridColumn>
+                                            <GridColumn Field=@nameof(GetScholarshipPostingResponse.UniversityLocation) Width="120" TextAlign="TextAlign.Center" HeaderText="Location"></GridColumn>
+                                            <GridColumn Field=@nameof(GetScholarshipPostingResponse.ScholarshipScope) Width="150" TextAlign="TextAlign.Center" HeaderText="Scope"></GridColumn>
+                                            <GridColumn Field=@nameof(GetScholarshipPostingResponse.AwardeeQuota) Width="140" TextAlign="TextAlign.Center" HeaderText="Quota Fulfilled">
+                                                <Template>
+                                                    @{
+                                                        var data = (context as GetScholarshipPostingResponse);
+                                                        var showdata = data.CurentAplicant + " / " + data.AwardeeQuota;
+                                                    }
+                                                    @showdata
+                                                </Template>
+                                            </GridColumn>
+                                            <GridColumn Field=@nameof(GetScholarshipPostingResponse.Status) HeaderText="Status" Width="150" TextAlign="TextAlign.Center">
+                                                <Template>
+                                                    @{
+                                                        var data = (context as GetScholarshipPostingResponse);
+                                                        if (data!.Status == ScholarshipPostingStatus.WaitingForApproval)
+                                                        {
+                                                            <SfChip>
+                                                                <ChipItems>
+                                                                    <ChipItem Text="@data.Status.GetDescription().ToString()" CssClass="e-success"></ChipItem>
+                                                                </ChipItems>
+                                                            </SfChip>
+                                                        }
+														else if (data!.Status == ScholarshipPostingStatus.Closed || (data!.Status == ScholarshipPostingStatus.Published && DateTimeOffset.Now.Date > data!.DueDate!.Value.Date))
+                                                        {
+                                                            <SfChip>
+                                                                <ChipItems>
+                                                                    <ChipItem Text="Closed" CssClass="e-danger"></ChipItem>
+                                                                </ChipItems>
+                                                            </SfChip>
+                                                        }
+                                                        else if (data!.Status == ScholarshipPostingStatus.ToBeReviewed)
+                                                        {
+                                                            <SfChip>
+                                                                <ChipItems>
+                                                                    <ChipItem Text="@data.Status.GetDescription().ToString()" CssClass="e-warning"></ChipItem>
+                                                                </ChipItems>
+                                                            </SfChip>
+                                                        }
+                                                        else if (data!.Status == ScholarshipPostingStatus.Published || data!.Status == ScholarshipPostingStatus.AlreadyReviewed)
+                                                        {
+                                                            <SfChip>
+                                                                <ChipItems>
+                                                                    <ChipItem Text="@data.Status.GetDescription().ToString()" CssClass="e-info"></ChipItem>
+                                                                </ChipItems>
+                                                            </SfChip>
+                                                        }
+                                                        else
+                                                        {
+                                                            <SfChip>
+                                                                <ChipItems>
+                                                                    <ChipItem Text="@data.Status.GetDescription().ToString()" CssClass="e-info"></ChipItem>
+                                                                </ChipItems>
+                                                            </SfChip>
+                                                        }
+                                                    }
+                                                </Template>
+                                            </GridColumn>
+                                            <GridColumn HeaderText="Action" Width="100" TextAlign="TextAlign.Center" Visible="@IsAllowScholarshipPostingCrud">
+                                                <Template>
+                                                    @{
+                                                        var _data = (context as GetScholarshipPostingResponse);
+                                                    }
+                                                    @if (_data!.Status != ScholarshipPostingStatus.Published && _data!.Status != ScholarshipPostingStatus.Completed && _data!.Status != ScholarshipPostingStatus.AlreadyReviewed)
+                                                    {
+                                                        <MudIconButton Icon="@Icons.Material.Filled.Edit" aria-label="Edit" Title="Edit"
+                                                                       OnClick="@(() => OnClickEditScholarshipPosting(_data!, false))" Size="Size.Small" />
+                                                    }
+
+                                                    @if (_data!.Status == ScholarshipPostingStatus.Closed)
+                                                    {
+                                                        <MudIconButton Icon="@Icons.Material.Filled.PublishedWithChanges" aria-label="Republish" Title="Republish"
+                                                                       OnClick="@(() => OnClickEditScholarshipPosting(_data, true))" Size="Size.Small" />
+
+                                                    }
+                                                </Template>
+                                            </GridColumn>
+                                        </GridColumns>
+                                    </SfGrid>
+                                </MudItem>
+                            </MudGrid>
+                        }
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+        </MudGrid>
+    </MudGrid>
+}
+
+<style>
+    .e-chip-list {
+        display: inline !important
+    }
+</style>

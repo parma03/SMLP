@@ -1,0 +1,31 @@
+﻿@using Microsoft.AspNetCore.Components
+@using MudBlazor
+
+<MudCard Elevation="0">
+    <MudCardHeader>
+        <CardHeaderAvatar>
+            <MudAvatar Color="Color.Tertiary">
+                <MudIcon Icon="@Icon"></MudIcon>
+            </MudAvatar>
+        </CardHeaderAvatar>
+        <CardHeaderContent>
+            <MudText>@Title</MudText>
+            <MudLink Typo="Typo.h5" OnClick="OnClickDownload">@SubTitle</MudLink>
+        </CardHeaderContent>
+    </MudCardHeader>
+</MudCard>
+
+@code {
+
+    [Parameter]
+    public string Title { get; set; } = default!;
+
+    [Parameter]
+    public string? SubTitle { get; set; } = default!;
+
+    [Parameter]
+    public string Icon { get; set; } = Icons.Material.Rounded.Summarize;
+
+    [Parameter]
+    public EventCallback OnClickDownload { get; set; }
+}

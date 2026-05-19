@@ -1,0 +1,478 @@
+﻿@page "/Scholarships/ScholarshipPlan/Registration/{IsCreated:bool}"
+@page "/Scholarships/ScholarshipPlan/Registration/{IsCreated:bool}/{RegistrationId:guid}"
+
+@using Psmp.Shared.Scholarships.ScholarshipPlan.Queries
+@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.PdfViewerServer
+@using Syncfusion.Blazor.Popups
+@using Syncfusion.Blazor.SplitButtons
+@using Syncfusion.Blazor.DropDowns
+
+<ErrorViewer Error="_error" />
+<BrowserTabTitle>@DisplayTextFor.ScholarshipPlan</BrowserTabTitle>
+<MudBreadcrumbs Items="_breadcrumbItems"></MudBreadcrumbs>
+@if (_isLoading)
+{
+    <Loading IsVisible="_isLoading" />
+}
+else
+{
+    <MudGrid Spacing="2">
+        <MudItem xs="12">
+            <MudCard>
+                <MudCardContent Class="px-16">
+                    <MudItem xs="12" Class="d-flex justify-end">
+                        <SfChip>
+                            <ChipItems>
+                                 @{
+                                    if (DataScholarshipPlan!.Status == ScholarshipPlanStatus.Approved)
+                                    {
+                                        <ChipItem Text="@DataScholarshipPlan.Status.GetDescription()" CssClass="e-success"></ChipItem>
+                                    }
+                                    else if (DataScholarshipPlan!.Status == ScholarshipPlanStatus.Rejected)
+                                    {
+                                        <ChipItem Text="@DataScholarshipPlan.Status.GetDescription()" CssClass="e-danger"></ChipItem>
+                                    }
+                                    else if (DataScholarshipPlan!.Status == ScholarshipPlanStatus.WaitingForApproval)
+                                    {
+                                        <ChipItem Text="@DataScholarshipPlan.Status.GetDescription()" CssClass="e-warning"></ChipItem>
+                                    }
+                                    else
+                                    {
+                                        <ChipItem Text="@DataScholarshipPlan.Status.GetDescription()" CssClass="e-info"></ChipItem>
+                                    }
+                                }
+                            </ChipItems>
+                        </SfChip>
+                    </MudItem>
+                    <MudItem xs="12" Class="mb-6">
+                        <MudText Typo="Typo.h6">Specific Requirement</MudText>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudGrid>
+                            <MudItem xs="4">
+                                <MudText>Scholarship Code</MudText>
+                            </MudItem>
+                            <MudItem xs="8">
+                                <SfTextBox ID="txtCode" Placeholder="Generate by system" @bind-Value="DataScholarshipPlan.Code" Enabled="false"></SfTextBox>
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudGrid>
+                            <MudItem xs="4">
+                                <MudText>Holding/Sub Holding/AP Services & Portfolio <span style="color:red;">*</span></MudText>
+                            </MudItem>
+                            <MudItem xs="8">
+                                <SfDropDownList ID="ddlCompanyGroup" TValue="int" Enabled="IsAllowEdit" TItem="GetCompanyGroupQueryResponse" DataSource="@_companyGroups" @bind-Value="DataScholarshipPlan.CompanyGroupId"
+                                                AllowFiltering="true" FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains" Placeholder="Select Company Group">
+                                    <DropDownListEvents TItem="GetCompanyGroupQueryResponse" TValue="int" ValueChange="@OnChangeCompanyGroupAsync"></DropDownListEvents>
+                                    <DropDownListFieldSettings Text="Name" Value="Id"></DropDownListFieldSettings>
+                                </SfDropDownList>
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudGrid>
+                            <MudItem xs="4">
+                                <MudText>Company Name <span style="color:red;">*</span></MudText>
+                            </MudItem>
+                            <MudItem xs="8">
+                                <SfDropDownList ID="ddlCompany" TValue="string" TItem="GetCompanyQueryResponse" Enabled="IsAllowEdit" DataSource="@_companies" @bind-Value="DataScholarshipPlan.CompanyCode"
+                                                AllowFiltering="true" FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains" Placeholder="Select Company">
+                                    <DropDownListEvents TItem="GetCompanyQueryResponse" TValue="string" ValueChange="@OnChangeCompanyAsync"></DropDownListEvents>
+                                    <DropDownListFieldSettings Text="Name" Value="Code" />
+                                </SfDropDownList>
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudGrid>
+                            <MudItem xs="4">
+                                <MudText>Directorate <span style="color:red;">*</span></MudText>
+                            </MudItem>
+                            <MudItem xs="8">
+                                <SfDropDownList ID="ddlDirectorate" TValue="int" TItem="GetDirectorateQueryResponse" Enabled="IsAllowEdit" DataSource="@_directorates" @bind-Value="DataScholarshipPlan.DirectorateId"
+                                                AllowFiltering="true" FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains" Placeholder="Select Directorate">
+                                    <DropDownListEvents TItem="GetDirectorateQueryResponse" TValue="int" ValueChange="@OnChangeDirectorateAsync"></DropDownListEvents>
+                                    <DropDownListFieldSettings Text="Name" Value="Id" />
+                                </SfDropDownList>
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudGrid>
+                            <MudItem xs="4">
+                                <MudText>Function <span style="color:red;">*</span></MudText>
+                            </MudItem>
+                            <MudItem xs="8">
+                                <SfDropDownList ID="ddlFunction" TValue="int" TItem="GetFungsiResponse" Enabled="IsAllowEdit" DataSource="@_fungsis" @bind-Value="DataScholarshipPlan.FungsiId"
+                                                AllowFiltering="true" FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains" Placeholder="Select Function">
+                                    <DropDownListEvents TItem="GetFungsiResponse" TValue="int" ValueChange="@OnChangeFungsiAsync"></DropDownListEvents>
+                                    <DropDownListFieldSettings Text="Name" Value="Id" />
+                                </SfDropDownList>
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudGrid>
+                            <MudItem xs="4">
+                                <MudText>Division</MudText>
+                            </MudItem>
+                            <MudItem xs="8">
+                                <SfDropDownList ID="ddlDivision" TValue="int" TItem="GetDivisionQueryResponse" Enabled="IsAllowEdit" DataSource="@_divisions" @bind-Value="DataScholarshipPlan.DivisionId"
+                                                AllowFiltering="true" FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains" Placeholder="Select Division">
+                                    <DropDownListFieldSettings Text="Name" Value="Id" />
+                                </SfDropDownList>
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudGrid>
+                            <MudItem xs="4">
+                                <MudText>Business Issues <span style="color:red;">*</span></MudText>
+                            </MudItem>
+                            <MudItem xs="8">
+                                <SfTextArea ID="txtBusinessIssues" Placeholder="Standarisasi proses safety and asset integrity di seluruh wilayah kerja Pertamina" RowCount="2" ColumnCount="500"
+                                            Disabled="@(IsAllowEdit == false)" @bind-Value="DataScholarshipPlan.BusinessIssue"></SfTextArea>
+                                @* Disabled="@(IsAllowEdit == false)" pakai ini untuk disable SfTextArea*@
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudGrid>
+                            <MudItem xs="4">
+                                <MudText>References of Business Issues <span style="color:red;">*</span></MudText>
+                            </MudItem>
+                            <MudItem xs="8">
+                                <SfTextArea ID="txtBusinessIssueReferences" Placeholder="RJPP&#10;Proses Bisnis Pertamina" RowCount="2" ColumnCount="500"
+                                            Disabled="@(IsAllowEdit == false)" @bind-Value="DataScholarshipPlan.BusinessIssueReferences"></SfTextArea>
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudGrid>
+                            <MudItem xs="4">
+                                <MudText>Performance Issues<span style="color:red;">*</span></MudText>
+                            </MudItem>
+                            <MudItem xs="8">
+                                <SfTextArea ID="txtPerformanceIssue" Placeholder="Prequent proses safety incident occurance, high depedence on external consultant expertise on process safety issues, low ESG score (Prevention of Major Accident Aspect) " RowCount="2" ColumnCount="500"
+                                            Disabled="@(IsAllowEdit == false)" @bind-Value="DataScholarshipPlan.PerformanceIssue"></SfTextArea>
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudGrid>
+                            <MudItem xs="4">
+                                <MudText>Competency Issues<span style="color:red;">*</span></MudText>
+                            </MudItem>
+                            <MudItem xs="8">
+                                <SfTextArea ID="txtCompetencyIssue" Placeholder="Strategic Management" RowCount="2" ColumnCount="500"
+                                            Disabled="@(IsAllowEdit == false)" @bind-Value="DataScholarshipPlan.CompetencyIssue"></SfTextArea>
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudGrid>
+                            <MudItem xs="4">
+                                <MudText>Project Innovation<span style="color:red;">*</span></MudText>
+                            </MudItem>
+                            <MudItem xs="8">
+                                <SfTextArea ID="txtProjectInnovation" Placeholder="Project Innovation" RowCount="2" ColumnCount="500"
+                                            Disabled="@(IsAllowEdit == false)" @bind-Value="DataScholarshipPlan.ProjectInovation"></SfTextArea>
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudGrid>
+                            <MudItem xs="4">
+                                <MudText>Degree <span style="color:red;">*</span></MudText>
+                            </MudItem>
+                            <MudItem xs="8">
+                                <SfDropDownList ID="ddlDegree" TValue="int" TItem="GetDegreeQueryResponse" DataSource="@_degrees" Enabled="IsAllowEdit" @bind-Value="DataScholarshipPlan.DegreeId"
+                                                AllowFiltering="true" FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains" Placeholder="Select Degree">
+                                    <DropDownListFieldSettings Text="Name" Value="Id" />
+                                    <DropDownListEvents TItem="GetDegreeQueryResponse" TValue="int" ValueChange="OnChangeDegree" />
+                                </SfDropDownList>
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudGrid>
+                            <MudItem xs="4">
+                                <MudText>Faculty <span style="color:red;">*</span></MudText>
+                            </MudItem>
+                            <MudItem xs="8">
+                                <SfTextArea ID="txtFaculty" Placeholder="Human Resources" RowCount="2" ColumnCount="500"
+                                            Disabled="@(IsAllowEdit == false)" @bind-Value="DataScholarshipPlan.Faculty"></SfTextArea>
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudGrid>
+                            <MudItem xs="4">
+                                <MudText>Major <span style="color:red;">*</span></MudText>
+                            </MudItem>
+                            <MudItem xs="8">
+                                <SfTextArea ID="txtMajor" Placeholder="Human Resources Management" RowCount="2" ColumnCount="500"
+                                            Disabled="@(IsAllowEdit == false)" @bind-Value="DataScholarshipPlan.Major"></SfTextArea>
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudGrid>
+                            <MudItem xs="4">
+                                <MudText>
+                                    University Reference <span style="color:red;">*</span>
+                                    <br />
+                                    <MudText Typo="Typo.subtitle2" Color="Color.Secondary" Style="font-style: italic; font-size: 0.7rem;">
+                                        <b>(Maximum 150 Character)</b>
+                                    </MudText>
+                                </MudText>
+                            </MudItem>
+                            <MudItem xs="8">
+                                <SfTextBox ID="txtUniversityReference" Placeholder="Top 50 University/Akreditasi A" Enabled="IsAllowEdit" @bind-Value="DataScholarshipPlan.UniversityReference"></SfTextBox>
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudGrid>
+                            <MudItem xs="4">
+                                <MudText>University Location <span style="color:red;">*</span></MudText>
+                            </MudItem>
+                            <MudItem xs="8">
+                                <SfDropDownList ID="ddlUniversityLocation" TValue="int" TItem="DropdownItemResponse" Enabled="IsAllowEdit" DataSource="@_locations" @bind-Value="DataScholarshipPlan.UniversityLocation"
+                                                Placeholder="Select University Location">
+                                    <DropDownListFieldSettings Text="Description" Value="Id" />
+                                    <DropDownListEvents TItem="DropdownItemResponse" TValue="int" ValueChange="OnChangeUniversityLocation" />
+                                </SfDropDownList>
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudGrid>
+                            <MudItem xs="4">
+                                <MudText>Latest Education Background (Level & Major) <span style="color:red;">*</span></MudText>
+                                <MudText Typo="Typo.subtitle2" Color="Color.Secondary" Style="font-style: italic; font-size: 0.7rem;">
+                                    <b>(Maximum 150 Character)</b>
+                                </MudText>
+                            </MudItem>
+                            <MudItem xs="8">
+                                <SfTextBox ID="txtLatestEducation" Placeholder="Bachelor of Accounting" Enabled="IsAllowEdit" @bind-Value="DataScholarshipPlan.LatestEducation"></SfTextBox>
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudGrid>
+                            <MudItem xs="4">
+                                <MudText>Minimum Working Experience (Years & Field) <span style="color:red;">*</span></MudText>
+                                <MudText Typo="Typo.subtitle2" Color="Color.Secondary" Style="font-style: italic; font-size: 0.7rem;">
+                                    <b>(Maximum 150 Character)</b>
+                                </MudText>
+                            </MudItem>
+                            <MudItem xs="8">
+                                <SfTextBox ID="txtWorkingExperience" Placeholder="3 Years in Corporate Human Capital" Enabled="IsAllowEdit" @bind-Value="DataScholarshipPlan.WorkingExperience"></SfTextBox>
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudGrid>
+                            <MudItem xs="4">
+                                <MudText>Scope <span style="color:red;">*</span></MudText>
+                            </MudItem>
+                            <MudItem xs="8">
+                                <SfDropDownList ID="ddlScope" TValue="int" TItem="DropdownItemResponse" DataSource="@_scopes" Enabled="IsAllowEdit" @bind-Value="DataScholarshipPlan.Scope"
+                                                Placeholder="Select Scope">
+                                    <DropDownListFieldSettings Text="Description" Value="Id" />
+                                </SfDropDownList>
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudGrid>
+                            <MudItem xs="4">
+                                <MudText>Awardee Quota <span style="color:red;">*</span></MudText>
+                            </MudItem>
+                            <MudItem xs="8">
+                                <SfNumericTextBox ID="txtAwardeeQuota" Min="1" Max="99" @bind-Value="DataScholarshipPlan.AwardeeQuota" Enabled="IsAllowEdit"></SfNumericTextBox>
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudGrid>
+                            <MudItem xs="4">
+                                <MudText>Batch <span style="color:red;">*</span></MudText>
+                            </MudItem>
+                            <MudItem xs="8">
+                                <SfNumericTextBox ID="txtBatch" Min="1" Max="15" @bind-Value="DataScholarshipPlan.Batch" Enabled="IsAllowEdit"></SfNumericTextBox>
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudGrid>
+                            <MudItem xs="4">
+                                <MudText>Selection Category <span style="color:red;">*</span></MudText>
+                            </MudItem>
+                            <MudItem xs="8">
+                                <SfDropDownList ID="ddlSelectionType" TValue="int" TItem="DropdownItemResponse" Enabled="IsAllowEdit" DataSource="@_selectionTypes" @bind-Value="DataScholarshipPlan.SelectionType"
+                                                Placeholder="Select Selection category">
+                                    <DropDownListFieldSettings Text="Description" Value="Id" />
+                                </SfDropDownList>
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudGrid>
+                            <MudItem xs="4">
+                                <MudText>Posting Year <span style="color:red;">*</span></MudText>
+                            </MudItem>
+                            <MudItem xs="8">
+                                <SfNumericTextBox ID="txtPostingYear" Min="0" Max="2050" @bind-Value="DataScholarshipPlan.PostingYear" Format="###.##" FloatLabelType="@FloatLabelType.Always"></SfNumericTextBox>
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudGrid>
+                            <MudItem xs="4">
+                                <MudText>TOEFL Score<span style="color:red;">*</span></MudText>
+                            </MudItem>
+                            <MudItem xs="8">
+                                <SfNumericTextBox ID="txtTOEFLScore" Placeholder="TOEFL Score" @bind-Value="DataScholarshipPlan.TOEFLScore" Enabled="IsAllowEdit"></SfNumericTextBox>
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+                </MudCardContent>
+            </MudCard>
+
+            <br />
+
+            <MudCard>
+                <MudCardContent Class="px-16">
+                    <MudItem xs="12" Class="mb-6">
+                        <MudText Typo="Typo.h6">Administrative Selection Criteria</MudText>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudGrid>
+                            <MudItem xs="4">
+                                <MudText>Minimum PRL Individu/ BS</MudText>
+                            </MudItem>
+                            <MudItem xs="8">
+                                <SfNumericTextBox ID="txtMinPrl" Min="10" Max="30" @bind-Value="DataScholarshipPlan.MinimumPrl" Enabled="IsAllowEdit"></SfNumericTextBox>
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudGrid>
+                            <MudItem xs="4">
+                                <MudText>Maximum Age</MudText>
+                            </MudItem>
+                            <MudItem xs="8">
+                                <SfNumericTextBox ID="txtMaxAge" Min="18" Max="60" @bind-Value="DataScholarshipPlan.MaximumAge" Enabled="IsAllowEdit"></SfNumericTextBox>
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudGrid>
+                            <MudItem xs="4">
+                                <MudText>Minimum Work Period</MudText>
+                            </MudItem>
+                            <MudItem xs="6">
+                                <SfNumericTextBox ID="txtMinWorkPeriod" Min="0" Max="40" @bind-Value="DataScholarshipPlan.MinimumWorkPeriod" Enabled="IsAllowEdit"></SfNumericTextBox>
+                            </MudItem>
+                            <MudItem xs="2">
+                                <b>Years</b>
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudGrid>
+                            <MudItem xs="4">
+                                <MudText>Average Performance Rating Last 3 Years</MudText>
+                            </MudItem>
+                            <MudItem xs="8">
+                                <SfNumericTextBox ID="txtPerformanceRating" Format="n2" Min="3" Max="5.5f" TValue="float"
+                                                  @bind-Value="DataScholarshipPlan.PerformanceRating" Enabled="IsAllowEdit"></SfNumericTextBox>
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudGrid>
+                            <MudItem xs="4">
+                                <MudText>Indiciplinary Record Last 3 Years (SAP Based)</MudText>
+                            </MudItem>
+                            <MudItem xs="8">
+                                <SfDropDownList ID="ddlIndiciplinaryStatus" TValue="int" Enabled="IsAllowEdit" TItem="DropdownItemResponse" DataSource="@_indiciplinaries" @bind-Value="DataScholarshipPlan.IndiciplinaryStatus"
+                                                Placeholder="Select Indiciplinary Status">
+                                    <DropDownListFieldSettings Text="Description" Value="Id" />
+                                </SfDropDownList>
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudGrid>
+                            <MudItem xs="4">
+                                <MudText>MCU Status</MudText>
+                            </MudItem>
+                            <MudItem xs="8">
+                                <SfDropDownList ID="ddlMcuStatus" TValue="int" TItem="DropdownItemResponse" Enabled="IsAllowEdit" DataSource="@_mcu" @bind-Value="DataScholarshipPlan.McuStatus"
+                                                Placeholder="Select MCU Status">
+                                    <DropDownListFieldSettings Text="Description" Value="Id" />
+                                </SfDropDownList>
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+                </MudCardContent>
+            </MudCard>
+
+            <br />
+
+            @if (!string.IsNullOrEmpty(_documentPathFinal))
+            {
+                <MudCard>
+                    <MudCardContent Class="px-16">
+                        <MudItem xs="12" Class="mb-6">
+                            <MudText Typo="Typo.h6">Document</MudText>
+                        </MudItem>
+                        <MudItem xs="12" Style="min-height:250px;">
+                            <SfPdfViewerServer DocumentPath="@_documentPathFinal" Width="100%" Height="600px" />
+                        </MudItem>
+                    </MudCardContent>
+                </MudCard>
+                <br />
+            }
+
+            <MudItem xs="12">
+                <MudGrid Justify="Justify.SpaceBetween">
+                    <MudItem>
+                        <SfButton OnClick="OnClickCancelAsync" Content="Back" IconCss="e-icons e-arrow-left" CssClass="e-outline e-danger"></SfButton>
+                    </MudItem>
+                    <MudItem Class="mr-15">
+                        @if (IsAllowEdit)
+                        {
+                            <SfProgressButton IsPrimary="true" Content="Save" CssClass="e-info" EnableProgress="true" IconCss="e-icons e-save-as"
+                                              Disabled="@VisibleSave" OnClick="OnClickSave" Duration="3000">
+                                <ProgressButtonSpinSettings Position="SpinPosition.Center"></ProgressButtonSpinSettings>
+                                <ProgressButtonAnimationSettings Effect="Syncfusion.Blazor.SplitButtons.AnimationEffect.SlideRight"></ProgressButtonAnimationSettings>
+                            </SfProgressButton>
+                        }
+                    </MudItem>
+                </MudGrid>
+            </MudItem>
+        </MudItem>
+    </MudGrid>
+
+    <DialogConfirmation Visibility="VisiblePopup"
+                        Title="@DisplayTextFor.ScholarshipPlan"
+                        Content="Are you sure want to close this page?"
+                        DialogOpen="DialogOpen" DialogClose="DialogClose"
+                        OnClickNo="ClickedNo" OnClickYes="ClickedYes"></DialogConfirmation>
+}
+
+<style>
+    .e-chip-list.e-chip, .e-chip-list .e-chip {
+        font-size: medium;
+        height: 48px;
+        padding: 0 16px;
+        border-radius: 32px;
+    }
+</style>

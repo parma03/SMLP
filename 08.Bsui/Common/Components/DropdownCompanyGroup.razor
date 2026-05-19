@@ -1,0 +1,9 @@
+﻿@using Psmp.Shared.Masters.Queries
+@using Syncfusion.Blazor.DropDowns
+
+<SfDropDownList ID="ddlCompanyGroup" TValue="int" TItem="GetCompanyGroupQueryResponse"
+                AllowFiltering="true" FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains"
+                DataSource="@_companyGroups" @bind-Value="@CompanyGrupValue">
+    <DropDownListFieldSettings Text="Name" Value="Id" />
+    <DropDownListEvents TItem="GetCompanyGroupQueryResponse" TValue="int" ValueChange="OnChangeAsync" />
+</SfDropDownList>

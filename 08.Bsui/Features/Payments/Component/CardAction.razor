@@ -1,0 +1,24 @@
+﻿<style>
+    @@media (max-width: 768px) {
+        .responsive-text {
+            font-size: 1rem; /* Ukuran font lebih kecil */
+        }
+    }
+
+    @@media (max-width: 480px) {
+        .responsive-text {
+            font-size: 0.875rem; /* Ukuran font lebih kecil lagi */
+        }
+    }
+</style>
+
+<MudCard Elevation="0">
+    <MudCardHeader>
+        @* <MudIconButton Icon="@Icons.Material.Filled.RemoveRedEye" Color="Color.Primary" Title="View" />
+        <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Primary" Title="Edit" />*@
+        <MudChip T="string" Variant="Variant.Text" Color="Color.Success" Size="Size.Large" Class="d-flex gap-2 align-items-center" Style="height: 50px;">
+            <MudIconButton Icon="@Icons.Material.Filled.RemoveRedEye" Title="View" />
+            <MudIconButton Icon="@Icons.Material.Filled.Edit" Title="Edit" />
+        </MudChip>
+    </MudCardHeader>
+</MudCard>

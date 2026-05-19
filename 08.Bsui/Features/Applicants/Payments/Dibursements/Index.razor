@@ -1,0 +1,442 @@
+﻿@using Psmp.Base.Payments.Enums
+@using Psmp.Bsui.Features.Applicants.Payments.Components
+@using Psmp.Shared.Payments.Queries
+@inject IWebHostEnvironment _webHostEnvironment
+@inject IOptions<HrisOptions> _hrisOptions
+
+<style>
+    .no-minheight-tabs .mud-tabs-panels {
+        min-height: unset !important;
+        height: auto !important;
+        padding-bottom: 0 !important;
+    }
+
+	.e-chip.sf-warning-mud {
+		background: var(--mud-palette-warning);
+		color: var(--mud-palette-warning-text);
+		pointer-events: none;
+	}
+
+	.e-chip.sf-default-mud {
+		background: var(--mud-palette-secondary);
+		color: var(--mud-palette-secondary-text);
+		pointer-events: none;
+	}
+</style>
+
+<LoadingDialog IsVisible=@_isLoadingDialog Text="Loading..."></LoadingDialog>
+<ErrorViewer Error="@Error" />
+
+@if (_isLoading)
+{
+    <Loading IsVisible="_isLoading" />
+}
+else if (!_isUniversityAdded)
+{
+    <MudGrid Spacing="2">
+        <MudGrid Class="mb-2">
+            <MudItem xs="12">
+                <MudPaper Class="pa-4" Elevation="2">
+                    <MudGrid AlignItems="center" Class="mb-1">
+                        <MudItem xs="12">
+                            <MudText Typo="Typo.h5">Hello @_displayName</MudText>
+                        </MudItem>
+                    </MudGrid>
+                    <MudGrid Spacing="1">
+                        <MudItem xs="12">
+                            <MudText Typo="Typo.body1">
+                                Welcome to payment page.
+                            </MudText>
+                        </MudItem>
+                        <MudItem xs="12">
+                            <MudText Typo="Typo.body1" Class="text-bold ml-4">
+                                Please fill the University Admission before proceeding to the Disbursement feature.
+                            </MudText>
+                        </MudItem>
+                        <MudItem xs="12">
+                            <MudText Typo="Typo.body1" Class="text-bold ml-4">
+                                Go to University, select University Admission, and then add your university and fill in the required documents to proceed.
+                            </MudText>
+                        </MudItem>
+                    </MudGrid>
+                </MudPaper>
+            </MudItem>
+        </MudGrid>
+    </MudGrid>
+}
+else
+{
+    @* @if (Action != null)
+    {
+        <MudText Typo="Typo.h5">@_username</MudText>
+    }
+    else
+    { *@
+        <MudGrid Spacing="2">
+            <MudGrid Class="mb-2">
+                <MudItem xs="12">
+                    <MudText Typo="Typo.body1" HtmlTag="h3">
+                        Hello <b>@_displayName</b>, welcome to payment page.
+                    </MudText>
+                </MudItem>
+            </MudGrid>
+            <MudGrid Class="mb-2">
+                <MudItem xs="12">
+                    <MudPaper Class="pa-4" Elevation="2">
+                        <MudGrid AlignItems="center">
+                            <MudItem xs="12">
+                                @if (Action != null)
+                                {
+                                    <MudText Typo="Typo.h5">@_username</MudText>
+                                }
+                                else
+                                {
+                                    <MudText Typo="Typo.h5">Hello @_displayName</MudText>
+                                }
+                            </MudItem>
+                        </MudGrid>
+                        <MudGrid Spacing="2">
+                            <MudItem xs="9" Class="d-flex align-center justify-start">
+                                <MudText Typo="Typo.h5" Color="Color.Primary" Class="ms-0">@_university</MudText>
+                            </MudItem>
+                            @* <MudItem xs="3" Class="d-flex flex-wrap justify-end align-center">
+                                <SfButton Content="Save" CssClass="e-info" IconCss="e-icons e-circle-check"></SfButton>
+                            </MudItem> *@
+                        </MudGrid>
+                    </MudPaper>
+                </MudItem>
+            </MudGrid>
+
+            <MudGrid Class="mb-2">
+                <MudItem xs="12">
+                    <MudTabs Class="no-minheight-tabs" @bind-ActivePanelIndex="ActiveTabIndex" Rounded="true" Centered="false" Elevation="0">
+                        <MudTabPanel Text="Progress">
+                            <MudGrid Class="mt-2">
+                                <MudItem xs="12">
+                                    <MudCard Class="pa-4" Elevation="2">
+                                        <MudGrid Justify="Justify.Center">
+                                            <!-- Card pertama -->
+                                            <MudItem xs="12" sm="6" md="6" Class="d-flex justify-start">
+                                                <Psmp.Bsui.Features.Payments.Component.CardStatistic ImageSrc="img/dollars.png" AvatarColor="Color.Info" Judul="@($"{"Preparation"} ({_count1})")" CountCurrency="@_countcurrency1"></Psmp.Bsui.Features.Payments.Component.CardStatistic>
+                                            </MudItem>
+
+                                            <!-- Divider Vertikal -->
+                                            @* <MudItem xs="0" md="0" Class="d-flex justify-start">
+                                                <MudHidden Breakpoint="Breakpoint.SmAndDown">
+                                                    <MudDivider Vertical="true" Class="mud-divider-height-full" Style="height: 90px; border-width: 2px; opacity: 0.5;" />
+                                                </MudHidden>
+                                            </MudItem> *@
+
+                                            <!-- Card kedua -->
+										<MudItem xs="12" sm="6" md="6" Class="d-flex justify-start">
+												<Psmp.Bsui.Features.Payments.Component.CardStatistic ImageSrc="img/idr7.png" AvatarColor="Color.Info" Judul="@($"{"Preparation"} ({_count2})")" CountCurrency="@_countcurrency2" CurrencyType="@("Rp")" IsLast="true"></Psmp.Bsui.Features.Payments.Component.CardStatistic>
+                                            </MudItem>
+
+                                            @* <!-- Divider Vertikal -->
+                                            <MudItem xs="0" md="0" Class="d-flex justify-start">
+                                                <MudHidden Breakpoint="Breakpoint.SmAndDown">
+                                                    <MudDivider Vertical="true" Class="mud-divider-height-full" Style="height: 90px; border-width: 2px; opacity: 0.5;" />
+                                                </MudHidden>
+                                            </MudItem>
+
+                                            <!-- Card kedua -->
+                                            <MudItem xs="5" md="3" Class="d-flex justify-start">
+                                                <Psmp.Bsui.Features.Payments.Component.CardStatistic ImageSrc="img/dollars.png" AvatarColor="Color.Default" Judul="@($"{"Requested to BMC"} ({_count3})")" CountCurrency="@_countcurrency3"></Psmp.Bsui.Features.Payments.Component.CardStatistic>
+                                            </MudItem>
+
+                                            <!-- Divider Vertikal -->
+                                            <MudItem xs="0" md="0" Class="d-flex justify-start">
+                                                <MudHidden Breakpoint="Breakpoint.SmAndDown">
+                                                    <MudDivider Vertical="true" Class="mud-divider-height-full" Style="height: 90px; border-width: 2px; opacity: 0.5;" />
+                                                </MudHidden>
+                                            </MudItem>
+
+                                            <!-- Card kedua -->
+                                            <MudItem xs="5" md="2" Class="d-flex justify-start">
+                                                <Psmp.Bsui.Features.Payments.Component.CardStatistic ImageSrc="img/dollars.png" AvatarColor="Color.Default" Judul="@($"{"Requested to BMC"} ({_count4})")" CountCurrency="@_countcurrency4" CurrencyType="@("Rp")"></Psmp.Bsui.Features.Payments.Component.CardStatistic>
+                                            </MudItem> *@
+                                        </MudGrid>
+                                    </MudCard>
+                                </MudItem>
+                            </MudGrid>
+                        </MudTabPanel>
+                        <MudTabPanel Text="Completed">
+                            <MudGrid Class="mt-2">
+                                <MudItem xs="12">
+                                    <MudCard Class="pa-4" Elevation="2">
+                                        <MudGrid Justify="Justify.Center">
+                                            <!-- Card pertama -->
+                                            <MudItem xs="12" sm="6" md="6" Class="d-flex justify-start">
+                                                <Psmp.Bsui.Features.Payments.Component.CardStatistic ImageSrc="img/dollars.png" AvatarColor="Color.Success" Judul="@($"{"Completed"} ({_count5})")" CountCurrency="@_countcurrency5"></Psmp.Bsui.Features.Payments.Component.CardStatistic>
+                                            </MudItem>
+
+                                            <!-- Divider Vertikal -->
+                                            @* <MudItem xs="0" md="0" Class="d-flex justify-start">
+                                                <MudHidden Breakpoint="Breakpoint.SmAndDown">
+                                                    <MudDivider Vertical="true" Class="mud-divider-height-full" Style="height: 90px; border-width: 2px; opacity: 0.5;" />
+                                                </MudHidden>
+                                            </MudItem> *@
+
+                                            <!-- Card kedua -->
+                                            <MudItem xs="12" sm="6" md="6" Class="d-flex justify-start">
+												<Psmp.Bsui.Features.Payments.Component.CardStatistic ImageSrc="img/idr7.png" AvatarColor="Color.Success" Judul="@($"{"Completed"} ({_count6})")" CountCurrency="@_countcurrency6" CurrencyType="@("Rp")" IsLast="true"></Psmp.Bsui.Features.Payments.Component.CardStatistic>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudCard>
+                                </MudItem>
+                            </MudGrid>
+                        </MudTabPanel>
+                    </MudTabs>
+                </MudItem>
+            </MudGrid>
+        </MudGrid>
+    @* } *@
+    <MudGrid Spacing="2">
+        <MudGrid Class="mb-2">
+            <MudItem xs="12">
+                <MudCard Class="pa-4" Elevation="2">
+                    <MudCardContent>
+                        <MudItem xs="12">
+                            <MudPaper Class="d-flex justify-start flex-grow-1 gap-1" Elevation="0">
+                                <MudText Typo="Typo.h6" Class="ms-0">List of Disbursement</MudText>
+                                <Tooltips />
+                            </MudPaper>
+                            @if (Action != null)
+                            {
+                                <MudItem xs="12">
+                                    <MudGrid>
+                                        <MudItem xs="4" Class="justify-end">
+                                            <SfButton OnClick="OnClickAddAsync" Content="Request Disbursement" IconCss="e-icons e-circle-add" CssClass="e-info"></SfButton>
+                                        </MudItem>
+                                    </MudGrid>
+                                </MudItem>
+                            }
+                            <br />
+							<SfGrid @ref="Grid" DataSource="@_filteredDisbursements" Toolbar="@(new List<string>() { "Search" })" AllowFiltering="true" AllowPaging="true" AllowSorting="true" AllowResizing="true" AllowTextWrap="true">
+                                <GridPageSettings PageCount="8" PageSize="8" PageSizes="@SyncfusionGridValue.PageSize"></GridPageSettings>
+                                <GridEvents CommandClicked="OnCommandClicked" TValue="GetApplicantDisbursementResponse"></GridEvents>
+                                <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Excel"></GridFilterSettings>
+                                <GridColumns>
+                                    <GridColumn Field=@nameof(GetApplicantDisbursementResponse.RequestDate) HeaderText="Month" Width="150">
+                                        <Template>
+                                            @{
+                                                var data = (context as GetApplicantDisbursementResponse);
+                                                var date = data?.RequestDate;
+                                                var bulan = date?.ToString("MMMM", new System.Globalization.CultureInfo("id-ID"));
+                                            }
+                                            @bulan
+                                        </Template>
+                                    </GridColumn>
+                                    @* <GridColumn Field=@nameof(GetApplicantDisbursementResponse.RequestId) HeaderText="Request Id" Width="150"></GridColumn>
+                                    <GridColumn Field=@nameof(GetApplicantDisbursementResponse.PaymentDate) HeaderText="Payment Date" Format="dd.MM.yyyy" Width="150"></GridColumn>
+                                    <GridColumn Field=@nameof(GetApplicantDisbursementResponse.Item) HeaderText="Category" Width="150"></GridColumn> *@
+                                    <GridColumn Field=@nameof(GetApplicantDisbursementResponse.Item) HeaderText="Category" Width="150"></GridColumn>
+                                    <GridColumn Field=@nameof(GetApplicantDisbursementResponse.CurrencyType) HeaderText="Currency" Width="150">
+                                        <Template>
+                                            @{
+                                                var data = (context as GetApplicantDisbursementResponse);
+                                                @data!.CurrencyType.GetDescription().ToString()
+                                            }
+                                        </Template>
+                                    </GridColumn>
+                                    <GridColumn Field=@nameof(GetApplicantDisbursementResponse.Amount) HeaderText="Amount" Width="150" TextAlign="TextAlign.Right">
+                                        <Template>
+                                            @{
+                                                var data = (context as GetApplicantDisbursementResponse);
+                                            }
+                                             <div style="text-align:right;">
+                                                @($"{data!.Amount.ToString("N2", new System.Globalization.CultureInfo("id-ID"))}")
+                                             </div>
+                                        </Template>
+                                    </GridColumn>
+                                    <GridColumn Field=@nameof(GetApplicantDisbursementResponse.WageType) HeaderText="Wage Type" Width="150"></GridColumn>
+                                    <GridColumn Field=@nameof(GetApplicantDisbursementResponse.PaymentFrequency) HeaderText="Payment Frequency" Width="200"></GridColumn>
+                                    <GridColumn Field=@nameof(GetApplicantDisbursementResponse.PaymentStatus) HeaderText="Payment Status" Width="200">
+                                        <Template>
+                                            @{
+                                                var data = (context as GetApplicantDisbursementResponse);
+                                                if (data!.PaymentStatus == PaymentStatus.Approved)
+                                                {
+                                                    <div style="display:flex; justify-content:center;">
+                                                        <SfChip>
+                                                            <ChipItems>
+                                                                <ChipItem Text="@data.PaymentStatus.GetDescription().ToString()" CssClass="e-success"></ChipItem>
+                                                            </ChipItems>
+                                                        </SfChip>
+                                                    </div>
+                                                }
+                                                else if (data!.PaymentStatus == PaymentStatus.Rejected)
+                                                {
+                                                    <div style="display:flex; justify-content:center;">
+                                                        <SfChip>
+                                                            <ChipItems>
+                                                                <ChipItem Text="@data.PaymentStatus.GetDescription().ToString()" CssClass="e-danger"></ChipItem>
+                                                            </ChipItems>
+                                                        </SfChip>
+                                                    </div>
+                                                }
+                                                else if (data!.PaymentStatus == PaymentStatus.WaitingApproval)
+                                                {
+                                                    <div style="display:flex; justify-content:center;">
+                                                        <SfChip>
+                                                            <ChipItems>
+                                                                <ChipItem Text="@data.PaymentStatus.GetDescription().ToString()" CssClass="e-warning"></ChipItem>
+                                                            </ChipItems>
+                                                        </SfChip>
+                                                    </div>
+                                                }
+                                                else if (data!.PaymentStatus == PaymentStatus.RequestPreparation)
+                                                {
+                                                    <div style="display:flex; justify-content:center;">
+                                                        <SfChip>
+                                                            <ChipItems>
+                                                                <ChipItem Text="@data.PaymentStatus.GetDescription().ToString()" CssClass="e-info"></ChipItem>
+                                                            </ChipItems>
+                                                        </SfChip>
+                                                    </div>
+                                                }
+                                                else if (data!.PaymentStatus == PaymentStatus.RequestToBmc)
+                                                {
+                                                    <div style="display:flex; justify-content:center;">
+                                                        <SfChip>
+                                                            <ChipItems>
+                                                                <ChipItem Text="@data.PaymentStatus.GetDescription().ToString()" CssClass="e-default"></ChipItem>
+                                                            </ChipItems>
+                                                        </SfChip>
+                                                    </div>
+                                                }
+                                                else if (data!.PaymentStatus == PaymentStatus.Posted)
+                                                {
+                                                    <div style="display:flex; justify-content:center;">
+                                                        <SfChip>
+                                                            <ChipItems>
+                                                                <ChipItem Text="@data.PaymentStatus.GetDescription().ToString()" CssClass="e-success"></ChipItem>
+                                                            </ChipItems>
+                                                        </SfChip>
+                                                    </div>
+                                                }
+                                                else if (data!.PaymentStatus == PaymentStatus.NeedRevision)
+                                                {
+                                                    <div style="display:flex; justify-content:center;">
+                                                        <SfChip>
+                                                            <ChipItems>
+															    <ChipItem Text="@data.PaymentStatus.GetDescription().ToString()" CssClass="sf-warning-mud"></ChipItem>
+                                                            </ChipItems>
+                                                        </SfChip>
+                                                    </div>
+                                                }
+                                                else if (data!.PaymentStatus == PaymentStatus.Pending)
+                                                {
+                                                    <div style="display:flex; justify-content:center;">
+                                                        <SfChip>
+                                                            <ChipItems>
+																<ChipItem Text="@data.PaymentStatus.GetDescription().ToString()" CssClass="sf-default-mud"></ChipItem>
+                                                            </ChipItems>
+                                                        </SfChip>
+                                                    </div>
+                                                }
+                                                else if (data!.PaymentStatus == PaymentStatus.Saved)
+                                                {
+                                                    <div style="display:flex; justify-content:center;">
+                                                        <SfChip>
+                                                            <ChipItems>
+                                                                <ChipItem Text="@data.PaymentStatus.GetDescription().ToString()" CssClass="e-success"></ChipItem>
+                                                            </ChipItems>
+                                                        </SfChip>
+                                                    </div>
+                                                }
+                                                else if (data!.PaymentStatus == PaymentStatus.Completed)
+                                                {
+                                                    <div style="display:flex; justify-content:center;">
+                                                        <SfChip>
+                                                            <ChipItems>
+                                                                <ChipItem Text="@data.PaymentStatus.GetDescription().ToString()" CssClass="e-success"></ChipItem>
+                                                            </ChipItems>
+                                                        </SfChip>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div style="display:flex; justify-content:center;">
+                                                        <SfChip>
+                                                            <ChipItems>
+                                                                <ChipItem Text="@data.PaymentStatus.GetDescription().ToString()" CssClass="e-secondary"></ChipItem>
+                                                            </ChipItems>
+                                                        </SfChip>
+                                                    </div>
+                                                }
+                                            }
+                                        </Template>
+                                    </GridColumn>
+									<GridColumn HeaderText="Action" TextAlign="TextAlign.Center" Width="150">
+										<Template>
+											@{
+												var item = (context as GetApplicantDisbursementResponse);
+											}
+											<SfButton IconCss="e-icons e-eye" CssClass="e-flat" OnClick="@(() => OnActionClick(item, "View"))" Title="View"></SfButton>
+
+											@if (Action != null && item!.PaymentStatus == PaymentStatus.RequestPreparation)
+											{
+												<SfButton IconCss="e-icons e-delete" CssClass="e-flat" OnClick="@(() => OnActionClick(item, "Delete"))" Title="Delete"></SfButton>
+											}
+										</Template>
+									</GridColumn>
+                                    @* <GridColumn HeaderText="Action" TextAlign="TextAlign.Center" Width="150">
+                                        <GridCommandColumns>
+                                            @if (Action == null)
+                                            {
+                                                <GridCommandColumn Title="View" Type="CommandButtonType.None" ButtonOption="@(new CommandButtonOptions() {IconCss="e-icons e-eye", CssClass="e-flat" })"></GridCommandColumn>
+                                            }
+                                            else
+                                            {
+                                                <GridCommandColumn Title="View" Type="CommandButtonType.None" ButtonOption="@(new CommandButtonOptions() {IconCss="e-icons e-eye", CssClass="e-flat" })"></GridCommandColumn>
+                                                <GridCommandColumn Title="Edit" Type="CommandButtonType.Edit" ButtonOption="@(new CommandButtonOptions() {IconCss="e-icons e-edit", CssClass="e-flat" })"></GridCommandColumn>
+                                                <GridCommandColumn Title="Delete" Type="CommandButtonType.Delete" ButtonOption="@(new CommandButtonOptions() {IconCss="e-icons e-delete", CssClass="e-flat" })"></GridCommandColumn>
+                                            }
+                                        </GridCommandColumns>
+                                    </GridColumn> *@
+                                </GridColumns>
+                            </SfGrid>
+                        </MudItem>
+
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+        </MudGrid>
+    </MudGrid>
+}
+
+<DialogAddDibursement Visibility="VisiblePopup"
+					  Title="@TitlePopup"
+					  DialogOpen="DialogOpen" DialogClose="DialogClose"
+					  OnClickNo="ClickedNo" OnClickYes="ClickedYes"
+					  Curency="_dropdownItemCurrencyType"
+					  ItemListData="@_items"
+					  Name="@_username"
+					  EmployeeNumber="@_employeeId"
+					  ItemId="@_itemId"
+					  Country="@_country"
+					  RequestData="_requestData"
+					  Frequency="@_frequensi"
+					  CountryDropdownList="@_countryDropdownList"
+					  CityDropdownList="@_cityDropdownList"
+					  OnCommandClicked="OnCommandClickedDocument"
+					  OnRemoveDisbursement="OnRemoveUploaderDibursement"
+					  ValueChangeDisbursement="ValueChangeUploaderDisbursement"
+					  City="@_city"
+					  listDocument="@_getListDocuments"
+					  ItemDropdownList="_itemsDropDown"
+					  IsEnabled="IsEnabled"
+					  OnChangeItem="OnChangeItemHandler"
+					  OnChangeCountry="OnChangeCountryHandler"
+					  OnChangeCity="OnChangeCityHandler">
+</DialogAddDibursement>
+<Psmp.Bsui.Common.Components.DialogConfirmation
+    Visibility="VisiblePopupDelete"
+    Title="Delete Confirmation"
+    Content="Are you sure want to delete this data?"
+    UseLeftMargin="true"
+    DialogOpen="DialogOpenDelete"
+    DialogClose="DialogCloseDelete"
+    OnClickNo="ClickedNo"
+    OnClickYes="ClickedYesDelete" />

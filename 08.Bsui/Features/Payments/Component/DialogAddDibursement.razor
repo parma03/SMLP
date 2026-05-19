@@ -1,0 +1,577 @@
+﻿@using Psmp.Domain.Entities.Masters
+@using Psmp.Shared.Applicants.Queries.GetApplicantPayment
+@using Psmp.Shared.Common.Responses
+@using Psmp.Shared.Masters.Queries
+@using Psmp.Shared.Payments.Commands
+@using Psmp.Shared.Documents.Queries.GetDocuments
+@using Psmp.Bsui.Features.Payments.Constants
+@using Psmp.Base.Scholarships.Enums
+@using Psmp.Shared.Selections.SelectionAdministrations.Commands.CreateSelectionAdministration
+@using Psmp.Shared.Selections.SelectionTalentReviews.Commands.Create
+@using Psmp.Shared.Selections.SelectionTalentReviews.Queries
+@using System.Globalization
+@inject IWebHostEnvironment _webHostEnvironment
+
+<style>
+	.no-uppercase {
+		text-transform: none;
+		white-space: nowrap;
+	}
+
+	div[id^="modal-dialog-"],
+	div[id*="dialog-"],
+	.e-dlg-container,
+	.e-dialog,
+	div.e-dialog {
+		z-index: 10000 !important;
+		max-z-index: 10000 !important;
+	}
+
+	.e-dlg-overlay {
+		z-index: 9999 !important;
+	}
+</style>
+<LoadingDialog IsVisible="@_isLoadingDialog" Text="Loading..."></LoadingDialog>
+
+<SfDialog IsModal="true" Width="820px" ShowCloseIcon="true" @bind-Visible=Visibility>
+	<DialogTemplates>
+		<Header>@Title</Header>
+		<Content>
+			<div class="row">
+				<div class="col-md-12">
+					<MudGrid Spacing="2">
+						<MudItem xs="12">
+							<MudCard>
+								<MudCardContent>
+									<MudItem xs="12">
+										<MudGrid>
+											<MudItem xs="4">
+												<MudText>Employee Number / Employee Name <span style="color:red;">*</span></MudText>
+											</MudItem>
+
+											<MudItem xs="8">
+												<SfAutoComplete TValue="string" TItem="EmployeeSearchResult"
+																@bind-Value="@_employeeDisplayText"
+																DataSource="@_employeeSearchResults"
+																Placeholder="Search by Employee Number or Name"
+																FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains"
+																AllowFiltering="true"
+																ShowPopupButton="false"
+																Enabled="@(!IsViewMode)"
+																AllowCustom="false"
+																IgnoreCase="true">
+													<AutoCompleteEvents TValue="string" TItem="EmployeeSearchResult"
+																		Filtering="OnFilteringAsync"
+																		ValueChange="OnEmployeeSelected"></AutoCompleteEvents>
+													<AutoCompleteFieldSettings Value="DisplayText" Text="DisplayText"></AutoCompleteFieldSettings>
+													<AutoCompleteTemplates TItem="EmployeeSearchResult">
+														<ItemTemplate>
+															<div>@context.EmployeeNumber - @context.Name</div>
+														</ItemTemplate>
+														<NoRecordsTemplate>
+															<span>No employee found</span>
+														</NoRecordsTemplate>
+													</AutoCompleteTemplates>
+												</SfAutoComplete>
+											</MudItem>
+											@* <MudItem xs="4">
+                                                <SfMessage Severity="MessageSeverity.Error" ShowIcon="false" Variant="MessageVariant.Text" ShowCloseIcon="true" @bind-Visible="@IsShowError">@ErrorMessage</SfMessage>
+                                            </MudItem> *@
+										</MudGrid>
+									</MudItem>
+									<MudItem xs="12">
+										<MudGrid>
+											<!-- Label -->
+											<MudItem xs="4">
+												<MudText>Name</MudText>
+											</MudItem>
+
+											<!-- Textbox -->
+											<MudItem xs="5">
+												<SfTextBox ID="txName" Placeholder="Name" Value="@_name" ValueChanged="@((string val) => _name = val)" Enabled="false"></SfTextBox>
+											</MudItem>
+
+											<!-- Button -->
+											<MudItem xs="3" Class="d-flex justify-end">
+												<MudButton Variant="Variant.Filled" Color="Color.Primary" Disabled="@(!IsViewMode)" OnClick="OnCheckProfileClicked" Class="no-uppercase">
+													Check Profile
+												</MudButton>
+											</MudItem>
+										</MudGrid>
+									</MudItem>
+									<MudItem xs="12">
+										<MudGrid>
+											<MudItem xs="12" sm="6">
+												<MudText>Item</MudText>
+												<MudForm>
+													<SfDropDownList ID="ddlItem" TValue="int" Enabled="IsEnabled" TItem="DropdownItemResponse" DataSource="@ItemDropdownList" @bind-Value="RequestData!.ItemId"
+																	AllowFiltering="true" FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains" Placeholder="Select Item">
+														<DropDownListEvents TItem="DropdownItemResponse" TValue="int" ValueChange="@OnChangeItemAsync" OnValueSelect="@SelectCountry"></DropDownListEvents>
+														<DropDownListFieldSettings Text="Description" Value="Id" />
+													</SfDropDownList>
+												</MudForm>
+											</MudItem>
+											<MudItem xs="12" sm="6">
+												<MudText>Payment Frequency</MudText>
+												<MudForm>
+													<SfTextBox ID="txtFrequency" Placeholder="Payment Frequency" @bind-Value="_frequency" Enabled="false"></SfTextBox>
+												</MudForm>
+											</MudItem>
+										</MudGrid>
+									</MudItem>
+									<MudItem xs="12">
+										<MudGrid>
+											<MudItem xs="12">
+												<MudText>Currency</MudText>
+												<MudForm>
+													<SfDropDownList ID="ddlCurency" TValue="int" TItem="DropdownItemResponse" Enabled="@IsEnabled" DataSource="@Curency" @bind-Value="RequestData!.CurrencyType"
+																	Placeholder="Select Currency">
+														<DropDownListFieldSettings Text="Description" Value="Id" />
+													</SfDropDownList>
+												</MudForm>
+											</MudItem>
+										</MudGrid>
+									</MudItem>
+									@if (CountryDropdownList is not null && CountryDropdownList.Any())
+                                    {
+                                        <MudItem xs="12">
+                                            <MudGrid>
+                                                <MudItem xs="12" sm="6">
+                                                    <MudText>Country</MudText>
+                                                    <MudForm>
+                                                        <SfDropDownList ID="ddlCountry" TValue="string" Enabled="IsEnabled" TItem="DropdownItemStringResponse" DataSource="@CountryDropdownList" @bind-Value="RequestData!.Country"
+                                                                        AllowFiltering="true" FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains" Placeholder="Select Country">
+                                                            <DropDownListEvents TItem="DropdownItemStringResponse" TValue="string" ValueChange="@OnChangeContryAsync"></DropDownListEvents>
+                                                            <DropDownListFieldSettings Text="Description" Value="Id" />
+                                                        </SfDropDownList>
+                                                    </MudForm>
+                                                </MudItem>
+                                                <MudItem xs="12" sm="6">
+                                                    <MudText>City</MudText>
+                                                    <MudForm>
+                                                        <SfDropDownList ID="ddlCty" TValue="string" Enabled="IsEnabled" TItem="DropdownItemStringResponse" DataSource="@CityDropdownList" @bind-Value="RequestData!.City"
+                                                                        AllowFiltering="true" FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains" Placeholder="Select City">
+                                                            <DropDownListEvents TItem="DropdownItemStringResponse" TValue="string" ValueChange="@OnChangeCityAsync"></DropDownListEvents>
+                                                            <DropDownListFieldSettings Text="Description" Value="Id" />
+                                                        </SfDropDownList>
+                                                    </MudForm>
+                                                </MudItem>
+                                            </MudGrid>
+                                        </MudItem>
+                                    }
+                                    else if (!string.IsNullOrEmpty(RequestData?.Country) && !string.IsNullOrEmpty(RequestData?.City))
+                                    {
+                                        <MudItem xs="12">
+                                            <MudGrid>
+                                                <MudItem xs="12" sm="6">
+                                                    <MudText>Country</MudText>
+                                                    <MudForm>
+                                                        <SfTextBox ID="txtCountry" Placeholder="Country" @bind-Value="RequestData!.Country" Enabled="false"></SfTextBox>
+                                                    </MudForm>
+                                                </MudItem>
+                                                <MudItem xs="12" sm="6">
+                                                    <MudText>City</MudText>
+                                                    <MudForm>
+                                                        <SfTextBox ID="txtCity" Placeholder="City" @bind-Value="RequestData!.City" Enabled="false"></SfTextBox>
+                                                    </MudForm>
+                                                </MudItem>
+                                            </MudGrid>
+                                        </MudItem>
+                                    }
+									<MudItem xs="12">
+										<MudGrid>
+											<MudItem xs="12">
+												<MudText>Amount</MudText>
+												<MudForm>
+                                                    <SfNumericTextBox ID="txtAmount" Placeholder="Amount" Format="n2" @bind-Value="RequestData!.Amount" Enabled="@IsEnabled" Min="0"></SfNumericTextBox>
+												</MudForm>
+											</MudItem>
+										</MudGrid>
+									</MudItem>
+									<MudItem xs="12">
+										<MudGrid>
+											<MudItem xs="12">
+												<MudText>Notes</MudText>
+												<MudForm>
+													<SfTextArea ID="txtNotes" RowCount="3" ColumnCount="1000" Placeholder="Input Notes" @bind-Value="RequestData!.Notes" Disabled="@(!IsEnabled)"></SfTextArea>
+												</MudForm>
+											</MudItem>
+										</MudGrid>
+									</MudItem>
+									<MudItem xs="12">
+										<MudGrid>
+											<MudItem xs="12">
+												<MudText>Payment Proof</MudText>
+												<MudText Typo="Typo.subtitle2" Color="Color.Secondary" Style="font-style: italic; font-size: 0.8rem;">
+													<b>(Maximum Size 5 Mb)</b>
+												</MudText>
+												<MudForm Class="mt-1">
+													<SfUploader ID="uploaderReimbursement" AutoUpload="true" SequentialUpload="false" AllowMultiple="false" Enabled="@IsEnabled"
+																AllowedExtensions=".pdf">
+														<UploaderEvents ValueChange="ValueChangeDisbursement" OnRemove="OnRemoveDisbursement"></UploaderEvents>
+													</SfUploader>
+												</MudForm>
+											</MudItem>
+										</MudGrid>
+									</MudItem>
+									<br />
+									@if (listDocument!.Count() > 0)
+									{
+										<MudItem xs="12">
+											<SfGrid DataSource="@listDocument" AllowPaging="true" Width="100%" AllowResizing="true">
+												<GridPageSettings PageCount="8" PageSize="8" PageSizes="@SyncfusionGridValue.PageSize"></GridPageSettings>
+												<GridEvents CommandClicked="OnCommandClicked" TValue="GetDocumentsDocument"></GridEvents>
+												<GridColumns>
+													<GridColumn Field=@nameof(GetDocumentsDocument.FileName) HeaderText="Filename" TextAlign="TextAlign.Left" Width="80%"> </GridColumn>
+													<GridColumn HeaderText="Action" Width="20%" TextAlign="TextAlign.Center">
+														<GridCommandColumns>
+															<GridCommandColumn ID="btnDownload" Title="Download" ButtonOption="@(new CommandButtonOptions() { IconCss = "e-icons e-download", CssClass = "e-flat" })"> </GridCommandColumn>
+															@* <GridCommandColumn ID="btnDelete" Title="Delete" ButtonOption="@(new CommandButtonOptions() {IconCss="e-icons e-delete", CssClass="e-flat" })"> </GridCommandColumn> *@
+														</GridCommandColumns>
+													</GridColumn>
+												</GridColumns>
+											</SfGrid>
+										</MudItem>
+									}
+								</MudCardContent>
+							</MudCard>
+						</MudItem>
+					</MudGrid>
+				</div>
+			</div>
+		</Content>
+		<FooterTemplate>
+			<SfButton Content="Cancel" CssClass="e-outline e-danger" IconCss="e-icons e-close" OnClick="OnClickNo"></SfButton>
+			@if (IsEnabled == true)
+			{
+				<SfButton Content="Save" CssClass="e-success" IconCss="e-icons e-circle-check" OnClick="OnClickYes"></SfButton>
+			}
+
+		</FooterTemplate>
+	</DialogTemplates>
+	<DialogEvents OnOpen="@DialogOpen" Closed="@OnDialogCloseHandler"></DialogEvents>
+	<DialogPositionData X="center" Y="center"></DialogPositionData>
+	<DialogAnimationSettings Effect="DialogEffect.None"></DialogAnimationSettings>
+</SfDialog>
+@code {
+	#region Parameters
+	[Parameter]
+	public bool Visibility { get; set; }
+
+	[Parameter]
+	public string? Title { get; set; }
+
+	[Parameter]
+	public EventCallback DialogOpen { get; set; }
+
+	[Parameter]
+	public EventCallback DialogClose { get; set; }
+
+	[Parameter]
+	public EventCallback OnClickNo { get; set; }
+
+	[Parameter]
+	public EventCallback OnClickYes { get; set; }
+
+	[Parameter]
+	public string? Name { get; set; }
+
+	[Parameter]
+	public string? EmployeeNumber { get; set; }
+	// private SfTextBox? TextBoxNopek { get; set; }
+	[Parameter]
+	public EventCallback OnClickSearch { get; set; }
+	[Parameter]
+	public bool IsEnabled { get; set; }
+	[Parameter]
+	public bool IsViewMode { get; set; }
+	[Parameter]
+	public int ItemId { get; set; }
+	[Parameter]
+	public string? Country { get; set; }
+	[Parameter]
+	public string? City { get; set; }
+	[Parameter]
+	public float? Ammount { get; set; }
+	[Parameter]
+	public EventCallback<CommandClickEventArgs<GetDocumentsDocument>> OnCommandClicked { get; set; }
+	[Parameter]
+	public EventCallback<RemovingEventArgs> OnRemoveDisbursement { get; set; }
+	[Parameter]
+	public List<GetDocumentsDocument>? listDocument { get; set; }
+	[Parameter]
+	public EventCallback<UploadChangeEventArgs> ValueChangeDisbursement { get; set; }
+	[Parameter]
+	public List<DropdownItemResponse>? Curency { get; set; }
+	[Parameter]
+	public List<DropdownItemResponse>? ItemDropdownList { get; set; }
+	[Parameter]
+	public List<DropdownItemStringResponse>? CountryDropdownList { get; set; }
+	[Parameter]
+	public DisbursementRequest RequestData { get; set; } = new();
+	[Parameter]
+	public IEnumerable<GetItemStudyAssignmentResponse>? ItemListData { get; set; } = default!;
+	[Parameter]
+	public List<DropdownItemStringResponse>? CityDropdownList { get; set; }
+	[Parameter]
+	public string Frequency { get; set; }
+
+	[Parameter]
+	public bool IsShowError { get; set; } = false;
+
+	[Parameter]
+	public string ErrorMessage { get; set; } = string.Empty;
+    [Parameter]
+    public EventCallback<bool> OnDataCleared { get; set; }
+	#endregion
+
+	#region Private Fields
+	private string _employeeNumber = default!;
+	private string _lastSearchedEmployee = string.Empty;
+	private string _name = string.Empty;
+	private string _frequency = string.Empty;
+	private string _employeeDisplayText = string.Empty;
+	private bool _isLoadingDialog;
+	private bool _isSearching;
+	private bool _isDialogClosing = false;
+	private List<EmployeeSearchResult> _employeeSearchResults = new();
+	#endregion
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+    }
+
+	#region Lifecycle Methods
+	protected override void OnParametersSet()
+	{
+		base.OnParametersSet();
+
+		if (!string.IsNullOrEmpty(EmployeeNumber) && _employeeNumber != EmployeeNumber)
+		{
+			_employeeNumber = EmployeeNumber;
+			_name = Name ?? string.Empty;
+			_employeeDisplayText = !string.IsNullOrEmpty(Name)
+				? $"{EmployeeNumber} - {Name}"
+				: EmployeeNumber;
+
+			if (IsViewMode)
+			{
+				_employeeSearchResults = new List<EmployeeSearchResult>
+			{
+				new EmployeeSearchResult
+				{
+					EmployeeNumber = EmployeeNumber,
+					Name = Name ?? string.Empty,
+					ApplicantId = RequestData?.ApplicantId ?? Guid.Empty
+				}
+			};
+			}
+		}
+
+		if (!string.IsNullOrEmpty(Frequency) && _frequency != Frequency)
+		{
+			_frequency = Frequency;
+		}
+	}
+	#endregion
+
+	#region Event Handlers
+	private void OnCheckProfileClicked()
+	{
+		if (string.IsNullOrEmpty(EmployeeNumber))
+		{
+			_snackbar.AddWarning("Please input Employee Number first!");
+			return;
+		}
+
+		// Navigasi ke halaman lain
+		_navigationManager.NavigateTo(RouteFor.ApplicantPaymentd(EmployeeNumber, "Disbursement"));
+	}
+
+	private async Task OnDialogCloseHandler()
+	{
+		_isDialogClosing = true;
+		ResetDialogState();
+
+		if (DialogClose.HasDelegate)
+		{
+			await DialogClose.InvokeAsync();
+		}
+        if (OnDataCleared.HasDelegate)
+        {
+            await OnDataCleared.InvokeAsync(true);
+        }
+
+		_isDialogClosing = false;
+	}
+
+
+	public async void OnChangeItemAsync(ChangeEventArgs<int, DropdownItemResponse> args)
+	{
+		if (ItemListData == null) return;
+
+		var query = ItemListData.FirstOrDefault(x => x.Id == args.Value);
+
+		if (query == null)
+		{
+			return;
+		}
+
+		var firstFee = query.StudyAssignmentFee?.FirstOrDefault();
+
+		if (firstFee == null)
+		{
+			_frequency = string.Empty;
+			return;
+		}
+		
+		if (firstFee.PeriodType == "Month")
+		{
+			_frequency = $"Period - {firstFee.Perod} Month";
+		}
+		else if (firstFee.PeriodType == "Times")
+		{
+			_frequency = $"Period - {firstFee.Perod} Times";
+		}
+		if (query!.StudyAssignmentFee.Count() > 1)
+		{
+			var result = query.StudyAssignmentFee.Select(x => x.Country).Distinct().ToList();
+			CountryDropdownList = result.Select(x => new DropdownItemStringResponse { Id = x, Description = x }).Distinct().ToList();
+		}
+		else
+		{
+			RequestData!.Amount = query.StudyAssignmentFee.FirstOrDefault()!.Fee;
+			RequestData!.StudyAssignmentFeeId = query.StudyAssignmentFee.Select(x => x.Id).First();
+			CountryDropdownList = new List<DropdownItemStringResponse>();
+		}
+	}
+	private async Task OnChangeContryAsync(ChangeEventArgs<string, DropdownItemStringResponse> args)
+	{
+		var query = ItemListData.Where(x => x.Id == RequestData!.ItemId).SingleOrDefault();
+		if (query!.StudyAssignmentFee.Count() > 1)
+		{
+			var result = query.StudyAssignmentFee.Where(x => x.Country == args.Value).Select(x => x.City).Distinct().ToList();
+			CityDropdownList = result.Select(x => new DropdownItemStringResponse { Id = x, Description = x }).Distinct().ToList();
+		}
+	}
+	private async Task OnChangeCityAsync(ChangeEventArgs<string, DropdownItemStringResponse> args)
+	{
+		var query = ItemListData.Where(x => x.Id == RequestData!.ItemId).SingleOrDefault();
+		if (query!.StudyAssignmentFee.Count() > 1)
+		{
+			RequestData!.Amount = (decimal)query.StudyAssignmentFee.Where(x => x.City == args.Value).Select(x => x.Fee).First();
+			RequestData!.StudyAssignmentFeeId = query.StudyAssignmentFee.Where(x => x.City == args.Value).Select(x => x.Id).First();
+		}
+	}
+	public void SelectCountry()
+	{
+		Console.WriteLine("Select event has been triggered !!");
+	}
+
+	private async Task OnFilteringAsync(Syncfusion.Blazor.DropDowns.FilteringEventArgs args)
+	{
+		if (string.IsNullOrWhiteSpace(args.Text) || args.Text.Length < 2)
+		{
+			_employeeSearchResults = new List<EmployeeSearchResult>();
+			return;
+		}
+
+		try
+		{
+			var request = new GetApplicantPaymentDibursementRequest
+			{
+				EmployeeSearch = args.Text
+			};
+
+			var response = await _applicantService.GetApplicantPaymentDibursementAsync(request);
+
+			if (response.Error is null && response.Result?.Items != null)
+			{
+				_employeeSearchResults = response.Result.Items
+					.Select(x => new EmployeeSearchResult
+					{
+						EmployeeNumber = x.EmployeeNumber ?? string.Empty,
+						Name = x.Name ?? string.Empty,
+						ApplicantId = x.Id
+					})
+					.Where(x => !string.IsNullOrEmpty(x.EmployeeNumber))
+					.ToList();
+			}
+			else
+			{
+				_employeeSearchResults = new List<EmployeeSearchResult>();
+			}
+		}
+		catch (Exception ex)
+		{
+			_snackbar.AddError($"Error searching employee: {ex.Message}");
+			_employeeSearchResults = new List<EmployeeSearchResult>();
+		}
+	}
+
+	private async Task OnEmployeeSelected(ChangeEventArgs<string, EmployeeSearchResult> args)
+	{
+		if (_isDialogClosing) return;
+
+		if (string.IsNullOrWhiteSpace(args.Value))
+		{
+			ResetEmployeeSelection();
+			await InvokeAsync(StateHasChanged);
+			return;
+		}
+
+		if (args.ItemData == null) return;
+
+		if (_lastSearchedEmployee == args.ItemData.EmployeeNumber) return;
+
+		SetEmployeeData(args.ItemData);
+
+		_snackbar.AddSuccess($"Employee selected: {_name}");
+
+		if (OnClickSearch.HasDelegate)
+		{
+			await OnClickSearch.InvokeAsync();
+		}
+
+		await InvokeAsync(StateHasChanged);
+	}
+	#endregion
+
+	#region Helper Methods
+	private void ResetDialogState()
+	{
+		_lastSearchedEmployee = string.Empty;
+		_isLoadingDialog = false;
+		_employeeNumber = string.Empty;
+		_employeeSearchResults = new List<EmployeeSearchResult>();
+		_employeeDisplayText = string.Empty;
+		_name = string.Empty;
+		_frequency = string.Empty;
+		RequestData = new DisbursementRequest();
+		CountryDropdownList = null;
+		CityDropdownList = null;
+        EmployeeNumber = string.Empty;
+        Name = string.Empty;
+	}
+
+	private void ResetEmployeeSelection()
+	{
+		_employeeNumber = string.Empty;
+		_name = string.Empty;
+		RequestData.ApplicantId = Guid.Empty;
+		_lastSearchedEmployee = string.Empty;
+        EmployeeNumber = string.Empty;
+        Name = string.Empty;
+	}
+
+	private void SetEmployeeData(EmployeeSearchResult employee)
+	{
+		RequestData.ApplicantId = employee.ApplicantId;
+		_name = employee.Name;
+		_employeeNumber = employee.EmployeeNumber;
+		_lastSearchedEmployee = _employeeNumber;
+        _employeeDisplayText = $"{employee.EmployeeNumber} - {employee.Name}";
+	}
+	#endregion
+}

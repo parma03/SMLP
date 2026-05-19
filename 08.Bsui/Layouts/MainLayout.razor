@@ -1,0 +1,164 @@
+﻿@using Darnton.Blazor.DeviceInterop.Geolocation
+@using Psmp.Bsui.Common.Pages
+@using Psmp.Bsui.Common.Pages.Errors
+@using Psmp.Bsui.Services.AppInfo
+@using Psmp.Bsui.Services.Authentication
+@using Psmp.Bsui.Services.Authentication.Components
+@using Psmp.Bsui.Services.Geolocation
+@using Psmp.Bsui.Services.Geolocation.Components
+@using Psmp.Bsui.Services.HealthCheck.Components
+@using Psmp.Bsui.Services.Telemetry
+@using Psmp.Bsui.Services.Telemetry.ApplicationInsights.Components
+
+@inherits LayoutComponentBase
+
+@inject IOptions<AppInfoOptions> _appInfoOptions
+@inject IOptions<AuthenticationOptions> _authenticationOptions
+@inject IOptions<GeolocationOptions> _geolocationOptions
+@inject IOptions<TelemetryOptions> _telemetryOptions
+
+@inject AuthenticationStateProvider _authenticationStateProvider
+@inject IGeolocationService _geolocationService
+
+@if (_usingApplicationInsights)
+{
+    <PageViewTelemetryTracker />
+}
+
+<AuthorizeView>
+    <Authorized>
+        <MudThemeProvider Theme="@ThemeFor.MainLayout" />
+        <MudDialogProvider FullWidth="true" MaxWidth="MaxWidth.Small" />
+        <MudSnackbarProvider />
+        <MudLayout>
+            <MudAppBar>
+                @if (_authorized)
+                {
+                    <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+                }
+                <MudText Typo="Typo.h6" Class="ml-3">@_appInfoOptions.Value.FullName</MudText>
+                <img src="img/icontoga_.png" alt="icon scholarship" class="ml-2" style="width: 60px; height: 30px;" />
+                <MudSpacer />
+                <HealthCheckInfo />
+                @if (_usingAuthentication)
+                {
+                    <AccountInfo />
+                }
+            </MudAppBar>
+            @if (_authorized)
+            {
+                <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
+                    <div class="logo">
+                    </div>
+                    <NavMenu />
+                </MudDrawer>
+            }
+            <MudMainContent>
+                <div class="main-content">
+                    @if (_authorized)
+                    {
+                        if (_usingGeolocation)
+                        {
+                            if (_geolocationResult is null)
+                            {
+                                <Loading Description="Retrieving your current location..." />
+                            }
+                            else
+                            {
+                                if (!_geolocationResult.IsSuccess)
+                                {
+                                    <GeolocationError ErrorMessage="@_geolocationResult.Error.Message" />
+                                }
+                                else
+                                {
+                                    _readyToRenderBody = !_firstTimeRender;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            _readyToRenderBody = !_firstTimeRender;
+                        }
+
+                        if (_readyToRenderBody)
+                        {
+                            @Body
+                        }
+                    }
+                    else
+                    {
+                        <Forbidden />
+                    }
+                </div>
+            </MudMainContent>
+        </MudLayout>
+        <MudScrollToTop TopOffset="200">
+            <MudFab Color="Color.Warning" Icon="@Icons.Material.Filled.ArrowCircleUp" />
+        </MudScrollToTop>
+    </Authorized>
+    <NotAuthorized>
+        <Login />
+    </NotAuthorized>
+</AuthorizeView>
+
+<style>
+    @@media only screen and (max-width: 768px) {
+        .element_large {
+            display: none;
+        }
+
+        .login_box_compact {
+            height: 450px;
+            width: 360px;
+            background-color: rgba(255,255,255,0.13);
+            position: absolute;
+            transform: translate(-50%,-50%);
+            top: 50%;
+            left: 50%;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,255,255,0.1);
+            box-shadow: 0 0 40px rgba(8,7,16,0.6);
+            padding: 50px 35px;
+            font-family: 'Poppins',sans-serif;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+            outline: none;
+            border: none;
+            text-align: center;
+        }
+    }
+
+    .main-content {
+        position: relative;
+        height: 100%;
+        min-height: calc(100vh - 64px);
+        padding: 12px 24px 24px 24px;
+        background-image: url(./img/bg_web.png);
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+    }
+
+    .mud-appbar {
+        background-image: url(./img/bg_appbar.png);
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+    }
+
+    .mud-drawer-content {
+        background-image: url(./img/bg_web.png);
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+    }
+
+    .loading {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+    }
+</style>

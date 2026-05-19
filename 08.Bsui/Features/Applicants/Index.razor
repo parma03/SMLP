@@ -1,0 +1,13 @@
+﻿@page "/Applicant"
+
+<BrowserTabTitle>@CommonDisplayTextFor.Home</BrowserTabTitle>
+<PageHeader Title="@CommonDisplayTextFor.Home" />
+<Loading IsVisible="@_isLoading" />
+
+<AuthorizeView Context="context">
+    <Authorized>
+        <MudText Typo="Typo.h5" Class="mt-4">@_greetings</MudText>
+        <MudText Typo="Typo.h4" Class="mt-2">@context.User.GetDisplayName()</MudText>
+        <MudText Typo="Typo.h5">@_companyName</MudText>
+    </Authorized>
+</AuthorizeView>

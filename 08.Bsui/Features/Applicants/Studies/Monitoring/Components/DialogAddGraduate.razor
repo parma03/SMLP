@@ -1,0 +1,143 @@
+﻿@using Psmp.Shared.StudyMonitorings.Graduate.Commands.Create
+
+@* <SfDialog Target="#target" Width="620px" ShowCloseIcon="true" @bind-Visible=Visibility> *@
+<SfDialog Target="#target" Width="820px" ShowCloseIcon="true" AllowDragging="true" @bind-Visible=Visibility>
+    <DialogTemplates>
+        <Header>Graduate</Header>
+        <Content>
+            <div class="row">
+                <div class="col-md-12">
+                    <MudGrid Spacing="2">
+                        <MudItem xs="12">
+                            <MudCard Class="ml-2" Elevation="0">
+                                <MudCardContent>
+                                    <MudItem xs="12" Class="mt-4">
+                                        @* <MudText>Last Exam Schedule (.pdf) (Max. 5 Mb) <span style="color:red;">*</span></MudText> *@
+                                        <MudText>Last Exam Schedule (.pdf) <span style="color:red;">*</span></MudText>
+                                        <MudText Typo="Typo.subtitle2" Color="Color.Secondary" Style="font-style: italic; font-size: 0.8rem;" Class="mb-2">
+                                            <b>(Maximum Size 5 Mb)</b>
+                                        </MudText>
+                                        <SfUploader ID="uploaderPassport" AutoUpload="true" SequentialUpload="false" AllowMultiple="false"
+                                                    AllowedExtensions=".pdf" MaxFileSize="@MaxFileSize">
+                                            <UploaderEvents ValueChange="ValueChangeLastExam" OnRemove="OnRemoveLastExam"></UploaderEvents>
+                                        </SfUploader>
+                                    </MudItem>
+
+                                    <MudItem xs="12" Class="mt-4">
+                                        @* <MudText>Graduation Schedule (.pdf) (Max. 5 Mb) <span style="color:red;">*</span></MudText> *@
+                                        <MudText>Graduation Schedule (.pdf) <span style="color:red;">*</span></MudText>
+                                        <MudText Typo="Typo.subtitle2" Color="Color.Secondary" Style="font-style: italic; font-size: 0.8rem;" Class="mb-2">
+                                            <b>(Maximum Size 5 Mb)</b>
+                                        </MudText>
+                                        <SfUploader ID="uploaderVisa" AutoUpload="true" SequentialUpload="false" AllowMultiple="false"
+                                                    AllowedExtensions=".pdf" MaxFileSize="@MaxFileSize">
+                                            <UploaderEvents ValueChange="ValueChangeGraduation" OnRemove="OnRemoveGraduation"></UploaderEvents>
+                                        </SfUploader>
+                                    </MudItem>
+
+                                    <MudItem xs="12" Class="mt-4">
+                                        @* <MudText>Transcript File (.pdf) (Max. 5 Mb) <span style="color:red;">*</span></MudText> *@
+                                        <MudText>Transcript File (.pdf) <span style="color:red;">*</span></MudText>
+                                        <MudText Typo="Typo.subtitle2" Color="Color.Secondary" Style="font-style: italic; font-size: 0.8rem;" Class="mb-2">
+                                            <b>(Maximum Size 5 Mb)</b>
+                                        </MudText>
+                                        <SfUploader ID="uploaderTranscript" AutoUpload="true" SequentialUpload="false" AllowMultiple="false"
+                                                    AllowedExtensions=".pdf" MaxFileSize="@MaxFileSize">
+                                            <UploaderEvents ValueChange="ValueChangeTranscript" OnRemove="OnRemoveTranscript"></UploaderEvents>
+                                        </SfUploader>
+                                    </MudItem>
+
+                                    <MudItem xs="12" Class="mt-4">
+                                        @* <MudText>Certificate of Completion (.pdf) (Max. 5 Mb) <span style="color:red;">*</span></MudText> *@
+                                        <MudText>Certificate of Completion (.pdf) <span style="color:red;">*</span></MudText>
+                                        <MudText Typo="Typo.subtitle2" Color="Color.Secondary" Style="font-style: italic; font-size: 0.8rem;" Class="mb-2">
+                                            <b>(Maximum Size 5 Mb)</b>
+                                        </MudText>
+                                        <SfUploader ID="uploaderTranscript" AutoUpload="true" SequentialUpload="false" AllowMultiple="false"
+                                                    AllowedExtensions=".pdf" MaxFileSize="@MaxFileSize">
+                                            <UploaderEvents ValueChange="ValueChangeCompletion" OnRemove="OnRemoveCompletion"></UploaderEvents>
+                                        </SfUploader>
+                                    </MudItem>
+
+                                    <MudItem xs="12" Class="mt-4">
+                                        @* <MudText>Thesis/ Course Final Project/ Disertation (.pdf) (Max. 5 Mb) <span style="color:red;">*</span></MudText> *@
+                                        <MudText>Thesis/ Course Final Project/ Disertation (.pdf) <span style="color:red;">*</span></MudText>
+                                        <MudText Typo="Typo.subtitle2" Color="Color.Secondary" Style="font-style: italic; font-size: 0.8rem;" Class="mb-2">
+                                            <b>(Maximum Size 5 Mb)</b>
+                                        </MudText>
+                                        <SfUploader ID="uploaderTranscript" AutoUpload="true" SequentialUpload="false" AllowMultiple="false"
+                                                    AllowedExtensions=".pdf" MaxFileSize="@MaxFileSize">
+                                            <UploaderEvents ValueChange="ValueChangeFinalProject" OnRemove="OnRemoveFinalProject"></UploaderEvents>
+                                        </SfUploader>
+                                    </MudItem>
+                                </MudCardContent>
+                            </MudCard>
+                        </MudItem>
+                    </MudGrid>
+                </div>
+            </div>
+        </Content>
+        <FooterTemplate>
+            <SfButton Content="Cancel" CssClass="e-outline e-danger" IconCss="e-icons e-close" OnClick="OnClickNo"></SfButton>
+            <SfButton Content="Save" CssClass="e-success" IconCss="e-icons e-circle-check" OnClick="OnClickYes"></SfButton>
+        </FooterTemplate>
+    </DialogTemplates>
+    <DialogEvents OnOpen="@DialogOpen" Closed="@DialogClose"></DialogEvents>
+    <DialogPositionData X="center" Y="center"></DialogPositionData>
+    <DialogAnimationSettings Effect="DialogEffect.None"></DialogAnimationSettings>
+</SfDialog>
+
+@code {
+
+    [Parameter]
+    public bool Visibility { get; set; }
+
+    [Parameter]
+    public EventCallback DialogOpen { get; set; }
+
+    [Parameter]
+    public EventCallback DialogClose { get; set; }
+
+    [Parameter]
+    public EventCallback OnClickNo { get; set; }
+
+    [Parameter]
+    public EventCallback OnClickYes { get; set; }
+
+    [Parameter]
+    public EventCallback<UploadChangeEventArgs> ValueChangeLastExam { get; set; }
+
+    [Parameter]
+    public EventCallback<RemovingEventArgs> OnRemoveLastExam { get; set; }
+
+    [Parameter]
+    public EventCallback<UploadChangeEventArgs> ValueChangeGraduation { get; set; }
+
+    [Parameter]
+    public EventCallback<RemovingEventArgs> OnRemoveGraduation { get; set; }
+
+    [Parameter]
+    public EventCallback<UploadChangeEventArgs> ValueChangeTranscript { get; set; }
+
+    [Parameter]
+    public EventCallback<RemovingEventArgs> OnRemoveTranscript { get; set; }
+
+    [Parameter]
+    public EventCallback<UploadChangeEventArgs> ValueChangeCompletion { get; set; }
+
+    [Parameter]
+    public EventCallback<RemovingEventArgs> OnRemoveCompletion { get; set; }
+
+    [Parameter]
+    public EventCallback<UploadChangeEventArgs> ValueChangeFinalProject { get; set; }
+
+    [Parameter]
+    public EventCallback<RemovingEventArgs> OnRemoveFinalProject { get; set; }
+
+
+    [Parameter]
+    public CreateGraduateRequest? request { get; set; }
+
+    [Parameter]
+    public long MaxFileSize { get; set; }
+}

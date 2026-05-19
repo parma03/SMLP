@@ -1,0 +1,139 @@
+﻿@page "/ApplicantUniversity/UniversityAdmission/{Id:guid}"
+@inject IWebHostEnvironment _webHostEnvironment
+@inject IOptions<HrisOptions> _hrisOptions
+
+
+@using Psmp.Base.Universities.Enums
+@using Psmp.Shared.Universities.Constants
+@using Syncfusion.Blazor.PdfViewerServer
+
+<BrowserTabTitle>@DisplayTextFor.University</BrowserTabTitle>
+<MudBreadcrumbs Items="_breadcrumbItems" Style="padding-left:2px;"></MudBreadcrumbs>
+<ErrorViewer Error="@_error" />
+<style>
+    .text-center {
+        text-align:center;
+    }
+
+    .border-item {
+        border : 1px solid;
+        border-radius : 6px;
+    }
+
+    .text-item{
+        font-size : 14px !important;
+    }
+</style>
+@if (_isLoading)
+{
+    <Loading IsVisible="_isLoading" />
+}
+else
+{
+    @if (_isCanView)
+    {
+        <MudGrid Spacing="0">
+            <MudGrid Class="mb-2">
+                @if (_data is not null)
+                {
+                    <MudItem xs="12" Class="mt-1">
+                        <MudCard Class="pa-4" Elevation="2">
+                            <MudCardContent>
+                                <MudGrid Class="mb-2">
+                                    <MudItem xs="12">
+                                        <MudText Typo="Typo.body1" HtmlTag="h3">
+                                            Hello <b>@_displayName</b>, welcome to project page.<br />
+                                            Please submit your project plan, thank you
+                                        </MudText>
+                                    </MudItem>
+                                    <MudDivider Class="mb-2" />
+                                    <MudItem xs="8">
+                                        <MudGrid>
+                                            <MudItem xs="12">
+                                                <p style="font-size: 30px">@_data.University</p>
+                                                <SfChip>
+                                                    <ChipItems>
+                                                        <ChipItem Text="@_data.Country" CssClass="text-item" TrailingIconCss="e-icons e-location"></ChipItem>
+                                                        @if (_data.Status == AdmissionStatus.Completed)
+                                                        {
+                                                            <ChipItem Text="Completed" CssClass="e-success text-item"></ChipItem>
+                                                        }
+                                                        else if (_data.Status == AdmissionStatus.WaitingApproval)
+                                                        {
+                                                            <ChipItem Text="Waiting for Approval" CssClass="e-info text-item"></ChipItem>
+                                                        }
+                                                        else if (_data.Status == AdmissionStatus.Approved)
+                                                        {
+                                                            <ChipItem Text="Approved" CssClass="e-warning text-item"></ChipItem>
+                                                        }
+                                                        else if (_data.Status == AdmissionStatus.Submitted)
+                                                        {
+                                                            <ChipItem Text="Submitted" CssClass="text-item"></ChipItem>
+                                                        }
+                                                        else if (_data.Status == AdmissionStatus.Rejected)
+                                                        {
+                                                            <ChipItem Text="Rejected" CssClass="e-danger text-item"></ChipItem>
+                                                        }
+                                                    </ChipItems>
+                                                </SfChip>
+                                            </MudItem>
+                                            <MudItem xs="12">
+                                                @* <MudGrid>
+                                                    <MudItem xs="3" Class="text-center border-item">
+                                                        <MudGrid>
+                                                            <MudItem xs="12">
+                                                                <MudText Class="ms-0"><h3>@DisplayTextFor.ApplicationDeadline</h3></MudText>
+                                                                <MudText Class="ms-0 mt-1"><h4>@_data.Dateline.ToString("dd-MM-yyyy")</h4></MudText>
+                                                                <MudText Class="ms-0 mt-1" Style="font-weight: bold; font-size: 20px;">@((Convert.ToDateTime(_data.Dateline.ToString()) - DateTime.Now).Days) Days left</MudText>
+                                                            </MudItem>
+                                                        </MudGrid>
+                                                    </MudItem>
+                                                </MudGrid> *@
+                                            </MudItem>
+                                        </MudGrid>
+                                    </MudItem>
+                                    <MudItem xs="4">
+                                        <MudItem xs="12" Style="min-height: 175px;">
+                                            <img src="img/univ.png" alt="icon scholarship" width="180" />
+                                        </MudItem>
+                                    </MudItem>
+                                </MudGrid>
+                                <MudDivider />
+                                <MudGrid Class="mt-0 mb-2">
+                                    <MudItem xs="12">
+                                        <MudGrid>
+                                            <MudItem xs="6" Class="mt-1" Style="min-height:250px;">
+                                                <MudText><strong>Letter of Acceptance</strong></MudText>
+                                                <MudGrid>
+                                                    <MudItem xs="12" Class="mt-2">
+                                                        <SfPdfViewerServer DocumentPath="@_documentPathLoA" Width="100%" Height="870px" />
+                                                    </MudItem>
+                                                </MudGrid>
+                                            </MudItem>
+                                            <MudItem xs="6" Class="mt-1" Style="min-height:250px;">
+                                                <MudText><strong>Superior (Min. VP) Approval Letter</strong></MudText>
+                                                <MudGrid>
+                                                    <MudItem xs="12" Class="mt-2">
+                                                        <SfPdfViewerServer DocumentPath="@_documentPathSuperiorApproval" Width="100%" Height="870px" />
+                                                    </MudItem>
+                                                </MudGrid>
+                                            </MudItem>
+                                        </MudGrid>                                    
+                                    </MudItem>
+                                </MudGrid>
+                                <MudItem xs="12" Style="text-align: right;">
+                                    <SfButton OnClick="OnClickBack" Content="Back" IconCss="e-icons e-arrow-left" CssClass="e-info"></SfButton>
+                                </MudItem>
+                            </MudCardContent>
+                        </MudCard>
+                    </MudItem>
+                }
+            </MudGrid>
+        </MudGrid>
+    }
+    else
+    {
+        <br />
+        <MudText Typo="Typo.h4">Not available university admission</MudText>
+    }
+}

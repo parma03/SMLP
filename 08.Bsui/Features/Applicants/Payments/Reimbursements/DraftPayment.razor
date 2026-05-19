@@ -1,0 +1,116 @@
+﻿@using Syncfusion.Blazor.DocumentEditor
+<style>
+	.m-4 {
+	margin-right: 4px;
+	}
+
+	#txtNumberOfLetter {
+	height: 150px;
+	}
+
+	#txtInvoiceAddressCompany {
+	height: 150px;
+	}
+
+	#txtCarbonCopy {
+	height: 150px;
+	}
+</style>
+<ErrorViewer Error="_error" />
+<LoadingDialog IsVisible=@_isLoadingDialog Text="Loading..."></LoadingDialog>
+@if (_isLoading)
+{
+	<Loading IsVisible="_isLoading" />
+}
+else
+{
+
+	<MudGrid Spacing="2">
+		<MudItem xs="12">
+			<MudGrid Spacing="2">
+				<MudItem xs="4">
+					<MudGrid Spacing="2">
+						<MudItem xs="12">
+							<MudCard Style="height : 850px;">
+								<MudCardContent>
+									<MudItem xs="12" Class="mt-4">
+										<MudText>Nomer BAST</MudText>
+										<MudGrid>
+											<MudItem xs="12">
+                                                <SfTextBox ID="txtCategory" Placeholder="Nomer BAST" @bind-Value="_requestReimbursement!.BASTNumber" Enabled="true"></SfTextBox>
+											</MudItem>
+										</MudGrid>
+									</MudItem>
+									<MudItem xs="12" Class="mt-4">
+										<MudText>BA Date</MudText>
+										<MudGrid>
+
+											<MudItem xs="12">
+												<SfDatePicker TValue="DateOnly?" Format="dd-MM-yyyy" Placeholder="Choose a Date" FullScreen="true" ShowClearButton="true" @bind-Value="_requestReimbursement!.BADate" Enabled="true"></SfDatePicker>
+											</MudItem>
+										</MudGrid>
+									</MudItem>
+									<MudItem xs="12" Class="mt-4">
+										<MudText>Nomer PO</MudText>
+										<MudGrid>
+											<MudItem xs="12">
+                                                <SfTextBox ID="txtAddressTo" Placeholder="Nomer PO" @bind-Value="_requestReimbursement!.PONumber" Enabled="true"></SfTextBox>
+											</MudItem>
+										</MudGrid>
+									</MudItem>
+								</MudCardContent>
+							</MudCard>
+						</MudItem>
+					</MudGrid>
+				</MudItem>
+				<MudItem xs="8">
+					<MudGrid Spacing="2">
+						
+						<MudItem xs="12" Style="min-height:670px;">
+							<MudGrid>
+								<MudItem xs="12">
+									<ErrorViewer Error="_errorDraft" />
+									<SfDocumentEditorContainer @ref="_containerDocument" Height="1069px" ShowPropertiesPane="@ShowProperties" RestrictEditing="@ReadOnly" EnableToolbar="@Toolbar" ToolbarItems="@_toolbarItems" DocumentEditorSettings="_settingDocument">
+										<DocumentEditorContainerEvents Created="OnCreated"></DocumentEditorContainerEvents>
+									</SfDocumentEditorContainer>
+								</MudItem>
+							</MudGrid>
+						</MudItem>
+						<MudItem xs="12">
+							@if (_data.PaymentStatus != Base.Payments.Enums.PaymentStatus.Completed)
+							{
+								@if (_documentDraftId == Guid.Empty)
+								{
+									<SfButton OnClick="OnClickGenerateAsync" Content="Generate" IconCss="e-icons e-circle-check" CssClass="e-primary m-4"></SfButton>
+									@if (_contentButton == "Save")
+									{
+										<SfButton OnClick="OnClickSaveAsync" Content="Save" IconCss="e-icons e-save" CssClass="e-info m-4"></SfButton>
+									}
+									else if (_contentButton == "Update")
+									{
+										<SfButton OnClick="OnClickUpdateAsync" Content="Edit Document" IconCss="e-icons e-edit" CssClass="e-info m-4"></SfButton>
+									}
+								}
+								else
+								{
+									@* <SfButton OnClick="OnClickPofficeAsync" Content="Continue to P-Office" IconCss="e-icons e-check" CssClass="e-info"></SfButton> *@
+									@* <SfButton OnClick="OnClickPsignAsync" Content="Continue to P-Sign" IconCss="e-icons e-check" CssClass="e-info"></SfButton> *@
+									<SfButton OnClick="OnClickDownloadWordAsync" Content="Download as Word" IconCss="e-icons e-download" CssClass="e-info"></SfButton>
+									<SfButton OnClick="OnClickDownloadPdfAsync" Content="Download as PDF" IconCss="e-icons e-download" CssClass="e-info"></SfButton>
+								}
+							}
+						</MudItem>
+					</MudGrid>
+				</MudItem>
+			</MudGrid>
+		</MudItem>
+	</MudGrid>
+}
+
+<DialogConfirmation Visibility="VisiblePopupConfirm"
+					Title="Payment"
+					Content="@TitlePopupConfirm"
+					DialogOpen="DialogConfirmOpen"
+					DialogClose="DialogConfirmClose"
+					OnClickNo="ClickedNoConfirm"
+					OnClickYes="ClickedYesConfirm"></DialogConfirmation>
