@@ -1,0 +1,41 @@
+@page "/PointAdjustments"
+
+<BrowserTabTitle>Penyesuaian Poin</BrowserTabTitle>
+<PageHeader Title="Penyesuaian Poin Manual" Icon="@Icons.Material.Filled.Tune" />
+
+<MudAlert Severity="Severity.Warning" Class="mb-4">
+    Fitur ini digunakan untuk koreksi poin secara manual (bonus, kompensasi, atau pengurangan karena kesalahan).
+    Setiap penyesuaian akan tercatat di audit log.
+</MudAlert>
+
+<MudGrid>
+    <MudItem xs="12" md="5">
+        <MudPaper Class="pa-4 rounded-lg" Elevation="2">
+            <MudText Typo="Typo.subtitle1" Class="mb-3" Style="color:#6F4E37; font-weight:700;">
+                Form Penyesuaian Poin
+            </MudText>
+            <MudTextField Label="Cari No. HP / Kode Member" Variant="Variant.Outlined" Class="mb-3" />
+            <MudSelect Label="Tipe Penyesuaian" Variant="Variant.Outlined" Class="mb-3">
+                <MudSelectItem Value="@("Tambah")">➕ Tambah Poin (Bonus/Kompensasi)</MudSelectItem>
+                <MudSelectItem Value="@("Kurang")">➖ Kurangi Poin (Koreksi)</MudSelectItem>
+            </MudSelect>
+            <MudNumericField Label="Jumlah Poin" Variant="Variant.Outlined" Class="mb-3" Min="1" />
+            <MudTextField Label="Alasan / Catatan" Variant="Variant.Outlined" Lines="3" Class="mb-3"
+                          Placeholder="Wajib diisi: alasan penyesuaian poin..." />
+            <MudButton Variant="Variant.Filled" Style="background:#6F4E37; color:white; width:100%;"
+                       StartIcon="@Icons.Material.Filled.Save">
+                Simpan Penyesuaian
+            </MudButton>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" md="7">
+        <MudPaper Class="pa-4 rounded-lg" Elevation="2">
+            <MudText Typo="Typo.subtitle1" Class="mb-3" Style="color:#6F4E37; font-weight:700;">
+                Riwayat Penyesuaian
+            </MudText>
+            <MudText Class="pa-4 text-center" Color="Color.Secondary">
+                Belum ada riwayat penyesuaian poin
+            </MudText>
+        </MudPaper>
+    </MudItem>
+</MudGrid>

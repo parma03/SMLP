@@ -1,0 +1,41 @@
+@page "/RedeemHistories"
+
+<BrowserTabTitle>Riwayat Penukaran Reward</BrowserTabTitle>
+<PageHeader Title="Riwayat Penukaran Reward" Icon="@Icons.Material.Filled.Redeem" />
+
+<MudGrid Class="mb-4">
+    <MudItem xs="12" sm="6" md="4">
+        <MudTextField Label="Cari nama / kode member" Variant="Variant.Outlined"
+                      Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" />
+    </MudItem>
+    <MudItem xs="12" sm="6" md="3">
+        <MudDatePicker Label="Dari Tanggal" Variant="Variant.Outlined" />
+    </MudItem>
+    <MudItem xs="12" sm="6" md="3">
+        <MudDatePicker Label="Sampai Tanggal" Variant="Variant.Outlined" />
+    </MudItem>
+    <MudItem xs="12" sm="6" md="2" Class="d-flex align-end">
+        <MudButton Variant="Variant.Outlined" Color="Color.Secondary"
+                   StartIcon="@Icons.Material.Filled.FileDownload" Style="width:100%;">
+            Export
+        </MudButton>
+    </MudItem>
+</MudGrid>
+
+<MudPaper Class="pa-4 rounded-lg" Elevation="1">
+    <MudTable Dense="true" Hover="true" Elevation="0" Items="@_empty">
+        <HeaderContent>
+            <MudTh>Tanggal Redeem</MudTh>
+            <MudTh>Nama Pelanggan</MudTh>
+            <MudTh>Reward</MudTh>
+            <MudTh Style="text-align:right">Poin Digunakan</MudTh>
+            <MudTh>Diproses Oleh</MudTh>
+            <MudTh>Status</MudTh>
+        </HeaderContent>
+        <NoRecordsContent>
+            <MudText Class="pa-4 text-center" Color="Color.Secondary">
+                Belum ada riwayat penukaran reward
+            </MudText>
+        </NoRecordsContent>
+    </MudTable>
+</MudPaper>
