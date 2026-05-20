@@ -1,462 +1,151 @@
-﻿using System.Security.Claims;
-using IdentityModel;
-using IdentityModel.Client;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.Extensions.Options;
-using Smlp.Bsui.Common.Extensions;
-using Smlp.Bsui.Services.Authentication.IdAMan;
-using Smlp.Bsui.Services.Authentication.IS4IM;
-using Smlp.Bsui.Services.Authorization;
-using Smlp.Client.Services.UserInfo;
-using Smlp.Shared.Common.Constants;
-using Smlp.Shared.Services.Authentication.Constants;
-using Smlp.Shared.Services.Authorization.Constants;
 
 namespace Smlp.Bsui.Services.Authentication;
 
 public class AuthorizedAuthenticationStateProvider : AuthenticationStateProvider
 {
-    private readonly ClaimsPrincipal _user;
-    private readonly string _tokenUrl = default!;
-    private readonly string _clientId = default!;
-    private readonly string _clientSecret = default!;
+    private const string AccessTokenKey = "smlp_access_token";
+    private const string RefreshTokenKey = "smlp_refresh_token";
+    private const string UserInfoKey = "smlp_user_info";
+
     private readonly ProtectedLocalStorage _localStorage;
-    private readonly UserInfoService _userInfo;
     private readonly AuthenticationOptions _authenticationOptions;
-    private readonly bool _usingAuthentication;
-    private readonly bool _usingAuthorization;
-    private readonly IAuthorizationService _authorizationService;
     private readonly ILogger<AuthorizedAuthenticationStateProvider> _logger;
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
+    private ClaimsPrincipal _currentUser = new(new ClaimsIdentity());
 
     public AuthorizedAuthenticationStateProvider(
         IHttpContextAccessor httpContextAccessor,
         IOptions<AuthenticationOptions> authenticationOptions,
-        IOptions<AuthorizationOptions> authorizationOptions,
-        IConfiguration configuration,
         ProtectedLocalStorage localStorage,
-        UserInfoService userInfo,
-        IAuthorizationService authorizationService,
         ILogger<AuthorizedAuthenticationStateProvider> logger)
     {
+        _httpContextAccessor = httpContextAccessor;
         _authenticationOptions = authenticationOptions.Value;
-        _usingAuthentication = _authenticationOptions.Provider is not AuthenticationProvider.None;
-        _usingAuthorization = authorizationOptions.Value.Provider is not AuthorizationProvider.None;
-
-        if (!_usingAuthentication)
-        {
-            var claims = Permissions.All
-                .Select(permission => new Claim(AuthorizationClaimTypes.Permission, permission))
-                .ToList();
-
-            var noneAuthenticationIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-            _user = new ClaimsPrincipal(noneAuthenticationIdentity);
-        }
-        else
-        {
-            var httpContext = httpContextAccessor.HttpContext;
-
-            if (httpContext is null)
-            {
-                throw new InvalidOperationException("HttpContext object is null.");
-            }
-
-            _user = httpContext.User;
-
-            if (!_usingAuthorization)
-            {
-                var claims = new List<Claim>();
-
-                foreach (var claim in _user.Claims)
-                {
-                    if (claim.Type
-                        is OidcConstants.TokenResponse.AccessToken
-                        or OidcConstants.TokenResponse.RefreshToken
-                        or AuthorizationClaimTypes.PositionId
-                        or AuthorizationClaimTypes.PositionName
-                        or AuthorizationClaimTypes.Permission)
-                    {
-                        continue;
-                    }
-                    else if (claim.Type.StartsWith(AuthorizationClaimTypes.CustomParameter))
-                    {
-                        continue;
-                    }
-                    else
-                    {
-                        claims.Add(claim);
-                    }
-                }
-
-                foreach (var permission in Permissions.All)
-                {
-                    claims.Add(new Claim(AuthorizationClaimTypes.Permission, permission));
-                }
-
-                var noneAuthorizationIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-                _user = new ClaimsPrincipal(noneAuthorizationIdentity);
-            }
-        }
-
-        switch (_authenticationOptions.Provider)
-        {
-            case AuthenticationProvider.None:
-                _tokenUrl = string.Empty;
-                _clientId = string.Empty;
-                _clientSecret = string.Empty;
-                break;
-
-            case AuthenticationProvider.IdAMan:
-                var idAManAuthenticationOptions = configuration.GetSection(IdAManAuthenticationOptions.SectionKey).Get<IdAManAuthenticationOptions>();
-                _tokenUrl = idAManAuthenticationOptions.TokenUrl;
-                _clientId = idAManAuthenticationOptions.ClientId;
-                _clientSecret = idAManAuthenticationOptions.ClientSecret;
-                break;
-
-            case AuthenticationProvider.IS4IM:
-                var is4imAuthenticationOptions = configuration.GetSection(IS4IMAuthenticationOptions.SectionKey).Get<IS4IMAuthenticationOptions>();
-                _tokenUrl = is4imAuthenticationOptions.TokenUrl;
-                _clientId = is4imAuthenticationOptions.ClientId;
-                _clientSecret = is4imAuthenticationOptions.ClientSecret;
-                break;
-
-            default:
-                throw new ArgumentException($"{CommonDisplayTextFor.Unsupported} {AuthenticationDisplayTextFor.AuthenticationProvider}: {authenticationOptions.Value.Provider}");
-        }
-
         _localStorage = localStorage;
-        _userInfo = userInfo;
-        _authorizationService = authorizationService;
         _logger = logger;
+
+        // Mode None: grant full access for development
+        if (_authenticationOptions.Provider == "None")
+        {
+            var devClaims = new List<Claim>
+            {
+                new(ClaimTypes.NameIdentifier, "00000000-0000-0000-0000-000000000001"),
+                new(ClaimTypes.Name, "admin"),
+                new("displayname", "Administrator"),
+                new(ClaimTypes.Role, "Admin"),
+                new(ClaimTypes.Email, "admin@smlp.local")
+            };
+            var devIdentity = new ClaimsIdentity(devClaims, CookieAuthenticationDefaults.AuthenticationScheme);
+            _currentUser = new ClaimsPrincipal(devIdentity);
+        }
     }
 
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
-        var identity = _user.Identity;
-
-        if (!_usingAuthentication)
+        if (_authenticationOptions.Provider == "None")
         {
-            return await Task.FromResult(new AuthenticationState(new ClaimsPrincipal(_user)));
+            return new AuthenticationState(_currentUser);
         }
 
-        if (identity is null)
+        try
         {
-            return await Task.FromResult(new AuthenticationState(new ClaimsPrincipal()));
-        }
+            var storedToken = await _localStorage.GetAsync<string>(AccessTokenKey);
+            if (!storedToken.Success || string.IsNullOrWhiteSpace(storedToken.Value))
+            {
+                return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
+            }
 
-        if (!identity.IsAuthenticated)
+            var claims = ParseClaimsFromJwt(storedToken.Value);
+            var expiry = claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Exp);
+
+            if (expiry is not null)
+            {
+                var expiryTime = DateTimeOffset.FromUnixTimeSeconds(long.Parse(expiry.Value));
+                if (expiryTime < DateTimeOffset.UtcNow)
+                {
+                    await LogoutAsync();
+                    return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
+                }
+            }
+
+            var identity = new ClaimsIdentity(claims, "jwt");
+            _currentUser = new ClaimsPrincipal(identity);
+
+            return new AuthenticationState(_currentUser);
+        }
+        catch (Exception ex)
         {
-            return await Task.FromResult(new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity())));
+            _logger.LogWarning(ex, "Gagal mendapatkan authentication state.");
+            return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
         }
-
-        return await Task.FromResult(new AuthenticationState(new ClaimsPrincipal(_user)));
     }
 
-    public async Task LoadIdentity()
+    public async Task LoginAsync(string accessToken, string refreshToken)
     {
-        if (!_usingAuthentication)
-        {
-            NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(_user)));
+        await _localStorage.SetAsync(AccessTokenKey, accessToken);
+        await _localStorage.SetAsync(RefreshTokenKey, refreshToken);
 
-            return;
-        }
+        var claims = ParseClaimsFromJwt(accessToken);
+        var identity = new ClaimsIdentity(claims, "jwt");
+        _currentUser = new ClaimsPrincipal(identity);
 
-        var identity = _user.Identity;
-
-        if (identity is null || !identity.IsAuthenticated)
-        {
-            await ClearStoredIdentityAsync();
-
-            NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(_user)));
-
-            return;
-        }
-
-        if (!_usingAuthorization)
-        {
-            NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(_user)));
-
-            return;
-        }
-
-        var storedAccessToken = await _localStorage.GetAsync<string>(OidcConstants.TokenResponse.AccessToken);
-        var storedRefreshToken = await _localStorage.GetAsync<string>(OidcConstants.TokenResponse.RefreshToken);
-        var storedPositionId = await _localStorage.GetAsync<string>(AuthorizationClaimTypes.PositionId);
-        var storedPositionName = await _localStorage.GetAsync<string>(AuthorizationClaimTypes.PositionName);
-        var storedPermissions = await _localStorage.GetAsync<IList<string>>(AuthorizationClaimTypes.Permission);
-        var storedCustomParameters = await _localStorage.GetAsync<IDictionary<string, string>>(AuthorizationClaimTypes.CustomParameter);
-
-        var claims = new List<Claim>();
-
-        foreach (var claim in _user.Claims)
-        {
-            if (claim.Type
-                is OidcConstants.TokenResponse.AccessToken
-                or OidcConstants.TokenResponse.RefreshToken
-                or AuthorizationClaimTypes.PositionId
-                or AuthorizationClaimTypes.PositionName
-                or AuthorizationClaimTypes.Permission)
-            {
-                continue;
-            }
-            else if (claim.Type.StartsWith(AuthorizationClaimTypes.CustomParameter))
-            {
-                continue;
-            }
-            else
-            {
-                claims.Add(claim);
-            }
-        }
-
-        if (!string.IsNullOrWhiteSpace(storedAccessToken.Value))
-        {
-            claims.Add(new Claim(OidcConstants.TokenResponse.AccessToken, storedAccessToken.Value));
-
-            _userInfo.AccessToken = storedAccessToken.Value;
-        }
-        else
-        {
-            var claimAccessToken = _user.GetAccessToken();
-
-            if (!string.IsNullOrWhiteSpace(claimAccessToken))
-            {
-                claims.Add(new Claim(OidcConstants.TokenResponse.AccessToken, claimAccessToken));
-
-                _userInfo.AccessToken = claimAccessToken;
-            }
-        }
-
-        if (!string.IsNullOrWhiteSpace(storedRefreshToken.Value))
-        {
-            claims.Add(new Claim(OidcConstants.TokenResponse.RefreshToken, storedRefreshToken.Value));
-        }
-        else
-        {
-            claims.Add(new Claim(OidcConstants.TokenResponse.RefreshToken, _user.GetRefreshToken()!));
-        }
-
-        if (!string.IsNullOrWhiteSpace(storedPositionId.Value))
-        {
-            claims.Add(new Claim(AuthorizationClaimTypes.PositionId, storedPositionId.Value));
-
-            
-        }
-        else
-        {
-            var claimPositionId = _user.GetPositionId();
-
-            if (claimPositionId is not null)
-            {
-                claims.Add(new Claim(AuthorizationClaimTypes.PositionId, claimPositionId));
-
-                
-            }
-            else
-            {
-                
-            }
-        }
-
-        if (!string.IsNullOrWhiteSpace(storedPositionName.Value))
-        {
-            claims.Add(new Claim(AuthorizationClaimTypes.PositionName, storedPositionName.Value));
-        }
-        else
-        {
-            var claimPositionName = _user.GetPositionName();
-
-            if (claimPositionName is not null)
-            {
-                claims.Add(new Claim(AuthorizationClaimTypes.PositionName, claimPositionName));
-            }
-        }
-
-        if (storedPermissions.Value is not null)
-        {
-            foreach (var permission in storedPermissions.Value)
-            {
-                claims.Add(new Claim(AuthorizationClaimTypes.Permission, permission));
-            }
-        }
-        else
-        {
-            foreach (var permission in _user.GetPermissions())
-            {
-                claims.Add(new Claim(AuthorizationClaimTypes.Permission, permission));
-            }
-        }
-
-        if (storedCustomParameters.Value is not null)
-        {
-            foreach (var customParameter in storedCustomParameters.Value)
-            {
-                claims.Add(new Claim(customParameter.Key, customParameter.Value));
-            }
-        }
-        else
-        {
-            foreach (var customParameter in _user.GetCustomParameters())
-            {
-                claims.Add(new Claim(customParameter.Key, customParameter.Value));
-            }
-        }
-
-        var newIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-        NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(new ClaimsPrincipal(newIdentity))));
+        NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(_currentUser)));
     }
 
-    public async Task LoadAuthorizationAsync(string positionId, string positionName)
+    public async Task LogoutAsync()
     {
-        var identity = new ClaimsIdentity(_user.Claims, CookieAuthenticationDefaults.AuthenticationScheme);
+        await _localStorage.DeleteAsync(AccessTokenKey);
+        await _localStorage.DeleteAsync(RefreshTokenKey);
+        await _localStorage.DeleteAsync(UserInfoKey);
 
-        var authorizationInfo = await _authorizationService.GetAuthorizationInfoAsync(positionId, _userInfo.AccessToken);
-
-        if (authorizationInfo is null)
-        {
-            NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(new ClaimsPrincipal(_user))));
-
-            return;
-        }
-
-        
-
-        var claims = new List<Claim>();
-
-        foreach (var claim in _user.Claims)
-        {
-            if (claim.Type
-                is AuthorizationClaimTypes.PositionId
-                or AuthorizationClaimTypes.PositionName
-                or AuthorizationClaimTypes.Permission)
-            {
-                continue;
-            }
-            else if (claim.Type.StartsWith(AuthorizationClaimTypes.CustomParameter))
-            {
-                continue;
-            }
-            else
-            {
-                claims.Add(claim);
-            }
-        }
-
-        claims.Add(new Claim(AuthorizationClaimTypes.PositionId, positionId));
-        await _localStorage.SetAsync(AuthorizationClaimTypes.PositionId, positionId);
-
-        claims.Add(new Claim(AuthorizationClaimTypes.PositionName, positionName));
-        await _localStorage.SetAsync(AuthorizationClaimTypes.PositionName, positionName);
-
-        var distinctPermissions = authorizationInfo.Roles.SelectMany(x => x.Permissions).Distinct();
-
-        foreach (var permission in distinctPermissions)
-        {
-            if (!claims.Any(x => x.Type == AuthorizationClaimTypes.Permission && x.Value == permission))
-            {
-                claims.Add(new Claim(AuthorizationClaimTypes.Permission, permission));
-            }
-        }
-
-        await _localStorage.SetAsync(AuthorizationClaimTypes.Permission, distinctPermissions);
-
-        var customParameters = new Dictionary<string, string>();
-
-        foreach (var customParameter in authorizationInfo.CustomParameters)
-        {
-            var customParameterClaimType = $"{AuthorizationClaimTypes.CustomParameter}{AuthorizationDelimiterFor.CustomParameter}{customParameter.Key}";
-
-            if (!claims.Any(x => x.Type == customParameterClaimType && x.Value == customParameter.Value))
-            {
-                claims.Add(new Claim(customParameterClaimType, customParameter.Value));
-                customParameters.Add(customParameterClaimType, customParameter.Value);
-            }
-        }
-
-        await _localStorage.SetAsync(AuthorizationClaimTypes.CustomParameter, customParameters);
-
-        identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-        NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(new ClaimsPrincipal(identity))));
+        _currentUser = new ClaimsPrincipal(new ClaimsIdentity());
+        NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(_currentUser)));
     }
 
-    public async Task RefreshTokensAsync()
+    public async Task<string?> GetAccessTokenAsync()
     {
-        var storedRefreshToken = await _localStorage.GetAsync<string>(OidcConstants.TokenResponse.RefreshToken);
-        var refreshToken = string.Empty;
-
-        if (storedRefreshToken.Value is not null)
+        try
         {
-            refreshToken = storedRefreshToken.Value;
+            var result = await _localStorage.GetAsync<string>(AccessTokenKey);
+            return result.Success ? result.Value : null;
         }
-        else
+        catch
         {
-            var claimRefreshToken = _user.GetRefreshToken();
-
-            if (!string.IsNullOrWhiteSpace(claimRefreshToken))
-            {
-                refreshToken = claimRefreshToken;
-            }
+            return null;
         }
-
-        var tokenClientOptions = new TokenClientOptions
-        {
-            Address = _tokenUrl,
-            ClientId = _clientId,
-            ClientSecret = _clientSecret
-        };
-
-        var httpClient = new HttpClient();
-        var tokenClient = new TokenClient(httpClient, tokenClientOptions);
-        var tokenResponse = await tokenClient.RequestRefreshTokenAsync(refreshToken);
-
-        if (tokenResponse.IsError)
-        {
-            _logger.LogError("Error in requesting new Access Token using Refresh Token {RefreshToken}", refreshToken);
-
-            NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(new ClaimsPrincipal(_user))));
-
-            return;
-        }
-
-        var claims = new List<Claim>();
-
-        foreach (var claim in _user.Claims)
-        {
-            if (claim.Type is OidcConstants.TokenResponse.AccessToken or OidcConstants.TokenResponse.RefreshToken)
-            {
-                continue;
-            }
-            else
-            {
-                claims.Add(claim);
-            }
-        }
-
-        claims.Add(new Claim(OidcConstants.TokenResponse.AccessToken, tokenResponse.AccessToken));
-        await _localStorage.SetAsync(OidcConstants.TokenResponse.AccessToken, tokenResponse.AccessToken);
-        _userInfo.AccessToken = tokenResponse.AccessToken;
-
-        claims.Add(new Claim(OidcConstants.TokenResponse.RefreshToken, tokenResponse.RefreshToken));
-        await _localStorage.SetAsync(OidcConstants.TokenResponse.RefreshToken, tokenResponse.RefreshToken);
-
-        var newIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-        NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(new ClaimsPrincipal(newIdentity))));
     }
 
-    public async Task ClearStoredIdentityAsync()
+    public async Task<string?> GetRefreshTokenAsync()
     {
-        await _localStorage.DeleteAsync(AuthorizationClaimTypes.PositionId);
-        await _localStorage.DeleteAsync(AuthorizationClaimTypes.PositionName);
-        await _localStorage.DeleteAsync(AuthorizationClaimTypes.Permission);
-        await _localStorage.DeleteAsync(AuthorizationClaimTypes.CustomParameter);
+        try
+        {
+            var result = await _localStorage.GetAsync<string>(RefreshTokenKey);
+            return result.Success ? result.Value : null;
+        }
+        catch
+        {
+            return null;
+        }
+    }
 
-        await _localStorage.DeleteAsync(OidcConstants.TokenResponse.AccessToken);
-        await _localStorage.DeleteAsync(OidcConstants.TokenResponse.RefreshToken);
+    private static IEnumerable<Claim> ParseClaimsFromJwt(string jwt)
+    {
+        var handler = new JwtSecurityTokenHandler();
+        try
+        {
+            var token = handler.ReadJwtToken(jwt);
+            return token.Claims;
+        }
+        catch
+        {
+            return Enumerable.Empty<Claim>();
+        }
     }
 }

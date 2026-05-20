@@ -1,4 +1,4 @@
-﻿using Smlp.Base.User.Enums;
+using Smlp.Base.User.Enums;
 using Smlp.Domain.Abstracts;
 
 namespace Smlp.Domain.Entities.Master
@@ -12,6 +12,11 @@ namespace Smlp.Domain.Entities.Master
         public string EmailAddress { get; set; } = default!;
         public bool IsActive { get; set; }
         public FileEntity? ProfilePict { get; set; }
+
+        // JWT Auth
+        public string PasswordHash { get; set; } = default!;
+        public string? RefreshToken { get; set; }
+        public DateTime? RefreshTokenExpiry { get; set; }
 
         // Navigation
         public Customer? Customer { get; set; }

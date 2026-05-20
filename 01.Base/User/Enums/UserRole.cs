@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Smlp.Base.User.Enums
@@ -13,8 +13,12 @@ namespace Smlp.Base.User.Enums
         [Display(Name = "Owner")]
         Owner = 1,
 
+        [Description("Kasir")]
+        [Display(Name = "Kasir")]
+        Kasir = 2,
+
         [Description("Pelanggan")]
         [Display(Name = "Pelanggan")]
-        Pelanggan = 2,
+        Pelanggan = 3,
     }
 }

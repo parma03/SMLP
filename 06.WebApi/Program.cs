@@ -4,6 +4,7 @@ using Smlp.Application;
 using Smlp.Infrastructure;
 using Smlp.Infrastructure.Logging;
 using Smlp.Infrastructure.Persistence;
+using Smlp.Infrastructure.Authentication;
 using Smlp.Shared;
 using Smlp.Shared.Localization;
 using Smlp.Shared.Common.Constants;
@@ -25,6 +26,11 @@ builder.Services.AddWebApi(builder.Configuration);
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddApiVersioning();
 builder.Services.AddFluentValidationAutoValidation();
+
+// JWT Authentication
+builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection(JwtOptions.SectionKey));
+builder.Services.AddJwtAuthentication(builder.Configuration);
+
 builder.Services.AddControllers(options =>
 {
     options.Filters.Add(new ApiExceptionFilterAttribute());
@@ -33,6 +39,20 @@ builder.Services.AddControllers(options =>
 .AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
+
+// CORS untuk Blazor frontend
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("SmlpCors", policy =>
+    {
+        var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>()
+            ?? new[] { "https://localhost:44992", "https://localhost:5001" };
+        policy.WithOrigins(allowedOrigins)
+              .AllowAnyMethod()
+              .AllowAnyHeader()
+              .AllowCredentials();
+    });
 });
 
 var app = builder.Build();
@@ -58,9 +78,12 @@ if (!app.Environment.IsProduction())
     app.UseDeveloperExceptionPage();
 
 app.UseBackEndService(builder.Configuration);
+app.UseCors("SmlpCors");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
 app.UseInfrastructure(builder.Configuration);
 app.UseDocumentationService(builder.Configuration);
 app.MapControllers();

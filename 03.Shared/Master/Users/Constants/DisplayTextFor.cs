@@ -2,7 +2,6 @@
 {
     public static class DisplayTextFor
     {
-        public const string User = nameof(User);
         public static readonly string KelolaUser = "Kelola User";
         public static readonly string Update = "Update User";
         public static readonly string CreateUser = "Create User";

@@ -1,25 +1,70 @@
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using Smlp.Bsui.Services.Authentication;
+using Smlp.Client.Services.BackEnd;
+using Smlp.Shared.Auth.Requests;
 
 namespace Smlp.Bsui.Common.Pages;
 
 public partial class Login
 {
-    [Inject]
-    public NavigationManager NavigationManager { get; set; } = default!;
+    [Inject] public NavigationManager NavigationManager { get; set; } = default!;
+    [Inject] public AuthorizedAuthenticationStateProvider AuthStateProvider { get; set; } = default!;
+    [Inject] public IAuthService AuthService { get; set; } = default!;
 
     private bool _processing = false;
     private string _username = string.Empty;
     private string _password = string.Empty;
     private string? _errorMessage = null;
     private InputType _passwordInputType = InputType.Password;
+    private bool _showPassword = false;
+
+    private void TogglePasswordVisibility()
+    {
+        _showPassword = !_showPassword;
+        _passwordInputType = _showPassword ? InputType.Text : InputType.Password;
+    }
 
     private async Task OnClickLoginAsync()
     {
+        if (string.IsNullOrWhiteSpace(_username) || string.IsNullOrWhiteSpace(_password))
+        {
+            _errorMessage = "Username dan password wajib diisi.";
+            return;
+        }
+
         _processing = true;
         _errorMessage = null;
-        await Task.Delay(500);
-        NavigationManager.NavigateTo(Smlp.Bsui.Pages.Account.Constants.RouteFor.Login, true);
-        _processing = false;
+
+        try
+        {
+            var request = new LoginRequest { Username = _username, Password = _password };
+            var result = await AuthService.LoginAsync(request);
+
+            if (result.Error is not null)
+            {
+                _errorMessage = result.Error.Detail ?? "Login gagal. Periksa username dan password Anda.";
+                return;
+            }
+
+            if (result.Result is not null)
+            {
+                await AuthStateProvider.LoginAsync(result.Result.AccessToken, result.Result.RefreshToken);
+                NavigationManager.NavigateTo("/", true);
+            }
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = "Terjadi kesalahan. Silakan coba lagi.";
+        }
+        finally
+        {
+            _processing = false;
+        }
+    }
+
+    private async Task OnKeyPressAsync(Microsoft.AspNetCore.Components.Web.KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter") await OnClickLoginAsync();
     }
 }

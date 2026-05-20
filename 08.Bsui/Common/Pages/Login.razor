@@ -25,12 +25,12 @@
     }
 
     .login-card {
-        background: rgba(255, 255, 255, 0.95);
+        background: rgba(255, 255, 255, 0.97);
         border-radius: 16px;
         padding: 48px 40px;
         width: 100%;
         max-width: 420px;
-        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        box-shadow: 0 20px 60px rgba(0,0,0,0.35);
         text-align: center;
     }
 
@@ -68,17 +68,21 @@
                       Adornment="Adornment.Start"
                       AdornmentIcon="@Icons.Material.Filled.Person"
                       Class="mb-3"
-                      FullWidth="true" />
+                      FullWidth="true"
+                      @onkeypress="OnKeyPressAsync"
+                      Disabled="@_processing" />
 
         <MudTextField @bind-Value="_password"
                       Label="Password"
                       Variant="Variant.Outlined"
-                      Adornment="Adornment.Start"
-                      AdornmentIcon="@Icons.Material.Filled.Lock"
+                      Adornment="Adornment.End"
+                      AdornmentIcon="@(_showPassword ? Icons.Material.Filled.VisibilityOff : Icons.Material.Filled.Visibility)"
+                      OnAdornmentClick="TogglePasswordVisibility"
                       InputType="@_passwordInputType"
-                      AdornmentAriaLabel="Tampilkan/Sembunyikan Password"
                       Class="mb-4"
-                      FullWidth="true" />
+                      FullWidth="true"
+                      @onkeypress="OnKeyPressAsync"
+                      Disabled="@_processing" />
 
         <MudButton Variant="Variant.Filled"
                    FullWidth="true"
