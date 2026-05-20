@@ -1,5 +1,5 @@
 ﻿using System.Timers;
-using Darnton.Blazor.DeviceInterop.Geolocation;
+using Smlp.Bsui.Services.Geolocation.Abstractions;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Smlp.Base.ValueObjects;

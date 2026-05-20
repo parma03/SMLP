@@ -10,10 +10,8 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.25" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.Server" Version="8.0.25" />
     <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.12.1" />
-    <PackageReference Include="MudBlazor" Version="7.28.0" />
-    <PackageReference Include="Darnton.Blazor.DeviceInterop" Version="5.1.0" />
+    <PackageReference Include="MudBlazor" Version="8.0.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
   </ItemGroup>
 

@@ -1,4 +1,4 @@
-﻿using Darnton.Blazor.DeviceInterop.Geolocation;
+using Smlp.Bsui.Services.Geolocation.Abstractions;
 
 namespace Smlp.Bsui.Services.Geolocation.None;
 
@@ -13,16 +13,16 @@ public class NoneGeolocationService : IGeolocationService
 
     public Task ClearWatch(long watchId)
     {
-        return default!;
+        return Task.CompletedTask;
     }
 
-    public Task<GeolocationResult> GetCurrentPosition(PositionOptions options)
+    public Task<GeolocationResult> GetCurrentPosition(PositionOptions? options = null)
     {
-        return default!;
+        return Task.FromResult(new GeolocationResult { IsSuccess = false, ErrorMessage = "Geolocation not enabled." });
     }
 
-    public Task<long?> WatchPosition(PositionOptions options)
+    public Task<long?> WatchPosition(PositionOptions? options = null)
     {
-        return default!;
+        return Task.FromResult<long?>(null);
     }
 }
