@@ -1,3 +1,8 @@
+/*
+ * Sistem Manajemen Loyalitas Pelanggan (SMLP)
+ * Copyright (c) 2025-2026
+ */
+
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 using Smlp.Bsui.Common.Constants;
 using Smlp.Bsui.Services;
@@ -9,7 +14,6 @@ using Smlp.Client;
 using Smlp.Shared.Common.Constants;
 using Smlp.Shared.Localization;
 using Smlp.Shared;
-using Syncfusion.Blazor;
 
 Console.WriteLine($"Starting {CommonValueFor.EntryAssemblySimpleName}...");
 
@@ -19,15 +23,12 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddServerSideBlazor().AddHubOptions(o => { o.MaximumReceiveMessageSize = 2147483647; });
-builder.Services.AddSyncfusionBlazor();
 builder.Services.AddShared(builder.Configuration);
 builder.Services.AddClient(builder.Configuration);
 builder.Services.AddBsui(builder.Configuration);
 
 StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configuration);
-builder.Services.AddApplicationInsightsTelemetry();
 
-// temporary custom culture
 var app = builder.Build();
 
 var logger = app.Services.GetRequiredService<ILogger<Program>>();

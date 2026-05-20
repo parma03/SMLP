@@ -1,0 +1,42 @@
+@using Smlp.Base.Customer.Enums
+
+@* Displays tier badge with appropriate color *@
+<MudTooltip Text="@GetTierDescription(Tier)">
+    <MudChip Size="@Size"
+             Style="@GetTierStyle(Tier)"
+             Icon="@GetTierIcon(Tier)">
+        @Tier.ToString()
+    </MudChip>
+</MudTooltip>
+
+@code {
+    [Parameter] public CustomerTier Tier { get; set; }
+    [Parameter] public Size Size { get; set; } = Size.Small;
+
+    private string GetTierStyle(CustomerTier tier) => tier switch
+    {
+        CustomerTier.Bronze   => "background:#CD7F32; color:white;",
+        CustomerTier.Silver   => "background:#9E9E9E; color:white;",
+        CustomerTier.Gold     => "background:#FFB300; color:white;",
+        CustomerTier.Platinum => "background:linear-gradient(135deg,#6A1B9A,#9C27B0); color:white;",
+        _ => ""
+    };
+
+    private string GetTierIcon(CustomerTier tier) => tier switch
+    {
+        CustomerTier.Bronze   => Icons.Material.Filled.EmojiEvents,
+        CustomerTier.Silver   => Icons.Material.Filled.WorkspacePremium,
+        CustomerTier.Gold     => Icons.Material.Filled.Stars,
+        CustomerTier.Platinum => Icons.Material.Filled.Diamond,
+        _ => Icons.Material.Filled.Person
+    };
+
+    private string GetTierDescription(CustomerTier tier) => tier switch
+    {
+        CustomerTier.Bronze   => "Bronze: 0–499 poin lifetime",
+        CustomerTier.Silver   => "Silver: 500–1.999 poin lifetime",
+        CustomerTier.Gold     => "Gold: 2.000–9.999 poin lifetime",
+        CustomerTier.Platinum => "Platinum: 10.000+ poin lifetime",
+        _ => tier.ToString()
+    };
+}

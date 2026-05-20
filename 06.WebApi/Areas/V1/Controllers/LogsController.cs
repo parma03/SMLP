@@ -1,18 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Smlp.Application.Logs.Commands;
+/*
+ * Sistem Manajemen Loyalitas Pelanggan (SMLP)
+ */
+
+using Microsoft.AspNetCore.Mvc;
 using Smlp.Shared.Common.Constants;
-using Smlp.Shared.Common.Responses;
 
 namespace Smlp.WebApi.Areas.V1.Controllers;
 
+/// <summary>
+/// Controller for application logging endpoints.
+/// </summary>
 [ApiVersion(ApiVersioning.V1.Number)]
 public class LogsController : ApiControllerBase
 {
-    [HttpPost]
-    [Consumes(ContentTypes.ApplicationXWwwFormUrlEncoded)]
-    [ProducesResponseType(StatusCodes.Status201Created)]
-    public async Task<ActionResult<CommonCreateResponse>> CreateHrisLog([FromForm] CreateHrisLogCommand command)
-    {
-        return CreatedAtAction(nameof(CreateHrisLog), await Mediator.Send(command));
-    }
+    // Reserved for future logging endpoints.
 }

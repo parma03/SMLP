@@ -7,7 +7,6 @@ public class GetDocumentsDocument
     public Guid Id { get; set; }
 
     public string Title { get; set; } = default!;
-    public string CompanyCode { get; set; } = default!;
     public string DocumentCategoryName { get; set; } = default!;
     public int JrdpYear { get; set; }
     public string TopicCode { get; set; } = default!;

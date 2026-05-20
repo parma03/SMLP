@@ -1,0 +1,10 @@
+@using Smlp.Base.Customer.Enums
+@using Smlp.Base.Customer.Lists
+
+<MudSelect T="CustomerTier?" Label="@Label" @bind-Value="Value" Variant="Variant.Outlined" Clearable="true">
+    <MudSelectItem T="CustomerTier?" Value="null">-- Semua Tier --</MudSelectItem>
+    @foreach (var tier in CustomerTierList.All)
+    {
+        <MudSelectItem T="CustomerTier?" Value="tier.Value">@tier.Label</MudSelectItem>
+    }
+</MudSelect>

@@ -1,4 +1,4 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 using IdentityModel;
 using Microsoft.AspNetCore.Http;
 using Smlp.Application.Services.CurrentUser;
@@ -30,7 +30,6 @@ public class CurrentUserService : ICurrentUserService
             if (subject is null)
             {
                 subject = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type.Contains(AuthorizationClaimTypes.NameIdentifier))?.Value;
-                //subject = _httpContextAccessor.HttpContext.User.FindFirstValue("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier");
             }
 
             if (string.IsNullOrWhiteSpace(subject))
@@ -61,7 +60,7 @@ public class CurrentUserService : ICurrentUserService
         }
     }
 
-    public string? PositionId => _httpContextAccessor.HttpContext?.Request.Headers[HttpHeaderName.PtmnPositionId].FirstOrDefault();
+    public string? PositionId => _httpContextAccessor.HttpContext?.Request.Headers[HttpHeaderName.PositionId].FirstOrDefault();
 
     public string ClientId
     {
@@ -85,7 +84,7 @@ public class CurrentUserService : ICurrentUserService
                 return DefaultTextFor.SystemBackgroundJob;
             }
 
-            var ipAddress = _httpContextAccessor.HttpContext.Request.Headers[HttpHeaderName.PtmnIpAddress].FirstOrDefault();
+            var ipAddress = _httpContextAccessor.HttpContext.Request.Headers[HttpHeaderName.IpAddress].FirstOrDefault();
 
             if (!string.IsNullOrWhiteSpace(ipAddress))
             {
@@ -107,7 +106,7 @@ public class CurrentUserService : ICurrentUserService
     {
         get
         {
-            var geolocationText = _httpContextAccessor.HttpContext?.Request.Headers[HttpHeaderName.PtmnGeolocation].FirstOrDefault();
+            var geolocationText = _httpContextAccessor.HttpContext?.Request.Headers[HttpHeaderName.Geolocation].FirstOrDefault();
 
             if (string.IsNullOrWhiteSpace(geolocationText))
             {

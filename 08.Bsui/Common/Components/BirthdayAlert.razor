@@ -1,0 +1,41 @@
+@* Shows customers with birthdays today or this week - great for CRM retention *@
+@if (_hasData && _birthdayCustomers.Any())
+{
+    <MudAlert Severity="Severity.Success"
+              Icon="@Icons.Material.Filled.Cake"
+              Style="border-left:4px solid #2E7D32; margin-bottom:16px;">
+        <MudText Typo="Typo.subtitle2" Style="font-weight:700;">
+            🎂 @_birthdayCustomers.Count pelanggan ulang tahun @_periodLabel!
+        </MudText>
+        <div class="d-flex flex-wrap gap-2 mt-1">
+            @foreach (var customer in _birthdayCustomers.Take(5))
+            {
+                <MudChip Size="Size.Small" Color="Color.Success">@customer.Name (@customer.BirthDateDisplay)</MudChip>
+            }
+            @if (_birthdayCustomers.Count > 5)
+            {
+                <MudChip Size="Size.Small" Color="Color.Default">+@(_birthdayCustomers.Count - 5) lainnya</MudChip>
+            }
+        </div>
+        <MudButton Variant="Variant.Text" Color="Color.Success" Size="Size.Small"
+                   StartIcon="@Icons.Material.Filled.CardGiftcard" Class="mt-1">
+            Kirim Ucapan & Reward
+        </MudButton>
+    </MudAlert>
+}
+
+@code {
+    [Parameter] public bool ShowWeek { get; set; } = false;
+
+    private bool _hasData = false;
+    private List<BirthdayItem> _birthdayCustomers = new();
+    private string _periodLabel => ShowWeek ? "minggu ini" : "hari ini";
+
+    // This would normally inject a service - for now shows structure
+    protected override void OnInitialized()
+    {
+        _hasData = true; // Will be replaced with service call
+    }
+
+    private record BirthdayItem(string Name, string BirthDateDisplay);
+}

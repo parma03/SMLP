@@ -1,4 +1,4 @@
-﻿using Smlp.Client.Services.UserInfo;
+using Smlp.Client.Services.UserInfo;
 using Smlp.Shared.Common.Constants;
 using RestSharp;
 
@@ -12,19 +12,14 @@ public static class RestClientExtensions
     {
         restClient.AddDefaultHeader(HttpHeaderName.Authorization, $"{Bearer} {userInfoService.AccessToken}");
 
-        if (!string.IsNullOrWhiteSpace(userInfoService.PositionId))
-        {
-            restClient.AddDefaultHeader(HttpHeaderName.PtmnPositionId, userInfoService.PositionId);
-        }
-
         if (!string.IsNullOrWhiteSpace(userInfoService.IpAddress))
         {
-            restClient.AddDefaultHeader(HttpHeaderName.PtmnIpAddress, userInfoService.IpAddress);
+            restClient.AddDefaultHeader(HttpHeaderName.IpAddress, userInfoService.IpAddress);
         }
 
         if (userInfoService.Geolocation is not null)
         {
-            restClient.AddDefaultHeader(HttpHeaderName.PtmnGeolocation, userInfoService.Geolocation.ToString());
+            restClient.AddDefaultHeader(HttpHeaderName.Geolocation, userInfoService.Geolocation.ToString());
         }
     }
 }

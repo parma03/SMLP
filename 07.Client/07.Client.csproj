@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -9,22 +9,12 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.10" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.8" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.8" />
-    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="10.0.8" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
-    <PackageReference Include="Newtonsoft.Json.Bson" Version="1.0.3" />
-    <PackageReference Include="RestSharp" Version="114.0.0" />
-    <PackageReference Include="Serilog" Version="4.3.1" />
-    <PackageReference Include="System.Formats.Asn1" Version="10.0.8" />
-    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.8" />
-    <PackageReference Include="System.ServiceModel.Duplex" Version="6.0.0" />
-    <PackageReference Include="System.ServiceModel.Federation" Version="10.0.652802" />
-    <PackageReference Include="System.ServiceModel.Http" Version="10.0.652802" />
-    <PackageReference Include="System.ServiceModel.NetTcp" Version="10.0.652802" />
-    <PackageReference Include="System.ServiceModel.Security" Version="6.0.0" />
-    <PackageReference Include="System.Text.Encodings.Web" Version="10.0.8" />
-    <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="RestSharp" Version="112.1.0" />
+    <PackageReference Include="Serilog" Version="4.0.0" />
   </ItemGroup>
 
   <ItemGroup>

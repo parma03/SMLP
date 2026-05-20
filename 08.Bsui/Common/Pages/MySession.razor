@@ -1,4 +1,4 @@
-﻿@page "/MySession"
+@page "/MySession"
 @attribute [Authorize]
 
 @using IdentityModel
@@ -35,23 +35,13 @@
                         </MudField>
                     </MudItem>
                     <MudItem xs="12" sm="6">
-                        <MudField Label="@AuthenticationDisplayTextFor.EmployeeId">
-                            @authorizeContext.User.GetEmployeeId()
+                        <MudField Label="Role">
+                            @authorizeContext.User.GetRole()
                         </MudField>
                     </MudItem>
                     <MudItem xs="12" sm="6">
-                        <MudField Label="@AuthenticationDisplayTextFor.CompanyCode">
-                            @authorizeContext.User.GetCompanyCode()
-                        </MudField>
-                    </MudItem>
-                    <MudItem xs="12" sm="6">
-                        <MudField Label="@AuthenticationDisplayTextFor.Position">
-                            @authorizeContext.User.GetPositionName().ToSafeDisplayText()
-                        </MudField>
-                    </MudItem>
-                    <MudItem xs="12" sm="6">
-                        <MudField Label="@AuthenticationDisplayTextFor.PositionId">
-                            @authorizeContext.User.GetPositionId().ToSafeDisplayText()
+                        <MudField Label="No. HP">
+                            @authorizeContext.User.GetPhoneNumber().ToSafeDisplayText()
                         </MudField>
                     </MudItem>
                 </MudGrid>
@@ -75,38 +65,6 @@
                     <MudAlert Variant="Variant.Filled" Severity="Severity.Info">
                         @DefaultTextFor.NA
                     </MudAlert>
-                }
-            </MudTabPanel>
-            <MudTabPanel Text="@AuthorizationDisplayTextFor.CustomParameters">
-                @{
-                    var customParameters = authorizeContext.User.GetCustomParameters(true);
-
-                    if (customParameters.Any())
-                    {
-                        <MudSimpleTable Elevation="0" Outlined="true" Bordered="true" Striped="true" Hover="true">
-                            <thead>
-                                <tr>
-                                    <th>@AuthorizationDisplayTextFor.Key</th>
-                                    <th>@AuthorizationDisplayTextFor.Value</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var customParameter in customParameters.OrderBy(x => x.Key))
-                                {
-                                    <tr>
-                                        <td>@customParameter.Key</td>
-                                        <td>@customParameter.Value</td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </MudSimpleTable>
-                    }
-                    else
-                    {
-                        <MudAlert Variant="Variant.Filled" Severity="Severity.Info">
-                            @DefaultTextFor.NA
-                        </MudAlert>
-                    }
                 }
             </MudTabPanel>
             <MudTabPanel Text="@AuthenticationDisplayTextFor.MyClaims">

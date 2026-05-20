@@ -243,7 +243,7 @@ public class AuthorizedAuthenticationStateProvider : AuthenticationStateProvider
         {
             claims.Add(new Claim(AuthorizationClaimTypes.PositionId, storedPositionId.Value));
 
-            _userInfo.PositionId = storedPositionId.Value;
+            
         }
         else
         {
@@ -253,11 +253,11 @@ public class AuthorizedAuthenticationStateProvider : AuthenticationStateProvider
             {
                 claims.Add(new Claim(AuthorizationClaimTypes.PositionId, claimPositionId));
 
-                _userInfo.PositionId = claimPositionId;
+                
             }
             else
             {
-                _userInfo.PositionId = null;
+                
             }
         }
 
@@ -323,7 +323,7 @@ public class AuthorizedAuthenticationStateProvider : AuthenticationStateProvider
             return;
         }
 
-        _userInfo.PositionId = positionId;
+        
 
         var claims = new List<Claim>();
 

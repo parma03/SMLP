@@ -1,4 +1,4 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 using IdentityModel;
 using Smlp.Bsui.Services.Authentication.Constants;
 using Smlp.Shared.Services.Authorization.Constants;
@@ -50,14 +50,14 @@ public static class ClaimsPrincipalExtensions
         return user.FindFirst(x => x.Type == CustomClaimTypes.DisplayName)?.Value;
     }
 
-    public static string? GetEmployeeId(this ClaimsPrincipal user)
+    public static string? GetPhoneNumber(this ClaimsPrincipal user)
     {
-        return user.FindFirst(x => x.Type == CustomClaimTypes.EmployeeId)?.Value;
+        return user.FindFirst(x => x.Type == CustomClaimTypes.PhoneNumber)?.Value;
     }
 
-    public static string? GetCompanyCode(this ClaimsPrincipal user)
+    public static string? GetRole(this ClaimsPrincipal user)
     {
-        return user.FindFirst(x => x.Type == CustomClaimTypes.CompanyCode)?.Value;
+        return user.FindFirst(x => x.Type == CustomClaimTypes.Role)?.Value;
     }
 
     public static string? GetPositionId(this ClaimsPrincipal user)

@@ -1,9 +1,12 @@
-﻿using Microsoft.Extensions.Configuration;
+/*
+ * Sistem Manajemen Loyalitas Pelanggan (SMLP)
+ * Copyright (c) 2025-2026
+ */
+
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Smlp.Client.Services.BackEnd;
 using Smlp.Client.Services.HealthCheck;
-using Smlp.Client.Services.Hris;
-using Smlp.Client.Services.Iam;
 using Smlp.Client.Services.UserInfo;
 
 namespace Smlp.Client;
@@ -15,8 +18,6 @@ public static class DependencyInjection
         services.AddHealthCheckService();
         services.AddBackEndService(configuration);
         services.AddUserInfoService();
-        services.AddHrisService(configuration);
-        services.AddIamService(configuration);
 
         return services;
     }

@@ -35,7 +35,7 @@ public class CustomTelemetryInitializer : ITelemetryInitializer
                 telemetry.Context.User.Id = httpContext.User.FindFirstValue(JwtClaimTypes.Subject) ?? Guid.Empty.ToString();
             }
 
-            var clientIp = httpContext.Request.Headers[HttpHeaderName.PtmnIpAddress].FirstOrDefault();
+            var clientIp = httpContext.Request.Headers[HttpHeaderName.IpAddress].FirstOrDefault();
 
             if (string.IsNullOrWhiteSpace(clientIp))
             {
@@ -48,7 +48,7 @@ public class CustomTelemetryInitializer : ITelemetryInitializer
 
             if (_httpContextAccessor.HttpContext is not null)
             {
-                var geolocationText = _httpContextAccessor.HttpContext.Request.Headers[HttpHeaderName.PtmnGeolocation].FirstOrDefault();
+                var geolocationText = _httpContextAccessor.HttpContext.Request.Headers[HttpHeaderName.Geolocation].FirstOrDefault();
 
                 if (!string.IsNullOrWhiteSpace(geolocationText))
                 {

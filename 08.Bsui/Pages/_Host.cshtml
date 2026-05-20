@@ -1,4 +1,4 @@
-﻿@page "/"
+@page "/"
 
 @using Microsoft.AspNetCore.Components.Web
 @using Microsoft.Extensions.Options
@@ -15,16 +15,15 @@
 @{
     var ipAddress = string.Empty;
 
-    var ptmnIpAddress = HttpContext.Request.Headers[HttpHeaderName.PtmnIpAddress].FirstOrDefault();
+    var xIpAddress = HttpContext.Request.Headers[HttpHeaderName.IpAddress].FirstOrDefault();
 
-    if (!string.IsNullOrWhiteSpace(ptmnIpAddress))
+    if (!string.IsNullOrWhiteSpace(xIpAddress))
     {
-        ipAddress = ptmnIpAddress;
+        ipAddress = xIpAddress;
     }
     else
     {
         var remoteIpAddress = HttpContext.Connection.RemoteIpAddress;
-
         ipAddress = remoteIpAddress is not null ? remoteIpAddress.ToString() : DefaultTextFor.SystemBackgroundJob;
     }
 
@@ -35,7 +34,7 @@
 }
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -43,22 +42,19 @@
         <base href="~/" />
         <link rel="shortcut icon" href='@Url.Content("~/favicon.ico")'>
         <link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet" />
-        <link href="_content/Syncfusion.Blazor.Themes/material3.css" rel="stylesheet" />
-        <script src="_content/Syncfusion.Blazor.WordProcessor/scripts/syncfusion-blazor-documenteditor.min.js" type="text/javascript"></script>
-        <script src="_content/Syncfusion.Blazor.PdfViewer/scripts/syncfusion-blazor-pdfviewer.min.js" type="text/javascript"></script>
         <link href="css/site.css" rel="stylesheet" />
         <link href="Smlp.Bsui.styles.css" rel="stylesheet" />
         <component type="typeof(HeadOutlet)" render-mode="ServerPrerendered" />
     </head>
     <body>
         <component type="typeof(App)" param-InitialApplicationState="initialApplicationState" render-mode="ServerPrerendered" />
-	    <div id="blazor-error-ui">
-		    <div class="error-content">
-                Please click <span onclick="window.location.reload();" style="display:inline-flex; align-items:center; padding:4px 12px; border-radius:16px; font-weight:600; font-size:0.875rem; color:#fff; cursor:pointer; background:linear-gradient(135deg,#4279db,#1c4185); margin:0 4px; user-select:none;"> HERE </span>
-                to refresh the page or go back to <span onclick="window.location.href='/'" style="display:inline-flex; align-items:center; padding:4px 12px; border-radius:16px; font-weight:600; font-size:0.875rem; color:#fff; cursor:pointer; background:linear-gradient(135deg,#2bb673,#1f8f56); margin:0 4px; user-select:none;"> HOME </span>
-                If this issue persists, please contact support. Thank you.<a class="dismiss" style="color:#000;"></a>
-		    </div>
-	    </div>
+        <div id="blazor-error-ui">
+            <div class="error-content">
+                Silakan klik <span onclick="window.location.reload();" style="display:inline-flex; align-items:center; padding:4px 12px; border-radius:16px; font-weight:600; font-size:0.875rem; color:#fff; cursor:pointer; background:linear-gradient(135deg,#6F4E37,#3E2723); margin:0 4px; user-select:none;"> DI SINI </span>
+                untuk memuat ulang halaman atau kembali ke <span onclick="window.location.href='/'" style="display:inline-flex; align-items:center; padding:4px 12px; border-radius:16px; font-weight:600; font-size:0.875rem; color:#fff; cursor:pointer; background:linear-gradient(135deg,#2bb673,#1f8f56); margin:0 4px; user-select:none;"> BERANDA </span>
+                Jika masalah berlanjut, hubungi administrator.<a class="dismiss" style="color:#000;"></a>
+            </div>
+        </div>
         <script src="_framework/blazor.server.js" autostart="false"></script>
         <script>
             Blazor.start({
@@ -72,8 +68,6 @@
             });
         </script>
         <script src="_content/MudBlazor/MudBlazor.min.js"></script>
-        <script src="_content/Syncfusion.Blazor.Core/scripts/syncfusion-blazor.min.js" type="text/javascript"></script>
         <script src="js/downloadFile.js"></script>
-        <script src="js/backSite.js"></script>
     </body>
 </html>

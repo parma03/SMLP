@@ -1,9 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
+/*
+ * Sistem Manajemen Loyalitas Pelanggan (SMLP)
+ */
+
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Smlp.Application.Services.Persistence;
-using static Smlp.Shared.Master.Users.Constants.ApiEndpoint.V1;
 
 namespace Smlp.Application.Services.Persistence.Seeders;
+
 public class UserSeeder
 {
     private readonly ILogger<UserSeeder> _logger;
@@ -22,7 +26,6 @@ public class UserSeeder
             if (!await _context.Users.AnyAsync(x => x.Id == user.Id))
             {
                 _logger.LogInformation("Seeding data {EntityType} {EntityName}...", nameof(Users), user.Name);
-
                 _ = await _context.Users.AddAsync(user);
             }
         }
@@ -35,18 +38,18 @@ public static class InitialUser
 {
     public static readonly Users Admin = new()
     {
-        Id = new.guid,
-        Name = "tes1",
-        Username = "tes1",
-        DisplayName = "tes1",
+        Id = new Guid("a1b2c3d4-e5f6-7890-abcd-ef1234567890"),
+        Name = "Admin SMLP",
+        Username = "admin",
+        DisplayName = "Administrator",
         Role = Smlp.Base.User.Enums.UserRole.Admin,
-        PhoneNumber = "081234567890",
-        EmailAddress = "",
+        PhoneNumber = "08100000000",
+        EmailAddress = "admin@smlp.local",
         IsActive = true
     };
-    public static readonly Users[] All = new Users[]
-    {
 
+    public static readonly Users[] All =
+    {
+        Admin
     };
 }
-
