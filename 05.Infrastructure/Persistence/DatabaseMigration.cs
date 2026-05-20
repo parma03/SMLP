@@ -15,7 +15,7 @@ public static class DatabaseMigration
         var logger = serviceProvider.GetRequiredService<ILogger<T>>();
         var persistenceOptions = configuration.GetSection(PersistenceOptions.SectionKey).Get<PersistenceOptions>();
 
-        SMLPDbContext context;
+        SmlpDbContext context;
         bool isMigrationNeeded;
 
         switch (persistenceOptions!.Provider)
@@ -25,7 +25,7 @@ public static class DatabaseMigration
                 break;
 
             case PersistenceProvider.SqlServer:
-                context = serviceProvider.GetRequiredService<SqlServerSMLPDbContext>();
+                context = serviceProvider.GetRequiredService<SqlServerSmlpDbContext>();
 
                 isMigrationNeeded = (await context.Database.GetPendingMigrationsAsync()).Any();
 
@@ -42,7 +42,7 @@ public static class DatabaseMigration
                 break;
 
             case PersistenceProvider.VaultSqlServer:
-                context = serviceProvider.GetRequiredService<SqlServerSMLPDbContext>();
+                context = serviceProvider.GetRequiredService<SqlServerSmlpDbContext>();
 
                 isMigrationNeeded = (await context.Database.GetPendingMigrationsAsync()).Any();
 

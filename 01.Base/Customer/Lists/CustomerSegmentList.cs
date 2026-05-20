@@ -12,8 +12,7 @@ namespace Smlp.Base.Customer.Lists
                 CustomerSegment.Active,
                 CustomerSegment.Loyal,
                 CustomerSegment.Inactive,
-                CustomerSegment.AtRisk,
-                CustomerSegment.Lost
+                CustomerSegment.AtRisk
             };
 
             return list;
