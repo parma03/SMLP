@@ -1,26 +1,13 @@
-﻿using Smlp.Bsui.Services.Authorization.IdAMan;
-using Smlp.Shared.Services.Authorization.Constants;
+using Smlp.Bsui.Services.Authorization;
 
 namespace Smlp.Bsui.Common.Pages.Errors;
 
 public partial class CannotReachAuthorizationProvider
 {
-    private string _authorizationProviderUrl = default!;
+    private string _authorizationProviderUrl = string.Empty;
 
     protected override void OnInitialized()
     {
-        switch (_authorizationOptions.Value.Provider)
-        {
-            case AuthorizationProvider.None:
-                break;
-
-            case AuthorizationProvider.IdAMan:
-                var idAManAuthorizationOptions = configuration.GetSection(IdAManAuthorizationOptions.SectionKey).Get<IdAManAuthorizationOptions>();
-                _authorizationProviderUrl = idAManAuthorizationOptions.BaseUrl;
-                break;
-
-            default:
-                break;
-        }
+        _authorizationProviderUrl = "Server otorisasi tidak dapat dijangkau.";
     }
 }

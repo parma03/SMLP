@@ -1,307 +1,58 @@
-﻿@page "/About"
+@page "/About"
 
-@using Microsoft.AspNetCore.Http
 @using Smlp.Bsui.Services.AppInfo
-@using Smlp.Bsui.Services.External.Location
 @using Smlp.Bsui.Services.FrontEnd
-@using Smlp.Bsui.Services.Geolocation
-@using Smlp.Client.Services.Hris
+@using Smlp.Shared.Common.Constants
 
-@inject IHttpContextAccessor _httpContextAccessor
 @inject IOptions<AppInfoOptions> _appInfoOptions
-@inject LocationExternalService _locationExternalService
 @inject IOptions<FrontEndOptions> _frontEndOptions
-@inject IOptions<GeolocationOptions> _geolocationOptions
-@inject ApplicantService _applicantService
 @inject IWebHostEnvironment _webHostEnvironment
-@inject IOptions<HrisOptions> _hrisOptions
 
 <BrowserTabTitle>@CommonDisplayTextFor.About</BrowserTabTitle>
 <MudBreadcrumbs Items="_breadcrumbItems"></MudBreadcrumbs>
 <PageHeader Title="@CommonDisplayTextFor.About" />
-<PageSection SectionTitle="Manual Book" Class="pa-4">
-    <MudGrid>
-        <MudItem xs="12">
-            <MudPaper Class="pa-4" Elevation="0">
-                @if (IsAdmin)
-                {
-                    <MudAlert Severity="Severity.Info" Class="mb-4">
-                        <MudText>
-                            <MudLink Href="@("file/template/User Manual Book -  Admin.pdf")" Target="_blank" Color="Color.Info" Style="font-size: 15px;">
-                                User Manual Scholarship Admin
-                            </MudLink>
-                        </MudText>
-                    </MudAlert>
-                    <MudAlert Severity="Severity.Info" Class="mb-4">
-                        <MudText>
-                            <MudLink Href="@("file/template/User Manual User Mentor.pdf")" Target="_blank" Color="Color.Info" Style="font-size: 15px;">
-                                User Manual Scholarship Mentor
-                            </MudLink>
-                        </MudText>
-                    </MudAlert>
 
-                    <MudAlert Severity="Severity.Info" Class="mb-4">
-                        <MudText>
-                            <MudLink Href="@("file/template/User Manual Book - Applicant.pdf")" Target="_blank" Color="Color.Info" Style="font-size: 15px;">
-                                User Manual Scholarship Applicant
-                            </MudLink>
-                        </MudText>
-                    </MudAlert>
-                }
-                else if (IsMentor)
-                {
-                    if (_isHC)
-                    {
-                        <MudAlert Severity="Severity.Info" Class="mb-4">
-                            <MudText>
-                                <MudLink Href="@("file/template/User Manual Scholarship  HC.pdf")" Target="_blank" Color="Color.Info" Style="font-size: 15px;">
-                                    User Manual Scholarship HC
-                                </MudLink>
-                            </MudText>
-                        </MudAlert>
-                    }
-
-                    <MudAlert Severity="Severity.Info" Class="mb-4">
-                        <MudText>
-                            <MudLink Href="@("file/template/User Manual User Mentor.pdf")" Target="_blank" Color="Color.Info" Style="font-size: 15px;">
-                                User Manual Scholarship Mentor
-                            </MudLink>
-                        </MudText>
-                    </MudAlert>
-
-                    <MudAlert Severity="Severity.Info" Class="mb-4">
-                        <MudText>
-                            <MudLink Href="@("file/template/User Manual Book - Applicant.pdf")" Target="_blank" Color="Color.Info" Style="font-size: 15px;">
-                                User Manual Scholarship Applicant
-                            </MudLink>
-                        </MudText>
-                    </MudAlert>
-                }
-                else if (_isHC)
-                {
-                    <MudAlert Severity="Severity.Info" Class="mb-4">
-                        <MudText>
-                            <MudLink Href="@("file/template/User Manual Scholarship  HC.pdf")" Target="_blank" Color="Color.Info" Style="font-size: 15px;">
-                                User Manual Scholarship HC
-                            </MudLink>
-                        </MudText>
-                    </MudAlert>
-                    <MudAlert Severity="Severity.Info" Class="mb-4">
-                        <MudText>
-                            <MudLink Href="@("file/template/User Manual User Mentor.pdf")" Target="_blank" Color="Color.Info" Style="font-size: 15px;">
-                                User Manual Scholarship Mentor
-                            </MudLink>
-                        </MudText>
-                    </MudAlert>
-
-                    <MudAlert Severity="Severity.Info" Class="mb-4">
-                        <MudText>
-                            <MudLink Href="@("file/template/User Manual Book - Applicant.pdf")" Target="_blank" Color="Color.Info" Style="font-size: 15px;">
-                                User Manual Scholarship Applicant
-                            </MudLink>
-                        </MudText>
-                    </MudAlert>
-                }
-                else
-                {
-                    <MudAlert Severity="Severity.Info" Class="mb-4">
-                        <MudText>
-                            <MudLink Href="@("file/template/User Manual Book - Applicant.pdf")" Target="_blank" Color="Color.Info" Style="font-size: 15px;">
-                                User Manual Scholarship Applicant
-                            </MudLink>
-                        </MudText>
-                    </MudAlert>
-                }
-            </MudPaper>
-        </MudItem>
-    </MudGrid>
-    @* <MudGrid>
-        <MudPaper>
-            @if (IsAdmin)
-            {
-                <MudAlert Severity="Severity.Info" Class="mb-4">
-                    <MudText><MudLink Href="@($"file/template/User Manual HC Admin.pdf")" Target="_blank" Color="Color.Info" Style="font-size: 15px;">User Manual Scholarship Admin HC</MudLink></MudText>
-                </MudAlert>
-
-            }
-            else if (_isMentor)
-            {
-                <MudAlert Severity="Severity.Info" Class="mb-4">
-                    <MudText><MudLink Href="@($"file/template/User Manual User Mentors.pdf")" Target="_blank" Color="Color.Info" Style="font-size: 15px;">User Manual Scholarship Mentor</MudLink></MudText>
-                </MudAlert>
-            }
-            else
-            {
-            <MudAlert Severity="Severity.Info" Class="mb-4">
-                <MudText><MudLink Href="@($"file/template/User Manual Applicant.pdf")" Target="_blank" Color="Color.Info" Style="font-size: 15px;">User Manual Scholarship Applicant</MudLink></MudText>
-            </MudAlert>
-            }
+<MudGrid>
+    <MudItem xs="12" md="6">
+        <MudPaper Class="pa-4 rounded-lg" Elevation="1">
+            <div class="d-flex align-center mb-4">
+                <MudIcon Icon="@Icons.Material.Filled.LocalCafe" Style="font-size:3rem; color:#6F4E37;" Class="mr-3" />
+                <div>
+                    <MudText Typo="Typo.h5" Style="color:#6F4E37; font-weight:700;">@_appInfoOptions.Value.FullName</MudText>
+                    <MudText Typo="Typo.body2" Color="Color.Secondary">@_appInfoOptions.Value.Description</MudText>
+                </div>
+            </div>
+            <MudDivider Class="mb-3" />
+            <MudList Dense="true">
+                <MudListItem Icon="@Icons.Material.Filled.Info">
+                    <MudText Typo="Typo.body2"><b>Versi:</b> @_appInfoOptions.Value.Version</MudText>
+                </MudListItem>
+                <MudListItem Icon="@Icons.Material.Filled.Code">
+                    <MudText Typo="Typo.body2"><b>Platform:</b> .NET 8 + Blazor Server</MudText>
+                </MudListItem>
+                <MudListItem Icon="@Icons.Material.Filled.Palette">
+                    <MudText Typo="Typo.body2"><b>UI Framework:</b> MudBlazor</MudText>
+                </MudListItem>
+                <MudListItem Icon="@Icons.Material.Filled.Storage">
+                    <MudText Typo="Typo.body2"><b>Database:</b> SQL Server</MudText>
+                </MudListItem>
+            </MudList>
         </MudPaper>
-    </MudGrid> *@
-</PageSection>
-@* <PageSection SectionTitle="System Information">
-    <MudPaper>
-        <MudList Clickable="true">
-            <MudListItem><b>Application Name</b>: @_appInfoOptions.Value.FullName</MudListItem>
-            <MudDivider />
-            <MudListItem><b>Application Description</b>: @_appInfoOptions.Value.Description</MudListItem>
-            <MudDivider />
-            <MudListItem><b>Application Version</b>: @CommonValueFor.EntryAssemblyInformationalVersion</MudListItem>
-            <MudDivider />
-            <MudListItem><b>Application Last Build</b>: @CommonValueFor.EntryAssemblyLastBuild.ToCompleteDateTimeDisplayText()</MudListItem>
-        </MudList>
-    </MudPaper>
-    <MudSimpleTable Elevation="5" Class="my-8">
-        <tbody>
-            <tr>
-                <td class="text-bold">Environment Name</td>
-                <td>@CommonValueFor.EnvironmentName</td>
-            </tr>
-            <tr>
-                <td class="text-bold">Operating System</td>
-                <td>@CommonValueFor.OperatingSystemDescription</td>
-            </tr>
-            <tr>
-                <td class="text-bold">ASP.NET Version</td>
-                <td>@CommonValueFor.EntryAssemblyFrameworkName</td>
-            </tr>
-            <tr>
-                <td class="text-bold">Time Zone</td>
-                <td>@TimeZoneInfo.Local.DisplayName</td>
-            </tr>
-        </tbody>
-    </MudSimpleTable>
-</PageSection> *@
-@* @if (_geolocationOptions.Value.Enabled)
-{
-    <PageSection SectionTitle="Your Current Location" Class="mt-6">
-        @if (_userGeolocationDetails is null)
-        {
-            <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-4" />
-        }
-        else
-        {
-            if (_userInfo.Geolocation is not null)
-            {
-                <MudSimpleTable Elevation="5" Class="mb-10">
-                    <tbody>
-                        <tr>
-                            <td class="text-bold">Geolocation</td>
-                            <td><MudLink Href="@_userInfo.Geolocation.LocationUrl" Target="_blank">@_userInfo.Geolocation.LocationText</MudLink></td>
-                        </tr>
-                        @if (_userGeolocationDetails.Address is not null)
-                        {
-                            <tr>
-                                <td class="text-bold">Address</td>
-                                <td>@_userGeolocationDetails.Address.CityBlock, @_userGeolocationDetails.Address.Neighbourhood, @_userGeolocationDetails.Address.Suburb</td>
-                            </tr>
-                            <tr>
-                                <td class="text-bold">City</td>
-                                <td>@_userGeolocationDetails.Address.CityDistrict (@_userGeolocationDetails.Address.PostalCode)</td>
-                            </tr>
-                            <tr>
-                                <td class="text-bold">Province</td>
-                                <td>@_userGeolocationDetails.Address.City</td>
-                            </tr>
-                            <tr>
-                                <td class="text-bold">Country</td>
-                                <td>@_userGeolocationDetails.Address.Country</td>
-                            </tr>
-                        }
-                    </tbody>
-                </MudSimpleTable>
-            }
-            else
-            {
-                <MudAlert Variant="Variant.Filled" Severity="Severity.Warning">Cannot retreive your Geolocation information.</MudAlert>
-            }
-        }
-    </PageSection>
-}
-@if (_frontEndOptions.Value.DisplayTechnicalInformation)
-{
-    <PageSection Class="pb-4" SectionTitle="Technical Information">
-        <MudExpansionPanels MultiExpansion="true" Class="my-4">
-            <MudExpansionPanel>
-                <TitleContent>
-                    <div class="d-flex align-center">
-                        <MudBadge Color="Color.Info" Content="4" Class="mr-8">
-                            <MudIcon Icon="@Icons.Material.Filled.Wifi" Color="Color.Primary"></MudIcon>
-                        </MudBadge>
-                        <MudText Typo="Typo.subtitle1">Connection</MudText>
-                    </div>
-                </TitleContent>
-                <ChildContent>
-                    <MudTreeView T="string">
-                        <MudTreeViewItem Value='"Remote"'>
-                            <MudTreeViewItem Value='@($"IP Address: {_connectionInfo.RemoteIpAddress}")' />
-                            <MudTreeViewItem Value='@($"Port: {_connectionInfo.RemotePort}")' />
-                        </MudTreeViewItem>
-                        <MudTreeViewItem Value='"Local"'>
-                            <MudTreeViewItem Value='@($"IP Address: {_connectionInfo.LocalIpAddress}")' />
-                            <MudTreeViewItem Value='@($"Port: {_connectionInfo.LocalPort}")' />
-                        </MudTreeViewItem>
-                    </MudTreeView>
-                </ChildContent>
-            </MudExpansionPanel>
-            <MudExpansionPanel>
-                <TitleContent>
-                    <div class="d-flex align-center">
-                        <MudBadge Color="Color.Info" Content="@_requestHeaders.Count" Class="mr-8">
-                            <MudIcon Icon="@Icons.Material.Filled.CallMade" Color="Color.Secondary"></MudIcon>
-                        </MudBadge>
-                        <MudText Typo="Typo.subtitle1">Request Headers</MudText>
-                    </div>
-                </TitleContent>
-                <ChildContent>
-                    <MudSimpleTable Elevation="0" Outlined="true" Bordered="true" Striped="true" Hover="true">
-                        <thead>
-                            <tr>
-                                <th>Key</th>
-                                <th>Value</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var requestHeader in _requestHeaders.OrderBy(x => x.Key))
-                            {
-                                <tr>
-                                    <td>@requestHeader.Key</td>
-                                    <td>@string.Join(',', requestHeader.Value)</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </MudSimpleTable>
-                </ChildContent>
-            </MudExpansionPanel>
-            <MudExpansionPanel>
-                <TitleContent>
-                    <div class="d-flex align-center">
-                        <MudBadge Color="Color.Info" Content="@_responseHeaders.Count" Class="mr-8">
-                            <MudIcon Icon="@Icons.Material.Filled.CallReceived" Color="Color.Tertiary"></MudIcon>
-                        </MudBadge>
-                        <MudText Typo="Typo.subtitle1">Response Headers</MudText>
-                    </div>
-                </TitleContent>
-                <ChildContent>
-                    <MudSimpleTable Elevation="0" Outlined="true" Bordered="true" Striped="true" Hover="true">
-                        <thead>
-                            <tr>
-                                <th>Key</th>
-                                <th>Value</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var responseHeader in _responseHeaders.OrderBy(x => x.Key))
-                            {
-                                <tr>
-                                    <td>@responseHeader.Key</td>
-                                    <td>@string.Join(',', responseHeader.Value)</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </MudSimpleTable>
-                </ChildContent>
-            </MudExpansionPanel>
-        </MudExpansionPanels>
-    </PageSection>
-} *@
+    </MudItem>
+
+    <MudItem xs="12" md="6">
+        <MudPaper Class="pa-4 rounded-lg" Elevation="1">
+            <MudText Typo="Typo.subtitle1" Class="mb-3" Style="color:#6F4E37; font-weight:700;">
+                🎯 Fitur Utama
+            </MudText>
+            <MudList Dense="true">
+                <MudListItem Icon="@Icons.Material.Filled.People">CRM & Manajemen Pelanggan</MudListItem>
+                <MudListItem Icon="@Icons.Material.Filled.Stars">Program Poin & Loyalitas</MudListItem>
+                <MudListItem Icon="@Icons.Material.Filled.CardGiftcard">Katalog Reward & Redeem</MudListItem>
+                <MudListItem Icon="@Icons.Material.Filled.Analytics">Dashboard Analytics & Laporan</MudListItem>
+                <MudListItem Icon="@Icons.Material.Filled.Psychology">Customer Insights & RFM Analysis</MudListItem>
+                <MudListItem Icon="@Icons.Material.Filled.Receipt">Manajemen Transaksi</MudListItem>
+            </MudList>
+        </MudPaper>
+    </MudItem>
+</MudGrid>

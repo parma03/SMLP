@@ -1,6 +1,6 @@
-﻿using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Common.Responses;
 
-namespace Smlp.Shared.Scholarships.ScholarshipPlan.Commands.Delete
+namespace Smlp.Shared.Master.Users.Commands.Delete
 {
     public class DeleteUserResponse : Response
     {

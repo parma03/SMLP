@@ -1,75 +1,28 @@
-﻿@page "/Profile"
+@page "/Profile"
 @attribute [Authorize]
 
-@using Smlp.Client.Services.Hris
 @using Smlp.Shared.Common.Constants
-@inject IWebHostEnvironment _webHostEnvironment
-@inject IOptions<HrisOptions> _hrisOptions
-@inject HrisService _hrisService
 
 <MudBreadcrumbs Items="_breadcrumbItems"></MudBreadcrumbs>
 <BrowserTabTitle>@CommonDisplayTextFor.Profile</BrowserTabTitle>
-<PageHeader Title="@_displayName" />
-<ErrorViewer Error="@Error" />
+<PageHeader Title="Profil Pengguna" />
 
-@if (_isLoading)
-{
-    <Loading IsVisible="_isLoading" Description="Get data from HRIS Plus ..." />
-}
-else
-{
-    <MudGrid Spacing="2">
-        <MudItem xs="12" sm="12">
-            <MudField Label="Employee Number">
-                @_employeeNumber
-            </MudField>
-        </MudItem>
-        <MudItem xs="12" sm="12">
-            <MudField Label="Email">
-                @_email
-            </MudField>
-        </MudItem>
-        <MudItem xs="12" sm="12">
-            <MudField Label="Company">
-                @_company
-            </MudField>
-        </MudItem>
-        <MudItem xs="12" sm="12">
-            <MudField Label="Position">
-                @_position
-            </MudField>
-        </MudItem>
-        <MudItem xs="12" sm="6">
-            <MudField Label="Birthday">
-                @((_birthday == DateOnly.MinValue) ? DefaultTextFor.Dash : _birthday.ToString("dd MMM yyyy"))
-            </MudField>
-        </MudItem>
-        <MudItem xs="12" sm="6">
-            <MudField Label="PRL">
-                @((_prl == 0) ? DefaultTextFor.Dash : _prl.ToString())
-            </MudField>
-        </MudItem>
-        <MudItem xs="12" sm="6">
-            <MudField Label="Hire Date">
-                @((_hiredate == DateOnly.MinValue) ? DefaultTextFor.Dash : _hiredate.ToString("dd MMM yyyy"))
-            </MudField>
-        </MudItem>
-        <MudItem xs="12" sm="6">
-            <MudField Label="MCU Status">
-                @_mcuStatus.ToString()
-            </MudField>
-        </MudItem>
-    </MudGrid>
-
-    <div class="bottom-right">
-        <b><i>*This data is provided by HRIS+</i></b>
-    </div>
-}
-
-<style>
-    .bottom-right {
-        position: absolute;
-        bottom: 1em;
-        right: 1em;
-    }
-</style>
+<MudGrid Spacing="2">
+    <MudItem xs="12" md="6">
+        <MudPaper Class="pa-4 rounded-lg" Elevation="1">
+            <div class="d-flex align-center mb-4">
+                <MudAvatar Style="background:#6F4E37; color:white; width:64px; height:64px; font-size:1.8rem;" Class="mr-3">
+                    @(_displayName?.FirstOrDefault())
+                </MudAvatar>
+                <div>
+                    <MudText Typo="Typo.h6" Style="color:#3E2723; font-weight:700;">@_displayName</MudText>
+                    <MudChip Size="Size.Small" Color="Color.Primary">@_role</MudChip>
+                </div>
+            </div>
+            <MudDivider Class="mb-3" />
+            <MudField Label="Username" Class="mb-3">@_username</MudField>
+            <MudField Label="Email" Class="mb-3">@_email</MudField>
+            <MudField Label="Role">@_role</MudField>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
