@@ -12,5 +12,8 @@ namespace Smlp.Domain.Entities.Master
         public string EmailAddress { get; set; } = default!;
         public bool IsActive { get; set; }
         public FileEntity? ProfilePict { get; set; }
+
+        // Navigation
+        public Customer? Customer { get; set; }
     }
 }

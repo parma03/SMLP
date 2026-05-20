@@ -52,7 +52,7 @@ public class SmlpDbContext : DbContext, ISmlpDbContext
 
     #region Transaction Entities
 
-    public DbSet<Transaction> Transactions => Set<Transaction>();
+    public DbSet<Transaksi> Transactions => Set<Transaksi>();
     public DbSet<TransactionItem> TransactionItems => Set<TransactionItem>();
     public DbSet<RedeemHistory> RedeemHistories => Set<RedeemHistory>();
     public DbSet<PointAdjustment> PointAdjustments => Set<PointAdjustment>();

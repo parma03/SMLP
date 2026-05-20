@@ -18,12 +18,14 @@ namespace Smlp.Domain.Entities.Master
         public int LifetimePoints { get; set; }
         public decimal TotalSpend { get; set; }
         public DateTimeOffset? LastTransactionDate { get; set; }
-        public bool IsActive { get; set; }
         public string? Notes { get; set; }
-        public FileEntity? ProfilePict { get; set; }
+
+        // FK
+        public Guid? UserId { get; set; }
 
         // Navigation
-        public ICollection<Transaction.Transaction> Transactions { get; set; } = new List<Transaction.Transaction>();
+        public User? User { get; set; }
+        public ICollection<Transaksi> Transactions { get; set; } = new List<Transaksi>();
         public ICollection<RedeemHistory> RedeemHistories { get; set; } = new List<RedeemHistory>();
     }
 }

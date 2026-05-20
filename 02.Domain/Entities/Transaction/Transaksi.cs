@@ -1,11 +1,10 @@
-﻿using System.Transactions;
-using Smlp.Base.Transaction.Enums;
+﻿using Smlp.Base.Transaction.Enums;
 using Smlp.Domain.Abstracts;
 using Smlp.Domain.Entities.Master;
 
 namespace Smlp.Domain.Entities.Transaction
 {
-    public class Transaction : AuditableEntity
+    public class Transaksi : AuditableEntity
     {
         public string TransactionCode { get; set; } = default!;
         public Guid CustomerId { get; set; }

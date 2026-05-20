@@ -6,7 +6,7 @@ namespace Smlp.Domain.Entities.Transaction
     public class TransactionItem : Entity
     {
         public Guid TransactionId { get; set; }
-        public Transaction Transaction { get; set; } = default!;
+        public Transaksi Transaction { get; set; } = default!;
         public Guid? ProductId { get; set; }
         public Product? Product { get; set; }
         public string ProductName { get; set; } = default!;

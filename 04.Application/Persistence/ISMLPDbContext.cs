@@ -32,7 +32,7 @@ public interface ISmlpDbContext
 
     #region Transaction Entities
 
-    public DbSet<Transaction> Transactions { get; }
+    public DbSet<Transaksi> Transactions { get; }
     public DbSet<TransactionItem> TransactionItems { get; }
     public DbSet<RedeemHistory> RedeemHistories { get; }
     public DbSet<PointAdjustment> PointAdjustments { get; }
