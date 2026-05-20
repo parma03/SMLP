@@ -5,7 +5,7 @@ using Smlp.Shared.Common.Constants;
 
 namespace Smlp.Shared.Master.Users.Commands.Create
 {
-    public class UpdateUserRequest
+    public class CreateUserRequest
     {
         [OpenApiContentType(ContentTypes.TextPlain)]
         public string Username { get; set; } = default!;

@@ -4,7 +4,7 @@ using Smlp.Shared.Common.Responses;
 
 namespace Smlp.Shared.Master.Users.Commands.Create
 {
-    public class UpdateUserResponse : Response
+    public class CreateUserResponse : Response
     {
         public Guid Id { get; set; }
         public string Username { get; set; } = default!;

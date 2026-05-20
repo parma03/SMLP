@@ -21,8 +21,4 @@
     <ProjectReference Include="..\02.Domain\02.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Transaction\" />
-  </ItemGroup>
-
 </Project>
