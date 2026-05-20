@@ -1,5 +1,5 @@
-﻿@page "/Audits"
-@attribute [Authorize(Policy = Permissions.Psmp_Audit_Index)]
+@page "/Audits"
+@attribute [Authorize(Roles = "Admin,Owner")]
 
 @inject IJSRuntime _jsRuntime
 
@@ -27,7 +27,7 @@
     <HeaderContent>
         <MudTHeadRow IgnoreCheckbox="true">
             <MudTh colspan="6" Style="text-align: center; font-size: 1.2em;">
-                <MudText Typo="Typo.subtitle1">Displaying data from <b>@_filterModel.From.ToLongDateTimeDisplayText()</b> to <b>@_filterModel.To.ToLongDateTimeDisplayText()</b></MudText>
+                <MudText Typo="Typo.subtitle1">Menampilkan data dari <b>@_filterModel.From.ToLongDateTimeDisplayText()</b> hingga <b>@_filterModel.To.ToLongDateTimeDisplayText()</b></MudText>
             </MudTh>
         </MudTHeadRow>
         <MudTHeadRow IgnoreCheckbox="true">

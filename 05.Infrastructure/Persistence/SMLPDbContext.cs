@@ -1,15 +1,10 @@
-﻿/*
+/*
 * Sistem Manajemen Loyalitas Pelanggan (SMLP)
 * Copyright (c) 2025-2026
 */
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using Smlp.Infrastructure.Persistence.Common.Extensions;
-using Smlp.Infrastructure.Persistence.Common.Models;
-using Smlp.InfrastructureCurrentUser;
-using Smlp.InfrastructureDateAndTime;
-using Smlp.InfrastructureDomainEvent;
 using Smlp.Application.Services.CurrentUser;
 using Smlp.Application.Services.DateAndTime;
 using Smlp.Application.Services.DomainEvent;
@@ -81,181 +76,78 @@ public class SmlpDbContext : DbContext, ISmlpDbContext
 
     public async Task<int> SaveChangesAsync<THandler>(THandler handler, CancellationToken cancellationToken = default) where THandler : notnull
     {
-        foreach (var entry in ChangeTracker.Entries<ICreatable>())
-        {
-            switch (entry.State)
-            {
-                case EntityState.Added:
-                    entry.Entity.CreatedBy = _currentUser.Username;
-                    entry.Entity.Created = _dateTime.Now;
-                    break;
-            }
-        }
-
-        foreach (var entry in ChangeTracker.Entries<IModifiable>())
-        {
-            switch (entry.State)
-            {
-                case EntityState.Modified:
-                    entry.Entity.ModifiedBy = _currentUser.Username;
-                    entry.Entity.Modified = _dateTime.Now;
-                    break;
-            }
-        }
-
-        var auditEntries = OnBeforeSaveChanges(handler.GetType().Name);
-        var result = await base.SaveChangesAsync(true, cancellationToken);
-
-        await OnAfterSaveChanges(auditEntries);
-        await DispatchEvents();
-
+        await OnBeforeSavingAsync(handler, cancellationToken);
+        var result = await base.SaveChangesAsync(cancellationToken);
+        await OnAfterSavingAsync(cancellationToken);
         return result;
     }
 
-    private List<AuditEntry> OnBeforeSaveChanges(string actionName)
+    private async Task OnBeforeSavingAsync<THandler>(THandler handler, CancellationToken cancellationToken) where THandler : notnull
     {
-        ChangeTracker.DetectChanges();
-
+        var entries = ChangeTracker.Entries().ToList();
         var auditEntries = new List<AuditEntry>();
 
-        foreach (var entry in ChangeTracker.Entries())
+        foreach (var entry in entries)
         {
-            var isAuditableEntity = entry.Entity.GetType().IsAuditableEntity();
-
-            if (!isAuditableEntity || entry.State == EntityState.Detached || entry.State == EntityState.Unchanged)
-                continue;
-
-            var entityType = Model.FindEntityType(entry.Entity.GetType());
-
-            if (entityType is null)
-                throw new InvalidOperationException($"Cannot find Entity Type for {entry.Entity.GetType()}");
-
-            var tableName = $"{entityType.GetSchema()}.{entityType.GetTableName()}";
-            var entityName = entry.Entity.GetType().Name;
-
-            var auditEntry = new AuditEntry
+            if (entry.Entity is IDeletable deletable && entry.State == EntityState.Deleted)
             {
-                TableName = tableName,
-                EntityName = entityName,
-                ClientApplicationId = _currentUser.ClientId,
-                CreatedBy = _currentUser.Username,
-                FromIpAddress = _currentUser.IpAddress,
-                FromGeolocation = _currentUser.Geolocation,
-                ActionName = actionName,
-                ActionType = entry.State.ToString()
-            };
+                entry.State = EntityState.Modified;
+                deletable.IsDeleted = true;
+                deletable.DeletedAt = _dateTime?.Now ?? DateTimeOffset.UtcNow;
+                deletable.DeletedBy = _currentUser?.Username ?? handler.ToString();
+            }
 
-            auditEntries.Add(auditEntry);
-
-            foreach (var property in entry.Properties)
+            if (entry.Entity is ICreatable creatable && entry.State == EntityState.Added)
             {
-                if (property.IsTemporary)
+                creatable.CreatedAt = _dateTime?.Now ?? DateTimeOffset.UtcNow;
+                creatable.CreatedBy = _currentUser?.Username ?? handler.ToString();
+            }
+
+            if (entry.Entity is IModifiable modifiable && entry.State == EntityState.Modified)
+            {
+                modifiable.ModifiedAt = _dateTime?.Now ?? DateTimeOffset.UtcNow;
+                modifiable.ModifiedBy = _currentUser?.Username ?? handler.ToString();
+            }
+
+            if (entry.Entity is not Audit && (entry.State == EntityState.Added || entry.State == EntityState.Modified || entry.State == EntityState.Deleted))
+            {
+                var auditEntry = new AuditEntry(entry)
                 {
-                    auditEntry.TemporaryProperties.Add(property);
-                    continue;
-                }
-
-                var propertyName = property.Metadata.Name;
-                var originalValue = property.OriginalValue;
-                var currentValue = property.CurrentValue;
-
-                if (property.Metadata.IsPrimaryKey())
-                {
-                    if (currentValue is null)
-                        continue;
-
-                    if (propertyName == nameof(IHasKey.Id))
-                    {
-                        var entityId = currentValue.ToString();
-                        if (!string.IsNullOrWhiteSpace(entityId))
-                            auditEntry.EntityId = new Guid(entityId);
-                    }
-                    continue;
-                }
-
-                switch (entry.State)
-                {
-                    case EntityState.Added:
-                        if (propertyName is nameof(IDeletable.IsDeleted) or nameof(IModifiable.Modified) or nameof(IModifiable.ModifiedBy))
-                            continue;
-                        auditEntry.NewValues[propertyName] = currentValue;
-                        break;
-
-                    case EntityState.Deleted:
-                        auditEntry.OldValues[propertyName] = originalValue;
-                        break;
-
-                    case EntityState.Modified:
-                        if (property.IsModified)
-                        {
-                            auditEntry.OldValues[propertyName] = originalValue;
-                            auditEntry.NewValues[propertyName] = currentValue;
-
-                            if (propertyName is nameof(IDeletable.IsDeleted) && (bool)currentValue! is true)
-                                auditEntry.ActionType = SoftDeleted;
-                        }
-                        break;
-                }
+                    ClientApplicationId = handler?.ToString() ?? "System",
+                    CreatedBy = _currentUser?.Username ?? "System"
+                };
+                auditEntries.Add(auditEntry);
             }
         }
 
-        foreach (var auditEntry in auditEntries.Where(x => !x.HasTemporaryProperties))
-            Audits.Add(auditEntry.ToAudit());
-
-        return auditEntries.Where(x => x.HasTemporaryProperties).ToList();
-    }
-
-    private Task OnAfterSaveChanges(List<AuditEntry> auditEntries)
-    {
-        if (auditEntries is null || auditEntries.Count == 0)
-            return Task.CompletedTask;
-
-        foreach (var auditEntry in auditEntries)
+        if (auditEntries.Any())
         {
-            foreach (var property in auditEntry.TemporaryProperties)
+            foreach (var auditEntry in auditEntries)
             {
-                var currentValue = property.CurrentValue;
-                var propertyName = property.Metadata.Name;
-
-                if (currentValue is null)
-                    continue;
-
-                if (property.Metadata.IsPrimaryKey())
-                {
-                    if (propertyName == nameof(IHasKey.Id))
-                    {
-                        var entityId = currentValue.ToString();
-                        if (!string.IsNullOrWhiteSpace(entityId))
-                            auditEntry.EntityId = new Guid(entityId);
-                    }
-                }
-                else
-                {
-                    auditEntry.NewValues[propertyName] = currentValue;
-                }
+                Audits.Add(auditEntry.ToAudit());
             }
-
-            Audits.Add(auditEntry.ToAudit());
         }
-
-        return SaveChangesAsync();
     }
 
-    private async Task DispatchEvents()
+    private async Task OnAfterSavingAsync(CancellationToken cancellationToken)
     {
-        while (true)
+        var domainEvents = ChangeTracker.Entries<DomainEvent>()
+            .Select(e => e.Entity)
+            .ToList();
+
+        if (_domainEvent is not null)
         {
-            var domainEventEntity = ChangeTracker.Entries<IHasDomainEvent>()
-                .Select(x => x.Entity.DomainEvents)
-                .SelectMany(x => x)
-                .Where(domainEvent => !domainEvent.IsPublished)
-                .FirstOrDefault();
-
-            if (domainEventEntity is null)
-                break;
-
-            domainEventEntity.IsPublished = true;
-            await _domainEvent.Publish(domainEventEntity);
+            foreach (var domainEvent in domainEvents)
+            {
+                await _domainEvent.Publish(domainEvent, cancellationToken);
+            }
         }
+    }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(SmlpDbContext).Assembly);
+        modelBuilder.SetSoftDeleteQueryFilter();
     }
 }

@@ -1,5 +1,5 @@
-﻿@page "/Documents"
-@attribute [Authorize(Policy = Permissions.Psmp_Document_Index)]
+@page "/Documents"
+@attribute [Authorize(Roles = "Admin,Owner")]
 
 @using Smlp.Shared.Documents.Queries.GetDocuments
 
@@ -16,10 +16,11 @@
           ServerData="@(new Func<TableState, Task<TableData<GetDocumentsDocument>>>(ReloadTableDocuments))">
     <ToolBarContent>
         <MudButton Variant="Variant.Filled" Color="Color.Tertiary" StartIcon="@Icons.Material.Filled.Refresh" OnClick="Refresh">@CommonDisplayTextFor.Refresh</MudButton>
-        @if (_user.HasPermission(Permissions.Psmp_Document_Create))
-        {
-            <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.CloudUpload" Class="ml-2" OnClick="ShowDialogAdd">@CommonDisplayTextFor.Upload @DisplayTextFor.Document</MudButton>
-        }
+        <AuthorizeView Roles="Admin">
+            <Authorized>
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.CloudUpload" Class="ml-2" OnClick="ShowDialogAdd">@CommonDisplayTextFor.Upload @DisplayTextFor.Document</MudButton>
+            </Authorized>
+        </AuthorizeView>
         <MudSpacer />
         <MudTextField Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" Placeholder="@CommonDisplayTextFor.Search" T="string" ValueChanged="@(keyword => OnSearch(keyword))"></MudTextField>
     </ToolBarContent>
@@ -50,9 +51,13 @@
             <MudHighlighter Text="@context.Created.ToLongDateTimeDisplayText()" HighlightedText="@_searchKeyword" />
         </MudTd>
         <MudTd>
-            <MudButton Variant="Variant.Filled" Color="Color.Dark" StartIcon="@Icons.Material.Filled.Delete" Size="Size.Small" OnClick="@(() => ShowDialogDelete(context))">
-                @CommonDisplayTextFor.Delete
-            </MudButton>
+            <AuthorizeView Roles="Admin">
+                <Authorized>
+                    <MudButton Variant="Variant.Filled" Color="Color.Dark" StartIcon="@Icons.Material.Filled.Delete" Size="Size.Small" OnClick="@(() => ShowDialogDelete(context))">
+                        @CommonDisplayTextFor.Delete
+                    </MudButton>
+                </Authorized>
+            </AuthorizeView>
         </MudTd>
     </RowTemplate>
     <PagerContent>

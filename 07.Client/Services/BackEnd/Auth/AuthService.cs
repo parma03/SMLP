@@ -1,41 +1,54 @@
-using RestSharp;
+using Microsoft.Extensions.Options;
 using Smlp.Client.Common.Extensions;
+using Smlp.Client.Services.UserInfo;
 using Smlp.Shared.Auth.Requests;
 using Smlp.Shared.Auth.Responses;
 using Smlp.Shared.Common.Responses;
+using RestSharp;
+using static Smlp.Shared.Auth.Constants.ApiEndpoint.V1;
 
-namespace Smlp.Client.Services.BackEnd;
+namespace Smlp.Client.Services.BackEnd.Auth;
 
-public class AuthService : IAuthService
+public class AuthService
 {
-    private readonly RestClient _client;
+    private readonly RestClient _restClient;
 
-    public AuthService(RestClient client)
+    public AuthService(IOptions<BackEndOptions> backEndServiceOptions, UserInfoService userInfo)
     {
-        _client = client;
+        var options = new RestClientOptions(new Uri($"{backEndServiceOptions.Value.BaseUrl}/{Auths.Segment}"))
+        {
+            RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+        };
+        _restClient = new RestClient(options);
+        _restClient.AddUserInfo(userInfo);
     }
 
-    public async Task<Response<LoginResponse>> LoginAsync(LoginRequest request)
+    public async Task<ResponseResult<LoginResponse>> LoginAsync(LoginRequest request)
     {
-        var restRequest = new RestRequest("api/v1/auth/login", Method.Post);
-        restRequest.AddJsonBody(request);
-        var response = await _client.ExecuteAsync<LoginResponse>(restRequest);
-        return response.ToResponse<LoginResponse>();
+        var restRequest = new RestRequest($"{nameof(Auths.RouteTemplateFor.Login)}", Method.Post);
+        restRequest.AddParameters(request);
+
+        var restResponse = await _restClient.ExecuteAsync(restRequest);
+
+        return restResponse.ToResponseResult<LoginResponse>();
     }
 
-    public async Task<Response<object>> LogoutAsync(string accessToken)
+    public async Task<ResponseResult<RefreshTokenResponse>> RefreshTokenAsync(RefreshTokenRequest request)
     {
-        var restRequest = new RestRequest("api/v1/auth/logout", Method.Post);
-        restRequest.AddHeader("Authorization", $"Bearer {accessToken}");
-        var response = await _client.ExecuteAsync(restRequest);
-        return response.ToResponse<object>();
+        var restRequest = new RestRequest($"{nameof(Auths.RouteTemplateFor.RefreshToken)}", Method.Post);
+        restRequest.AddParameters(request);
+
+        var restResponse = await _restClient.ExecuteAsync(restRequest);
+
+        return restResponse.ToResponseResult<RefreshTokenResponse>();
     }
 
-    public async Task<Response<object>> RefreshTokenAsync(string refreshToken)
+    public async Task<ResponseResult<SuccessResponse>> LogoutAsync()
     {
-        var restRequest = new RestRequest("api/v1/auth/refresh", Method.Post);
-        restRequest.AddJsonBody(new RefreshTokenRequest { RefreshToken = refreshToken });
-        var response = await _client.ExecuteAsync(restRequest);
-        return response.ToResponse<object>();
+        var restRequest = new RestRequest($"{nameof(Auths.RouteTemplateFor.Logout)}", Method.Post);
+
+        var restResponse = await _restClient.ExecuteAsync(restRequest);
+
+        return restResponse.ToResponseResult<SuccessResponse>();
     }
 }

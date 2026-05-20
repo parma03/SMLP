@@ -1,4 +1,6 @@
-﻿/*
+/*
+* Sistem Manajemen Loyalitas Pelanggan (SMLP)
+* Copyright (c) 2025-2026
 */
 
 using Microsoft.EntityFrameworkCore;
@@ -13,14 +15,14 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddSqlServerPersistenceService(this IServiceCollection services, SqlServerOptions sqlServerOptions, IHealthChecksBuilder healthChecksBuilder)
     {
-        var migrationsAssembly = typeof(SqlServerSMLPDbContext).Assembly.FullName;
+        var migrationsAssembly = typeof(SqlServerSmlpDbContext).Assembly.FullName;
 
-        services.AddDbContext<SqlServerSMLPDbContext>(options =>
+        services.AddDbContext<SqlServerSmlpDbContext>(options =>
         {
             options.UseSqlServer(sqlServerOptions.ConnectionString, builder =>
             {
                 builder.MigrationsAssembly(migrationsAssembly);
-                builder.MigrationsHistoryTable(TableNameFor.EfMigrationsHistory, nameof(SMLP));
+                builder.MigrationsHistoryTable(TableNameFor.EfMigrationsHistory, "Smlp");
                 builder.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
             });
 
@@ -28,7 +30,7 @@ public static class DependencyInjection
             options.ConfigureWarnings(wcb => wcb.Throw(RelationalEventId.MultipleCollectionIncludeWarning));
         });
 
-        services.AddScoped<IPsmpDbContext>(provider => provider.GetRequiredService<SqlServerSMLPDbContext>());
+        services.AddScoped<ISmlpDbContext>(provider => provider.GetRequiredService<SqlServerSmlpDbContext>());
 
         healthChecksBuilder.AddSqlServer(
             connectionString: sqlServerOptions.ConnectionString,

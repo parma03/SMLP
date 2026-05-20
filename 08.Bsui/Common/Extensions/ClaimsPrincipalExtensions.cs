@@ -1,5 +1,9 @@
+/*
+* Sistem Manajemen Loyalitas Pelanggan (SMLP)
+*/
+
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using IdentityModel;
 using Smlp.Bsui.Services.Authentication.Constants;
 using Smlp.Shared.Services.Authorization.Constants;
 
@@ -9,75 +13,53 @@ public static class ClaimsPrincipalExtensions
 {
     public static Guid? GetUserId(this ClaimsPrincipal user)
     {
-        var userId = user.FindFirst(x => x.Type.Contains(AuthorizationClaimTypes.NameIdentifier))?.Value;
-        if (string.IsNullOrWhiteSpace(userId))
-        {
-            return null;
-        }
+        var userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value
+                  ?? user.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
 
-        return new Guid(userId);
+        if (string.IsNullOrWhiteSpace(userId))
+            return null;
+
+        return Guid.TryParse(userId, out var id) ? id : null;
     }
 
     public static string? GetUsername(this ClaimsPrincipal user)
     {
-        return user.FindFirst(x => x.Type.Contains(JwtClaimTypes.Email))?.Value;
+        return user.FindFirst("username")?.Value
+            ?? user.FindFirst(JwtRegisteredClaimNames.Email)?.Value
+            ?? user.FindFirst(ClaimTypes.Name)?.Value;
     }
 
-    public static DateTimeOffset? GetAuthenticationTime(this ClaimsPrincipal user)
+    public static string? GetEmail(this ClaimsPrincipal user)
     {
-        var authenticationTime = user.FindFirst(x => x.Type == JwtClaimTypes.AuthenticationTime)?.Value;
-
-        if (string.IsNullOrWhiteSpace(authenticationTime))
-        {
-            return null;
-        }
-
-        return DateTimeOffset.FromUnixTimeSeconds(long.Parse(authenticationTime));
-    }
-
-    public static string? GetAccessToken(this ClaimsPrincipal user)
-    {
-        return user.FindFirst(x => x.Type == OidcConstants.TokenResponse.AccessToken)?.Value;
-    }
-
-    public static string? GetRefreshToken(this ClaimsPrincipal user)
-    {
-        return user.FindFirst(x => x.Type == OidcConstants.TokenResponse.RefreshToken)?.Value;
+        return user.FindFirst(JwtRegisteredClaimNames.Email)?.Value
+            ?? user.FindFirst(ClaimTypes.Email)?.Value;
     }
 
     public static string? GetDisplayName(this ClaimsPrincipal user)
     {
-        return user.FindFirst(x => x.Type == CustomClaimTypes.DisplayName)?.Value;
-    }
-
-    public static string? GetPhoneNumber(this ClaimsPrincipal user)
-    {
-        return user.FindFirst(x => x.Type == CustomClaimTypes.PhoneNumber)?.Value;
+        return user.FindFirst(CustomClaimTypes.DisplayName)?.Value
+            ?? user.FindFirst(JwtRegisteredClaimNames.Name)?.Value
+            ?? user.FindFirst(ClaimTypes.Name)?.Value;
     }
 
     public static string? GetRole(this ClaimsPrincipal user)
     {
-        return user.FindFirst(x => x.Type == CustomClaimTypes.Role)?.Value;
-    }
-
-    public static string? GetPositionId(this ClaimsPrincipal user)
-    {
-        return user.FindFirst(x => x.Type == AuthorizationClaimTypes.PositionId)?.Value;
-    }
-
-    public static string? GetPositionName(this ClaimsPrincipal user)
-    {
-        return user.FindFirst(x => x.Type == AuthorizationClaimTypes.PositionName)?.Value;
+        return user.FindFirst(ClaimTypes.Role)?.Value
+            ?? user.FindFirst("role")?.Value;
     }
 
     public static IEnumerable<string> GetRoles(this ClaimsPrincipal user)
     {
-        return user.Claims.Where(x => x.Type == AuthorizationClaimTypes.Role).Select(x => x.Value);
+        return user.Claims
+            .Where(x => x.Type == ClaimTypes.Role || x.Type == "role" || x.Type == AuthorizationClaimTypes.Role)
+            .Select(x => x.Value);
     }
 
     public static IEnumerable<string> GetPermissions(this ClaimsPrincipal user)
     {
-        return user.Claims.Where(x => x.Type == AuthorizationClaimTypes.Permission).Select(x => x.Value);
+        return user.Claims
+            .Where(x => x.Type == AuthorizationClaimTypes.Permission)
+            .Select(x => x.Value);
     }
 
     public static bool HasPermission(this ClaimsPrincipal user, string permission)
@@ -85,34 +67,28 @@ public static class ClaimsPrincipalExtensions
         return user.Claims.Any(x => x.Type == AuthorizationClaimTypes.Permission && x.Value == permission);
     }
 
-    public static bool HasPermission(this ClaimsPrincipal user, string[] permission)
+    public static bool HasPermission(this ClaimsPrincipal user, string[] permissions)
     {
-        return user.Claims.Any(x => x.Type == AuthorizationClaimTypes.Permission && permission.Contains(x.Value));
+        return user.Claims.Any(x => x.Type == AuthorizationClaimTypes.Permission && permissions.Contains(x.Value));
     }
 
-    public static IDictionary<string, string> GetCustomParameters(this ClaimsPrincipal user, bool withoutPrefix = false)
+    public static bool IsAdmin(this ClaimsPrincipal user)
+        => user.IsInRole("Admin");
+
+    public static bool IsOwner(this ClaimsPrincipal user)
+        => user.IsInRole("Owner");
+
+    public static bool IsKasir(this ClaimsPrincipal user)
+        => user.IsInRole("Kasir") || user.IsInRole("Admin");
+
+    public static bool IsCustomer(this ClaimsPrincipal user)
+        => user.IsInRole("Customer");
+
+    public static DateTimeOffset? GetAuthenticationTime(this ClaimsPrincipal user)
     {
-        var claimCustomParameters = user.Claims.Where(x => x.Type.StartsWith(AuthorizationClaimTypes.CustomParameter));
-
-        var customParameters = new Dictionary<string, string>();
-
-        foreach (var claimCustomParameter in claimCustomParameters)
-        {
-            var claimType = claimCustomParameter.Type;
-
-            if (withoutPrefix)
-            {
-                claimType = claimType.Replace($"{AuthorizationClaimTypes.CustomParameter}/", string.Empty);
-            }
-
-            customParameters.Add(claimType, claimCustomParameter.Value);
-        }
-
-        return customParameters;
-    }
-
-    public static bool HasCustomParameter(this ClaimsPrincipal user, string key, string value)
-    {
-        return user.GetCustomParameters().Any(x => x.Key.Equals(key, StringComparison.OrdinalIgnoreCase) && x.Value.Equals(value, StringComparison.OrdinalIgnoreCase));
+        var authTime = user.FindFirst(JwtRegisteredClaimNames.Iat)?.Value;
+        if (string.IsNullOrWhiteSpace(authTime) || !long.TryParse(authTime, out var unixTime))
+            return null;
+        return DateTimeOffset.FromUnixTimeSeconds(unixTime);
     }
 }

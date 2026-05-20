@@ -5,6 +5,7 @@
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Smlp.Client.Services.BackEnd.Auth;
 using Smlp.Client.Services.BackEnd.Masters;
 
 namespace Smlp.Client.Services.BackEnd;
@@ -20,6 +21,7 @@ public static class DependencyInjection
 
         #region Essential Services
 
+        services.AddTransient<AuthService>();
         services.AddTransient<AuditService>();
         services.AddTransient<UsersService>();
 

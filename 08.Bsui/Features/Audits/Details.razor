@@ -1,5 +1,5 @@
-﻿@page "/Audits/Details/{AuditId:guid}"
-@attribute [Authorize(Policy = Permissions.Psmp_Audit_View)]
+@page "/Audits/Details/{AuditId:guid}"
+@attribute [Authorize(Roles = "Admin,Owner")]
 
 <BrowserTabTitle>@DisplayTextFor.Audit</BrowserTabTitle>
 <MudBreadcrumbs Items="_breadcrumbItems"></MudBreadcrumbs>

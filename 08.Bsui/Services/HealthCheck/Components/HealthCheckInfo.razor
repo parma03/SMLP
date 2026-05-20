@@ -1,90 +1,38 @@
-﻿@using Smlp.Client.Services.HealthCheck
+@using Smlp.Client.Services.HealthCheck
 
 @inject HealthCheckService _healthCheckService
 @inject IOptions<BackEndOptions> _backEndOptions
 
-<AuthorizeView>
+<AuthorizeView Roles="Admin,Owner">
     <Authorized>
-        @if (context.User.HasPermission(Permissions.Psmp_HealthCheck_View))
-
-
-
-
-
-
-
+        @if (_healthCheckEntries.Any())
         {
-
-
-
-
-
-
-
-            if (_healthCheckEntries.Any())
-
-
-
-
-
-
-
-            {
-                <MudTooltip>
-                    <ChildContent>
-                        <AlertHealthCheck HealthCheckSeverity="@_healthCheckSeverity" HealthCheckStatusText="@_healthCheckStatus" />
-                    </ChildContent>
-                    <TooltipContent>
-                        @if (_healthCheckEntries.Any())
-
-
-
-
-
-
-
-                        {
-                            <div class="pa-2" style="text-align: left;">
-                                <table>
-                                    @foreach (var healthCheckEntry in _healthCheckEntries)
-                                    {
-                                        <tr>
-                                            <td class="pa-1">@healthCheckEntry.Key</td>
-                                            <td class="pa-1">:</td>
-                                            <td class="pa-1">@healthCheckEntry.Value.Status</td>
-                                        </tr>
-                                    }
-                                </table>
-                            </div>
-                        }
-                    </TooltipContent>
-                </MudTooltip>
-            }
-
-
-
-
-
-
-
-            else
-
-
-
-
-
-
-
-            {
-                <AlertHealthCheck HealthCheckSeverity="@_healthCheckSeverity" HealthCheckStatusText="@_healthCheckStatus" />
-            }
-
-
-
-
-
-
-
+            <MudTooltip>
+                <ChildContent>
+                    <AlertHealthCheck HealthCheckSeverity="@_healthCheckSeverity" HealthCheckStatusText="@_healthCheckStatus" />
+                </ChildContent>
+                <TooltipContent>
+                    @if (_healthCheckEntries.Any())
+                    {
+                        <div class="pa-2" style="text-align: left;">
+                            <table>
+                                @foreach (var healthCheckEntry in _healthCheckEntries)
+                                {
+                                    <tr>
+                                        <td class="pa-1">@healthCheckEntry.Key</td>
+                                        <td class="pa-1">:</td>
+                                        <td class="pa-1">@healthCheckEntry.Value.Status</td>
+                                    </tr>
+                                }
+                            </table>
+                        </div>
+                    }
+                </TooltipContent>
+            </MudTooltip>
+        }
+        else
+        {
+            <AlertHealthCheck HealthCheckSeverity="@_healthCheckSeverity" HealthCheckStatusText="@_healthCheckStatus" />
         }
     </Authorized>
 </AuthorizeView>

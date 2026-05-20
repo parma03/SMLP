@@ -1,4 +1,4 @@
-﻿namespace Smlp.Shared.Auth.Constants
+namespace Smlp.Shared.Auth.Constants
 {
     public static class ApiEndpoint
     {
@@ -12,9 +12,9 @@
                 {
                     public const string Login = nameof(Login);
                     public const string Logout = nameof(Logout);
+                    public const string RefreshToken = nameof(RefreshToken);
                 }
             }
         }
     }
-
 }

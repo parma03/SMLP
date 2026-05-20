@@ -1,6 +1,7 @@
 using MediatR;
 using Smlp.Application.Services.Authentication;
 using Smlp.Application.Services.Persistence;
+using Smlp.Shared.Auth.Requests;
 using Smlp.Shared.Auth.Responses;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
@@ -8,7 +9,9 @@ using System.Text;
 
 namespace Smlp.Application.Auth.Commands.Login;
 
-public record LoginCommand(string Username, string Password) : IRequest<LoginResponse>;
+public class LoginCommand : LoginRequest, IRequest<LoginResponse>
+{
+}
 
 public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponse>
 {
@@ -29,7 +32,6 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponse>
         if (user is null)
             throw new UnauthorizedAccessException("Username atau password salah.");
 
-        // Password check (hashed)
         var passwordHash = ComputeSha256Hash(request.Password);
         if (user.PasswordHash != passwordHash)
             throw new UnauthorizedAccessException("Username atau password salah.");
@@ -37,7 +39,6 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponse>
         var accessToken = _jwtTokenService.GenerateAccessToken(user);
         var refreshToken = _jwtTokenService.GenerateRefreshToken();
 
-        // Store refresh token
         user.RefreshToken = refreshToken;
         user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(7);
         await _context.SaveChangesAsync(this, cancellationToken);

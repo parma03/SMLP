@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using Smlp.Bsui.Services.Authentication;
-using Smlp.Client.Services.BackEnd;
+using Smlp.Client.Services.BackEnd.Auth;
 using Smlp.Shared.Auth.Requests;
 
 namespace Smlp.Bsui.Common.Pages;
@@ -10,7 +10,7 @@ public partial class Login
 {
     [Inject] public NavigationManager NavigationManager { get; set; } = default!;
     [Inject] public AuthorizedAuthenticationStateProvider AuthStateProvider { get; set; } = default!;
-    [Inject] public IAuthService AuthService { get; set; } = default!;
+    [Inject] public AuthService AuthService { get; set; } = default!;
 
     private bool _processing = false;
     private string _username = string.Empty;
