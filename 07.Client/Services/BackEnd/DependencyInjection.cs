@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Smlp.Client.Services.BackEnd.Auth;
 using Smlp.Client.Services.BackEnd.Masters;
+using Smlp.Client.Services.BackEnd.Transactions;
 
 namespace Smlp.Client.Services.BackEnd;
 
@@ -33,6 +34,29 @@ public static class DependencyInjection
         services.AddTransient<EmailService>();
 
         #endregion Business Services
+
+        #region Master Services
+
+        services.AddTransient<CustomerService>();
+        services.AddTransient<RewardService>();
+        services.AddTransient<PointRuleService>();
+
+        #endregion Master Services
+
+        #region Transaction Services
+
+        services.AddTransient<TransactionService>();
+        services.AddTransient<RedeemService>();
+        services.AddTransient<PointAdjustmentService>();
+
+        #endregion Transaction Services
+
+        #region Analytics & Reports
+
+        services.AddTransient<AnalyticsService>();
+        services.AddTransient<ReportService>();
+
+        #endregion Analytics & Reports
 
         return services;
     }

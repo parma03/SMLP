@@ -18,5 +18,5 @@ public class GetTransactionResponse : Response
     public string? Notes { get; set; }
     public TransactionStatus Status { get; set; }
     public string CustomerTierSnapshot { get; set; } = default!;
-    public List<TransactionItemDto> Items { get; set; } = new();
+    public List<TransactionItemResponse> Items { get; set; } = new();
 }

@@ -1,6 +1,8 @@
+using Smlp.Shared.Common.Responses;
+
 namespace Smlp.Shared.Analytics.Queries.GetDashboardSummary;
 
-public class GetDashboardSummaryResponse
+public class GetDashboardSummaryResponse : Response
 {
     // KPI Cards
     public int TotalCustomers { get; set; }
@@ -27,11 +29,4 @@ public class GetDashboardSummaryResponse
 
     // Top rewards
     public List<TopRewardItem> TopRewards { get; set; } = new();
-}
-
-public class TopRewardItem
-{
-    public string RewardName { get; set; } = default!;
-    public int RedeemCount { get; set; }
-    public int PointCost { get; set; }
 }

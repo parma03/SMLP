@@ -4,8 +4,9 @@ namespace Smlp.Base.Transaction.Enums
     {
         Pending = 1,
         Verified = 2,
-        Rejected = 3,
-        Expired = 4,
-        Cancelled = 5
+        Completed = 3,
+        Rejected = 4,
+        Expired = 5,
+        Cancelled = 6
     }
 }

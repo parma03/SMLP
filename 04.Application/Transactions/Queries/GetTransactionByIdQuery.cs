@@ -40,7 +40,7 @@ public class GetTransactionByIdQueryHandler : IRequestHandler<GetTransactionById
             Notes = t.Notes,
             Status = t.Status,
             CustomerTierSnapshot = t.CustomerTierSnapshot,
-            Items = t.Items.Select(i => new TransactionItemDto
+            Items = t.Items.Select(i => new TransactionItemResponse
             {
                 Id = i.Id,
                 ProductName = i.ProductName,
