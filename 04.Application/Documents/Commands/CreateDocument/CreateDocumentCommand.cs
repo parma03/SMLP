@@ -1,7 +1,3 @@
-/*
-* Sistem Manajemen Loyalitas Pelanggan (SMLP)
-*/
-
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Options;

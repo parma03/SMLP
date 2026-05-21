@@ -1,7 +1,6 @@
-﻿
-using Smlp.Base.Document.Enums;
-using Smlp.Shared.Common.Attributes;
+﻿using Smlp.Shared.Common.Attributes;
 using Smlp.Shared.Common.Constants;
+using Smlp.Base.Selections.Enums;
 
 namespace Smlp.Shared.Documents.Commands.CreateDocument;
 

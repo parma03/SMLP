@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Smlp.Application.Common.Exceptions;
 using Smlp.Application.Services.Persistence;
 using Smlp.Application.Services.Storage;
-using Smlp.Base.Document.Enums;
+using Smlp.Base.Selections.Enums;
 using Smlp.Shared.Documents.Constants;
 using Smlp.Shared.Documents.Queries.GetDocumentFile;
 
