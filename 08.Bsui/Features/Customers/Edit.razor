@@ -1,0 +1,136 @@
+﻿@attribute [Authorize(Roles = "Admin,Kasir")]
+@page "/Customers/{Id:guid}/Edit"
+
+<BrowserTabTitle>Edit Pelanggan</BrowserTabTitle>
+<MudBreadcrumbs Items="_breadcrumbItems"></MudBreadcrumbs>
+<PageHeader Title="Edit Pelanggan" Icon="@Icons.Material.Filled.EditNote" />
+
+@if (_isLoading)
+{
+    <MudProgressLinear Indeterminate="true" Color="Color.Primary" Class="mb-4" />
+}
+
+@if (_model is not null)
+{
+    <MudGrid>
+        <MudItem xs="12" md="7">
+            <MudPaper Class="pa-6 rounded-lg" Elevation="2">
+                <MudText Typo="Typo.subtitle1" Class="mb-4" Style="color:#6F4E37; font-weight:700;">
+                    <MudIcon Icon="@Icons.Material.Filled.Person" Class="mr-1" />
+                    Edit Data Pelanggan
+                </MudText>
+
+                <MudGrid>
+                    <MudItem xs="12" sm="6">
+                        <MudTextField @bind-Value="_model.FullName"
+                                      Label="Nama Lengkap"
+                                      Variant="Variant.Outlined"
+                                      Required="true"
+                                      RequiredError="Nama lengkap wajib diisi"
+                                      Adornment="Adornment.Start"
+                                      AdornmentIcon="@Icons.Material.Filled.Person"
+                                      Class="mb-3" />
+                    </MudItem>
+                    <MudItem xs="12" sm="6">
+                        <MudTextField @bind-Value="_model.PhoneNumber"
+                                      Label="Nomor HP (WhatsApp)"
+                                      Variant="Variant.Outlined"
+                                      Required="true"
+                                      RequiredError="Nomor HP wajib diisi"
+                                      Adornment="Adornment.Start"
+                                      AdornmentIcon="@Icons.Material.Filled.Phone"
+                                      Class="mb-3" />
+                    </MudItem>
+                    <MudItem xs="12" sm="6">
+                        <MudTextField @bind-Value="_model.EmailAddress"
+                                      Label="Email (Opsional)"
+                                      Variant="Variant.Outlined"
+                                      InputType="InputType.Email"
+                                      Adornment="Adornment.Start"
+                                      AdornmentIcon="@Icons.Material.Filled.Email"
+                                      Class="mb-3" />
+                    </MudItem>
+                    <MudItem xs="12" sm="6">
+                        <MudDatePicker @bind-Date="BirthDatePicker"
+                                       Label="Tanggal Lahir (Opsional)"
+                                       Variant="Variant.Outlined"
+                                       Class="mb-3" />
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudSelect @bind-Value="SelectedGender" Label="Jenis Kelamin (Opsional)" Variant="Variant.Outlined" Class="mb-3">
+                            <MudSelectItem T="Gender ?" Value="@(null)">— Pilih Jenis Kelamin —</MudSelectItem>
+                            <MudSelectItem T="Gender ?" Value="@((Gender?)Gender.LakiLaki)">Laki-laki</MudSelectItem>
+                            <MudSelectItem T="Gender ?" Value="@((Gender?)Gender.Perempuan)">Perempuan</MudSelectItem>
+                        </MudSelect>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudTextField @bind-Value="_model.Address"
+                                      Label="Alamat (Opsional)"
+                                      Variant="Variant.Outlined"
+                                      Lines="2"
+                                      Class="mb-3" />
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudTextField @bind-Value="_model.Notes"
+                                      Label="Catatan"
+                                      Variant="Variant.Outlined"
+                                      Lines="2"
+                                      Placeholder="Preferensi pelanggan, alergi, dll..."
+                                      Class="mb-3" />
+                    </MudItem>
+                </MudGrid>
+
+                <MudDivider Class="my-4" />
+
+                <BottomButtonPanel>
+                    <MudButton Variant="Variant.Outlined"
+                               Color="Color.Default"
+                               StartIcon="@Icons.Material.Filled.ArrowBack"
+                               Href="@CommonRouteFor.CustomerDetail(Id)">
+                        Batal
+                    </MudButton>
+                    <MudButton Variant="Variant.Filled"
+                               Style="background:#6F4E37; color:white;"
+                               StartIcon="@Icons.Material.Filled.Save"
+                               Disabled="@_isSaving"
+                               OnClick="@SaveAsync">
+                        @if (_isSaving)
+                        {
+                            <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                            <MudText Class="ms-2">Menyimpan...</MudText>
+                        }
+                        else
+                        {
+                            <MudText>Simpan Perubahan</MudText>
+                        }
+                    </MudButton>
+                </BottomButtonPanel>
+            </MudPaper>
+        </MudItem>
+
+        <MudItem xs="12" md="5">
+            @if (_customer is not null)
+            {
+                <MudPaper Class="pa-4 rounded-lg" Elevation="2" Style="border-left:4px solid #6F4E37;">
+                    <MudText Typo="Typo.subtitle2" Class="mb-3" Style="color:#6F4E37; font-weight:700;">
+                        📋 Info Member Saat Ini
+                    </MudText>
+                    <MudList T="string" Dense="true">
+                        <MudListItem Icon="@Icons.Material.Filled.Badge">
+                            <MudText Typo="Typo.body2">Kode: <strong>@_customer.MemberCode</strong></MudText>
+                        </MudListItem>
+                        <MudListItem Icon="@Icons.Material.Filled.Stars">
+                            <MudText Typo="Typo.body2">Tier: <strong>@_customer.Tier</strong></MudText>
+                        </MudListItem>
+                        <MudListItem Icon="@Icons.Material.Filled.ConfirmationNumber">
+                            <MudText Typo="Typo.body2">Poin saat ini: <strong>@_customer.TotalPoints.ToString("N0")</strong></MudText>
+                        </MudListItem>
+                        <MudListItem Icon="@Icons.Material.Filled.ShoppingBag">
+                            <MudText Typo="Typo.body2">Total belanja: <strong>Rp @_customer.TotalSpend.ToString("N0")</strong></MudText>
+                        </MudListItem>
+                    </MudList>
+                </MudPaper>
+            }
+        </MudItem>
+    </MudGrid>
+}

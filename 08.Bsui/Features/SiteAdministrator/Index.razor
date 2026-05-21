@@ -10,15 +10,19 @@
         <MudPaper Class="pa-4 rounded-lg" Elevation="0">
             <MudGrid Class="mb-3">
                 <MudItem xs="12" sm="6" md="4">
-                    <MudTextField @bind-Value="_searchUser"
+                    <MudTextField Value="_searchUser"
+                                  ValueChanged="@((string v) => OnSearchChanged(v))"
                                   Label="Cari pengguna..."
                                   Adornment="Adornment.Start"
                                   AdornmentIcon="@Icons.Material.Filled.Search"
                                   Variant="Variant.Outlined"
-                                  Immediate="true" />
+                                  Immediate="true"
+                                  DebounceInterval="300" />
                 </MudItem>
                 <MudItem xs="12" sm="6" md="3">
-                    <MudSelect @bind-Value="_filterRole" Label="Filter Role" Variant="Variant.Outlined">
+                    <MudSelect Value="_filterRole"
+                               ValueChanged="@((string v) => OnFilterRoleChanged(v))"
+                               Label="Filter Role" Variant="Variant.Outlined">
                         <MudSelectItem Value="@("")">Semua Role</MudSelectItem>
                         <MudSelectItem Value="@("Admin")">Admin</MudSelectItem>
                         <MudSelectItem Value="@("Kasir")">Kasir</MudSelectItem>
@@ -39,28 +43,50 @@
                     <MudTh>Username</MudTh>
                     <MudTh>Nama Lengkap</MudTh>
                     <MudTh>Email</MudTh>
+                    <MudTh>No. HP</MudTh>
                     <MudTh>Role</MudTh>
                     <MudTh>Status</MudTh>
                     <MudTh>Aksi</MudTh>
                 </HeaderContent>
                 <RowTemplate>
-                    <MudTd>@context.Username</MudTd>
-                    <MudTd>@context.FullName</MudTd>
-                    <MudTd>@context.Email</MudTd>
-                    <MudTd><MudChip Size="Size.Small" Color="Color.Primary">@context.Role</MudChip></MudTd>
                     <MudTd>
-                        <MudChip Size="Size.Small" Color="@(context.IsActive ? Color.Success : Color.Default)">
+                        <div class="d-flex align-center">
+                            <MudAvatar Size="Size.Small" Style="background:#6F4E37; color:white;" Class="mr-2">
+                                @(context.DisplayName.FirstOrDefault())
+                            </MudAvatar>
+                            @context.Username
+                        </div>
+                    </MudTd>
+                    <MudTd>@context.DisplayName</MudTd>
+                    <MudTd>@context.EmailAddress</MudTd>
+                    <MudTd>@context.PhoneNumber</MudTd>
+                    <MudTd>
+                        <MudChip T="string" Size="Size.Small" Color="@GetRoleColor(context.Role)">
+                            @GetRoleLabel(context.Role)
+                        </MudChip>
+                    </MudTd>
+                    <MudTd>
+                        <MudChip T="string" Size="Size.Small" Color="@(context.IsActive? Color.Success: Color.Default)">
                             @(context.IsActive ? "Aktif" : "Nonaktif")
                         </MudChip>
                     </MudTd>
                     <MudTd>
-                        <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" Color="Color.Primary" />
-                        <MudIconButton Icon="@Icons.Material.Filled.Lock" Size="Size.Small" Color="Color.Warning" />
+                        <MudTooltip Text="Edit Pengguna">
+                            <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" Color="Color.Primary"
+                                           OnClick="@(() => OpenEditUserDialog(context))" />
+                        </MudTooltip>
+                        <MudTooltip Text="Hapus Pengguna">
+                            <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" Color="Color.Error"
+                                           OnClick="@(() => DeleteUserAsync(context))" />
+                        </MudTooltip>
                     </MudTd>
                 </RowTemplate>
                 <NoRecordsContent>
                     <MudText Class="pa-4 text-center" Color="Color.Secondary">Belum ada pengguna terdaftar</MudText>
                 </NoRecordsContent>
+                <PagerContent>
+                    <MudTablePager PageSizeOptions="new int[] { 10, 25, 50 }" />
+                </PagerContent>
             </MudTable>
         </MudPaper>
     </MudTabPanel>
@@ -72,14 +98,10 @@
                     <MudText Typo="Typo.subtitle1" Class="mb-3" Style="color:#6F4E37; font-weight:700;">
                         ☕ Informasi Coffee Shop
                     </MudText>
-                    <MudTextField Label="Nama Coffee Shop" Variant="Variant.Outlined" Class="mb-3"
-                                  Value="@_shopName" />
-                    <MudTextField Label="Alamat" Variant="Variant.Outlined" Class="mb-3"
-                                  Value="@_shopAddress" Lines="2" />
-                    <MudTextField Label="No. Telepon" Variant="Variant.Outlined" Class="mb-3"
-                                  Value="@_shopPhone" />
-                    <MudTextField Label="Email" Variant="Variant.Outlined" Class="mb-3"
-                                  Value="@_shopEmail" />
+                    <MudTextField @bind-Value="_shopName" Label="Nama Coffee Shop" Variant="Variant.Outlined" Class="mb-3" />
+                    <MudTextField @bind-Value="_shopAddress" Label="Alamat" Variant="Variant.Outlined" Class="mb-3" Lines="2" />
+                    <MudTextField @bind-Value="_shopPhone" Label="No. Telepon" Variant="Variant.Outlined" Class="mb-3" />
+                    <MudTextField @bind-Value="_shopEmail" Label="Email" Variant="Variant.Outlined" Class="mb-3" />
                     <MudButton Variant="Variant.Filled" Style="background:#6F4E37; color:white;"
                                StartIcon="@Icons.Material.Filled.Save">
                         Simpan Pengaturan
@@ -91,22 +113,87 @@
                     <MudText Typo="Typo.subtitle1" Class="mb-3" Style="color:#6F4E37; font-weight:700;">
                         📋 Informasi Sistem
                     </MudText>
-                    <MudList Dense="true">
-                        <MudListItem>
-                            <MudText Typo="Typo.body2"><b>Aplikasi:</b> Sistem Manajemen Loyalitas Pelanggan</MudText>
-                        </MudListItem>
-                        <MudListItem>
-                            <MudText Typo="Typo.body2"><b>Versi:</b> 1.0.0</MudText>
-                        </MudListItem>
-                        <MudListItem>
-                            <MudText Typo="Typo.body2"><b>Framework:</b> .NET 8 + Blazor Server + MudBlazor</MudText>
-                        </MudListItem>
-                        <MudListItem>
-                            <MudText Typo="Typo.body2"><b>Database:</b> SQL Server</MudText>
-                        </MudListItem>
+                    <MudList T="string" Dense="true">
+                        <MudListItem><MudText Typo="Typo.body2"><b>Aplikasi:</b> SMLP - Sistem Manajemen Loyalitas Pelanggan</MudText></MudListItem>
+                        <MudListItem><MudText Typo="Typo.body2"><b>Versi:</b> 1.0.0</MudText></MudListItem>
+                        <MudListItem><MudText Typo="Typo.body2"><b>Framework:</b> .NET 8 + Blazor Server + MudBlazor</MudText></MudListItem>
+                        <MudListItem><MudText Typo="Typo.body2"><b>Database:</b> SQL Server</MudText></MudListItem>
+                        <MudListItem><MudText Typo="Typo.body2"><b>Auth:</b> JWT Bearer Token</MudText></MudListItem>
                     </MudList>
                 </MudPaper>
             </MudItem>
         </MudGrid>
     </MudTabPanel>
 </MudTabs>
+
+@* Dialog Tambah/Edit Pengguna *@
+<MudDialog @bind-IsVisible="_showUserDialog" Options="new DialogOptions { MaxWidth = MaxWidth.Small, FullWidth = true }">
+    <TitleContent>
+        <MudText Typo="Typo.h6" Style="color:#6F4E37;">
+            <MudIcon Icon="@Icons.Material.Filled.Person" Class="mr-2" />
+            @(_isEditMode ? "Edit Pengguna" : "Tambah Pengguna Baru")
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudGrid>
+            <MudItem xs="12" sm="6">
+                <MudTextField @bind-Value="_userForm.Username"
+                              Label="Username"
+                              Variant="Variant.Outlined"
+                              Required="true"
+                              AdornmentIcon="@Icons.Material.Filled.AccountCircle"
+                              Adornment="Adornment.Start"
+                              Class="mb-3" />
+            </MudItem>
+            <MudItem xs="12" sm="6">
+                <MudTextField @bind-Value="_userForm.DisplayName"
+                              Label="Nama Lengkap"
+                              Variant="Variant.Outlined"
+                              Required="true"
+                              AdornmentIcon="@Icons.Material.Filled.Person"
+                              Adornment="Adornment.Start"
+                              Class="mb-3" />
+            </MudItem>
+            <MudItem xs="12" sm="6">
+                <MudSelect @bind-Value="_userForm.Role" Label="Role" Variant="Variant.Outlined" Class="mb-3">
+                    <MudSelectItem Value="@(UserRole.Admin)">👑 Admin</MudSelectItem>
+                    <MudSelectItem Value="@(UserRole.Owner)">🏢 Owner</MudSelectItem>
+                    <MudSelectItem Value="@(UserRole.Kasir)">🧑‍💼 Kasir</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+            <MudItem xs="12" sm="6">
+                <MudTextField @bind-Value="_userForm.PhoneNumber"
+                              Label="No. HP"
+                              Variant="Variant.Outlined"
+                              AdornmentIcon="@Icons.Material.Filled.Phone"
+                              Adornment="Adornment.Start"
+                              Class="mb-3" />
+            </MudItem>
+            <MudItem xs="12">
+                <MudTextField @bind-Value="_userForm.EmailAddress"
+                              Label="Email"
+                              Variant="Variant.Outlined"
+                              InputType="InputType.Email"
+                              AdornmentIcon="@Icons.Material.Filled.Email"
+                              Adornment="Adornment.Start"
+                              Class="mb-3" />
+            </MudItem>
+            <MudItem xs="12">
+                <MudSwitch @bind-Value="_userForm.IsActive" Label="Status Aktif" Color="Color.Success" />
+            </MudItem>
+        </MudGrid>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="CloseUserDialog" Variant="Variant.Outlined">Batal</MudButton>
+        <MudButton Variant="Variant.Filled"
+                   Style="background:#6F4E37; color:white;"
+                   OnClick="SaveUserAsync"
+                   Disabled="@_isSavingUser">
+            @if (_isSavingUser)
+            {
+                <MudProgressCircular Size="Size.Small" Indeterminate="true" Class="mr-2" />
+            }
+            @(_isEditMode ? "Simpan Perubahan" : "Tambah Pengguna")
+        </MudButton>
+    </DialogActions>
+</MudDialog>

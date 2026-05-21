@@ -1,3 +1,13 @@
 @using Smlp.Bsui.Common.Components
 @using Smlp.Bsui.Common.Constants
 @using MudBlazor
+@using Smlp.Client.Services.BackEnd.Masters
+@using Microsoft.AspNetCore.Authorization
+@using Smlp.Base.User.Enums
+@using Smlp.Shared.Master.Users.Commands.Create
+@using Smlp.Shared.Master.Users.Commands.Update
+@using Smlp.Shared.Master.Users.Queries
+
+@inject NavigationManager _navigationManager
+@inject ISnackbar _snackbar
+@inject UsersService _usersService

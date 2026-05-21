@@ -1,0 +1,258 @@
+@attribute [Authorize]
+@page "/Customers/{Id:guid}"
+
+<BrowserTabTitle>Detail Pelanggan</BrowserTabTitle>
+<MudBreadcrumbs Items="_breadcrumbItems"></MudBreadcrumbs>
+<PageHeader Title="Detail Pelanggan" Icon="@Icons.Material.Filled.Person" />
+
+@if (_isLoading)
+{
+    <MudProgressLinear Indeterminate="true" Color="Color.Primary" Class="mb-4" />
+}
+
+@if (_customer is not null)
+{
+    <MudGrid>
+        @* Left: Profile Card *@
+        <MudItem xs="12" md="4">
+            <MudPaper Class="pa-6 rounded-lg text-center" Elevation="2" Style="border-top:4px solid #6F4E37;">
+                <MudAvatar Style="background:#6F4E37; color:white; width:72px; height:72px; font-size:2rem; margin:0 auto 16px;" >
+                    @(_customer.FullName.FirstOrDefault())
+                </MudAvatar>
+                <MudText Typo="Typo.h5" Style="font-weight:700;">@_customer.FullName</MudText>
+                <MudChip T="string" Size="Size.Medium" Style="background:#C8860A; color:white; margin:8px 0;">
+                    @(_customer.MemberCode)
+                </MudChip>
+                <div class="d-flex justify-center gap-2 mb-3">
+                    <MudChip T="string" Size="Size.Small" Color="@GetTierColor(_customer.Tier)">@GetTierEmoji(_customer.Tier) @_customer.Tier</MudChip>
+                    <MudChip T="string" Size="Size.Small" Color="@GetSegmentColor(_customer.Segment)">@GetSegmentLabel(_customer.Segment)</MudChip>
+                </div>
+
+                <MudDivider Class="my-3" />
+
+                <div class="d-flex justify-space-around mb-3">
+                    <div class="text-center">
+                        <MudText Typo="Typo.h5" Style="color:#C8860A; font-weight:700;">⭐ @_customer.TotalPoints.ToString("N0")</MudText>
+                        <MudText Typo="Typo.caption" Color="Color.Secondary">Total Poin</MudText>
+                    </div>
+                    <MudDivider Vertical="true" FlexItem="true" />
+                    <div class="text-center">
+                        <MudText Typo="Typo.h5" Style="color:#2E7D32; font-weight:700;">@_customer.TotalTransactions</MudText>
+                        <MudText Typo="Typo.caption" Color="Color.Secondary">Transaksi</MudText>
+                    </div>
+                </div>
+
+                <MudPaper Class="pa-3 rounded" Elevation="0" Style="background:#FFF8E1; border:1px solid #FFE082;">
+                    <MudText Typo="Typo.caption" Color="Color.Secondary">Total Belanja</MudText>
+                    <MudText Typo="Typo.h6" Style="color:#2E7D32; font-weight:700;">Rp @_customer.TotalSpend.ToString("N0")</MudText>
+                </MudPaper>
+
+                <MudDivider Class="my-3" />
+
+                <div class="d-flex gap-2 justify-center">
+                    <MudButton Variant="Variant.Outlined" Color="Color.Primary" Size="Size.Small"
+                               StartIcon="@Icons.Material.Filled.Edit"
+                               Href="@CommonRouteFor.CustomerEdit(_customer.Id)">Edit</MudButton>
+                    <MudButton Variant="Variant.Filled" Size="Size.Small"
+                               Style="background:#6F4E37; color:white;"
+                               StartIcon="@Icons.Material.Filled.Receipt"
+                               Href="@($"{CommonRouteFor.TransactionCreate}?customerId={_customer.Id}")">
+                        Input Transaksi
+                    </MudButton>
+                </div>
+            </MudPaper>
+
+            @* Contact Info *@
+            <MudPaper Class="pa-4 rounded-lg mt-4" Elevation="2">
+                <MudText Typo="Typo.subtitle2" Class="mb-3" Style="color:#6F4E37; font-weight:700;">
+                    📞 Informasi Kontak
+                </MudText>
+                <MudList T="string" Dense="true">
+                    <MudListItem Icon="@Icons.Material.Filled.Phone">
+                        <MudText Typo="Typo.body2">@_customer.PhoneNumber</MudText>
+                    </MudListItem>
+                    @if (!string.IsNullOrEmpty(_customer.EmailAddress))
+                    {
+                        <MudListItem Icon="@Icons.Material.Filled.Email">
+                            <MudText Typo="Typo.body2">@_customer.EmailAddress</MudText>
+                        </MudListItem>
+                    }
+                    @if (!string.IsNullOrEmpty(_customer.Address))
+                    {
+                        <MudListItem Icon="@Icons.Material.Filled.LocationOn">
+                            <MudText Typo="Typo.body2">@_customer.Address</MudText>
+                        </MudListItem>
+                    }
+                    @if (_customer.BirthDate.HasValue)
+                    {
+                        <MudListItem Icon="@Icons.Material.Filled.Cake">
+                            <MudText Typo="Typo.body2">@_customer.BirthDate.Value.ToString("dd MMMM yyyy")</MudText>
+                        </MudListItem>
+                    }
+                    @if (_customer.Gender.HasValue)
+                    {
+                        <MudListItem Icon="@Icons.Material.Filled.Wc">
+                            <MudText Typo="Typo.body2">@(_customer.Gender.Value == Smlp.Base.Customer.Enums.Gender.LakiLaki ? "Laki-laki" : "Perempuan")</MudText>
+                        </MudListItem>
+                    }
+                </MudList>
+                @if (!string.IsNullOrEmpty(_customer.Notes))
+                {
+                    <MudDivider Class="my-2" />
+                    <MudText Typo="Typo.caption" Color="Color.Secondary">Catatan:</MudText>
+                    <MudText Typo="Typo.body2">@_customer.Notes</MudText>
+                }
+                <MudDivider Class="my-2" />
+                <MudText Typo="Typo.caption" Color="Color.Secondary">
+                    Bergabung: @_customer.JoinDate.ToString("dd MMM yyyy")
+                </MudText>
+                @if (_customer.LastTransactionDate.HasValue)
+                {
+                    <br />
+                    <MudText Typo="Typo.caption" Color="Color.Secondary">
+                        Transaksi terakhir: @_customer.LastTransactionDate.Value.ToString("dd MMM yyyy")
+                    </MudText>
+                }
+            </MudPaper>
+
+            @* Tier Progress *@
+            <MudPaper Class="pa-4 rounded-lg mt-4" Elevation="2">
+                <MudText Typo="Typo.subtitle2" Class="mb-3" Style="color:#6F4E37; font-weight:700;">
+                    🏆 Progress Tier
+                </MudText>
+                @{
+                    var (nextTierName, pointsNeeded, progressPct) = GetTierProgress(_customer.TotalPoints, _customer.Tier);
+                }
+                @if (pointsNeeded > 0)
+                {
+                    <MudText Typo="Typo.caption" Color="Color.Secondary" Class="mb-1">
+                        Butuh <strong>@pointsNeeded poin</strong> lagi untuk @nextTierName
+                    </MudText>
+                    <MudProgressLinear Value="@progressPct" Color="Color.Warning" Class="mb-1" Rounded="true" Size="Size.Medium" />
+                    <MudText Typo="Typo.caption" Color="Color.Secondary">@progressPct.ToString("F0")% menuju @nextTierName</MudText>
+                }
+                else
+                {
+                    <MudChip T="string" Color="Color.Primary" Size="Size.Small">💎 Sudah di tier tertinggi!</MudChip>
+                }
+            </MudPaper>
+        </MudItem>
+
+        @* Right: Tabs *@
+        <MudItem xs="12" md="8">
+            <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-4">
+                <MudTabPanel Text="Riwayat Transaksi" Icon="@Icons.Material.Filled.Receipt">
+                    @if (_loadingTransactions)
+                    {
+                        <MudProgressLinear Indeterminate="true" Color="Color.Primary" />
+                    }
+                    <MudTable Dense="true" Hover="true" Elevation="0" Items="@_transactions">
+                        <HeaderContent>
+                            <MudTh>Kode</MudTh>
+                            <MudTh>Tanggal</MudTh>
+                            <MudTh Style="text-align:right">Total</MudTh>
+                            <MudTh Style="text-align:right">Poin</MudTh>
+                            <MudTh>Bayar</MudTh>
+                        </HeaderContent>
+                        <RowTemplate>
+                            <MudTd>
+                                <MudText Typo="Typo.caption" Style="font-family:monospace; color:#6F4E37;">@context.TransactionCode</MudText>
+                            </MudTd>
+                            <MudTd><MudText Typo="Typo.caption">@context.TransactionDate.ToString("dd MMM yyyy")</MudText></MudTd>
+                            <MudTd Style="text-align:right">
+                                <MudText Typo="Typo.body2" Style="color:#2E7D32; font-weight:600;">Rp @context.TotalAmount.ToString("N0")</MudText>
+                            </MudTd>
+                            <MudTd Style="text-align:right">
+                                <MudText Typo="Typo.body2" Style="color:#C8860A; font-weight:600;">⭐ @context.PointsEarned</MudText>
+                            </MudTd>
+                            <MudTd><MudText Typo="Typo.caption">@context.PaymentMethod</MudText></MudTd>
+                        </RowTemplate>
+                        <NoRecordsContent>
+                            <MudText Class="pa-4 text-center" Color="Color.Secondary">Belum ada riwayat transaksi</MudText>
+                        </NoRecordsContent>
+                        <PagerContent>
+                            <MudTablePager PageSizeOptions="new int[]{5, 10, 25}" />
+                        </PagerContent>
+                    </MudTable>
+                </MudTabPanel>
+
+                <MudTabPanel Text="Riwayat Redeem" Icon="@Icons.Material.Filled.Redeem">
+                    @if (_loadingRedeems)
+                    {
+                        <MudProgressLinear Indeterminate="true" Color="Color.Primary" />
+                    }
+                    <MudTable Dense="true" Hover="true" Elevation="0" Items="@_redeems">
+                        <HeaderContent>
+                            <MudTh>Kode</MudTh>
+                            <MudTh>Tanggal</MudTh>
+                            <MudTh>Reward</MudTh>
+                            <MudTh Style="text-align:right">Poin</MudTh>
+                            <MudTh>Status</MudTh>
+                        </HeaderContent>
+                        <RowTemplate>
+                            <MudTd><MudText Typo="Typo.caption" Style="font-family:monospace; color:#6F4E37;">@context.RedeemCode</MudText></MudTd>
+                            <MudTd><MudText Typo="Typo.caption">@context.RedeemDate.ToString("dd MMM yyyy")</MudText></MudTd>
+                            <MudTd><MudText Typo="Typo.body2">@context.RewardName</MudText></MudTd>
+                            <MudTd Style="text-align:right">
+                                <MudText Typo="Typo.body2" Style="color:#C62828; font-weight:600;">-⭐ @context.PointsUsed</MudText>
+                            </MudTd>
+                            <MudTd>
+                                <MudChip T="string" Size="Size.Small" Color="@GetRedeemStatusColor(context.Status)">
+                                    @GetRedeemStatusLabel(context.Status)
+                                </MudChip>
+                            </MudTd>
+                        </RowTemplate>
+                        <NoRecordsContent>
+                            <MudText Class="pa-4 text-center" Color="Color.Secondary">Belum ada riwayat penukaran reward</MudText>
+                        </NoRecordsContent>
+                        <PagerContent>
+                            <MudTablePager PageSizeOptions="new int[]{5, 10, 25}" />
+                        </PagerContent>
+                    </MudTable>
+                </MudTabPanel>
+
+                <MudTabPanel Text="Riwayat Poin" Icon="@Icons.Material.Filled.Stars">
+                    @if (_loadingPoints)
+                    {
+                        <MudProgressLinear Indeterminate="true" Color="Color.Primary" />
+                    }
+                    <MudTable Dense="true" Hover="true" Elevation="0" Items="@_pointHistory">
+                        <HeaderContent>
+                            <MudTh>Tanggal</MudTh>
+                            <MudTh>Keterangan</MudTh>
+                            <MudTh Style="text-align:right">Perubahan</MudTh>
+                            <MudTh Style="text-align:right">Saldo</MudTh>
+                        </HeaderContent>
+                        <RowTemplate>
+                            <MudTd><MudText Typo="Typo.caption">@context.Date.ToString("dd MMM yyyy")</MudText></MudTd>
+                            <MudTd><MudText Typo="Typo.body2">@context.Description</MudText></MudTd>
+                            <MudTd Style="text-align:right">
+                                @if (context.Points > 0)
+                                {
+                                    <MudText Style="color:#2E7D32; font-weight:700;">+@context.Points</MudText>
+                                }
+                                else
+                                {
+                                    <MudText Style="color:#C62828; font-weight:700;">@context.Points</MudText>
+                                }
+                            </MudTd>
+                            <MudTd Style="text-align:right">
+                                <MudText Typo="Typo.body2" Style="color:#C8860A; font-weight:600;">⭐ @context.Balance</MudText>
+                            </MudTd>
+                        </RowTemplate>
+                        <NoRecordsContent>
+                            <MudText Class="pa-4 text-center" Color="Color.Secondary">Belum ada riwayat poin</MudText>
+                        </NoRecordsContent>
+                        <PagerContent>
+                            <MudTablePager PageSizeOptions="new int[]{5, 10, 25}" />
+                        </PagerContent>
+                    </MudTable>
+                </MudTabPanel>
+            </MudTabs>
+        </MudItem>
+    </MudGrid>
+}
+else if (!_isLoading)
+{
+    <MudAlert Severity="Severity.Warning">Pelanggan tidak ditemukan.</MudAlert>
+}

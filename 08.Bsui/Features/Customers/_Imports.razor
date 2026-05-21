@@ -5,8 +5,11 @@
 @using Smlp.Client.Services.BackEnd.Masters
 @using Microsoft.AspNetCore.Authorization
 @using Smlp.Base.Customer.Enums
+@using Smlp.Client.Services.BackEnd.Transactions
 
 @inject NavigationManager _navigationManager
 @inject ISnackbar _snackbar
 
 @inject CustomerService _customerService
+@inject TransactionService _transactionService
+@inject RedeemService _redeemService
