@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Newtonsoft.Json;
 using Smlp.Base.ValueObjects;
 using Smlp.Domain.Entities;
@@ -7,6 +7,48 @@ namespace Smlp.Infrastructure.Persistence.Common.Models;
 
 public class AuditEntry
 {
+    public AuditEntry(EntityEntry entry)
+    {
+        TableName = entry.Metadata.GetTableName() ?? entry.Metadata.Name;
+        EntityName = entry.Metadata.Name;
+        ActionType = entry.State.ToString();
+        ActionName = entry.State.ToString();
+
+        foreach (var property in entry.Properties)
+        {
+            if (property.IsTemporary)
+            {
+                TemporaryProperties.Add(property);
+                continue;
+            }
+
+            var propertyName = property.Metadata.Name;
+
+            if (property.Metadata.IsPrimaryKey())
+            {
+                EntityId = (Guid)(property.CurrentValue ?? Guid.Empty);
+                continue;
+            }
+
+            switch (entry.State)
+            {
+                case Microsoft.EntityFrameworkCore.EntityState.Added:
+                    NewValues[propertyName] = property.CurrentValue;
+                    break;
+                case Microsoft.EntityFrameworkCore.EntityState.Deleted:
+                    OldValues[propertyName] = property.OriginalValue;
+                    break;
+                case Microsoft.EntityFrameworkCore.EntityState.Modified:
+                    if (property.IsModified)
+                    {
+                        OldValues[propertyName] = property.OriginalValue;
+                        NewValues[propertyName] = property.CurrentValue;
+                    }
+                    break;
+            }
+        }
+    }
+
     public string CreatedBy { get; set; } = default!;
     public string TableName { get; set; } = default!;
     public string EntityName { get; set; } = default!;
@@ -16,7 +58,7 @@ public class AuditEntry
     public IDictionary<string, object?> OldValues { get; } = new Dictionary<string, object?>();
     public IDictionary<string, object?> NewValues { get; } = new Dictionary<string, object?>();
     public string ClientApplicationId { get; set; } = default!;
-    public string FromIpAddress { get; set; } = default!;
+    public string FromIpAddress { get; set; } = "0.0.0.0";
     public Geolocation? FromGeolocation { get; set; }
     public IList<PropertyEntry> TemporaryProperties { get; } = new List<PropertyEntry>();
 
@@ -24,22 +66,10 @@ public class AuditEntry
 
     public Audit ToAudit()
     {
-        if (System.Net.IPAddress.TryParse(FromIpAddress, out var parsedIpAddress))
-        {
-            if (parsedIpAddress.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6)
-            {
-                FromIpAddress = parsedIpAddress.MapToIPv4().ToString();
-            }
-        }
-        else
-        {
-            FromIpAddress = "Invalid";
-        }
-
         var audit = new Audit
         {
             Id = Guid.NewGuid(),
-            Created = DateTimeOffset.Now,
+            CreatedAt = DateTimeOffset.Now,
             CreatedBy = CreatedBy,
             TableName = TableName,
             EntityName = EntityName,

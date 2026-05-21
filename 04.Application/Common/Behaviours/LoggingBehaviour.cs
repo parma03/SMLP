@@ -23,12 +23,9 @@ public class LoggingBehaviour<TRequest> : IRequestPreProcessor<TRequest> where T
         var formattedRequest = request.ToPrettyJson();
         var username = _currentUser.Username;
         var ipAddress = _currentUser.IpAddress;
-        var latitude = _currentUser.Geolocation is null ? DefaultTextFor.NA : _currentUser.Geolocation.Latitude.ToString();
-        var longitude = _currentUser.Geolocation is null ? DefaultTextFor.NA : _currentUser.Geolocation.Longitude.ToString();
-        var accuracy = _currentUser.Geolocation is null ? DefaultTextFor.NA : _currentUser.Geolocation.Accuracy.ToString();
 
-        _logger.LogInformation("{RequestName} by {Username} from {IpAddress} at {Latitude}||{Longitude}||{Accuracy}.\n{RequestName}\n{RequestObject}",
-           requestName, username, ipAddress, latitude, longitude, accuracy, requestName, formattedRequest);
+        _logger.LogInformation("{RequestName} by {Username} from {IpAddress}.\n{RequestName}\n{RequestObject}",
+           requestName, username, ipAddress, requestName, formattedRequest);
 
         return Task.CompletedTask;
     }

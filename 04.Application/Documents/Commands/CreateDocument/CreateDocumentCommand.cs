@@ -50,31 +50,24 @@ public class CreateDocumentCommandHandler : IRequestHandler<CreateDocumentComman
         var extension = Path.GetExtension(request.File.FileName);
         var filename = $"DOC_{timeStamp}{extension}";
 
-        try
+        var document = new Document
         {
-            var document = new Document
-            {
-                Id = Guid.NewGuid(),
-                DocumentType = request.DocumentType,
-                FileName = filename,
-                FileSize = request.File.Length,
-                FileContentType = request.File.ContentType,
-                StorageFileId = await _storageService.CreateAsync(file, request.DocumentType, filename)
-            };
+            Id = Guid.NewGuid(),
+            DocumentType = request.DocumentType,
+            FileName = filename,
+            FileSize = request.File.Length,
+            FileContentType = request.File.ContentType,
+            StorageFileId = await _storageService.CreateAsync(file, request.DocumentType, filename)
+        };
 
-            document.DomainEvents.Add(new DocumentCreatedEvent(document.Id));
+        document.DomainEvents.Add(new DocumentCreatedEvent(document.Id));
 
-            await _context.Documents.AddAsync(document, cancellationToken);
-            await _context.SaveChangesAsync(this, cancellationToken);
+        await _context.Documents.AddAsync(document, cancellationToken);
+        await _context.SaveChangesAsync(this, cancellationToken);
 
-            return new CreateDocumentResponse
-            {
-                DocumentId = document.Id
-            };
-        }
-        catch (Exception)
+        return new CreateDocumentResponse
         {
-            throw;
-        }
+            DocumentId = document.Id
+        };
     }
 }

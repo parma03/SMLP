@@ -6,7 +6,7 @@ namespace Smlp.Client.Services.BackEnd;
 
 public interface IAuthService
 {
-    Task<Response<LoginResponse>> LoginAsync(LoginRequest request);
-    Task<Response<object>> LogoutAsync(string accessToken);
-    Task<Response<object>> RefreshTokenAsync(string refreshToken);
+    Task<ResponseResult<LoginResponse>> LoginAsync(LoginRequest request);
+    Task<ResponseResult<SuccessResponse>> LogoutAsync();
+    Task<ResponseResult<RefreshTokenResponse>> RefreshTokenAsync(RefreshTokenRequest request);
 }

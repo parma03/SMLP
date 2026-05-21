@@ -1,14 +1,15 @@
-﻿/*
+/*
+* Sistem Manajemen Loyalitas Pelanggan (SMLP)
 */
 
 using Microsoft.Extensions.Options;
+using RestSharp;
 using Smlp.Client.Common.Extensions;
 using Smlp.Client.Services.UserInfo;
 using Smlp.Shared.Common.Responses;
-using Smlp.Shared.Masters.AdministrativeCriterias.Commands;
-using Smlp.Shared.Masters.AdministrativeCriterias.Queries;
-using RestSharp;
-using static Smlp.Shared.Masters.AdministrativeCriterias.Constants.ApiEndpoint.V1;
+using Smlp.Shared.Master.Users.Commands.Create;
+using Smlp.Shared.Master.Users.Commands.Update;
+using Smlp.Shared.Master.Users.Queries;
 
 namespace Smlp.Client.Services.BackEnd.Masters;
 
@@ -18,12 +19,9 @@ public class UsersService : IDisposable
 
     public UsersService(IOptions<BackEndOptions> backEndServiceOptions, UserInfoService userInfo)
     {
-        if (backEndServiceOptions is null)
-        {
-            return;
-        }
+        if (backEndServiceOptions is null) return;
 
-        var options = new RestClientOptions(new Uri($"{backEndServiceOptions!.Value.BaseUrl}/{AdministrativeCriterias.Segment}"))
+        var options = new RestClientOptions(new Uri($"{backEndServiceOptions!.Value.BaseUrl}/V1/Users"))
         {
             RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
         };
@@ -39,50 +37,58 @@ public class UsersService : IDisposable
 
     protected virtual void Dispose(bool disposing)
     {
-        _restClient.Dispose();
+        _restClient?.Dispose();
     }
 
-    public async Task<ResponseResult<ListResponse<GetAdministrativeCriteriaQueryResponse>>> GetAdministrativeCriteriaAsync(GetAdministrativeCriteriaQueryRequest request)
+    public async Task<ResponseResult<PaginatedListResponse<GetUserResponse>>> GetUsersAsync(GetUserRequest request)
     {
         var restRequest = new RestRequest(string.Empty, Method.Get);
         restRequest.AddQueryParameters(request);
         var restResponse = await _restClient.ExecuteAsync(restRequest);
+        return restResponse.ToResponseResult<PaginatedListResponse<GetUserResponse>>();
+    }
 
-        return restResponse.ToResponseResult<ListResponse<GetAdministrativeCriteriaQueryResponse>>();
-    }
-    public async Task<ResponseResult<GetAdministrativeCriteriaQueryResponse>> GetAdministrativeCriteriaByIdAsync(int? id)
+    public async Task<ResponseResult<GetUserResponse>> GetUserByIdAsync(Guid id)
     {
-        var restRequest = new RestRequest($"{nameof(AdministrativeCriterias.RouteTemplateFor.AdministrativeCriteriaById)}/{id}", Method.Get);
+        var restRequest = new RestRequest($"{id}", Method.Get);
         var restResponse = await _restClient.ExecuteAsync(restRequest);
-        return restResponse.ToResponseResult<GetAdministrativeCriteriaQueryResponse>();
+        return restResponse.ToResponseResult<GetUserResponse>();
     }
-    public async Task<ResponseResult<AdministrativeCriteriaResponse>> CreateAdministrativeCriteriaAsync(AdministrativeCriteriaRequest request)
+
+    public async Task<ResponseResult<CommonCreateResponse>> CreateUserAsync(CreateUserRequest request)
     {
         var restRequest = new RestRequest(string.Empty, Method.Post);
-        restRequest.AddParameters(request);
-
+        restRequest.AddBody(request);
         var restResponse = await _restClient.ExecuteAsync(restRequest);
-
-        return restResponse.ToResponseResult<AdministrativeCriteriaResponse>();
+        return restResponse.ToResponseResult<CommonCreateResponse>();
     }
-    public async Task<ResponseResult<SuccessResponse>> UpdateAdministrativeCriteriaAsync(AdministrativeCriteriaRequest request)
+
+    public async Task<ResponseResult<CommonUpdateResponse>> UpdateUserAsync(Guid id, UpdateUserRequest request)
     {
-        var id = request.Id;
-
-        var restRequest = new RestRequest(id.ToString(), Method.Put);
-        restRequest.AddParameters(request);
-
+        var restRequest = new RestRequest($"{id}", Method.Put);
+        // Use AddFile for multipart if profile picture is present
+        if (request.ProfilePictureFile is not null)
+        {
+            restRequest.AddParameter("Username", request.Username, ParameterType.RequestBody);
+            restRequest.AddParameter("DisplayName", request.DisplayName, ParameterType.RequestBody);
+            restRequest.AddParameter("Role", request.Role.ToString(), ParameterType.RequestBody);
+            restRequest.AddParameter("PhoneNumber", request.PhoneNumber, ParameterType.RequestBody);
+            restRequest.AddParameter("EmailAddress", request.EmailAddress, ParameterType.RequestBody);
+            restRequest.AddParameter("IsActive", request.IsActive.ToString(), ParameterType.RequestBody);
+            // Note: file upload from Blazor client handled separately via byte array
+        }
+        else
+        {
+            restRequest.AddBody(request);
+        }
         var restResponse = await _restClient.ExecuteAsync(restRequest);
-
-        return restResponse.ToResponseResult<SuccessResponse>();
+        return restResponse.ToResponseResult<CommonUpdateResponse>();
     }
-    public async Task<ResponseResult<SuccessResponse>> DeleteAdministrativeCriteriaAsync(int id)
+
+    public async Task<ResponseResult<SuccessResponse>> DeleteUserAsync(Guid id)
     {
-        var restRequest = new RestRequest($"{AdministrativeCriterias.RouteTemplateFor.AdministrativeCriteriaById}/{id}", Method.Delete);
-        restRequest.AddParameters(id);
-
+        var restRequest = new RestRequest($"{id}", Method.Delete);
         var restResponse = await _restClient.ExecuteAsync(restRequest);
-
         return restResponse.ToResponseResult<SuccessResponse>();
     }
 }

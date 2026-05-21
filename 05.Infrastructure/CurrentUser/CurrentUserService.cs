@@ -21,23 +21,10 @@ public class CurrentUserService : ICurrentUserService
     {
         get
         {
-            if (_httpContextAccessor.HttpContext is null)
-            {
-                return null;
-            }
-
-            var subject = _httpContextAccessor.HttpContext.User.FindFirstValue(JwtClaimTypes.Subject);
-            if (subject is null)
-            {
-                subject = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type.Contains(AuthorizationClaimTypes.NameIdentifier))?.Value;
-            }
-
-            if (string.IsNullOrWhiteSpace(subject))
-            {
-                return null;
-            }
-
-            return new Guid(subject);
+            if (_httpContextAccessor.HttpContext is null) return null;
+            var subject = _httpContextAccessor.HttpContext.User.FindFirstValue(JwtClaimTypes.Subject)
+                ?? _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type.Contains(AuthorizationClaimTypes.NameIdentifier))?.Value;
+            return string.IsNullOrWhiteSpace(subject) ? null : new Guid(subject);
         }
     }
 
@@ -45,32 +32,31 @@ public class CurrentUserService : ICurrentUserService
     {
         get
         {
-            if (_httpContextAccessor.HttpContext is null)
-            {
-                return DefaultTextFor.SystemBackgroundJob;
-            }
-
-            var email = _httpContextAccessor.HttpContext.User.FindFirstValue(JwtClaimTypes.Email);
-            if (email is null)
-            {
-                email = _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type.Contains(JwtClaimTypes.Email))?.Value;
-            }
-
-            return email ?? DefaultTextFor.Unknown;
+            if (_httpContextAccessor.HttpContext is null) return DefaultTextFor.SystemBackgroundJob;
+            return _httpContextAccessor.HttpContext.User.FindFirstValue(JwtClaimTypes.Email)
+                ?? _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type.Contains(JwtClaimTypes.Email))?.Value
+                ?? DefaultTextFor.Unknown;
         }
     }
 
-    public string? PositionId => _httpContextAccessor.HttpContext?.Request.Headers[HttpHeaderName.PositionId].FirstOrDefault();
+    public string? PositionId =>
+        _httpContextAccessor.HttpContext?.Request.Headers[HttpHeaderName.PositionId].FirstOrDefault();
+
+    public string? Role
+    {
+        get
+        {
+            if (_httpContextAccessor.HttpContext is null) return null;
+            return _httpContextAccessor.HttpContext.User.FindFirstValue(AuthorizationClaimTypes.Role)
+                ?? _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Role);
+        }
+    }
 
     public string ClientId
     {
         get
         {
-            if (_httpContextAccessor.HttpContext is null)
-            {
-                return DefaultTextFor.SystemBackgroundJob;
-            }
-
+            if (_httpContextAccessor.HttpContext is null) return DefaultTextFor.SystemBackgroundJob;
             return _httpContextAccessor.HttpContext.User.FindFirstValue(JwtClaimTypes.ClientId) ?? DefaultTextFor.Unknown;
         }
     }
@@ -79,26 +65,11 @@ public class CurrentUserService : ICurrentUserService
     {
         get
         {
-            if (_httpContextAccessor.HttpContext is null)
-            {
-                return DefaultTextFor.SystemBackgroundJob;
-            }
-
+            if (_httpContextAccessor.HttpContext is null) return DefaultTextFor.SystemBackgroundJob;
             var ipAddress = _httpContextAccessor.HttpContext.Request.Headers[HttpHeaderName.IpAddress].FirstOrDefault();
-
-            if (!string.IsNullOrWhiteSpace(ipAddress))
-            {
-                return ipAddress;
-            }
-
-            var remoteIpAddress = _httpContextAccessor.HttpContext.Connection.RemoteIpAddress;
-
-            if (remoteIpAddress is not null)
-            {
-                return remoteIpAddress.ToString();
-            }
-
-            return DefaultTextFor.Unknown;
+            if (!string.IsNullOrWhiteSpace(ipAddress)) return ipAddress;
+            var remoteIp = _httpContextAccessor.HttpContext.Connection.RemoteIpAddress;
+            return remoteIp?.ToString() ?? DefaultTextFor.Unknown;
         }
     }
 
@@ -107,13 +78,7 @@ public class CurrentUserService : ICurrentUserService
         get
         {
             var geolocationText = _httpContextAccessor.HttpContext?.Request.Headers[HttpHeaderName.Geolocation].FirstOrDefault();
-
-            if (string.IsNullOrWhiteSpace(geolocationText))
-            {
-                return null;
-            }
-
-            return Geolocation.From(geolocationText);
+            return string.IsNullOrWhiteSpace(geolocationText) ? null : Geolocation.From(geolocationText);
         }
     }
 
@@ -121,12 +86,9 @@ public class CurrentUserService : ICurrentUserService
     {
         get
         {
-            if (_httpContextAccessor.HttpContext is null)
-            {
-                return new List<string>();
-            }
-
-            return _httpContextAccessor.HttpContext.User.FindAll(AuthorizationClaimTypes.Permission).Select(x => x.Value).ToList();
+            if (_httpContextAccessor.HttpContext is null) return new List<string>();
+            return _httpContextAccessor.HttpContext.User.FindAll(AuthorizationClaimTypes.Permission)
+                .Select(x => x.Value).ToList();
         }
     }
 }

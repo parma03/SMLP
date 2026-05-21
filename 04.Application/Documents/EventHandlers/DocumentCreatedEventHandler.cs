@@ -1,14 +1,9 @@
-﻿/*
-*/
-
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Smlp.Application.Common.Exceptions;
 using Smlp.Application.Services.DomainEvent.Models;
-using Smlp.Application.Services.Ecm;
-using Smlp.Application.Services.Ecm.Models.UploadContent;
 using Smlp.Application.Services.Persistence;
-using Smlp.Application.Services.Storage;
 using Smlp.Domain.Events;
 using Smlp.Shared.Documents.Constants;
 
@@ -17,17 +12,12 @@ namespace Smlp.Application.Documents.EventHandlers;
 public class DocumentCreatedEventHandler : INotificationHandler<DomainEventNotification<DocumentCreatedEvent>>
 {
     private readonly ISmlpDbContext _context;
-    private readonly IStorageService _storageService;
-    private readonly IEcmService _ecmService;
+    private readonly ILogger<DocumentCreatedEventHandler> _logger;
 
-    public DocumentCreatedEventHandler(
-        ISmlpDbContext context,
-        IStorageService storageService,
-        IEcmService ecmService)
+    public DocumentCreatedEventHandler(ISmlpDbContext context, ILogger<DocumentCreatedEventHandler> logger)
     {
         _context = context;
-        _storageService = storageService;
-        _ecmService = ecmService;
+        _logger = logger;
     }
 
     public async Task Handle(DomainEventNotification<DocumentCreatedEvent> notification, CancellationToken cancellationToken)
@@ -41,14 +31,6 @@ public class DocumentCreatedEventHandler : INotificationHandler<DomainEventNotif
             throw new NotFoundException(DisplayTextFor.Document, notification.DomainEvent.DocumentId);
         }
 
-        var uploadContentModel = new UploadContentRequest
-        {
-            DocumentType = document.DocumentType,
-            FileName = document.FileName,
-            FileContentType = document.FileContentType,
-            FileContent = await _storageService.ReadAsync(document.StorageFileId, document.DocumentType)
-        };
-
-        var uploadContentResult = await _ecmService.UploadContentAsync(uploadContentModel, cancellationToken);
+        _logger.LogInformation("Document created: {DocumentId} - {FileName}", document.Id, document.FileName);
     }
 }

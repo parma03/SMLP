@@ -1,4 +1,4 @@
-﻿namespace Smlp.Domain.Events
+namespace Smlp.Domain.Events
 {
     public abstract class DomainEvent
     {

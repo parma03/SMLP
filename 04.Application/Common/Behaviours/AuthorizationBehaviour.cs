@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using MediatR;
 using Microsoft.Extensions.Options;
 using Smlp.Application.Common.Attributes;
@@ -19,10 +19,14 @@ public class AuthorizationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRe
     private readonly ICurrentUserService _currentUserService;
     private readonly IAuthorizationService _authorizationService;
 
-    public AuthorizationBehaviour(IOptions<AuthenticationOptions> authenticationOptions, IOptions<AuthorizationOptions> authorizationOptions, ICurrentUserService currentUserService, IAuthorizationService authorizationService)
+    public AuthorizationBehaviour(
+        IOptions<AuthenticationOptions> authenticationOptions,
+        IOptions<AuthorizationOptions> authorizationOptions,
+        ICurrentUserService currentUserService,
+        IAuthorizationService authorizationService)
     {
-        _usingAuthentication = authenticationOptions.Value.Provider is not AuthenticationProvider.None;
-        _usingAuthorization = authorizationOptions.Value.Provider is not AuthenticationProvider.None;
+        _usingAuthentication = authenticationOptions.Value.Provider != AuthenticationProvider.None;
+        _usingAuthorization = authorizationOptions.Value.Provider != "None";
         _currentUserService = currentUserService;
         _authorizationService = authorizationService;
     }
@@ -60,7 +64,7 @@ public class AuthorizationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRe
 
         if (string.IsNullOrWhiteSpace(_currentUserService.PositionId))
         {
-            throw new ForbiddenAccessException($"{StartingErrorMessage} {_currentUserService.Username} does not have {AuthenticationDisplayTextFor.PositionId}.");
+            throw new ForbiddenAccessException($"{StartingErrorMessage} {_currentUserService.Username} does not have a Position ID.");
         }
 
         var authorizationInfo = await _authorizationService.GetAuthorizationInfoAsync(_currentUserService.PositionId, cancellationToken);
@@ -71,7 +75,7 @@ public class AuthorizationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRe
 
             if (!authorized)
             {
-                throw new ForbiddenAccessException($"{StartingErrorMessage} {_currentUserService.Username} with {AuthenticationDisplayTextFor.PositionId} {_currentUserService.PositionId} does not have the following {AuthorizationClaimTypes.Permission}: {policy}");
+                throw new ForbiddenAccessException($"{StartingErrorMessage} {_currentUserService.Username} with Position ID {_currentUserService.PositionId} does not have the following {AuthorizationClaimTypes.Permission}: {policy}");
             }
         }
 

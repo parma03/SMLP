@@ -21,8 +21,6 @@ namespace Smlp.Infrastructure.Persistence;
 
 public class SmlpDbContext : DbContext, ISmlpDbContext
 {
-    private const string SoftDeleted = nameof(SoftDeleted);
-
     protected ICurrentUserService _currentUser = default!;
     protected IDateAndTimeService _dateTime = default!;
     protected IDomainEventService _domainEvent = default!;
@@ -37,6 +35,7 @@ public class SmlpDbContext : DbContext, ISmlpDbContext
     #region Master Data Entities
 
     public DbSet<User> Users => Set<User>();
+    public DbSet<UserProfilePicture> UserProfilePictures => Set<UserProfilePicture>();
     public DbSet<Customer> Customers => Set<Customer>();
     public DbSet<PointRule> PointRules => Set<PointRule>();
     public DbSet<TierRule> TierRules => Set<TierRule>();
@@ -82,65 +81,66 @@ public class SmlpDbContext : DbContext, ISmlpDbContext
         return result;
     }
 
-    private async Task OnBeforeSavingAsync<THandler>(THandler handler, CancellationToken cancellationToken) where THandler : notnull
+    private Task OnBeforeSavingAsync<THandler>(THandler handler, CancellationToken cancellationToken) where THandler : notnull
     {
-        var entries = ChangeTracker.Entries().ToList();
+        var now = _dateTime?.Now ?? DateTimeOffset.UtcNow;
+        var user = _currentUser?.Username ?? handler.ToString() ?? "System";
         var auditEntries = new List<AuditEntry>();
 
-        foreach (var entry in entries)
+        foreach (var entry in ChangeTracker.Entries().ToList())
         {
             if (entry.Entity is IDeletable deletable && entry.State == EntityState.Deleted)
             {
                 entry.State = EntityState.Modified;
                 deletable.IsDeleted = true;
-                deletable.DeletedAt = _dateTime?.Now ?? DateTimeOffset.UtcNow;
-                deletable.DeletedBy = _currentUser?.Username ?? handler.ToString();
+                deletable.DeletedAt = now;
+                deletable.DeletedBy = user;
             }
 
             if (entry.Entity is ICreatable creatable && entry.State == EntityState.Added)
             {
-                creatable.CreatedAt = _dateTime?.Now ?? DateTimeOffset.UtcNow;
-                creatable.CreatedBy = _currentUser?.Username ?? handler.ToString();
+                creatable.CreatedAt = now;
+                creatable.CreatedBy = user;
             }
 
             if (entry.Entity is IModifiable modifiable && entry.State == EntityState.Modified)
             {
-                modifiable.ModifiedAt = _dateTime?.Now ?? DateTimeOffset.UtcNow;
-                modifiable.ModifiedBy = _currentUser?.Username ?? handler.ToString();
+                modifiable.ModifiedAt = now;
+                modifiable.ModifiedBy = user;
             }
 
-            if (entry.Entity is not Audit && (entry.State == EntityState.Added || entry.State == EntityState.Modified || entry.State == EntityState.Deleted))
+            if (entry.Entity is not Audit &&
+                (entry.State == EntityState.Added || entry.State == EntityState.Modified || entry.State == EntityState.Deleted))
             {
                 var auditEntry = new AuditEntry(entry)
                 {
                     ClientApplicationId = handler?.ToString() ?? "System",
-                    CreatedBy = _currentUser?.Username ?? "System"
+                    CreatedBy = user
                 };
                 auditEntries.Add(auditEntry);
             }
         }
 
-        if (auditEntries.Any())
+        foreach (var auditEntry in auditEntries)
         {
-            foreach (var auditEntry in auditEntries)
-            {
-                Audits.Add(auditEntry.ToAudit());
-            }
+            Audits.Add(auditEntry.ToAudit());
         }
+
+        return Task.CompletedTask;
     }
 
     private async Task OnAfterSavingAsync(CancellationToken cancellationToken)
     {
-        var domainEvents = ChangeTracker.Entries<DomainEvent>()
-            .Select(e => e.Entity)
+        if (_domainEvent is null) return;
+
+        var domainEvents = ChangeTracker
+            .Entries<IHasDomainEvent>()
+            .SelectMany(e => e.Entity.DomainEvents)
             .ToList();
 
-        if (_domainEvent is not null)
+        foreach (var domainEvent in domainEvents)
         {
-            foreach (var domainEvent in domainEvents)
-            {
-                await _domainEvent.Publish(domainEvent, cancellationToken);
-            }
+            await _domainEvent.Publish(domainEvent, cancellationToken);
         }
     }
 

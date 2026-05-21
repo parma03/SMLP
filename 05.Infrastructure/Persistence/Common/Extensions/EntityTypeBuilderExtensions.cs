@@ -1,6 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Smlp.Domain.Events;
 using Smlp.Domain.Interfaces;
 using Smlp.Infrastructure.Persistence.Common.Constants;
 using Smlp.Shared.Common.Constants;
@@ -18,7 +17,7 @@ public static class EntityTypeBuilderExtensions
     public static void ConfigureModifiableProperties<TEntity>(this EntityTypeBuilder<TEntity> builder)
         where TEntity : class, IModifiable
     {
-        builder.Property(x => x.Modified);
+        builder.Property(x => x.ModifiedAt);
         builder.Property(e => e.ModifiedBy).HasColumnType(CommonColumnTypes.Nvarchar(CommonMaximumLengthFor.ModifiedBy));
     }
 
@@ -31,7 +30,7 @@ public static class EntityTypeBuilderExtensions
     }
 
     public static void IgnoreDomainEventsProperties<TEntity>(this EntityTypeBuilder<TEntity> builder)
-        where TEntity : class, IHasDomainEvent
+        where TEntity : class, Domain.Events.IHasDomainEvent
     {
         builder.Ignore(e => e.DomainEvents);
     }

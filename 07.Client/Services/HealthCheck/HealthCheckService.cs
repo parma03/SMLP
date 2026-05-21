@@ -1,4 +1,4 @@
-﻿using Smlp.Shared.Services.HealthCheck.Constants;
+using Smlp.Shared.Services.HealthCheck.Constants;
 using Smlp.Shared.Services.HealthCheck.Queries.GetHealthCheck;
 using RestSharp;
 

@@ -1,4 +1,4 @@
-﻿using Smlp.Base.Document.Enums;
+using Smlp.Base.Document.Enums;
 using Smlp.Domain.Abstracts;
 using Smlp.Domain.Events;
 

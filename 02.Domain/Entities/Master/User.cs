@@ -11,7 +11,10 @@ namespace Smlp.Domain.Entities.Master
         public string PhoneNumber { get; set; } = default!;
         public string EmailAddress { get; set; } = default!;
         public bool IsActive { get; set; }
-        public FileEntity? ProfilePict { get; set; }
+
+        // Foto profil - disimpan sebagai file terpisah
+        public Guid? ProfilePictureId { get; set; }
+        public UserProfilePicture? ProfilePicture { get; set; }
 
         // JWT Auth
         public string PasswordHash { get; set; } = default!;

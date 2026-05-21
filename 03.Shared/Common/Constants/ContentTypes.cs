@@ -24,4 +24,5 @@ public static class ContentTypes
     public const string ApplicationJson = "application/json";
     public const string ApplicationXWwwFormUrlEncoded = "application/x-www-form-urlencoded";
     public const string MultipartFormData = "multipart/form-data";
+    public const string OctetStream = "application/octet-stream";
 }

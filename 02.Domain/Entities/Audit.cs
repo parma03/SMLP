@@ -1,4 +1,4 @@
-﻿using Smlp.Base.ValueObjects;
+using Smlp.Base.ValueObjects;
 using Smlp.Domain.Abstracts;
 
 namespace Smlp.Domain.Entities

@@ -20,7 +20,7 @@ public class GetUserByListQueryHandler : IRequestHandler<GetUserByListQuery, Pag
     public async Task<PaginatedListResponse<GetUserResponse>> Handle(GetUserByListQuery request, CancellationToken cancellationToken)
     {
         var req = request.Request;
-        var query = _context.Users.Where(u => !u.IsDeleted);
+        var query = _context.Users.Include(u => u.ProfilePicture).Where(u => !u.IsDeleted);
 
         if (!string.IsNullOrWhiteSpace(req.Username))
             query = query.Where(u => u.Username.Contains(req.Username));
@@ -32,19 +32,11 @@ public class GetUserByListQueryHandler : IRequestHandler<GetUserByListQuery, Pag
             query = query.Where(u => u.IsActive == req.IsActive);
 
         var total = await query.CountAsync(cancellationToken);
-        var items = await query
+        var users = await query
             .OrderBy(u => u.DisplayName)
-            .Select(u => new GetUserResponse
-            {
-                Id = u.Id,
-                Username = u.Username,
-                DisplayName = u.DisplayName,
-                Role = u.Role,
-                PhoneNumber = u.PhoneNumber,
-                EmailAddress = u.EmailAddress,
-                IsActive = u.IsActive
-            })
             .ToListAsync(cancellationToken);
+
+        var items = users.Select(GetUserByIdQueryHandler.MapToResponse).ToList();
 
         return new PaginatedListResponse<GetUserResponse> { Items = items, TotalCount = total };
     }

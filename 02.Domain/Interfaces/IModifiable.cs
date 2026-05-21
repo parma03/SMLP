@@ -1,8 +1,8 @@
-﻿namespace Smlp.Domain.Interfaces
+namespace Smlp.Domain.Interfaces
 {
     public interface IModifiable
     {
-        public DateTimeOffset? Modified { get; set; }
+        public DateTimeOffset? ModifiedAt { get; set; }
         public string? ModifiedBy { get; set; }
     }
 }

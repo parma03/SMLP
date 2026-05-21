@@ -1,9 +1,8 @@
-﻿namespace Smlp.Domain.Interfaces
+namespace Smlp.Domain.Interfaces
 {
     public interface ICreatable
     {
-        public DateTimeOffset Created { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
         public string CreatedBy { get; set; }
     }
-
 }

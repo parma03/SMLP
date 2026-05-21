@@ -3,17 +3,15 @@ using FluentValidation.AspNetCore;
 using Smlp.Application;
 using Smlp.Infrastructure;
 using Smlp.Infrastructure.Logging;
-using Smlp.Infrastructure.Persistence;
 using Smlp.Infrastructure.Authentication;
+using Smlp.Infrastructure.Authentication.Jwt;
 using Smlp.Shared;
 using Smlp.Shared.Localization;
 using Smlp.Shared.Common.Constants;
 using Smlp.WebApi.Common.Filters.ApiException;
 using Smlp.WebApi.Common.ModelBindings;
 using Smlp.WebApi.Services;
-using Smlp.WebApi.Services.BackEnd;
 using Smlp.WebApi.Services.Documentation;
-using Smlp.Infrastructure.BackgroundJob.Hangfire;
 
 Console.WriteLine($"Starting {CommonValueFor.EntryAssemblySimpleName}...");
 

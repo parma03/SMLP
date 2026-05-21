@@ -1,5 +1,7 @@
-﻿using System.Reflection;
+using System.Linq.Expressions;
+using System.Reflection;
 using Microsoft.EntityFrameworkCore;
+using Smlp.Domain.Interfaces;
 
 namespace Smlp.Infrastructure.Persistence.Common.Extensions;
 
@@ -8,10 +10,8 @@ public static class ModelBuilderExtensions
     public static void ApplyConfigurationsFromNameSpace(this ModelBuilder modelBuilder, string configurationNamespace)
     {
         var applyGenericMethods = typeof(ModelBuilder).GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.FlattenHierarchy);
-
         var applyGenericApplyConfigurationMethods = applyGenericMethods
             .Where(m => m.IsGenericMethod && m.Name.Equals("ApplyConfiguration", StringComparison.OrdinalIgnoreCase));
-
         var applyGenericMethod = applyGenericApplyConfigurationMethods
             .Where(m => m.GetParameters().FirstOrDefault()?.ParameterType.Name == "IEntityTypeConfiguration`1")
             .FirstOrDefault();
@@ -24,24 +24,30 @@ public static class ModelBuilderExtensions
         {
             foreach (var interfaceType in applicableType.GetInterfaces())
             {
-                // Check if the type implements interface IEntityTypeConfiguration<SomeEntity>.
                 if (interfaceType.IsConstructedGenericType && interfaceType.GetGenericTypeDefinition() == typeof(IEntityTypeConfiguration<>))
                 {
-                    // Make concrete ApplyConfiguration<SomeEntity> method.
                     var applyConcreteMethod = applyGenericMethod?.MakeGenericMethod(interfaceType.GenericTypeArguments[0]);
-
-                    // And invoke that with fresh instance of your configuration type.
-
                     var instance = Activator.CreateInstance(applicableType);
-
                     if (instance is not null)
-                    {
                         applyConcreteMethod?.Invoke(modelBuilder, new object[] { instance });
-                    }
-
                     break;
                 }
             }
+        }
+    }
+
+    public static void SetSoftDeleteQueryFilter(this ModelBuilder modelBuilder)
+    {
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+        {
+            if (!typeof(IDeletable).IsAssignableFrom(entityType.ClrType)) continue;
+
+            var parameter = Expression.Parameter(entityType.ClrType, "e");
+            var property = Expression.Property(parameter, nameof(IDeletable.IsDeleted));
+            var falseConstant = Expression.Constant(false);
+            var filterExpression = Expression.Equal(property, falseConstant);
+            var lambda = Expression.Lambda(filterExpression, parameter);
+            modelBuilder.Entity(entityType.ClrType).HasQueryFilter(lambda);
         }
     }
 }

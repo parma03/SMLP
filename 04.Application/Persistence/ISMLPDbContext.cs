@@ -22,6 +22,7 @@ public interface ISmlpDbContext
     #region Master Data Entities
 
     public DbSet<User> Users { get; }
+    public DbSet<UserProfilePicture> UserProfilePictures { get; }
     public DbSet<Customer> Customers { get; }
     public DbSet<PointRule> PointRules { get; }
     public DbSet<TierRule> TierRules { get; }

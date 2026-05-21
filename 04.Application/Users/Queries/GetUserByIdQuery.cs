@@ -21,20 +21,29 @@ public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, GetUser
     public async Task<GetUserResponse> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
     {
         var user = await _context.Users
+            .Include(u => u.ProfilePicture)
             .Where(u => u.Id == request.Id && !u.IsDeleted)
-            .Select(u => new GetUserResponse
-            {
-                Id = u.Id,
-                Username = u.Username,
-                DisplayName = u.DisplayName,
-                Role = u.Role,
-                PhoneNumber = u.PhoneNumber,
-                EmailAddress = u.EmailAddress,
-                IsActive = u.IsActive
-            })
             .FirstOrDefaultAsync(cancellationToken)
             ?? throw new NotFoundException(nameof(User), request.Id);
 
-        return user;
+        return MapToResponse(user);
     }
+
+    public static GetUserResponse MapToResponse(User u) => new()
+    {
+        Id = u.Id,
+        Username = u.Username,
+        DisplayName = u.DisplayName,
+        Role = u.Role,
+        PhoneNumber = u.PhoneNumber,
+        EmailAddress = u.EmailAddress,
+        IsActive = u.IsActive,
+        ProfilePicture = u.ProfilePicture is null ? null : new ProfilePictureDto
+        {
+            Id = u.ProfilePicture.Id,
+            FileName = u.ProfilePicture.FileName,
+            FileContentType = u.ProfilePicture.FileContentType,
+            FileSize = u.ProfilePicture.FileSize
+        }
+    };
 }

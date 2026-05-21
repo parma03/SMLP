@@ -7,7 +7,6 @@ using Smlp.Application.Users.Commands.Create;
 using Smlp.Application.Users.Commands.Delete;
 using Smlp.Application.Users.Commands.Update;
 using Smlp.Application.Users.Queries;
-using Smlp.Shared.Common.Constants;
 using Smlp.Shared.Common.Responses;
 using Smlp.Shared.Master.Users.Commands.Create;
 using Smlp.Shared.Master.Users.Commands.Update;
@@ -27,7 +26,7 @@ public class UsersController : ApiControllerBase
         return await Mediator.Send(new GetUserByListQuery { Request = request });
     }
 
-    [HttpGet(ApiEndpoint.V1.Users.RouteTemplateFor.GetById)]
+    [HttpGet(ApiEndpoint.V1.Users.RouteTemplateFor.GetUserById)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [Produces(typeof(GetUserResponse))]
@@ -44,16 +43,21 @@ public class UsersController : ApiControllerBase
         return CreatedAtAction(nameof(GetUserById), await Mediator.Send(new CreateUserCommand { Request = request }));
     }
 
-    [HttpPut(ApiEndpoint.V1.Users.RouteTemplateFor.Update)]
+    /// <summary>
+    /// Update data user. Untuk mengubah foto profil, gunakan multipart/form-data
+    /// dan sertakan file di field ProfilePictureFile.
+    /// </summary>
+    [HttpPut(ApiEndpoint.V1.Users.RouteTemplateFor.UpdateUser)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [Produces(typeof(CommonUpdateResponse))]
-    public async Task<ActionResult<CommonUpdateResponse>> UpdateUser([FromRoute] Guid id, [FromBody] UpdateUserRequest request)
+    [Consumes("multipart/form-data")]
+    public async Task<ActionResult<CommonUpdateResponse>> UpdateUser([FromRoute] Guid id, [FromForm] UpdateUserRequest request)
     {
         return await Mediator.Send(new UpdateUserCommand { Id = id, Request = request });
     }
 
-    [HttpDelete(ApiEndpoint.V1.Users.RouteTemplateFor.Delete)]
+    [HttpDelete(ApiEndpoint.V1.Users.RouteTemplateFor.DeleteUser)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> DeleteUser([FromRoute] Guid id)
