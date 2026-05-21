@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Newtonsoft.Json;
 using Smlp.Base.ValueObjects;
@@ -44,6 +45,7 @@ public class AuditEntry
                         OldValues[propertyName] = property.OriginalValue;
                         NewValues[propertyName] = property.CurrentValue;
                     }
+
                     break;
             }
         }

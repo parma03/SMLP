@@ -5,8 +5,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Smlp.Application.Services.BackgroundJob;
 using Smlp.Infrastructure.BackgroundJob.Hangfire.Storages.SqlServer;
-using Smlp.Infrastructure.Persistence.VaultSqlServer;
-using Smlp.Infrastructure.Vault;
 using Smlp.Shared.Common.Constants;
 using Smlp.Shared.Common.Extensions;
 
@@ -23,21 +21,6 @@ public static class DependencyInjection
             case HangfireBackgroundJobStorageProvider.SqlServer:
                 var sqlServerOptions = configuration.GetSection(SqlServerOptions.SectionKey).Get<SqlServerOptions>();
                 services.AddHangfireUsingSqlServerDatabase(sqlServerOptions!, healthChecksBuilder);
-                break;
-
-            case HangfireBackgroundJobStorageProvider.VaultSqlServer:
-                var vaultOptions = configuration.GetSection(VaultSqlServerOptions.SectionKey).Get<VaultSqlServerOptions>();
-                var vaultClient = ClientConnect.UseAppRoleAuth(vaultOptions.URL, vaultOptions.RoleID, vaultOptions.SecretID, vaultOptions.Namespace);
-                var vaultSqlServerSecret = StaticSecret.GetSecret(vaultClient, vaultOptions.SecretPath, vaultOptions.MountPoint);
-                var vaultSqlServerOptions = new SqlServerOptions
-                {
-                    ConnectionString = $"Server={vaultSqlServerSecret.Data.Data["Server"]};" +
-                                $"Database={vaultSqlServerSecret.Data.Data["Database"]};" +
-                                $"user id={vaultSqlServerSecret.Data.Data["id"]};" +
-                                $"pwd={vaultSqlServerSecret.Data.Data["pwd"]};" +
-                                $"Trusted_Connection=False;MultipleActiveResultSets=true;Encrypt=False;TrustServerCertificate=Yes;"
-                };
-                services.AddHangfireUsingSqlServerDatabase(vaultSqlServerOptions, healthChecksBuilder);
                 break;
 
             default:

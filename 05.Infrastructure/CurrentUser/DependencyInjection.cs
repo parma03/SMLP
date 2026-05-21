@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Smlp.Application.Services.CurrentUser;
 
-namespace Smlp.InfrastructureCurrentUser;
+namespace Smlp.Infrastructure.CurrentUser;
 
 public static class DependencyInjection
 {

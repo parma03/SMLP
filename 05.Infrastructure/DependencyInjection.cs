@@ -11,11 +11,12 @@ using Smlp.Infrastructure.BackgroundJob;
 using Smlp.Infrastructure.HealthCheck;
 using Smlp.Infrastructure.Persistence;
 using Smlp.Infrastructure.Storage;
-using Smlp.InfrastructureCurrentUser;
-using Smlp.InfrastructureDateAndTime;
+using Smlp.Infrastructure.DateAndTime;
 using Smlp.InfrastructureDomainEvent;
-using Smlp.InfrastructureOtp;
+using Smlp.Infrastructure.Otp;
 using Smlp.Application.Services.Authorization;
+using Smlp.Infrastructure.CurrentUser;
+using Smlp.Infrastructure.Authorization;
 
 namespace Smlp.Infrastructure;
 

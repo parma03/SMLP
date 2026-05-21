@@ -6,7 +6,7 @@ using Smlp.Base.ValueObjects;
 using Smlp.Shared.Common.Constants;
 using Smlp.Shared.Services.Authorization.Constants;
 
-namespace Smlp.InfrastructureCurrentUser;
+namespace Smlp.Infrastructure.CurrentUser;
 
 public class CurrentUserService : ICurrentUserService
 {
@@ -21,7 +21,8 @@ public class CurrentUserService : ICurrentUserService
     {
         get
         {
-            if (_httpContextAccessor.HttpContext is null) return null;
+            if (_httpContextAccessor.HttpContext is null)
+                return null;
             var subject = _httpContextAccessor.HttpContext.User.FindFirstValue(JwtClaimTypes.Subject)
                 ?? _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type.Contains(AuthorizationClaimTypes.NameIdentifier))?.Value;
             return string.IsNullOrWhiteSpace(subject) ? null : new Guid(subject);
@@ -32,7 +33,8 @@ public class CurrentUserService : ICurrentUserService
     {
         get
         {
-            if (_httpContextAccessor.HttpContext is null) return DefaultTextFor.SystemBackgroundJob;
+            if (_httpContextAccessor.HttpContext is null)
+                return DefaultTextFor.SystemBackgroundJob;
             return _httpContextAccessor.HttpContext.User.FindFirstValue(JwtClaimTypes.Email)
                 ?? _httpContextAccessor.HttpContext.User.FindFirst(x => x.Type.Contains(JwtClaimTypes.Email))?.Value
                 ?? DefaultTextFor.Unknown;
@@ -46,7 +48,8 @@ public class CurrentUserService : ICurrentUserService
     {
         get
         {
-            if (_httpContextAccessor.HttpContext is null) return null;
+            if (_httpContextAccessor.HttpContext is null)
+                return null;
             return _httpContextAccessor.HttpContext.User.FindFirstValue(AuthorizationClaimTypes.Role)
                 ?? _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Role);
         }
@@ -56,7 +59,8 @@ public class CurrentUserService : ICurrentUserService
     {
         get
         {
-            if (_httpContextAccessor.HttpContext is null) return DefaultTextFor.SystemBackgroundJob;
+            if (_httpContextAccessor.HttpContext is null)
+                return DefaultTextFor.SystemBackgroundJob;
             return _httpContextAccessor.HttpContext.User.FindFirstValue(JwtClaimTypes.ClientId) ?? DefaultTextFor.Unknown;
         }
     }
@@ -65,9 +69,11 @@ public class CurrentUserService : ICurrentUserService
     {
         get
         {
-            if (_httpContextAccessor.HttpContext is null) return DefaultTextFor.SystemBackgroundJob;
+            if (_httpContextAccessor.HttpContext is null)
+                return DefaultTextFor.SystemBackgroundJob;
             var ipAddress = _httpContextAccessor.HttpContext.Request.Headers[HttpHeaderName.IpAddress].FirstOrDefault();
-            if (!string.IsNullOrWhiteSpace(ipAddress)) return ipAddress;
+            if (!string.IsNullOrWhiteSpace(ipAddress))
+                return ipAddress;
             var remoteIp = _httpContextAccessor.HttpContext.Connection.RemoteIpAddress;
             return remoteIp?.ToString() ?? DefaultTextFor.Unknown;
         }
@@ -86,7 +92,8 @@ public class CurrentUserService : ICurrentUserService
     {
         get
         {
-            if (_httpContextAccessor.HttpContext is null) return new List<string>();
+            if (_httpContextAccessor.HttpContext is null)
+                return new List<string>();
             return _httpContextAccessor.HttpContext.User.FindAll(AuthorizationClaimTypes.Permission)
                 .Select(x => x.Value).ToList();
         }
