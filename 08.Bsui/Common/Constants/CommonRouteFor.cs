@@ -10,7 +10,6 @@ public static class CommonRouteFor
     public const string Dashboard = "/";
     public const string About = "/About";
     public const string Profile = "/Profile";
-    public const string MySession = "/MySession";
     public const string Login = "/Login";
 
     // CRM - Customer Management

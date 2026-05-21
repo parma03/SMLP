@@ -1,0 +1,258 @@
+﻿@attribute [Authorize]
+@page "/Transactions/{Id:guid}"
+
+
+<BrowserTabTitle>Detail Transaksi</BrowserTabTitle>
+<MudBreadcrumbs Items="_breadcrumbItems"></MudBreadcrumbs>
+<PageHeader Title="Detail Transaksi" Icon="@Icons.Material.Filled.ReceiptLong" />
+
+@if (_isLoading)
+{
+    <MudProgressLinear Indeterminate="true" Color="Color.Primary" Class="mb-4" />
+}
+
+@if (_transaction is not null)
+{
+    <MudGrid>
+        @* Left: Transaction Summary *@
+        <MudItem xs="12" md="4">
+            <MudPaper Class="pa-5 rounded-lg" Elevation="2" Style="border-top:4px solid #6F4E37;">
+                <div class="d-flex justify-space-between align-center mb-3">
+                    <MudText Typo="Typo.h6" Style="color:#6F4E37; font-weight:700;">
+                        <MudIcon Icon="@Icons.Material.Filled.Receipt" Class="mr-1" />
+                        Transaksi
+                    </MudText>
+                    <MudChip T="string" Size="Size.Small" Color="@GetStatusColor(_transaction.Status)">
+                        @GetStatusLabel(_transaction.Status)
+                    </MudChip>
+                </div>
+
+                <MudText Typo="Typo.body2" Style="font-family:monospace; font-size:0.95rem; color:#6F4E37; font-weight:700;" Class="mb-1">
+                    @_transaction.TransactionCode
+                </MudText>
+                <MudText Typo="Typo.caption" Color="Color.Secondary" Class="mb-3">
+                    @_transaction.TransactionDate.ToString("dd MMMM yyyy, HH:mm")
+                </MudText>
+
+                <MudDivider Class="my-3" />
+
+                @* Customer Info *@
+                <MudText Typo="Typo.caption" Color="Color.Secondary">Pelanggan</MudText>
+                <div class="d-flex align-center mt-1 mb-3">
+                    <MudAvatar Size="Size.Small" Style="background:#C8860A; color:white;" Class="mr-2">
+                        @(_transaction.CustomerName.FirstOrDefault())
+                    </MudAvatar>
+                    <div>
+                        <MudText Typo="Typo.body2" Style="font-weight:600;">@_transaction.CustomerName</MudText>
+                        <MudText Typo="Typo.caption" Color="Color.Secondary">@_transaction.CustomerMemberCode</MudText>
+                    </div>
+                </div>
+
+                <MudDivider Class="my-3" />
+
+                @* Points & Payment *@
+                <div class="d-flex justify-space-around mb-3">
+                    <div class="text-center">
+                        <MudText Typo="Typo.h5" Style="color:#C8860A; font-weight:700;">
+                            ⭐ @(_transaction.PointsEarned + _transaction.BonusPoints)
+                        </MudText>
+                        <MudText Typo="Typo.caption" Color="Color.Secondary">Total Poin</MudText>
+                        @if (_transaction.BonusPoints > 0)
+                        {
+                            <MudText Typo="Typo.caption" Style="color:#C8860A;">(+@_transaction.BonusPoints bonus)</MudText>
+                        }
+                    </div>
+                    <MudDivider Vertical="true" FlexItem="true" />
+                    <div class="text-center">
+                        <MudText Typo="Typo.caption" Color="Color.Secondary">Metode Bayar</MudText>
+                        <MudText Typo="Typo.body1" Style="font-weight:600;">@GetPaymentMethodLabel(_transaction.PaymentMethod)</MudText>
+                    </div>
+                </div>
+
+                <MudPaper Class="pa-3 rounded" Elevation="0" Style="background:#E8F5E9; border:1px solid #A5D6A7;">
+                    <MudText Typo="Typo.caption" Color="Color.Secondary">Total Belanja</MudText>
+                    <MudText Typo="Typo.h5" Style="color:#2E7D32; font-weight:700;">
+                        Rp @_transaction.TotalAmount.ToString("N0")
+                    </MudText>
+                </MudPaper>
+
+                @if (!string.IsNullOrEmpty(_transaction.Notes))
+                {
+                    <MudDivider Class="my-3" />
+                    <MudText Typo="Typo.caption" Color="Color.Secondary">Catatan</MudText>
+                    <MudText Typo="Typo.body2" Class="mt-1">@_transaction.Notes</MudText>
+                }
+
+                <MudDivider Class="my-3" />
+
+                @* Action Buttons *@
+                <div class="d-flex gap-2 flex-wrap">
+                    <MudButton Variant="Variant.Outlined" Color="Color.Primary" Size="Size.Small"
+                               StartIcon="@Icons.Material.Filled.Print"
+                               OnClick="PrintReceipt" FullWidth="true">
+                        Cetak Struk
+                    </MudButton>
+                    <AuthorizeView Roles="Admin,Owner">
+                        <Authorized>
+                            @if (_transaction.Status == TransactionStatus.Completed)
+                            {
+                                <MudButton Variant="Variant.Outlined" Color="Color.Error" Size="Size.Small"
+                                           StartIcon="@Icons.Material.Filled.Cancel"
+                                           OnClick="ConfirmCancelTransaction" FullWidth="true">
+                                    Batalkan Transaksi
+                                </MudButton>
+                            }
+                        </Authorized>
+                    </AuthorizeView>
+                    <MudButton Variant="Variant.Filled" Size="Size.Small"
+                               Style="background:#6F4E37; color:white;"
+                               StartIcon="@Icons.Material.Filled.Person"
+                               Href="@CommonRouteFor.CustomerDetail(_transaction.CustomerId)"
+                               FullWidth="true">
+                        Lihat Profil Pelanggan
+                    </MudButton>
+                </div>
+            </MudPaper>
+        </MudItem>
+
+        @* Right: Items Detail *@
+        <MudItem xs="12" md="8">
+            <MudPaper Class="pa-4 rounded-lg" Elevation="2">
+                <MudText Typo="Typo.subtitle1" Style="color:#6F4E37; font-weight:700;" Class="mb-3">
+                    🛒 Detail Item Belanja
+                </MudText>
+
+                @if (_transaction.Items.Any())
+                {
+                    <MudTable Items="@_transaction.Items" Dense="true" Hover="true" Elevation="0" Striped="true">
+                        <HeaderContent>
+                            <MudTh>Nama Produk</MudTh>
+                            <MudTh Style="text-align:center">Qty</MudTh>
+                            <MudTh Style="text-align:right">Harga Satuan</MudTh>
+                            <MudTh Style="text-align:right">Subtotal</MudTh>
+                        </HeaderContent>
+                        <RowTemplate>
+                            <MudTd>
+                                <MudText Typo="Typo.body2" Style="font-weight:500;">@context.ProductName</MudText>
+                            </MudTd>
+                            <MudTd Style="text-align:center">
+                                <MudChip T="string" Size="Size.Small" Color="Color.Default">x@context.Quantity</MudChip>
+                            </MudTd>
+                            <MudTd Style="text-align:right">
+                                <MudText Typo="Typo.body2">Rp @context.UnitPrice.ToString("N0")</MudText>
+                            </MudTd>
+                            <MudTd Style="text-align:right">
+                                <MudText Typo="Typo.body2" Style="color:#2E7D32; font-weight:600;">
+                                    Rp @context.Subtotal.ToString("N0")
+                                </MudText>
+                            </MudTd>
+                        </RowTemplate>
+                    </MudTable>
+
+                    @* Totals *@
+                    <MudDivider Class="mt-3 mb-2" />
+                    <div class="d-flex flex-column align-end gap-1 pa-2">
+                        <div class="d-flex justify-space-between" style="width:250px;">
+                            <MudText Typo="Typo.body2" Color="Color.Secondary">Subtotal</MudText>
+                            <MudText Typo="Typo.body2">Rp @_transaction.TotalAmount.ToString("N0")</MudText>
+                        </div>
+                        <div class="d-flex justify-space-between" style="width:250px;">
+                            <MudText Typo="Typo.body2" Color="Color.Secondary">Poin Diperoleh</MudText>
+                            <MudText Typo="Typo.body2" Style="color:#C8860A; font-weight:600;">⭐ +@_transaction.PointsEarned</MudText>
+                        </div>
+                        @if (_transaction.BonusPoints > 0)
+                        {
+                            <div class="d-flex justify-space-between" style="width:250px;">
+                                <MudText Typo="Typo.body2" Color="Color.Secondary">Bonus Poin</MudText>
+                                <MudText Typo="Typo.body2" Style="color:#C8860A; font-weight:600;">⭐ +@_transaction.BonusPoints</MudText>
+                            </div>
+                        }
+                        <MudDivider Style="width:250px;" />
+                        <div class="d-flex justify-space-between" style="width:250px;">
+                            <MudText Typo="Typo.subtitle2" Style="font-weight:700;">TOTAL</MudText>
+                            <MudText Typo="Typo.subtitle2" Style="color:#2E7D32; font-weight:700;">
+                                Rp @_transaction.TotalAmount.ToString("N0")
+                            </MudText>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <MudAlert Severity="Severity.Info">Tidak ada detail item untuk transaksi ini.</MudAlert>
+                }
+            </MudPaper>
+
+            @* Receipt Preview Panel *@
+            @if (_showReceipt)
+            {
+                <MudPaper Class="pa-4 rounded-lg mt-4" Elevation="2" id="receipt-area">
+                    <div style="max-width:300px; margin:0 auto; font-family:'Courier New', monospace; font-size:12px;">
+                        <div style="text-align:center; border-bottom:1px dashed #333; padding-bottom:8px; margin-bottom:8px;">
+                            <div style="font-size:16px; font-weight:bold;">☕ KOPI NUSANTARA</div>
+                            <div>Struk Pembelian</div>
+                            <div style="font-size:10px; color:#666;">@_transaction.TransactionDate.ToString("dd/MM/yyyy HH:mm")</div>
+                        </div>
+                        <div style="margin-bottom:8px;">
+                            <div>No: @_transaction.TransactionCode</div>
+                            <div>Pelanggan: @_transaction.CustomerName</div>
+                            <div>Member: @_transaction.CustomerMemberCode</div>
+                        </div>
+                        <div style="border-top:1px dashed #333; border-bottom:1px dashed #333; padding:6px 0; margin-bottom:8px;">
+                            @foreach (var item in _transaction.Items)
+                            {
+                                <div style="display:flex; justify-content:space-between;">
+                                    <span>@item.ProductName x@item.Quantity</span>
+                                    <span>@item.Subtotal.ToString("N0")</span>
+                                </div>
+                            }
+                        </div>
+                        <div style="display:flex; justify-content:space-between; font-weight:bold; margin-bottom:4px;">
+                            <span>TOTAL</span>
+                            <span>Rp @_transaction.TotalAmount.ToString("N0")</span>
+                        </div>
+                        <div style="text-align:center; margin-top:8px; font-size:10px; color:#666;">
+                            <div>Poin diperoleh: ⭐ +@(_transaction.PointsEarned + _transaction.BonusPoints)</div>
+                            <div style="margin-top:4px;">Terima kasih sudah berkunjung!</div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-center mt-3">
+                        <MudButton Variant="Variant.Outlined" Size="Size.Small" Color="Color.Default"
+                                   StartIcon="@Icons.Material.Filled.Print"
+                                   OnClick="DoPrint">Print</MudButton>
+                    </div>
+                </MudPaper>
+            }
+        </MudItem>
+    </MudGrid>
+}
+else if (!_isLoading)
+{
+    <MudAlert Severity="Severity.Warning">Transaksi tidak ditemukan.</MudAlert>
+}
+
+@* Cancel Confirmation Dialog *@
+<MudDialog @bind-IsVisible="_showCancelDialog" Options="new DialogOptions { MaxWidth = MaxWidth.ExtraSmall, FullWidth = true }">
+    <TitleContent>
+        <MudText Typo="Typo.h6" Color="Color.Error">
+            <MudIcon Icon="@Icons.Material.Filled.Warning" Class="mr-2" />
+            Batalkan Transaksi
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudText>
+            Apakah Anda yakin ingin membatalkan transaksi <strong>@(_transaction?.TransactionCode)</strong>?
+            Tindakan ini akan mengurangi poin pelanggan dan tidak dapat diurungkan.
+        </MudText>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="@(() => _showCancelDialog = false)" Variant="Variant.Outlined">Tidak</MudButton>
+        <MudButton Color="Color.Error" Variant="Variant.Filled" OnClick="CancelTransactionAsync"
+                   Disabled="_isCancelling">
+            @if (_isCancelling)
+            {
+                <MudProgressCircular Size="Size.Small" Indeterminate="true" Class="mr-2" />
+            }
+            Ya, Batalkan
+        </MudButton>
+    </DialogActions>
+</MudDialog>

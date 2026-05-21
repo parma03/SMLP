@@ -1,4 +1,7 @@
+@using Microsoft.AspNetCore.Components.Routing
+@using MudBlazor
 @using Smlp.Bsui.Common.Constants
+@using Smlp.Bsui.Common.Extensions
 
 <MudNavMenu>
     <AuthorizeView>
@@ -10,108 +13,128 @@
                 Dashboard
             </MudNavLink>
 
-            @* ========== CRM - PELANGGAN ========== *@
-            <MudNavGroup Icon="@Icons.Material.Filled.People"
-                         ExpandIcon="@Icons.Material.Filled.ExpandMore"
-                         Title="Manajemen Pelanggan"
-                         Expanded="false">
-                <MudNavLink Icon="@Icons.Material.Filled.PersonSearch"
-                            Match="NavLinkMatch.All"
-                            Href="@CommonRouteFor.Customers">
-                    Daftar Pelanggan
-                </MudNavLink>
-                <MudNavLink Icon="@Icons.Material.Filled.PersonAdd"
-                            Match="NavLinkMatch.All"
-                            Href="@CommonRouteFor.CustomerCreate">
-                    Tambah Pelanggan
-                </MudNavLink>
-            </MudNavGroup>
+            @* ========== CRM - PELANGGAN (Admin, Owner, Kasir) ========== *@
+            <AuthorizeView Roles="Admin,Owner,Kasir">
+                <Authorized>
+                    <MudNavGroup Icon="@Icons.Material.Filled.People"
+                                 ExpandIcon="@Icons.Material.Filled.ExpandMore"
+                                 Title="Manajemen Pelanggan"
+                                 Expanded="false">
+                        <MudNavLink Icon="@Icons.Material.Filled.PersonSearch"
+                                    Match="NavLinkMatch.All"
+                                    Href="@CommonRouteFor.Customers">
+                            Daftar Pelanggan
+                        </MudNavLink>
+                        <MudNavLink Icon="@Icons.Material.Filled.PersonAdd"
+                                    Match="NavLinkMatch.All"
+                                    Href="@CommonRouteFor.CustomerCreate">
+                            Tambah Pelanggan
+                        </MudNavLink>
+                    </MudNavGroup>
+                </Authorized>
+            </AuthorizeView>
 
-            @* ========== TRANSAKSI ========== *@
-            <MudNavGroup Icon="@Icons.Material.Filled.Receipt"
-                         ExpandIcon="@Icons.Material.Filled.ExpandMore"
-                         Title="Transaksi"
-                         Expanded="false">
-                <MudNavLink Icon="@Icons.Material.Filled.ReceiptLong"
-                            Match="NavLinkMatch.All"
-                            Href="@CommonRouteFor.Transactions">
-                    Riwayat Transaksi
-                </MudNavLink>
-                <MudNavLink Icon="@Icons.Material.Filled.AddCircle"
-                            Match="NavLinkMatch.All"
-                            Href="@CommonRouteFor.TransactionCreate">
-                    Input Transaksi
-                </MudNavLink>
-                <MudNavLink Icon="@Icons.Material.Filled.Tune"
-                            Match="NavLinkMatch.All"
-                            Href="@CommonRouteFor.PointAdjustments">
-                    Penyesuaian Poin
-                </MudNavLink>
-            </MudNavGroup>
+            @* ========== TRANSAKSI (Admin, Owner, Kasir) ========== *@
+            <AuthorizeView Roles="Admin,Owner,Kasir">
+                <Authorized>
+                    <MudNavGroup Icon="@Icons.Material.Filled.Receipt"
+                                 ExpandIcon="@Icons.Material.Filled.ExpandMore"
+                                 Title="Transaksi"
+                                 Expanded="false">
+                        <MudNavLink Icon="@Icons.Material.Filled.ReceiptLong"
+                                    Match="NavLinkMatch.All"
+                                    Href="@CommonRouteFor.Transactions">
+                            Riwayat Transaksi
+                        </MudNavLink>
+                        <MudNavLink Icon="@Icons.Material.Filled.AddCircle"
+                                    Match="NavLinkMatch.All"
+                                    Href="@CommonRouteFor.TransactionCreate">
+                            Input Transaksi
+                        </MudNavLink>
+                        <MudNavLink Icon="@Icons.Material.Filled.Tune"
+                                    Match="NavLinkMatch.All"
+                                    Href="@CommonRouteFor.PointAdjustments">
+                            Penyesuaian Poin
+                        </MudNavLink>
+                    </MudNavGroup>
+                </Authorized>
+            </AuthorizeView>
 
-            @* ========== REWARD ========== *@
-            <MudNavGroup Icon="@Icons.Material.Filled.CardGiftcard"
-                         ExpandIcon="@Icons.Material.Filled.ExpandMore"
-                         Title="Reward & Redeem"
-                         Expanded="false">
-                <MudNavLink Icon="@Icons.Material.Filled.Loyalty"
-                            Match="NavLinkMatch.All"
-                            Href="@CommonRouteFor.Rewards">
-                    Katalog Reward
-                </MudNavLink>
-                <MudNavLink Icon="@Icons.Material.Filled.Redeem"
-                            Match="NavLinkMatch.All"
-                            Href="@CommonRouteFor.RedeemHistories">
-                    Riwayat Penukaran
-                </MudNavLink>
-            </MudNavGroup>
+            @* ========== REWARD (Admin, Owner, Kasir) ========== *@
+            <AuthorizeView Roles="Admin,Owner,Kasir">
+                <Authorized>
+                    <MudNavGroup Icon="@Icons.Material.Filled.CardGiftcard"
+                                 ExpandIcon="@Icons.Material.Filled.ExpandMore"
+                                 Title="Reward & Redeem"
+                                 Expanded="false">
+                        <MudNavLink Icon="@Icons.Material.Filled.Loyalty"
+                                    Match="NavLinkMatch.All"
+                                    Href="@CommonRouteFor.Rewards">
+                            Katalog Reward
+                        </MudNavLink>
+                        <MudNavLink Icon="@Icons.Material.Filled.Redeem"
+                                    Match="NavLinkMatch.All"
+                                    Href="@CommonRouteFor.RedeemHistories">
+                            Riwayat Penukaran
+                        </MudNavLink>
+                    </MudNavGroup>
+                </Authorized>
+            </AuthorizeView>
 
-            @* ========== ANALYTICS ========== *@
-            <MudNavGroup Icon="@Icons.Material.Filled.Analytics"
-                         ExpandIcon="@Icons.Material.Filled.ExpandMore"
-                         Title="Analytics & Laporan"
-                         Expanded="false">
-                <MudNavLink Icon="@Icons.Material.Filled.Insights"
-                            Match="NavLinkMatch.All"
-                            Href="@CommonRouteFor.Analytics">
-                    Dashboard Analytics
-                </MudNavLink>
-                <MudNavLink Icon="@Icons.Material.Filled.Psychology"
-                            Match="NavLinkMatch.All"
-                            Href="@CommonRouteFor.CustomerInsights">
-                    Customer Insights
-                </MudNavLink>
-                <MudNavLink Icon="@Icons.Material.Filled.Stars"
-                            Match="NavLinkMatch.All"
-                            Href="@CommonRouteFor.LoyaltyAnalysis">
-                    Loyalty Analysis
-                </MudNavLink>
-                <MudNavLink Icon="@Icons.Material.Filled.Assessment"
-                            Match="NavLinkMatch.All"
-                            Href="@CommonRouteFor.Reports">
-                    Laporan
-                </MudNavLink>
-            </MudNavGroup>
-
-            @* ========== MASTER DATA ========== *@
-            <MudNavGroup Icon="@Icons.Material.Filled.Settings"
-                         ExpandIcon="@Icons.Material.Filled.ExpandMore"
-                         Title="Master Data"
-                         Expanded="false">
-                <MudNavLink Icon="@Icons.Material.Filled.Rule"
-                            Match="NavLinkMatch.All"
-                            Href="@CommonRouteFor.PointRules">
-                    Aturan Poin
-                </MudNavLink>
-                <MudNavLink Icon="@Icons.Material.Filled.WorkspacePremium"
-                            Match="NavLinkMatch.All"
-                            Href="@CommonRouteFor.TierRules">
-                    Aturan Tier
-                </MudNavLink>
-            </MudNavGroup>
-
-            @* ========== ADMINISTRATOR ========== *@
+            @* ========== ANALYTICS (Admin, Owner only) ========== *@
             <AuthorizeView Roles="Admin,Owner">
+                <Authorized>
+                    <MudNavGroup Icon="@Icons.Material.Filled.Analytics"
+                                 ExpandIcon="@Icons.Material.Filled.ExpandMore"
+                                 Title="Analytics & Laporan"
+                                 Expanded="false">
+                        <MudNavLink Icon="@Icons.Material.Filled.Insights"
+                                    Match="NavLinkMatch.All"
+                                    Href="@CommonRouteFor.Analytics">
+                            Dashboard Analytics
+                        </MudNavLink>
+                        <MudNavLink Icon="@Icons.Material.Filled.Psychology"
+                                    Match="NavLinkMatch.All"
+                                    Href="@CommonRouteFor.CustomerInsights">
+                            Customer Insights
+                        </MudNavLink>
+                        <MudNavLink Icon="@Icons.Material.Filled.Stars"
+                                    Match="NavLinkMatch.All"
+                                    Href="@CommonRouteFor.LoyaltyAnalysis">
+                            Loyalty Analysis
+                        </MudNavLink>
+                        <MudNavLink Icon="@Icons.Material.Filled.Assessment"
+                                    Match="NavLinkMatch.All"
+                                    Href="@CommonRouteFor.Reports">
+                            Laporan
+                        </MudNavLink>
+                    </MudNavGroup>
+                </Authorized>
+            </AuthorizeView>
+
+            @* ========== MASTER DATA (Admin, Owner) ========== *@
+            <AuthorizeView Roles="Admin,Owner">
+                <Authorized>
+                    <MudNavGroup Icon="@Icons.Material.Filled.Settings"
+                                 ExpandIcon="@Icons.Material.Filled.ExpandMore"
+                                 Title="Master Data"
+                                 Expanded="false">
+                        <MudNavLink Icon="@Icons.Material.Filled.Rule"
+                                    Match="NavLinkMatch.All"
+                                    Href="@CommonRouteFor.PointRules">
+                            Aturan Poin
+                        </MudNavLink>
+                        <MudNavLink Icon="@Icons.Material.Filled.WorkspacePremium"
+                                    Match="NavLinkMatch.All"
+                                    Href="@CommonRouteFor.TierRules">
+                            Aturan Tier
+                        </MudNavLink>
+                    </MudNavGroup>
+                </Authorized>
+            </AuthorizeView>
+
+            @* ========== ADMINISTRATOR (Admin only) ========== *@
+            <AuthorizeView Roles="Admin">
                 <Authorized>
                     <MudDivider Class="my-2" Style="background-color:rgba(255,255,255,0.15);" />
                     <MudNavLink Icon="@Icons.Material.Filled.AdminPanelSettings"
@@ -126,6 +149,19 @@
                     </MudNavLink>
                 </Authorized>
             </AuthorizeView>
+
+            @* ========== OWNER PANEL (Owner only) ========== *@
+            <AuthorizeView Roles="Owner">
+                <Authorized>
+                    <MudDivider Class="my-2" Style="background-color:rgba(255,255,255,0.15);" />
+                    <MudNavLink Icon="@Icons.Material.Filled.ManageSearch"
+                                Match="NavLinkMatch.All"
+                                Href="@CommonRouteFor.Audits">
+                        Audit Log
+                    </MudNavLink>
+                </Authorized>
+            </AuthorizeView>
+
         </Authorized>
     </AuthorizeView>
 

@@ -1,8 +1,4 @@
-﻿@using Smlp.Bsui.Services.AppInfo
-
-@inject IOptions<AppInfoOptions> _appInfoOptions
-
-@if (ChildContent is null)
+﻿@if (ChildContent is null)
 {
     <PageTitle>@_appInfoOptions.Value.FullName</PageTitle>
 }

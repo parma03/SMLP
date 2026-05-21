@@ -1,7 +1,6 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
-using Smlp.Bsui.Common.Extensions;
 
 namespace Smlp.Bsui.Layouts;
 

@@ -1,1 +1,14 @@
-﻿
+﻿@using MudBlazor
+@using Microsoft.Extensions.Options
+@using Smlp.Bsui.Services.AppInfo
+@using Smlp.Base.Customer.Enums
+@using Smlp.Base.Transaction.Enums
+@using Smlp.Base.Transaction.List
+@using Microsoft.AspNetCore.Authorization
+@using Smlp.Shared.Common.Constants
+@using Smlp.Bsui.Common.Components
+
+
+@inject IOptions<AppInfoOptions> _appInfoOptions
+@inject IDialogService _dialogService
+@inject ISnackbar _snackbar

@@ -1,8 +1,5 @@
-@using Smlp.Base.Customer.Enums
-
-@* Displays tier badge with appropriate color *@
 <MudTooltip Text="@GetTierDescription(Tier)">
-    <MudChip Size="@Size"
+    <MudChip T="string" Size="@Size"
              Style="@GetTierStyle(Tier)"
              Icon="@GetTierIcon(Tier)">
         @Tier.ToString()

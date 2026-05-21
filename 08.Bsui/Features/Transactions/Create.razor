@@ -1,5 +1,5 @@
 @attribute [Authorize(Roles = "Admin,Owner,Kasir")]
-@page "/TransactionCreate"
+@page "/Transactions/Create"
 
 <BrowserTabTitle>Input Transaksi</BrowserTabTitle>
 <MudBreadcrumbs Items="_breadcrumbItems"></MudBreadcrumbs>
@@ -133,7 +133,7 @@
                                               Placeholder="Nama produk..." />
                             </td>
                             <td>
-                                <MudNumericField @bind-Value="item.Price" Variant="Variant.Text" Dense="true"
+                                <MudNumericField @bind-Value="item.UnitPrice" Variant="Variant.Text" Dense="true"
                                                  Format="N0" Min="0" HideSpinButtons="true" />
                             </td>
                             <td style="text-align:center">
@@ -142,7 +142,7 @@
                             </td>
                             <td style="text-align:right">
                                 <MudText Style="color:#2E7D32; font-weight:600;">
-                                    Rp @((item.Price * item.Quantity).ToString("N0"))
+                                    Rp @((item.UnitPrice * item.Quantity).ToString("N0"))
                                 </MudText>
                             </td>
                             <td>

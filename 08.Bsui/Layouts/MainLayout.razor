@@ -1,10 +1,11 @@
-@using Darnton.Blazor.DeviceInterop.Geolocation
+@using Microsoft.AspNetCore.Components.Authorization
 @using Smlp.Bsui.Common.Pages
 @using Smlp.Bsui.Common.Pages.Errors
 @using Smlp.Bsui.Services.AppInfo
 @using Smlp.Bsui.Services.Authentication
 @using Smlp.Bsui.Services.Authentication.Components
 @using Smlp.Bsui.Services.Geolocation
+@using Smlp.Bsui.Services.Geolocation.Abstractions
 @using Smlp.Bsui.Services.Geolocation.Components
 @using Smlp.Bsui.Services.HealthCheck.Components
 @using Smlp.Bsui.Services.Telemetry
@@ -76,7 +77,7 @@
                             {
                                 if (!_geolocationResult.IsSuccess)
                                 {
-                                    <GeolocationError ErrorMessage="@_geolocationResult.Error.Message" />
+                                    <GeolocationError ErrorMessage="@_geolocationResult.ErrorMessage" />
                                 }
                                 else
                                 {

@@ -1,6 +1,3 @@
-@using Smlp.Base.Transaction.Enums
-@using Smlp.Base.Transaction.List
-
 <MudSelect T="PaymentMethod?" Label="@Label" @bind-Value="Value" Variant="Variant.Outlined" Clearable="true">
     <MudSelectItem T="PaymentMethod?" Value="null">-- Semua Metode --</MudSelectItem>
     @foreach (var method in PaymentMethodList.All)

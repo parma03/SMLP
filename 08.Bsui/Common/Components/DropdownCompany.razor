@@ -1,9 +1,0 @@
-﻿@using Smlp.Shared.Masters.Queries
-@using Syncfusion.Blazor.DropDowns
-
-<SfDropDownList ID="ddlCompany" TValue="string" TItem="GetCompanyQueryResponse"
-                AllowFiltering="true" FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains"
-                DataSource="@_companies" @bind-Value="@CompanyValue">
-    <DropDownListFieldSettings Text="Name" Value="Code" />
-    <DropDownListEvents TItem="GetCompanyQueryResponse" TValue="string" ValueChange="OnChangeAsync" />
-</SfDropDownList>

@@ -1,9 +1,5 @@
-/*
-* Sistem Manajemen Loyalitas Pelanggan (SMLP)
-*/
-
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using Microsoft.IdentityModel.JsonWebTokens;
 using Smlp.Bsui.Services.Authentication.Constants;
 using Smlp.Shared.Services.Authorization.Constants;
 
@@ -51,7 +47,7 @@ public static class ClaimsPrincipalExtensions
     public static IEnumerable<string> GetRoles(this ClaimsPrincipal user)
     {
         return user.Claims
-            .Where(x => x.Type == ClaimTypes.Role || x.Type == "role" || x.Type == AuthorizationClaimTypes.Role)
+            .Where(x => x.Type is ClaimTypes.Role or "role" or AuthorizationClaimTypes.Role)
             .Select(x => x.Value);
     }
 

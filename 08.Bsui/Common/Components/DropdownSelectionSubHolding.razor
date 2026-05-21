@@ -1,8 +1,0 @@
-﻿@using Smlp.Shared.Common.Responses
-@using Smlp.Shared.Masters.Queries
-@using Syncfusion.Blazor.DropDowns
-
-<SfDropDownList ID="ddlSelectionCompanyGroup" TValue="int" TItem="GetCompanyGroupQueryResponse" DataSource="@_companiesGroup" @bind-Value="@CompanyGroupValue">
-    <DropDownListFieldSettings Text="Name" Value="Id" />
-    <DropDownListEvents TItem="GetCompanyGroupQueryResponse" TValue="int" ValueChange="OnChangeAsync" />
-</SfDropDownList>
