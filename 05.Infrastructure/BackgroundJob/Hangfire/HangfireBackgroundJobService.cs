@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+using Hangfire;
+using System.Linq.Expressions;
 using Microsoft.Extensions.Logging;
 using Smlp.Application.Services.BackgroundJob;
 
@@ -77,7 +78,7 @@ public class HangfireBackgroundJobService : IBackgroundJobService
 
         try
         {
-            HangfireRecurringJob.AddOrUpdate(recurringJobId, methodCall, cronExpression, timeZone);
+            HangfireRecurringJob.AddOrUpdate(recurringJobId, methodCall, cronExpression, new RecurringJobOptions { TimeZone = timeZone });
         }
         catch (Exception exception)
         {
@@ -98,7 +99,7 @@ public class HangfireBackgroundJobService : IBackgroundJobService
 
         try
         {
-            HangfireRecurringJob.AddOrUpdate(recurringJobId, methodCall, cronExpression, timeZone);
+            HangfireRecurringJob.AddOrUpdate(recurringJobId, methodCall, cronExpression, new RecurringJobOptions { TimeZone = timeZone });
         }
         catch (Exception exception)
         {

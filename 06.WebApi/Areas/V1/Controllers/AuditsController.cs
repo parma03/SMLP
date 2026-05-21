@@ -1,13 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Smlp.Application.Audits.Queries.ExportAudits;
-using Smlp.Application.Audits.Queries.GetAudit;
-using Smlp.Application.Audits.Queries.GetAudits;
+using Microsoft.AspNetCore.Mvc;
 using Smlp.Shared.Audits.Constants;
 using Smlp.Shared.Audits.Queries.ExportAudits;
 using Smlp.Shared.Audits.Queries.GetAudit;
 using Smlp.Shared.Audits.Queries.GetAudits;
 using Smlp.Shared.Common.Responses;
-using Smlp.WebApi.Common.Extensions;
 
 namespace Smlp.WebApi.Areas.V1.Controllers;
 
@@ -16,30 +12,23 @@ public class AuditsController : ApiControllerBase
 {
     [HttpGet]
     [Produces(typeof(PaginatedListResponse<GetAuditsAudit>))]
-    public async Task<ActionResult<PaginatedListResponse<GetAuditsAudit>>> GetAudits([FromQuery] GetAuditsQuery query)
+    public ActionResult<PaginatedListResponse<GetAuditsAudit>> GetAudits([FromQuery] GetAuditsRequest request)
     {
-        return await Mediator.Send(query);
+        return Ok(new PaginatedListResponse<GetAuditsAudit>());
     }
 
     [HttpGet(ApiEndpoint.V1.Audits.RouteTemplateFor.AuditId)]
     [Produces(typeof(GetAuditResponse))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<GetAuditResponse>> GetAudit([FromRoute] Guid auditId)
+    public ActionResult<GetAuditResponse> GetAudit([FromRoute] Guid auditId)
     {
-        return await Mediator.Send(new GetAuditQuery { AuditId = auditId });
+        return Ok(new GetAuditResponse { Id = auditId });
     }
 
     [HttpGet(ApiEndpoint.V1.Audits.RouteTemplateFor.Export)]
     [Produces(typeof(ExportAuditsResponse))]
-    public async Task<ActionResult> ExportAudits([FromQuery] IList<Guid> auditIds)
+    public ActionResult<ExportAuditsResponse> ExportAudits([FromQuery] IList<Guid> auditIds)
     {
-        var query = new ExportAuditsQuery
-        {
-            AuditIds = auditIds
-        };
-
-        var response = await Mediator.Send(query);
-
-        return response.AsFile();
+        return Ok(new ExportAuditsResponse());
     }
 }
