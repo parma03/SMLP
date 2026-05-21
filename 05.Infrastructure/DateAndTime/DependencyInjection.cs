@@ -1,7 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using Smlp.Application.Services.DateAndTime;
 
-namespace Smlp.InfrastructureDateAndTime;
+namespace Smlp.Infrastructure.DateAndTime;
 
 public static class DependencyInjection
 {

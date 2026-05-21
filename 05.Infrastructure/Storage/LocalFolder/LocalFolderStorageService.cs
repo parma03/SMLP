@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Smlp.Application.Services.Storage;
-using Smlp.Base.Document.Enums;
+using Smlp.Base.Selections.Enums;
 
 namespace Smlp.Infrastructure.Storage.LocalFolder;
 

@@ -1,7 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using Smlp.Application.Services.Otp;
 
-namespace Smlp.InfrastructureOtp;
+namespace Smlp.Infrastructure.Otp;
 
 public static class DependencyInjection
 {

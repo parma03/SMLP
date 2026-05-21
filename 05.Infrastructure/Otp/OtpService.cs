@@ -1,11 +1,11 @@
-﻿using OtpNet;
+using OtpNet;
 using Smlp.Application.Services.Otp;
 using Smlp.Application.Services.Otp.Models.CreateOtp;
 using Smlp.Shared.Common.Constants;
 using QRCoder;
 using static QRCoder.PayloadGenerator;
 
-namespace Smlp.InfrastructureOtp;
+namespace Smlp.Infrastructure.Otp;
 
 public class OtpService : IOtpService
 {

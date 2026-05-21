@@ -1,4 +1,4 @@
-﻿using HealthChecks.UI.Client;
+using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,8 +7,6 @@ using Smlp.Infrastructure.AppInfo;
 using Smlp.Infrastructure.HealthCheck.Storages.SqlServer;
 using Smlp.Infrastructure.Logging;
 using Smlp.Shared.Common.Constants;
-using Smlp.Infrastructure.Vault;
-using Smlp.Infrastructure.Persistence.VaultSqlServer;
 
 namespace Smlp.Infrastructure.HealthCheck;
 
@@ -28,21 +26,6 @@ public static class DependencyInjection
                 case HealthCheckStorageProvider.SqlServer:
                     var sqlServerOptions = configuration.GetSection(SqlServerOptions.SectionKey).Get<SqlServerOptions>();
                     healthChecksUIBuilder.AddSqlServerStorage(sqlServerOptions);
-                    break;
-
-                case HealthCheckStorageProvider.VaultSqlServer:
-                    var vaultOptions = configuration.GetSection(VaultSqlServerOptions.SectionKey).Get<VaultSqlServerOptions>();
-                    var vaultClient = ClientConnect.UseAppRoleAuth(vaultOptions.URL, vaultOptions.RoleID, vaultOptions.SecretID, vaultOptions.Namespace);
-                    var vaultSqlServerSecret = StaticSecret.GetSecret(vaultClient, vaultOptions.SecretPath, vaultOptions.MountPoint);
-                    var vaultSqlServerOptions = new SqlServerOptions
-                    {
-                        ConnectionString = $"Server={vaultSqlServerSecret.Data.Data["Server"]};" +
-                                    $"Database={vaultSqlServerSecret.Data.Data["Database"]};" +
-                                    $"user id={vaultSqlServerSecret.Data.Data["id"]};" +
-                                    $"pwd={vaultSqlServerSecret.Data.Data["pwd"]};" +
-                                    $"Trusted_Connection=False;MultipleActiveResultSets=true;Encrypt=False;TrustServerCertificate=Yes;"
-                    };
-                    healthChecksUIBuilder.AddSqlServerStorage(vaultSqlServerOptions);
                     break;
 
                 default:

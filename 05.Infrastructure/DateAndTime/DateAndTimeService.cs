@@ -1,6 +1,6 @@
-﻿using Smlp.Application.Services.DateAndTime;
+using Smlp.Application.Services.DateAndTime;
 
-namespace Smlp.InfrastructureDateAndTime;
+namespace Smlp.Infrastructure.DateAndTime;
 
 public class DateAndTimeService : IDateAndTimeService
 {
