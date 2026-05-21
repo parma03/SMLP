@@ -1,0 +1,13 @@
+@using MudBlazor
+@using Smlp.Client.Services.BackEnd.Transactions
+@using Microsoft.AspNetCore.Authorization
+@using Smlp.Bsui.Common.Constants
+@using Smlp.Bsui.Common.Components
+@using Smlp.Shared.Reports.Queries.GetTransactionReport
+@using Smlp.Shared.Reports.Queries.GetRedeemReport
+@using Smlp.Shared.Reports.Queries.GetPointReport
+
+@inject NavigationManager _navigationManager
+@inject ISnackbar _snackbar
+
+@inject ReportService _reportService

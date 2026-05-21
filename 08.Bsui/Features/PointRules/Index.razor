@@ -4,25 +4,128 @@
 <BrowserTabTitle>Aturan Poin</BrowserTabTitle>
 <PageHeader Title="Aturan Poin" Icon="@Icons.Material.Filled.Rule" />
 
+@if (_showForm)
+{
+    <MudPaper Class="pa-4 rounded-lg mb-4" Elevation="2" Style="border-left:4px solid #6F4E37;">
+        <MudText Typo="Typo.subtitle1" Class="mb-4" Style="color:#6F4E37; font-weight:700;">
+            @(_editingId.HasValue ? "✏️ Edit Aturan Poin" : "➕ Tambah Aturan Poin Baru")
+        </MudText>
+        <MudGrid>
+            <MudItem xs="12" sm="6">
+                <MudTextField @bind-Value="_form.Name" Label="Nama Aturan" Variant="Variant.Outlined"
+                              Required="true" Placeholder="Contoh: Aturan Dasar Rp10.000" Class="mb-3" />
+            </MudItem>
+            <MudItem xs="12" sm="3">
+                <MudNumericField @bind-Value="_form.SpendAmount" Label="Belanja (Rp)" Variant="Variant.Outlined"
+                                 Min="1000" Format="N0" Class="mb-3"
+                                 Adornment="Adornment.Start" AdornmentText="Rp" />
+            </MudItem>
+            <MudItem xs="12" sm="3">
+                <MudNumericField @bind-Value="_form.PointEarned" Label="Poin Diperoleh" Variant="Variant.Outlined"
+                                 Min="1" Class="mb-3"
+                                 Adornment="Adornment.Start" AdornmentText="⭐" />
+            </MudItem>
+            <MudItem xs="12" sm="3">
+                <MudNumericField @bind-Value="_formBonusMultiplier" Label="Bonus Multiplier (Opsional)"
+                                 Variant="Variant.Outlined" Min="1.0m" Max="10.0m" Step="0.5m" Class="mb-3"
+                                 Placeholder="Contoh: 1.5 untuk 1.5×" />
+            </MudItem>
+            <MudItem xs="12" sm="3">
+                <MudDatePicker @bind-Date="_formValidFrom" Label="Berlaku Dari" Variant="Variant.Outlined" Class="mb-3" />
+            </MudItem>
+            <MudItem xs="12" sm="3">
+                <MudDatePicker @bind-Date="_formValidUntil" Label="Berlaku Sampai" Variant="Variant.Outlined" Class="mb-3" />
+            </MudItem>
+            <MudItem xs="12" sm="3" Class="d-flex align-center">
+                <MudSwitch @bind-Value="_form.IsActive" Label="Aktif" Color="Color.Success" />
+            </MudItem>
+            <MudItem xs="12">
+                <MudTextField @bind-Value="_form.Notes" Label="Catatan (Opsional)" Variant="Variant.Outlined"
+                              Lines="2" Class="mb-3" />
+            </MudItem>
+        </MudGrid>
+        <div class="d-flex gap-2">
+            <MudButton Variant="Variant.Filled" Style="background:#6F4E37; color:white;"
+                       StartIcon="@Icons.Material.Filled.Save" OnClick="SaveRuleAsync" Disabled="@_isSaving">
+                @if (_isSaving) { <MudProgressCircular Size="Size.Small" Indeterminate="true" Class="mr-2" /> }
+                Simpan
+            </MudButton>
+            <MudButton Variant="Variant.Outlined" Color="Color.Default" OnClick="CancelForm">Batal</MudButton>
+        </div>
+    </MudPaper>
+}
+
 <MudGrid>
-    <MudItem xs="12" md="7">
+    <MudItem xs="12" md="8">
         <MudPaper Class="pa-4 rounded-lg" Elevation="2">
             <div class="d-flex justify-space-between align-center mb-3">
-                <MudText Typo="Typo.subtitle1" Style="color:#6F4E37; font-weight:700;">Aturan Poin Aktif</MudText>
-                <MudButton Variant="Variant.Filled" Style="background:#6F4E37; color:white;"
-                           Size="Size.Small" StartIcon="@Icons.Material.Filled.Add">
-                    Tambah Aturan
-                </MudButton>
+                <MudText Typo="Typo.subtitle1" Style="color:#6F4E37; font-weight:700;">Daftar Aturan Poin</MudText>
+                @if (!_showForm)
+                {
+                    <MudButton Variant="Variant.Filled" Style="background:#6F4E37; color:white;"
+                               Size="Size.Small" StartIcon="@Icons.Material.Filled.Add"
+                               OnClick="ShowAddForm">
+                        Tambah Aturan
+                    </MudButton>
+                }
             </div>
-            <MudTable Dense="true" Hover="true" Elevation="0" Items="@_empty">
+            <MudTable Dense="true" Hover="true" Elevation="0" Items="@_rules" Loading="@_loading">
                 <HeaderContent>
                     <MudTh>Nama Aturan</MudTh>
-                    <MudTh Style="text-align:right">Belanja (Rp)</MudTh>
+                    <MudTh Style="text-align:right">Belanja</MudTh>
                     <MudTh Style="text-align:right">Poin</MudTh>
+                    <MudTh Style="text-align:right">Multiplier</MudTh>
                     <MudTh>Berlaku</MudTh>
                     <MudTh>Status</MudTh>
                     <MudTh>Aksi</MudTh>
                 </HeaderContent>
+                <RowTemplate>
+                    <MudTd>
+                        <MudText Typo="Typo.body2" Style="font-weight:600;">@context.Name</MudText>
+                        @if (!string.IsNullOrEmpty(context.Notes))
+                        {
+                            <MudText Typo="Typo.caption" Color="Color.Secondary">@context.Notes</MudText>
+                        }
+                    </MudTd>
+                    <MudTd Style="text-align:right">
+                        <MudText Typo="Typo.body2" Style="color:#2E7D32;">Rp @context.SpendAmount.ToString("N0")</MudText>
+                    </MudTd>
+                    <MudTd Style="text-align:right">
+                        <MudText Typo="Typo.body2" Style="color:#C8860A; font-weight:700;">⭐ @context.PointEarned</MudText>
+                    </MudTd>
+                    <MudTd Style="text-align:right">
+                        @if (context.BonusMultiplier.HasValue && context.BonusMultiplier > 1)
+                        {
+                            <MudChip T="string" Size="Size.Small" Color="Color.Warning">@context.BonusMultiplier×</MudChip>
+                        }
+                        else
+                        {
+                            <MudText Typo="Typo.caption" Color="Color.Secondary">1× (dasar)</MudText>
+                        }
+                    </MudTd>
+                    <MudTd>
+                        <MudText Typo="Typo.caption">
+                            @(context.ValidFrom?.ToString("dd/MM/yy") ?? "∞")
+                            —
+                            @(context.ValidUntil?.ToString("dd/MM/yy") ?? "∞")
+                        </MudText>
+                    </MudTd>
+                    <MudTd>
+                        <MudChip T="string" Size="Size.Small" Color="@(context.IsActive? Color.Success: Color.Default)">
+                            @(context.IsActive ? "Aktif" : "Nonaktif")
+                        </MudChip>
+                    </MudTd>
+                    <MudTd>
+                        <MudTooltip Text="Edit">
+                            <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" Color="Color.Primary"
+                                           OnClick="@(() => ShowEditForm(context))" />
+                        </MudTooltip>
+                        <MudTooltip Text="Hapus">
+                            <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" Color="Color.Error"
+                                           OnClick="@(() => DeleteAsync(context))" />
+                        </MudTooltip>
+                    </MudTd>
+                </RowTemplate>
                 <NoRecordsContent>
                     <MudText Class="pa-4 text-center" Color="Color.Secondary">
                         Belum ada aturan poin. Klik "Tambah Aturan" untuk memulai.
@@ -31,28 +134,35 @@
             </MudTable>
         </MudPaper>
     </MudItem>
-    <MudItem xs="12" md="5">
+    <MudItem xs="12" md="4">
         <MudPaper Class="pa-4 rounded-lg" Elevation="2">
             <MudText Typo="Typo.subtitle1" Class="mb-3" Style="color:#6F4E37; font-weight:700;">
-                💡 Cara Kerja Poin
+                💡 Panduan Aturan Poin
             </MudText>
-            <MudList Dense="true">
+            <MudAlert Severity="Severity.Info" Dense="true" Class="mb-3">
+                Setiap Rp yang ditentukan = jumlah poin yang diperoleh pelanggan.
+            </MudAlert>
+            <MudList T="string" Dense="true">
                 <MudListItem Icon="@Icons.Material.Filled.Circle">
-                    Sistem menghitung poin berdasarkan total belanja
+                    <MudText Typo="Typo.body2"><strong>Aturan Dasar:</strong> Rp 10.000 = 1 poin</MudText>
                 </MudListItem>
                 <MudListItem Icon="@Icons.Material.Filled.Circle">
-                    Contoh: Rp 10.000 = 1 poin
+                    <MudText Typo="Typo.body2"><strong>Multiplier:</strong> berlaku untuk tier tertentu</MudText>
                 </MudListItem>
                 <MudListItem Icon="@Icons.Material.Filled.Circle">
-                    Member Gold mendapat 1.5× multiplier
+                    <MudText Typo="Typo.body2"><strong>Gold:</strong> 1.5× poin dari aturan dasar</MudText>
                 </MudListItem>
                 <MudListItem Icon="@Icons.Material.Filled.Circle">
-                    Member Platinum mendapat 2× multiplier
+                    <MudText Typo="Typo.body2"><strong>Platinum:</strong> 2× poin dari aturan dasar</MudText>
                 </MudListItem>
                 <MudListItem Icon="@Icons.Material.Filled.Circle">
-                    Aturan bonus bisa ditambahkan untuk event khusus
+                    <MudText Typo="Typo.body2"><strong>Event Khusus:</strong> tambahkan aturan bonus sementara</MudText>
                 </MudListItem>
             </MudList>
+            <MudDivider Class="my-3" />
+            <MudText Typo="Typo.caption" Color="Color.Secondary">
+                Tips: Aturan dengan tanggal berlaku akan aktif secara otomatis pada periode yang ditentukan.
+            </MudText>
         </MudPaper>
     </MudItem>
 </MudGrid>

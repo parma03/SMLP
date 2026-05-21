@@ -1,0 +1,13 @@
+@using MudBlazor
+@using Smlp.Client.Services.BackEnd.Masters
+@using Microsoft.AspNetCore.Authorization
+@using Smlp.Bsui.Common.Constants
+@using Smlp.Bsui.Common.Components
+@using Smlp.Shared.Master.PointRules.Queries
+@using Smlp.Shared.Master.PointRules.Commands.Create
+@using Smlp.Shared.Master.PointRules.Commands.Update
+
+@inject NavigationManager _navigationManager
+@inject ISnackbar _snackbar
+
+@inject PointRuleService _pointRuleService

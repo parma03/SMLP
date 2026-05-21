@@ -4,122 +4,201 @@
 <BrowserTabTitle>Dashboard Analytics</BrowserTabTitle>
 <PageHeader Title="Dashboard Analytics" Icon="@Icons.Material.Filled.Analytics" />
 
+@if (_isLoading)
+{
+    <MudProgressLinear Indeterminate="true" Color="Color.Primary" Class="mb-4" />
+}
+
 <MudGrid Class="mb-4">
-    @* Date Range Filter *@
-    <MudItem xs="12" Class="d-flex align-center gap-3">
-        <MudDateRangePicker @bind-DateRange="_dateRange" Label="Periode" Variant="Variant.Outlined" Class="mr-2" Style="max-width:320px;" />
-        <MudSelect @bind-Value="_selectedPeriod" Label="Periode Cepat" Variant="Variant.Outlined" Style="max-width:200px;">
+    <MudItem xs="12" Class="d-flex align-center gap-3 flex-wrap">
+        <MudSelect @bind-Value="_selectedPeriod" Label="Periode Cepat" Variant="Variant.Outlined"
+                   Style="max-width:220px;" ValueChanged="@((string v) => OnPeriodChanged(v))">
             <MudSelectItem Value="@("7d")">7 Hari Terakhir</MudSelectItem>
             <MudSelectItem Value="@("30d")">30 Hari Terakhir</MudSelectItem>
             <MudSelectItem Value="@("90d")">3 Bulan Terakhir</MudSelectItem>
             <MudSelectItem Value="@("ytd")">Tahun Ini</MudSelectItem>
         </MudSelect>
-        <MudButton Variant="Variant.Filled" Style="background:#6F4E37; color:white;" StartIcon="@Icons.Material.Filled.Refresh">
+        <MudButton Variant="Variant.Filled" Style="background:#6F4E37; color:white;"
+                   StartIcon="@Icons.Material.Filled.Refresh" OnClick="LoadAnalyticsData">
             Perbarui
         </MudButton>
     </MudItem>
 </MudGrid>
 
-@* Revenue & Points KPI *@
+@* KPI Cards *@
 <MudGrid Class="mb-4">
     <MudItem xs="12" sm="6" md="3">
-        <MudPaper Class="pa-4 rounded-lg" Elevation="2">
+        <MudPaper Class="pa-4 rounded-lg" Elevation="2" Style="border-top:3px solid #2E7D32;">
             <MudText Typo="Typo.caption" Color="Color.Secondary">Total Revenue</MudText>
-            <MudText Typo="Typo.h5" Style="color:#2E7D32; font-weight:700;">Rp —</MudText>
-            <MudText Typo="Typo.caption"><MudIcon Icon="@Icons.Material.Filled.TrendingUp" Size="Size.Small" Color="Color.Success" /> vs periode lalu</MudText>
+            <MudText Typo="Typo.h5" Style="color:#2E7D32; font-weight:700;">Rp @(_revenueChart?.TotalRevenue.ToString("N0") ?? "—")</MudText>
+            <MudText Typo="Typo.caption" Color="Color.Secondary">@SelectedPeriodLabel</MudText>
         </MudPaper>
     </MudItem>
     <MudItem xs="12" sm="6" md="3">
-        <MudPaper Class="pa-4 rounded-lg" Elevation="2">
+        <MudPaper Class="pa-4 rounded-lg" Elevation="2" Style="border-top:3px solid #0277BD;">
             <MudText Typo="Typo.caption" Color="Color.Secondary">Rata-rata Transaksi</MudText>
-            <MudText Typo="Typo.h5" Style="color:#0277BD; font-weight:700;">Rp —</MudText>
-            <MudText Typo="Typo.caption" Color="Color.Secondary">per pelanggan</MudText>
+            <MudText Typo="Typo.h5" Style="color:#0277BD; font-weight:700;">Rp @(_revenueChart?.AverageTransactionValue.ToString("N0") ?? "—")</MudText>
+            <MudText Typo="Typo.caption" Color="Color.Secondary">per transaksi</MudText>
         </MudPaper>
     </MudItem>
     <MudItem xs="12" sm="6" md="3">
-        <MudPaper Class="pa-4 rounded-lg" Elevation="2">
+        <MudPaper Class="pa-4 rounded-lg" Elevation="2" Style="border-top:3px solid #C8860A;">
             <MudText Typo="Typo.caption" Color="Color.Secondary">Poin Diterbitkan</MudText>
-            <MudText Typo="Typo.h5" Style="color:#C8860A; font-weight:700;">— poin</MudText>
+            <MudText Typo="Typo.h5" Style="color:#C8860A; font-weight:700;">@(_revenueChart?.TotalPointsIssued.ToString("N0") ?? "—") poin</MudText>
             <MudText Typo="Typo.caption" Color="Color.Secondary">periode ini</MudText>
         </MudPaper>
     </MudItem>
     <MudItem xs="12" sm="6" md="3">
-        <MudPaper Class="pa-4 rounded-lg" Elevation="2">
-            <MudText Typo="Typo.caption" Color="Color.Secondary">Redemption Rate</MudText>
-            <MudText Typo="Typo.h5" Style="color:#6A1B9A; font-weight:700;">— %</MudText>
-            <MudText Typo="Typo.caption" Color="Color.Secondary">poin ditukar / diterbitkan</MudText>
+        <MudPaper Class="pa-4 rounded-lg" Elevation="2" Style="border-top:3px solid #6A1B9A;">
+            <MudText Typo="Typo.caption" Color="Color.Secondary">Total Transaksi</MudText>
+            <MudText Typo="Typo.h5" Style="color:#6A1B9A; font-weight:700;">@(_revenueChart?.TotalTransactions.ToString("N0") ?? "—")</MudText>
+            <MudText Typo="Typo.caption" Color="Color.Secondary">transaksi selesai</MudText>
         </MudPaper>
     </MudItem>
 </MudGrid>
 
-@* Charts Row *@
+@* Revenue Trend + Payment Breakdown *@
 <MudGrid Class="mb-4">
     <MudItem xs="12" md="8">
         <MudPaper Class="pa-4 rounded-lg" Elevation="2">
             <MudText Typo="Typo.subtitle1" Class="mb-3" Style="color:#6F4E37; font-weight:700;">
-                📈 Tren Revenue & Transaksi
+                📈 Tren Revenue Harian
             </MudText>
-            <div style="height:280px; display:flex; align-items:center; justify-content:center; background:#FFF8F0; border-radius:8px;">
-                <div class="text-center">
-                    <MudIcon Icon="@Icons.Material.Filled.BarChart" Style="font-size:4rem; color:#D7CCC8;" />
-                    <MudText Color="Color.Secondary">Grafik tren revenue</MudText>
-                    <MudText Typo="Typo.caption" Color="Color.Secondary">Terhubung ke data transaksi setelah service tersedia</MudText>
+            @if (_revenueChart?.DataPoints?.Any() == true)
+            {
+                <MudTable Dense="true" Hover="true" Elevation="0" Items="@_revenueChart.DataPoints">
+                    <HeaderContent>
+                        <MudTh>Tanggal</MudTh>
+                        <MudTh Style="text-align:right">Revenue</MudTh>
+                        <MudTh Style="text-align:right">Transaksi</MudTh>
+                        <MudTh Style="text-align:right">Poin</MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd><MudText Typo="Typo.caption">@context.Date.ToString("dd MMM yyyy")</MudText></MudTd>
+                        <MudTd Style="text-align:right; color:#2E7D32; font-weight:600;">Rp @context.Revenue.ToString("N0")</MudTd>
+                        <MudTd Style="text-align:right">@context.TransactionCount</MudTd>
+                        <MudTd Style="text-align:right; color:#C8860A;">⭐ @context.PointsIssued</MudTd>
+                    </RowTemplate>
+                    <NoRecordsContent>
+                        <MudText Class="pa-4 text-center" Color="Color.Secondary">Tidak ada data pada periode ini</MudText>
+                    </NoRecordsContent>
+                    <PagerContent>
+                        <MudTablePager PageSizeOptions="new int[]{7, 14, 30}" />
+                    </PagerContent>
+                </MudTable>
+            }
+            else
+            {
+                <div style="height:220px; display:flex; align-items:center; justify-content:center; background:#FFF8F0; border-radius:8px;">
+                    <div class="text-center">
+                        <MudIcon Icon="@Icons.Material.Filled.BarChart" Style="font-size:4rem; color:#D7CCC8;" />
+                        <MudText Color="Color.Secondary">Data akan muncul setelah transaksi terkumpul</MudText>
+                    </div>
                 </div>
-            </div>
+            }
         </MudPaper>
     </MudItem>
     <MudItem xs="12" md="4">
         <MudPaper Class="pa-4 rounded-lg" Elevation="2">
             <MudText Typo="Typo.subtitle1" Class="mb-3" Style="color:#6F4E37; font-weight:700;">
-                🥧 Distribusi Metode Bayar
+                🥧 Metode Pembayaran
             </MudText>
-            <div style="height:280px; display:flex; align-items:center; justify-content:center; background:#FFF8F0; border-radius:8px;">
-                <div class="text-center">
-                    <MudIcon Icon="@Icons.Material.Filled.PieChart" Style="font-size:4rem; color:#D7CCC8;" />
-                    <MudText Color="Color.Secondary">Pie chart metode pembayaran</MudText>
-                </div>
-            </div>
+            @if (_revenueChart?.PaymentBreakdowns?.Any() == true)
+            {
+                <MudList T="string" Dense="true">
+                    @foreach (var pm in _revenueChart.PaymentBreakdowns)
+                    {
+                        <MudListItem>
+                            <div class="d-flex justify-space-between align-center">
+                                <MudText Typo="Typo.body2">@pm.PaymentMethod</MudText>
+                                <div class="text-right">
+                                    <MudText Typo="Typo.body2" Style="color:#2E7D32; font-weight:600;">Rp @pm.TotalRevenue.ToString("N0")</MudText>
+                                    <MudText Typo="Typo.caption" Color="Color.Secondary">@pm.Percentage.ToString("F1")%</MudText>
+                                </div>
+                            </div>
+                            <MudProgressLinear Value="@((double)pm.Percentage)" Color="Color.Primary" Class="mt-1" />
+                        </MudListItem>
+                    }
+                </MudList>
+            }
+            else
+            {
+                <MudText Typo="Typo.caption" Color="Color.Secondary" Class="pa-3 text-center">
+                    Belum ada data pembayaran
+                </MudText>
+            }
         </MudPaper>
     </MudItem>
 </MudGrid>
 
-@* Top Products & Best Customers *@
+@* Customer Segment Summary *@
 <MudGrid>
     <MudItem xs="12" md="6">
         <MudPaper Class="pa-4 rounded-lg" Elevation="2">
             <MudText Typo="Typo.subtitle1" Class="mb-3" Style="color:#6F4E37; font-weight:700;">
-                ☕ Produk Terlaris
+                👥 Ringkasan Segmentasi Pelanggan
             </MudText>
-            <MudList Dense="true">
-                <MudListItem>
-                    <div class="d-flex align-center justify-space-between">
-                        <MudText Typo="Typo.body2">1. Americano</MudText>
-                        <MudText Style="color:#C8860A;">— pcs</MudText>
-                    </div>
-                </MudListItem>
-                <MudListItem>
-                    <div class="d-flex align-center justify-space-between">
-                        <MudText Typo="Typo.body2">2. Latte</MudText>
-                        <MudText Style="color:#C8860A;">— pcs</MudText>
-                    </div>
-                </MudListItem>
-                <MudListItem>
-                    <div class="d-flex align-center justify-space-between">
-                        <MudText Typo="Typo.body2">3. Croissant</MudText>
-                        <MudText Style="color:#C8860A;">— pcs</MudText>
-                    </div>
-                </MudListItem>
-            </MudList>
+            <MudGrid>
+                <MudItem xs="6">
+                    <MudPaper Class="pa-3 rounded" Elevation="0" Style="background:#E8F5E9; border:1px solid #A5D6A7;">
+                        <MudText Typo="Typo.h5" Style="color:#2E7D32; font-weight:700;">@(_summary?.ActiveCustomers ?? 0)</MudText>
+                        <MudText Typo="Typo.caption">Aktif</MudText>
+                    </MudPaper>
+                </MudItem>
+                <MudItem xs="6">
+                    <MudPaper Class="pa-3 rounded" Elevation="0" Style="background:#FFF8E1; border:1px solid #FFE082;">
+                        <MudText Typo="Typo.h5" Style="color:#C8860A; font-weight:700;">@(_summary?.NewCustomersThisMonth ?? 0)</MudText>
+                        <MudText Typo="Typo.caption">Baru Bulan Ini</MudText>
+                    </MudPaper>
+                </MudItem>
+                <MudItem xs="6">
+                    <MudPaper Class="pa-3 rounded" Elevation="0" Style="background:#FCE4EC; border:1px solid #F48FB1;">
+                        <MudText Typo="Typo.h5" Style="color:#C62828; font-weight:700;">@(_summary?.InactiveCustomers ?? 0)</MudText>
+                        <MudText Typo="Typo.caption">Tidak Aktif</MudText>
+                    </MudPaper>
+                </MudItem>
+                <MudItem xs="6">
+                    <MudPaper Class="pa-3 rounded" Elevation="0" Style="background:#EDE7F6; border:1px solid #CE93D8;">
+                        <MudText Typo="Typo.h5" Style="color:#6A1B9A; font-weight:700;">@(_summary?.TotalPointsRedeemed.ToString("N0") ?? 0)</MudText>
+                        <MudText Typo="Typo.caption">Total Poin Ditukar</MudText>
+                    </MudPaper>
+                </MudItem>
+            </MudGrid>
+            <MudButton Variant="Variant.Text" Color="Color.Primary" Href="/CustomerInsights" Size="Size.Small"
+                       EndIcon="@Icons.Material.Filled.ArrowForward" Class="mt-2">
+                Lihat Customer Insights Detail
+            </MudButton>
         </MudPaper>
     </MudItem>
     <MudItem xs="12" md="6">
         <MudPaper Class="pa-4 rounded-lg" Elevation="2">
             <MudText Typo="Typo.subtitle1" Class="mb-3" Style="color:#6F4E37; font-weight:700;">
-                👑 Top Pelanggan (by Spend)
+                🏆 Distribusi Tier
             </MudText>
-            <MudText Class="pa-4 text-center" Color="Color.Secondary" Typo="Typo.body2">
-                Data akan muncul setelah transaksi tersedia
-            </MudText>
+            @{
+                var totalCustomers = (_summary?.TotalCustomers ?? 1);
+            }
+            @foreach (var (name, count, color, bg) in new[]
+            {
+                ("🥉 Bronze", _summary?.BronzeCount ?? 0, "#CD7F32", "#FFF3E0"),
+                ("🥈 Silver", _summary?.SilverCount ?? 0, "#9E9E9E", "#FAFAFA"),
+                ("🥇 Gold", _summary?.GoldCount ?? 0, "#FFB300", "#FFFDE7"),
+                ("💎 Platinum", _summary?.PlatinumCount ?? 0, "#7B1FA2", "#F3E5F5"),
+            })
+            {
+                var pct = totalCustomers > 0 ? (double)count / totalCustomers * 100 : 0;
+                <div class="mb-2">
+                    <div class="d-flex justify-space-between mb-1">
+                        <MudText Typo="Typo.body2" Style="@($"color:{color}; font-weight:600;")">@name</MudText>
+                        <MudText Typo="Typo.caption">@count (@pct.ToString("F1")%)</MudText>
+                    </div>
+                    <MudProgressLinear Value="@pct" Style="@($"background:#f0f0f0;")" Color="Color.Primary" />
+                </div>
+            }
+            <MudButton Variant="Variant.Text" Color="Color.Primary" Href="/LoyaltyAnalysis" Size="Size.Small"
+                       EndIcon="@Icons.Material.Filled.ArrowForward" Class="mt-2">
+                Lihat Loyalty Analysis
+            </MudButton>
         </MudPaper>
     </MudItem>
 </MudGrid>
