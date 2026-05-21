@@ -69,8 +69,8 @@ public class GetLoyaltyAnalysisQueryHandler : IRequestHandler<GetLoyaltyAnalysis
 
         // Tier movement (monthly snapshot from customer current tiers grouped by month joined)
         var tierMovements = await _context.Customers
-            .Where(c => !c.IsDeleted && c.Created >= sixMonthsAgo)
-            .GroupBy(c => new { c.Created.Year, c.Created.Month, c.Tier })
+            .Where(c => !c.IsDeleted && c.CreatedAt >= sixMonthsAgo)
+            .GroupBy(c => new { c.CreatedAt.Year, c.CreatedAt.Month, c.Tier })
             .Select(g => new { g.Key.Year, g.Key.Month, g.Key.Tier, Count = g.Count() })
             .ToListAsync(cancellationToken);
 

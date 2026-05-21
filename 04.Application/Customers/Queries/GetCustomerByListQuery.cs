@@ -1,7 +1,6 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Smlp.Application.Services.Persistence;
-using Smlp.Base.Customer.Enums;
 using Smlp.Shared.Common.Responses;
 using Smlp.Shared.Master.Customers.Queries;
 
@@ -32,7 +31,7 @@ public class GetCustomerByListQueryHandler : IRequestHandler<GetCustomerByListQu
 
         var total = await query.CountAsync(cancellationToken);
         var items = await query
-            .OrderByDescending(c => c.LastTransactionDate ?? c.Created)
+            .OrderByDescending(c => c.LastTransactionDate ?? c.CreatedAt)
             .Skip((req.PageNumber - 1) * req.PageSize)
             .Take(req.PageSize)
             .Select(c => new GetCustomerResponse
@@ -47,7 +46,7 @@ public class GetCustomerByListQueryHandler : IRequestHandler<GetCustomerByListQu
                 LifetimePoints = c.LifetimePoints,
                 TotalSpend = c.TotalSpend,
                 LastTransactionDate = c.LastTransactionDate,
-                CreatedAt = c.Created
+                CreatedAt = c.CreatedAt
             })
             .ToListAsync(cancellationToken);
 

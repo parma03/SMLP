@@ -40,7 +40,7 @@ public class GetCustomerByIdQueryHandler : IRequestHandler<GetCustomerByIdQuery,
                 TotalSpend = c.TotalSpend,
                 LastTransactionDate = c.LastTransactionDate,
                 Notes = c.Notes,
-                CreatedAt = c.Created
+                CreatedAt = c.CreatedAt
             })
             .FirstOrDefaultAsync(cancellationToken)
             ?? throw new NotFoundException(nameof(Customer), request.Id);

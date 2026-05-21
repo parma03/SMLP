@@ -34,7 +34,7 @@ public class CreateTransactionCommandHandler : IRequestHandler<CreateTransaction
             .Where(r => r.IsActive && !r.IsDeleted
                 && (r.ValidFrom == null || r.ValidFrom <= today)
                 && (r.ValidUntil == null || r.ValidUntil >= today))
-            .OrderByDescending(r => r.Created)
+            .OrderByDescending(r => r.CreatedAt)
             .FirstOrDefaultAsync(cancellationToken);
 
         var txCode = await GenerateTransactionCodeAsync(cancellationToken);

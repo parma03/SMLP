@@ -7,6 +7,7 @@ using Smlp.Domain.Events;
 using Smlp.Shared.Documents.Commands.CreateDocument;
 
 namespace Smlp.Application.Documents.Commands.CreateDocument;
+
 public class CreateDocumentByTypeCommand : CreateDocumentByTypeRequest, IRequest<CreateDocumentResponse>
 {
 }

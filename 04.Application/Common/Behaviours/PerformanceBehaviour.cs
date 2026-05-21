@@ -3,7 +3,6 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using Smlp.Application.Common.Extensions;
 using Smlp.Application.Services.CurrentUser;
-using Smlp.Shared.Common.Constants;
 
 namespace Smlp.Application.Common.Behaviours;
 
@@ -36,19 +35,16 @@ public class PerformanceBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequ
             var formattedRequest = request.ToPrettyJson();
             var username = _currentUser.Username;
             var ipAddress = _currentUser.IpAddress;
-            var latitude = _currentUser.Geolocation is null ? DefaultTextFor.NA : _currentUser.Geolocation.Latitude.ToString();
-            var longitude = _currentUser.Geolocation is null ? DefaultTextFor.NA : _currentUser.Geolocation.Longitude.ToString();
-            var accuracy = _currentUser.Geolocation is null ? DefaultTextFor.NA : _currentUser.Geolocation.Accuracy.ToString();
 
             if (elapsedMilliseconds > 5000)
             {
-                _logger.LogError("{RequestName} for ({ElapsedMilliseconds} milliseconds) by {Username} from {IpAddress} at {Latitude}||{Longitude}||{Accuracy}.\n{RequestName}\n{RequestObject}",
-                   requestName, elapsedMilliseconds, username, ipAddress, latitude, longitude, accuracy, requestName, formattedRequest);
+                _logger.LogError("{RequestName} for ({ElapsedMilliseconds} milliseconds) by {Username} from {IpAddress}.\n{RequestName}\n{RequestObject}",
+                   requestName, elapsedMilliseconds, username, ipAddress, requestName, formattedRequest);
             }
             else
             {
-                _logger.LogWarning("{RequestName} for ({ElapsedMilliseconds} milliseconds) by {Username} from {IpAddress} at {Latitude}||{Longitude}||{Accuracy}.\n{RequestName}\n{RequestObject}",
-                   requestName, elapsedMilliseconds, username, ipAddress, latitude, longitude, accuracy, requestName, formattedRequest);
+                _logger.LogWarning("{RequestName} for ({ElapsedMilliseconds} milliseconds) by {Username} from {IpAddress}.\n{RequestName}\n{RequestObject}",
+                   requestName, elapsedMilliseconds, username, ipAddress, requestName, formattedRequest);
             }
         }
 

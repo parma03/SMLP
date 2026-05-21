@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Logging;
 using Smlp.Application.Common.Extensions;
 using Smlp.Application.Services.CurrentUser;
-using Smlp.Shared.Common.Constants;
 
 namespace Smlp.Application.Common.Behaviours;
 
@@ -29,12 +28,9 @@ public class UnhandledExceptionBehaviour<TRequest, TResponse> : IPipelineBehavio
             var formattedRequest = request.ToPrettyJson();
             var username = _currentUser.Username;
             var ipAddress = _currentUser.IpAddress;
-            var latitude = _currentUser.Geolocation is null ? DefaultTextFor.NA : _currentUser.Geolocation.Latitude.ToString();
-            var longitude = _currentUser.Geolocation is null ? DefaultTextFor.NA : _currentUser.Geolocation.Longitude.ToString();
-            var accuracy = _currentUser.Geolocation is null ? DefaultTextFor.NA : _currentUser.Geolocation.Accuracy.ToString();
 
-            _logger.LogError(exception, "Unhandled Exception when executing {RequestName} by {Username} from {IpAddress} at {Latitude}||{Longitude}||{Accuracy}.\n{RequestName}\n{RequestObject}",
-               requestName, username, ipAddress, latitude, longitude, accuracy, requestName, formattedRequest);
+            _logger.LogError(exception, "Unhandled Exception when executing {RequestName} by {Username} from {IpAddress}.\n{RequestName}\n{RequestObject}",
+               requestName, username, ipAddress, requestName, formattedRequest);
 
             throw;
         }

@@ -38,12 +38,12 @@ public class GetCustomerInsightsQueryHandler : IRequestHandler<GetCustomerInsigh
                 c.LifetimePoints,
                 c.TotalSpend,
                 c.LastTransactionDate,
-                c.Created
+                c.CreatedAt
             })
             .ToListAsync(cancellationToken);
 
         // RFM-based segmentation
-        var newCount = customers.Count(c => c.Created >= cutoffNew);
+        var newCount = customers.Count(c => c.CreatedAt >= cutoffNew);
         var activeCount = customers.Count(c => c.LastTransactionDate.HasValue && c.LastTransactionDate >= cutoffActive);
         var loyalCount = customers.Count(c => c.LastTransactionDate.HasValue && c.LastTransactionDate >= cutoffLoyal && c.LifetimePoints >= 500);
         var atRiskCount = customers.Count(c => c.LastTransactionDate.HasValue

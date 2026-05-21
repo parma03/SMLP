@@ -23,7 +23,7 @@ public class GetDashboardSummaryQueryHandler : IRequestHandler<GetDashboardSumma
         var today = now.Date;
 
         var totalCustomers = await _context.Customers.CountAsync(c => !c.IsDeleted, cancellationToken);
-        var newThisMonth = await _context.Customers.CountAsync(c => !c.IsDeleted && c.Created >= startOfMonth, cancellationToken);
+        var newThisMonth = await _context.Customers.CountAsync(c => !c.IsDeleted && c.CreatedAt >= startOfMonth, cancellationToken);
 
         var cutoffActive = now.AddDays(-30);
         var activeCustomers = await _context.Customers

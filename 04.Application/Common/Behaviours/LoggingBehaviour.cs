@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Logging;
 using Smlp.Application.Common.Extensions;
 using Smlp.Application.Services.CurrentUser;
-using Smlp.Shared.Common.Constants;
 
 namespace Smlp.Application.Common.Behaviours;
 

@@ -30,7 +30,7 @@ public class GetPointRuleByListQueryHandler : IRequestHandler<GetPointRuleByList
 
         var total = await query.CountAsync(cancellationToken);
         var items = await query
-            .OrderByDescending(r => r.Created)
+            .OrderByDescending(r => r.CreatedAt)
             .Skip((req.PageNumber - 1) * req.PageSize)
             .Take(req.PageSize)
             .Select(r => new GetPointRuleResponse
