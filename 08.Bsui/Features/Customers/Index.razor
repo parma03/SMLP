@@ -7,38 +7,43 @@
 <MudPaper Class="pa-4 rounded-lg" Elevation="1">
     <MudGrid Class="mb-3">
         <MudItem xs="12" sm="6" md="4">
-            <MudTextField @bind-Value="_searchText"
-                          Label="Cari pelanggan..."
+            <MudTextField Value="_searchText"
+                          ValueChanged="@((string v) => OnSearchChanged(v))"
+                          Label="Cari nama / nomor HP / kode member..."
                           Adornment="Adornment.Start"
                           AdornmentIcon="@Icons.Material.Filled.Search"
                           Variant="Variant.Outlined"
                           Immediate="true"
-                          DebounceInterval="300" />
+                          DebounceInterval="400" />
         </MudItem>
         <MudItem xs="12" sm="6" md="3">
-            <MudSelect @bind-Value="_filterTier" Label="Filter Tier" Variant="Variant.Outlined">
-                <MudSelectItem Value="@("")">Semua Tier</MudSelectItem>
-                <MudSelectItem Value="@("Bronze")">🥉 Bronze</MudSelectItem>
-                <MudSelectItem Value="@("Silver")">🥈 Silver</MudSelectItem>
-                <MudSelectItem Value="@("Gold")">🥇 Gold</MudSelectItem>
-                <MudSelectItem Value="@("Platinum")">💎 Platinum</MudSelectItem>
+            <MudSelect T="CustomerTier?" Value="_filterTier"
+                       ValueChanged="@((CustomerTier? v) => OnFilterTierChanged(v))"
+                       Label="Filter Tier" Variant="Variant.Outlined">
+                <MudSelectItem T="CustomerTier?" Value="@(null)">Semua Tier</MudSelectItem>
+                <MudSelectItem T="CustomerTier?" Value="@((CustomerTier?)CustomerTier.Bronze)">🥉 Bronze</MudSelectItem>
+                <MudSelectItem T="CustomerTier?" Value="@((CustomerTier?)CustomerTier.Silver)">🥈 Silver</MudSelectItem>
+                <MudSelectItem T="CustomerTier?" Value="@((CustomerTier?)CustomerTier.Gold)">🥇 Gold</MudSelectItem>
+                <MudSelectItem T="CustomerTier?" Value="@((CustomerTier?)CustomerTier.Platinum)">💎 Platinum</MudSelectItem>
             </MudSelect>
         </MudItem>
         <MudItem xs="12" sm="6" md="3">
-            <MudSelect @bind-Value="_filterSegment" Label="Filter Segmen" Variant="Variant.Outlined">
-                <MudSelectItem Value="@("")">Semua Segmen</MudSelectItem>
-                <MudSelectItem Value="@("New")">Baru</MudSelectItem>
-                <MudSelectItem Value="@("Active")">Aktif</MudSelectItem>
-                <MudSelectItem Value="@("Loyal")">Setia</MudSelectItem>
-                <MudSelectItem Value="@("AtRisk")">Berisiko</MudSelectItem>
-                <MudSelectItem Value="@("Inactive")">Tidak Aktif</MudSelectItem>
+            <MudSelect T="CustomerSegment?" Value="_filterSegment"
+                       ValueChanged="@((CustomerSegment? v) => OnFilterSegmentChanged(v))"
+                       Label="Filter Segmen" Variant="Variant.Outlined">
+                <MudSelectItem T="CustomerSegment?" Value="@(null)">Semua Segmen</MudSelectItem>
+                <MudSelectItem T="CustomerSegment?" Value="@((CustomerSegment?)CustomerSegment.New)">Baru</MudSelectItem>
+                <MudSelectItem T="CustomerSegment?" Value="@((CustomerSegment?)CustomerSegment.Active)">Aktif</MudSelectItem>
+                <MudSelectItem T="CustomerSegment?" Value="@((CustomerSegment?)CustomerSegment.Loyal)">Setia</MudSelectItem>
+                <MudSelectItem T="CustomerSegment?" Value="@((CustomerSegment?)CustomerSegment.AtRisk)">Berisiko</MudSelectItem>
+                <MudSelectItem T="CustomerSegment?" Value="@((CustomerSegment?)CustomerSegment.Inactive)">Tidak Aktif</MudSelectItem>
             </MudSelect>
         </MudItem>
         <MudItem xs="12" sm="6" md="2" Class="d-flex align-end">
             <MudButton Variant="Variant.Filled"
                        StartIcon="@Icons.Material.Filled.PersonAdd"
                        Style="background:#6F4E37; color:white; width:100%;"
-                       Href="/CustomerCreate">
+                       Href="@CommonRouteFor.CustomerCreate">
                 Tambah Pelanggan
             </MudButton>
         </MudItem>
@@ -53,12 +58,13 @@
             <MudTh>Tier</MudTh>
             <MudTh>Segmen</MudTh>
             <MudTh Style="text-align:right">Total Poin</MudTh>
+            <MudTh Style="text-align:right">Total Belanja</MudTh>
             <MudTh>Transaksi Terakhir</MudTh>
             <MudTh>Aksi</MudTh>
         </HeaderContent>
         <RowTemplate>
             <MudTd>
-                <MudChip Size="Size.Small" Style="background:#6F4E37; color:white; font-family:monospace;">
+                <MudChip T="string" Size="Size.Small" Style="background:#6F4E37; color:white; font-family:monospace;">
                     @context.MemberCode
                 </MudChip>
             </MudTd>
@@ -72,24 +78,37 @@
             </MudTd>
             <MudTd>@context.PhoneNumber</MudTd>
             <MudTd>
-                <MudChip Size="Size.Small" Color="@GetTierColor(context.Tier)">@context.Tier</MudChip>
+                <MudChip T="string" Size="Size.Small" Color="@GetTierColor(context.Tier)">@GetTierLabel(context.Tier)</MudChip>
             </MudTd>
             <MudTd>
-                <MudChip Size="Size.Small" Color="@GetSegmentColor(context.Segment)">@context.Segment</MudChip>
+                <MudChip T="string" Size="Size.Small" Color="@GetSegmentColor(context.Segment)">@GetSegmentLabel(context.Segment)</MudChip>
             </MudTd>
             <MudTd Style="text-align:right">
                 <MudText Typo="Typo.body2" Style="color:#C8860A; font-weight:700;">
                     ⭐ @context.TotalPoints.ToString("N0")
                 </MudText>
             </MudTd>
+            <MudTd Style="text-align:right">
+                <MudText Typo="Typo.body2" Style="color:#2E7D32; font-weight:600;">
+                    Rp @context.TotalSpend.ToString("N0")
+                </MudText>
+            </MudTd>
             <MudTd>
                 <MudText Typo="Typo.caption">@(context.LastTransactionDate?.ToString("dd MMM yyyy") ?? "-")</MudText>
             </MudTd>
             <MudTd>
-                <MudIconButton Icon="@Icons.Material.Filled.Visibility" Size="Size.Small" Color="Color.Primary"
-                               Href="@($"/CustomerDetail/{context.Id}")" />
-                <MudIconButton Icon="@Icons.Material.Filled.Receipt" Size="Size.Small" Color="Color.Secondary"
-                               Href="@($"/TransactionCreate?customerId={context.Id}")" />
+                <MudTooltip Text="Detail Pelanggan">
+                    <MudIconButton Icon="@Icons.Material.Filled.Visibility" Size="Size.Small" Color="Color.Primary"
+                                   Href="@CommonRouteFor.CustomerDetail(context.Id)" />
+                </MudTooltip>
+                <MudTooltip Text="Input Transaksi">
+                    <MudIconButton Icon="@Icons.Material.Filled.Receipt" Size="Size.Small" Color="Color.Secondary"
+                                   Href="@($"{CommonRouteFor.TransactionCreate}?customerId={context.Id}")" />
+                </MudTooltip>
+                <MudTooltip Text="Edit Pelanggan">
+                    <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" Color="Color.Default"
+                                   Href="@CommonRouteFor.CustomerEdit(context.Id)" />
+                </MudTooltip>
             </MudTd>
         </RowTemplate>
         <NoRecordsContent>

@@ -7,56 +7,156 @@
 <MudGrid Class="mb-4">
     <MudItem xs="12" sm="6" md="4">
         <MudTextField @bind-Value="_searchText" Label="Cari reward..." Variant="Variant.Outlined"
-                      Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" />
+                      Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search"
+                      Immediate="true" DebounceInterval="400" />
     </MudItem>
     <MudItem xs="12" sm="6" md="3">
-        <MudSelect @bind-Value="_filterType" Label="Tipe Reward" Variant="Variant.Outlined">
-            <MudSelectItem Value="@("")">Semua Tipe</MudSelectItem>
-            <MudSelectItem Value="@("FreeItem")">Gratis Item</MudSelectItem>
-            <MudSelectItem Value="@("Discount")">Diskon</MudSelectItem>
-            <MudSelectItem Value="@("Voucher")">Voucher</MudSelectItem>
+        <MudSelect T="RewardType?" @bind-Value="_filterType" Label="Tipe Reward" Variant="Variant.Outlined">
+            <MudSelectItem T="RewardType?" Value="@(null)">Semua Tipe</MudSelectItem>
+            <MudSelectItem T="RewardType?" Value="@((RewardType?)RewardType.FreeItem)">🎁 Produk Gratis</MudSelectItem>
+            <MudSelectItem T="RewardType?" Value="@((RewardType?)RewardType.DiscountAmount)">💰 Diskon Nominal</MudSelectItem>
+            <MudSelectItem T="RewardType?" Value="@((RewardType?)RewardType.DiscountPercent)">🏷️ Diskon Persen</MudSelectItem>
+            <MudSelectItem T="RewardType?" Value="@((RewardType?)RewardType.Voucher)">🎫 Voucher</MudSelectItem>
         </MudSelect>
     </MudItem>
     <MudItem xs="12" sm="6" md="2" Class="d-flex align-end">
+        <MudButton Variant="Variant.Outlined" Color="Color.Primary"
+                   StartIcon="@Icons.Material.Filled.Refresh"
+                   OnClick="LoadRewardsAsync"
+                   Style="width:100%;">
+            Perbarui
+        </MudButton>
+    </MudItem>
+    <MudItem xs="12" sm="6" md="3" Class="d-flex align-end">
         <MudButton Variant="Variant.Filled"
                    Style="background:#6F4E37; color:white; width:100%;"
                    StartIcon="@Icons.Material.Filled.Add"
-                   Href="/RewardCreate">
+                   Href="@CommonRouteFor.RewardCreate">
             Tambah Reward
         </MudButton>
     </MudItem>
 </MudGrid>
 
+@if (_loading)
+{
+    <MudProgressLinear Indeterminate="true" Color="Color.Primary" Class="mb-4" />
+}
+
+@if (!_rewards.Any() && !_loading)
+{
+    <MudAlert Severity="Severity.Info">
+        Belum ada reward. Klik "Tambah Reward" untuk membuat reward pertama.
+    </MudAlert>
+}
+
 <MudGrid>
-    @* Sample reward cards - will be replaced with actual data *@
-    <MudItem xs="12" sm="6" md="4">
-        <MudCard Class="rounded-lg" Elevation="2">
-            <MudCardContent>
-                <div class="d-flex align-center mb-2">
-                    <MudIcon Icon="@Icons.Material.Filled.LocalCafe" Style="color:#6F4E37; font-size:2.5rem;" Class="mr-2" />
-                    <div>
-                        <MudText Typo="Typo.subtitle1" Style="font-weight:700;">Gratis 1 Americano</MudText>
-                        <MudChip Size="Size.Small" Color="Color.Success">Aktif</MudChip>
+    @foreach (var reward in _rewards)
+    {
+        <MudItem xs="12" sm="6" md="4">
+            <MudCard Class="rounded-lg" Elevation="2" Style="@(reward.IsActive && !IsExpired(reward) && !IsOutOfStock(reward) ? "" : "opacity:0.7;")">
+                <MudCardContent>
+                    <div class="d-flex align-center mb-2">
+                        <MudIcon Icon="@Icons.Material.Filled.CardGiftcard"
+                                 Style="color:#6F4E37; font-size:2.5rem;" Class="mr-2" />
+                        <div class="flex-grow-1">
+                            <MudText Typo="Typo.subtitle1" Style="font-weight:700;">@reward.Name</MudText>
+                            <div class="d-flex gap-1 flex-wrap">
+                                <MudChip T="string" Size="Size.Small" Color="@GetRewardColor(reward.Type)">
+                                    @GetRewardTypeLabel(reward.Type)
+                                </MudChip>
+                                @if (!reward.IsActive)
+                                {
+                                    <MudChip T="string" Size="Size.Small" Color="Color.Error">Nonaktif</MudChip>
+                                }
+                                else if (IsExpired(reward))
+                                {
+                                    <MudChip T="string" Size="Size.Small" Color="Color.Error">Kadaluarsa</MudChip>
+                                }
+                                else if (IsOutOfStock(reward))
+                                {
+                                    <MudChip T="string" Size="Size.Small" Color="Color.Warning">Habis</MudChip>
+                                }
+                                else
+                                {
+                                    <MudChip T="string" Size="Size.Small" Color="Color.Success">Aktif</MudChip>
+                                }
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <MudDivider Class="my-2" />
-                <div class="d-flex justify-space-between">
-                    <MudText Typo="Typo.caption">Biaya Poin</MudText>
-                    <MudText Typo="Typo.subtitle2" Style="color:#C8860A; font-weight:700;">⭐ 50 poin</MudText>
-                </div>
-                <div class="d-flex justify-space-between">
-                    <MudText Typo="Typo.caption">Min. Tier</MudText>
-                    <MudChip Size="Size.Small" Color="Color.Default">Bronze</MudChip>
-                </div>
-                <div class="d-flex justify-space-between">
-                    <MudText Typo="Typo.caption">Sudah ditukar</MudText>
-                    <MudText Typo="Typo.caption">0 kali</MudText>
-                </div>
-            </MudCardContent>
-            <MudCardActions>
-                <MudButton Size="Size.Small" Color="Color.Primary" Variant="Variant.Text">Edit</MudButton>
-                <MudButton Size="Size.Small" Color="Color.Secondary" Variant="Variant.Text">Proses Redeem</MudButton>
-            </MudCardActions>
-        </MudCard>
-    </MudItem>
+
+                    @if (!string.IsNullOrEmpty(reward.Description))
+                    {
+                        <MudText Typo="Typo.caption" Color="Color.Secondary" Class="mb-2">@reward.Description</MudText>
+                    }
+
+                    <MudDivider Class="my-2" />
+
+                    <div class="d-flex justify-space-between mb-1">
+                        <MudText Typo="Typo.caption">Biaya Poin</MudText>
+                        <MudText Typo="Typo.subtitle2" Style="color:#C8860A; font-weight:700;">⭐ @reward.PointCost poin</MudText>
+                    </div>
+
+                    @if (reward.Type == RewardType.DiscountAmount && reward.DiscountAmount.HasValue)
+                    {
+                        <div class="d-flex justify-space-between mb-1">
+                            <MudText Typo="Typo.caption">Nilai Diskon</MudText>
+                            <MudText Typo="Typo.caption" Style="color:#2E7D32; font-weight:600;">Rp @reward.DiscountAmount.Value.ToString("N0")</MudText>
+                        </div>
+                    }
+                    @if (reward.Type == RewardType.DiscountPercent && reward.DiscountPercent.HasValue)
+                    {
+                        <div class="d-flex justify-space-between mb-1">
+                            <MudText Typo="Typo.caption">Diskon</MudText>
+                            <MudText Typo="Typo.caption" Style="color:#2E7D32; font-weight:600;">@reward.DiscountPercent.Value%</MudText>
+                        </div>
+                    }
+                    @if (reward.Type == RewardType.FreeItem && !string.IsNullOrEmpty(reward.FreeItemName))
+                    {
+                        <div class="d-flex justify-space-between mb-1">
+                            <MudText Typo="Typo.caption">Item Gratis</MudText>
+                            <MudText Typo="Typo.caption" Style="font-weight:600;">@reward.FreeItemName</MudText>
+                        </div>
+                    }
+
+                    <div class="d-flex justify-space-between mb-1">
+                        <MudText Typo="Typo.caption">Min. Tier</MudText>
+                        <MudText Typo="Typo.caption">@GetMinTierLabel(reward.MinimumTier)</MudText>
+                    </div>
+
+                    @if (reward.StockLimit.HasValue)
+                    {
+                        <div class="d-flex justify-space-between mb-1">
+                            <MudText Typo="Typo.caption">Stok Tersisa</MudText>
+                            <MudText Typo="Typo.caption" Color="@(reward.StockRemaining <= 5 ? Color.Warning : Color.Default)">
+                                @reward.StockRemaining / @reward.StockLimit
+                            </MudText>
+                        </div>
+                    }
+
+                    <div class="d-flex justify-space-between">
+                        <MudText Typo="Typo.caption">Sudah ditukar</MudText>
+                        <MudText Typo="Typo.caption">@reward.RedeemedCount kali</MudText>
+                    </div>
+
+                    @if (reward.ValidUntil.HasValue)
+                    {
+                        <MudText Typo="Typo.caption" Color="@(IsExpired(reward) ? Color.Error : Color.Secondary)">
+                            Berlaku s/d @reward.ValidUntil.Value.ToString("dd MMM yyyy")
+                        </MudText>
+                    }
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton Size="Size.Small" Color="Color.Primary" Variant="Variant.Text"
+                               Href="@CommonRouteFor.RewardEdit(reward.Id)">Edit</MudButton>
+                    <MudButton Size="Size.Small" Color="@(reward.IsActive ? Color.Warning : Color.Success)"
+                               Variant="Variant.Text"
+                               OnClick="@(() => ToggleActiveAsync(reward))">
+                        @(reward.IsActive ? "Nonaktifkan" : "Aktifkan")
+                    </MudButton>
+                    <MudButton Size="Size.Small" Color="Color.Error" Variant="Variant.Text"
+                               OnClick="@(() => DeleteAsync(reward))">Hapus</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+    }
 </MudGrid>

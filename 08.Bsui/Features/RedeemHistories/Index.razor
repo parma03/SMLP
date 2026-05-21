@@ -5,38 +5,108 @@
 <PageHeader Title="Riwayat Penukaran Reward" Icon="@Icons.Material.Filled.Redeem" />
 
 <MudGrid Class="mb-4">
-    <MudItem xs="12" sm="6" md="4">
-        <MudTextField Label="Cari nama / kode member" Variant="Variant.Outlined"
-                      Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" />
-    </MudItem>
     <MudItem xs="12" sm="6" md="3">
-        <MudDatePicker Label="Dari Tanggal" Variant="Variant.Outlined" />
+        <MudTextField @bind-Value="_searchText" Label="Cari nama / kode member / reward" Variant="Variant.Outlined"
+                      Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search"
+                      Immediate="true" DebounceInterval="400" />
     </MudItem>
-    <MudItem xs="12" sm="6" md="3">
-        <MudDatePicker Label="Sampai Tanggal" Variant="Variant.Outlined" />
+    <MudItem xs="6" sm="3" md="2">
+        <MudDatePicker @bind-Date="_dateFrom" Label="Dari Tanggal" Variant="Variant.Outlined" />
     </MudItem>
-    <MudItem xs="12" sm="6" md="2" Class="d-flex align-end">
+    <MudItem xs="6" sm="3" md="2">
+        <MudDatePicker @bind-Date="_dateTo" Label="Sampai Tanggal" Variant="Variant.Outlined" />
+    </MudItem>
+    <MudItem xs="12" sm="6" md="2">
+        <MudSelect T="RedeemStatus?" @bind-Value="_filterStatus" Label="Status" Variant="Variant.Outlined">
+            <MudSelectItem T="RedeemStatus?" Value="@(null)">Semua Status</MudSelectItem>
+            <MudSelectItem T="RedeemStatus?" Value="@((RedeemStatus?)RedeemStatus.Pending)">Menunggu</MudSelectItem>
+            <MudSelectItem T="RedeemStatus?" Value="@((RedeemStatus?)RedeemStatus.Verified)">Diverifikasi</MudSelectItem>
+            <MudSelectItem T="RedeemStatus?" Value="@((RedeemStatus?)RedeemStatus.Completed)">Selesai</MudSelectItem>
+            <MudSelectItem T="RedeemStatus?" Value="@((RedeemStatus?)RedeemStatus.Rejected)">Ditolak</MudSelectItem>
+        </MudSelect>
+    </MudItem>
+    <MudItem xs="12" sm="6" md="3" Class="d-flex align-end gap-2">
+        <MudButton Variant="Variant.Outlined" Color="Color.Primary"
+                   StartIcon="@Icons.Material.Filled.Search"
+                   OnClick="LoadRedeemsAsync"
+                   Style="flex:1;">
+            Cari
+        </MudButton>
         <MudButton Variant="Variant.Outlined" Color="Color.Secondary"
-                   StartIcon="@Icons.Material.Filled.FileDownload" Style="width:100%;">
+                   StartIcon="@Icons.Material.Filled.FileDownload"
+                   Style="flex:1;">
             Export
         </MudButton>
     </MudItem>
 </MudGrid>
 
 <MudPaper Class="pa-4 rounded-lg" Elevation="1">
-    <MudTable Dense="true" Hover="true" Elevation="0" Items="@_empty">
+    <MudTable Items="@_redeems" Dense="true" Hover="true" Striped="true" Loading="@_loading"
+              LoadingProgressColor="Color.Primary" Elevation="0">
         <HeaderContent>
-            <MudTh>Tanggal Redeem</MudTh>
+            <MudTh>Kode Redeem</MudTh>
+            <MudTh>Tanggal</MudTh>
             <MudTh>Nama Pelanggan</MudTh>
             <MudTh>Reward</MudTh>
             <MudTh Style="text-align:right">Poin Digunakan</MudTh>
             <MudTh>Diproses Oleh</MudTh>
             <MudTh>Status</MudTh>
+            <MudTh>Aksi</MudTh>
         </HeaderContent>
+        <RowTemplate>
+            <MudTd>
+                <MudText Typo="Typo.body2" Style="font-family:monospace; color:#6F4E37;">@context.RedeemCode</MudText>
+            </MudTd>
+            <MudTd>
+                <MudText Typo="Typo.caption">@context.RedeemDate.ToString("dd MMM yyyy HH:mm")</MudText>
+            </MudTd>
+            <MudTd>
+                <div>
+                    <MudText Typo="Typo.body2">@context.CustomerName</MudText>
+                    <MudText Typo="Typo.caption" Color="Color.Secondary">@context.CustomerMemberCode</MudText>
+                </div>
+            </MudTd>
+            <MudTd>
+                <MudText Typo="Typo.body2">@context.RewardName</MudText>
+            </MudTd>
+            <MudTd Style="text-align:right">
+                <MudText Style="color:#C62828; font-weight:700;">-* @context.PointsUsed</MudText>
+            </MudTd>
+            <MudTd>
+                <MudText Typo="Typo.caption">@(context.VerifiedBy ?? "-")</MudText>
+                @if (context.VerifiedAt.HasValue)
+                {
+                    <MudText Typo="Typo.caption" Color="Color.Secondary">@context.VerifiedAt.Value.ToString("dd MMM HH:mm")</MudText>
+                }
+            </MudTd>
+            <MudTd>
+                <MudChip T="string" Size="Size.Small" Color="@GetStatusColor(context.Status)">
+                    @GetStatusLabel(context.Status)
+                </MudChip>
+            </MudTd>
+            <MudTd>
+                @if (context.Status == RedeemStatus.Pending)
+                {
+                    <MudTooltip Text="Verifikasi">
+                        <MudIconButton Icon="@Icons.Material.Filled.CheckCircle" Size="Size.Small"
+                                       Color="Color.Success"
+                                       OnClick="@(() => VerifyRedeemAsync(context))" />
+                    </MudTooltip>
+                    <MudTooltip Text="Tolak">
+                        <MudIconButton Icon="@Icons.Material.Filled.Cancel" Size="Size.Small"
+                                       Color="Color.Error"
+                                       OnClick="@(() => RejectRedeemAsync(context))" />
+                    </MudTooltip>
+                }
+            </MudTd>
+        </RowTemplate>
         <NoRecordsContent>
             <MudText Class="pa-4 text-center" Color="Color.Secondary">
-                Belum ada riwayat penukaran reward
+                Belum ada riwayat penukaran reward dalam periode ini
             </MudText>
         </NoRecordsContent>
+        <PagerContent>
+            <MudTablePager PageSizeOptions="new int[]{10, 25, 50}" />
+        </PagerContent>
     </MudTable>
 </MudPaper>

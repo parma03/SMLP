@@ -1,5 +1,12 @@
-
 @using Smlp.Bsui.Features.Customers
 @using Smlp.Bsui.Common.Constants
 @using Smlp.Bsui.Common.Components
 @using MudBlazor
+@using Smlp.Client.Services.BackEnd.Masters
+@using Microsoft.AspNetCore.Authorization
+@using Smlp.Base.Customer.Enums
+
+@inject NavigationManager _navigationManager
+@inject ISnackbar _snackbar
+
+@inject CustomerService _customerService

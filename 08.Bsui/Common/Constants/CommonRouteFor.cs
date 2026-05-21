@@ -1,7 +1,3 @@
-/*
-* Sistem Manajemen Loyalitas Pelanggan (SMLP)
-*/
-
 namespace Smlp.Bsui.Common.Constants;
 
 public static class CommonRouteFor

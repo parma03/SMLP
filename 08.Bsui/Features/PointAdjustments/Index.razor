@@ -6,7 +6,7 @@
 
 <MudAlert Severity="Severity.Warning" Class="mb-4">
     Fitur ini digunakan untuk koreksi poin secara manual (bonus, kompensasi, atau pengurangan karena kesalahan).
-    Setiap penyesuaian akan tercatat di audit log.
+    Setiap penyesuaian akan tercatat di audit log dan tidak dapat dibatalkan.
 </MudAlert>
 
 <MudGrid>
@@ -15,28 +15,123 @@
             <MudText Typo="Typo.subtitle1" Class="mb-3" Style="color:#6F4E37; font-weight:700;">
                 Form Penyesuaian Poin
             </MudText>
-            <MudTextField Label="Cari No. HP / Kode Member" Variant="Variant.Outlined" Class="mb-3" />
-            <MudSelect Label="Tipe Penyesuaian" Variant="Variant.Outlined" Class="mb-3">
-                <MudSelectItem Value="@("Tambah")">➕ Tambah Poin (Bonus/Kompensasi)</MudSelectItem>
-                <MudSelectItem Value="@("Kurang")">➖ Kurangi Poin (Koreksi)</MudSelectItem>
+
+            <div class="d-flex gap-2 mb-3">
+                <MudTextField @bind-Value="_memberSearch"
+                              Label="Cari No. HP / Kode Member"
+                              Variant="Variant.Outlined"
+                              Placeholder="0812345678 atau MBR-001"
+                              Class="flex-grow-1" />
+                <MudButton Variant="Variant.Filled"
+                           Style="background:#6F4E37; color:white;"
+                           OnClick="@SearchCustomerAsync"
+                           Disabled="@_isSearching"
+                           StartIcon="@Icons.Material.Filled.Search">
+                    @if (_isSearching)
+                    {
+                        <MudProgressCircular Size="Size.Small" Indeterminate="true" />
+                    }
+                    else
+                    {
+                        <span>Cari</span>
+                    }
+                </MudButton>
+            </div>
+
+            @if (_selectedCustomer is not null)
+            {
+                <MudPaper Class="pa-3 rounded mb-3" Elevation="0" Style="background:#FFF3E0; border:1px solid #FFB74D;">
+                    <MudText Typo="Typo.subtitle2">@_selectedCustomer.FullName</MudText>
+                    <MudText Typo="Typo.caption" Color="Color.Secondary">@_selectedCustomer.PhoneNumber · @_selectedCustomer.MemberCode</MudText>
+                    <div class="d-flex align-center mt-1">
+                        <MudChip T="string" Size="Size.Small" Color="Color.Warning" Class="mr-1">@_selectedCustomer.Tier</MudChip>
+                        <MudText Typo="Typo.caption" Style="color:#C8860A;">⭐ @_selectedCustomer.TotalPoints.ToString("N0") poin</MudText>
+                    </div>
+                </MudPaper>
+            }
+
+            <MudSelect @bind-Value="_adjustmentType" Label="Tipe Penyesuaian" Variant="Variant.Outlined" Class="mb-3">
+                <MudSelectItem Value="@AdjustmentType.Bonus">➕ Bonus (Penambahan Poin)</MudSelectItem>
+                <MudSelectItem Value="@AdjustmentType.Correction">🔧 Koreksi (Penambahan/Pengurangan)</MudSelectItem>
+                <MudSelectItem Value="@AdjustmentType.Penalty">➖ Penalti (Pengurangan Poin)</MudSelectItem>
+                <MudSelectItem Value="@AdjustmentType.Reversal">↩️ Reversal (Pembalikan Transaksi)</MudSelectItem>
             </MudSelect>
-            <MudNumericField Label="Jumlah Poin" Variant="Variant.Outlined" Class="mb-3" Min="1" />
-            <MudTextField Label="Alasan / Catatan" Variant="Variant.Outlined" Lines="3" Class="mb-3"
-                          Placeholder="Wajib diisi: alasan penyesuaian poin..." />
+
+            <MudNumericField @bind-Value="_points" Label="Jumlah Poin" Variant="Variant.Outlined"
+                             Class="mb-3" Min="1" Max="99999"
+                             Adornment="Adornment.Start"
+                             AdornmentText="⭐" />
+
+            <MudTextField @bind-Value="_reason" Label="Alasan / Catatan (Wajib)"
+                          Variant="Variant.Outlined" Lines="3" Class="mb-3"
+                          Required="true"
+                          Placeholder="Jelaskan alasan penyesuaian poin ini..." />
+
             <MudButton Variant="Variant.Filled" Style="background:#6F4E37; color:white; width:100%;"
-                       StartIcon="@Icons.Material.Filled.Save">
-                Simpan Penyesuaian
+                       StartIcon="@Icons.Material.Filled.Save"
+                       OnClick="@SaveAdjustmentAsync"
+                       Disabled="@_isSaving">
+                @if (_isSaving)
+                {
+                    <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                    <MudText Class="ms-2">Menyimpan...</MudText>
+                }
+                else
+                {
+                    <MudText>Simpan Penyesuaian</MudText>
+                }
             </MudButton>
         </MudPaper>
     </MudItem>
+
     <MudItem xs="12" md="7">
         <MudPaper Class="pa-4 rounded-lg" Elevation="2">
             <MudText Typo="Typo.subtitle1" Class="mb-3" Style="color:#6F4E37; font-weight:700;">
                 Riwayat Penyesuaian
             </MudText>
-            <MudText Class="pa-4 text-center" Color="Color.Secondary">
-                Belum ada riwayat penyesuaian poin
-            </MudText>
+
+            <MudTable Items="@_adjustments" Dense="true" Hover="true" Elevation="0" Loading="@_loading">
+                <HeaderContent>
+                    <MudTh>Tanggal</MudTh>
+                    <MudTh>Pelanggan</MudTh>
+                    <MudTh>Tipe</MudTh>
+                    <MudTh Style="text-align:right">Poin</MudTh>
+                    <MudTh>Oleh</MudTh>
+                    <MudTh>Alasan</MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd><MudText Typo="Typo.caption">@context.AdjustmentDate.ToString("dd MMM yyyy HH:mm")</MudText></MudTd>
+                    <MudTd>
+                        <div>
+                            <MudText Typo="Typo.body2">@context.CustomerName</MudText>
+                            <MudText Typo="Typo.caption" Color="Color.Secondary">@context.CustomerMemberCode</MudText>
+                        </div>
+                    </MudTd>
+                    <MudTd>
+                        <MudChip T="string" Size="Size.Small" Color="@GetAdjustmentColor(context.AdjustmentType)">
+                            @GetAdjustmentTypeLabel(context.AdjustmentType)
+                        </MudChip>
+                    </MudTd>
+                    <MudTd Style="text-align:right">
+                        <MudText Style="@(context.AdjustmentType == AdjustmentType.Bonus ? "color:#2E7D32; font-weight:700;" : "color:#C62828; font-weight:700;")">
+                            @(context.AdjustmentType == AdjustmentType.Bonus ? "+" : "-")@context.Points
+                        </MudText>
+                    </MudTd>
+                    <MudTd><MudText Typo="Typo.caption">@context.ApprovedBy</MudText></MudTd>
+                    <MudTd>
+                        <MudTooltip Text="@context.Reason">
+                            <MudText Typo="Typo.caption" Style="max-width:150px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; display:block;">
+                                @context.Reason
+                            </MudText>
+                        </MudTooltip>
+                    </MudTd>
+                </RowTemplate>
+                <NoRecordsContent>
+                    <MudText Class="pa-4 text-center" Color="Color.Secondary">
+                        Belum ada riwayat penyesuaian poin
+                    </MudText>
+                </NoRecordsContent>
+            </MudTable>
         </MudPaper>
     </MudItem>
 </MudGrid>
