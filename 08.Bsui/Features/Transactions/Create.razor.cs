@@ -21,10 +21,19 @@ public partial class Create
     private PaymentMethod _paymentMethod = PaymentMethod.Tunai;
     private string? _notes;
 
+    // Discount
+    private decimal _discountPercent = 0;
+    private decimal _discountAmount = 0;
+    private bool _usePercentDiscount = true;
+
     // Items
     private readonly List<CreateTransactionItemRequest> _items = new();
     private decimal Subtotal => _items.Sum(i => i.UnitPrice * i.Quantity);
-    private int EstimatedPoints => (int)(Subtotal / 10_000);
+    private decimal DiscountValue => _usePercentDiscount
+        ? Math.Round(Subtotal * _discountPercent / 100, 0)
+        : _discountAmount;
+    private decimal GrandTotal => Math.Max(0, Subtotal - DiscountValue);
+    private int EstimatedPoints => (int)(GrandTotal / 10_000);
 
     protected override void OnInitialized()
     {
@@ -125,11 +134,14 @@ public partial class Create
         _isLoading = true;
         try
         {
+            var discountNote = DiscountValue > 0 ? $" | Diskon: Rp {DiscountValue:N0}" : "";
+            var finalNotes = string.IsNullOrWhiteSpace(_notes) ? discountNote.TrimStart(' ', '|', ' ') : $"{_notes}{discountNote}";
+
             var request = new CreateTransactionRequest
             {
                 CustomerId = _selectedCustomer.Id,
                 PaymentMethod = _paymentMethod,
-                Notes = _notes,
+                Notes = string.IsNullOrWhiteSpace(finalNotes) ? null : finalNotes,
                 Items = validItems.Select(i => new CreateTransactionItemRequest
                 {
                     ProductName = i.ProductName!,

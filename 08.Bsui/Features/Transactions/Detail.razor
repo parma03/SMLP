@@ -185,40 +185,109 @@
             @* Receipt Preview Panel *@
             @if (_showReceipt)
             {
-                <MudPaper Class="pa-4 rounded-lg mt-4" Elevation="2" id="receipt-area">
-                    <div style="max-width:300px; margin:0 auto; font-family:'Courier New', monospace; font-size:12px;">
-                        <div style="text-align:center; border-bottom:1px dashed #333; padding-bottom:8px; margin-bottom:8px;">
-                            <div style="font-size:16px; font-weight:bold;">☕ KOPI NUSANTARA</div>
-                            <div>Struk Pembelian</div>
-                            <div style="font-size:10px; color:#666;">@_transaction.TransactionDate.ToString("dd/MM/yyyy HH:mm")</div>
-                        </div>
-                        <div style="margin-bottom:8px;">
-                            <div>No: @_transaction.TransactionCode</div>
-                            <div>Pelanggan: @_transaction.CustomerName</div>
-                            <div>Member: @_transaction.CustomerMemberCode</div>
-                        </div>
-                        <div style="border-top:1px dashed #333; border-bottom:1px dashed #333; padding:6px 0; margin-bottom:8px;">
-                            @foreach (var item in _transaction.Items)
-                            {
-                                <div style="display:flex; justify-content:space-between;">
-                                    <span>@item.ProductName x@item.Quantity</span>
-                                    <span>@item.Subtotal.ToString("N0")</span>
-                                </div>
-                            }
-                        </div>
-                        <div style="display:flex; justify-content:space-between; font-weight:bold; margin-bottom:4px;">
-                            <span>TOTAL</span>
-                            <span>Rp @_transaction.TotalAmount.ToString("N0")</span>
-                        </div>
-                        <div style="text-align:center; margin-top:8px; font-size:10px; color:#666;">
-                            <div>Poin diperoleh: ⭐ +@(_transaction.PointsEarned + _transaction.BonusPoints)</div>
-                            <div style="margin-top:4px;">Terima kasih sudah berkunjung!</div>
+                <MudPaper Class="pa-4 rounded-lg mt-4" Elevation="2">
+                    <div class="d-flex justify-space-between align-center mb-3">
+                        <MudText Typo="Typo.subtitle1" Style="color:#6F4E37; font-weight:700;">
+                            🧾 Preview Struk
+                        </MudText>
+                        <div class="d-flex gap-2">
+                            <MudButton Variant="Variant.Filled"
+                                       Style="background:#6F4E37; color:white;"
+                                       Size="Size.Small"
+                                       StartIcon="@Icons.Material.Filled.Print"
+                                       OnClick="DoPrint">
+                                Cetak / Print
+                            </MudButton>
+                            <MudIconButton Icon="@Icons.Material.Filled.Close"
+                                           Size="Size.Small"
+                                           OnClick="PrintReceipt" />
                         </div>
                     </div>
-                    <div class="d-flex justify-center mt-3">
-                        <MudButton Variant="Variant.Outlined" Size="Size.Small" Color="Color.Default"
-                                   StartIcon="@Icons.Material.Filled.Print"
-                                   OnClick="DoPrint">Print</MudButton>
+
+                    <div id="receipt-print-area" style="max-width:320px; margin:0 auto;">
+                        <div style="font-family:'Courier New', Courier, monospace; font-size:12px; padding:16px; border:1px solid #ddd; border-radius:4px; background:#fff;">
+                            @* Store Header *@
+                            <div style="text-align:center; margin-bottom:12px;">
+                                <div style="font-size:20px;">☕</div>
+                                <div style="font-size:15px; font-weight:bold; letter-spacing:1px;">KOPI NUSANTARA</div>
+                                <div style="font-size:10px; color:#555;">Sistem Loyalitas Pelanggan</div>
+                                <div style="border-bottom:2px dashed #999; margin-top:8px;"></div>
+                            </div>
+
+                            @* Transaction Info *@
+                            <div style="margin-bottom:10px; font-size:11px;">
+                                <div style="display:flex; justify-content:space-between;">
+                                    <span>No Struk</span>
+                                    <span style="font-weight:bold;">@_transaction.TransactionCode</span>
+                                </div>
+                                <div style="display:flex; justify-content:space-between;">
+                                    <span>Tanggal</span>
+                                    <span>@_transaction.TransactionDate.ToString("dd/MM/yyyy HH:mm")</span>
+                                </div>
+                                <div style="display:flex; justify-content:space-between;">
+                                    <span>Status</span>
+                                    <span style="font-weight:bold;">@GetStatusLabel(_transaction.Status)</span>
+                                </div>
+                            </div>
+
+                            @* Customer Info *@
+                            <div style="background:#FFF8E1; padding:6px 8px; border-radius:4px; margin-bottom:10px; font-size:11px;">
+                                <div style="font-weight:bold; margin-bottom:2px;">MEMBER</div>
+                                <div>@_transaction.CustomerName</div>
+                                <div style="color:#555;">Kode: @_transaction.CustomerMemberCode</div>
+                                <div style="color:#555;">Tier: @_transaction.CustomerTierSnapshot</div>
+                            </div>
+
+                            <div style="border-top:1px dashed #999; border-bottom:1px dashed #999; padding:8px 0; margin-bottom:10px;">
+                                <div style="font-weight:bold; font-size:10px; margin-bottom:4px;">ITEM PEMBELIAN</div>
+                                @foreach (var item in _transaction.Items)
+                                {
+                                    <div style="margin-bottom:4px;">
+                                        <div style="font-size:11px;">@item.ProductName</div>
+                                        <div style="display:flex; justify-content:space-between; font-size:11px; color:#555;">
+                                            <span>@item.Quantity x Rp @item.UnitPrice.ToString("N0")</span>
+                                            <span style="font-weight:bold; color:#000;">Rp @item.Subtotal.ToString("N0")</span>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+
+                            @* Totals *@
+                            <div style="margin-bottom:10px; font-size:11px;">
+                                <div style="display:flex; justify-content:space-between;">
+                                    <span>Subtotal</span>
+                                    <span>Rp @_transaction.TotalAmount.ToString("N0")</span>
+                                </div>
+                                <div style="display:flex; justify-content:space-between; font-size:13px; font-weight:bold; margin-top:4px; border-top:1px solid #999; padding-top:4px;">
+                                    <span>TOTAL</span>
+                                    <span>Rp @_transaction.TotalAmount.ToString("N0")</span>
+                                </div>
+                                <div style="display:flex; justify-content:space-between; margin-top:4px;">
+                                    <span>Metode Bayar</span>
+                                    <span>@GetPaymentMethodLabel(_transaction.PaymentMethod)</span>
+                                </div>
+                            </div>
+
+                            @* Points Earned *@
+                            <div style="text-align:center; background:#FFF8E1; padding:8px; border-radius:4px; margin-bottom:10px;">
+                                <div style="font-size:10px; color:#555;">POIN DIPEROLEH</div>
+                                <div style="font-size:18px; color:#C8860A; font-weight:bold;">⭐ +@(_transaction.PointsEarned + _transaction.BonusPoints)</div>
+                                @if (_transaction.BonusPoints > 0)
+                                {
+                                    <div style="font-size:10px; color:#C8860A;">(termasuk +@_transaction.BonusPoints bonus)</div>
+                                }
+                                <div style="font-size:10px; color:#555; margin-top:2px;">
+                                    Terima kasih sudah berbelanja!
+                                </div>
+                            </div>
+
+                            @* Footer *@
+                            <div style="text-align:center; font-size:10px; color:#555; border-top:2px dashed #999; padding-top:8px;">
+                                <div>Terima kasih atas kunjungan Anda!</div>
+                                <div>Simpan struk ini sebagai bukti transaksi.</div>
+                                <div style="margin-top:4px; font-size:9px;">@_transaction.TransactionDate.ToString("dd MMMM yyyy, HH:mm") WIB</div>
+                            </div>
+                        </div>
                     </div>
                 </MudPaper>
             }

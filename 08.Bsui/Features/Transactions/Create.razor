@@ -173,10 +173,49 @@
                 <MudText>Subtotal (@_items.Count item)</MudText>
                 <MudText Style="font-weight:600;">Rp @Subtotal.ToString("N0")</MudText>
             </div>
+
+            @* Discount Section *@
+            <MudPaper Class="pa-3 rounded mb-2" Elevation="0" Style="background:#FFF3E0; border:1px solid #FFCCBC;">
+                <div class="d-flex align-center justify-space-between mb-2">
+                    <MudText Typo="Typo.caption" Style="font-weight:600; color:#E64A19;">
+                        🏷️ DISKON
+                    </MudText>
+                    <MudToggleGroup T="bool" @bind-Value="_usePercentDiscount" Size="Size.Small">
+                        <MudToggleItem Value="true" Text="%" />
+                        <MudToggleItem Value="false" Text="Rp" />
+                    </MudToggleGroup>
+                </div>
+                @if (_usePercentDiscount)
+                {
+                    <MudNumericField @bind-Value="_discountPercent"
+                                     Label="Diskon (%)"
+                                     Variant="Variant.Outlined"
+                                     Min="0" Max="100"
+                                     Adornment="Adornment.End" AdornmentText="%"
+                                     Dense="true" />
+                }
+                else
+                {
+                    <MudNumericField @bind-Value="_discountAmount"
+                                     Label="Diskon (Rp)"
+                                     Variant="Variant.Outlined"
+                                     Min="0"
+                                     Format="N0"
+                                     Dense="true" />
+                }
+                @if (DiscountValue > 0)
+                {
+                    <div class="d-flex justify-space-between mt-1">
+                        <MudText Typo="Typo.caption" Color="Color.Error">Potongan</MudText>
+                        <MudText Typo="Typo.caption" Color="Color.Error" Style="font-weight:700;">- Rp @DiscountValue.ToString("N0")</MudText>
+                    </div>
+                }
+            </MudPaper>
+
             <MudDivider Class="my-2" />
             <div class="d-flex justify-space-between mb-2">
                 <MudText Typo="Typo.h6" Style="color:#6F4E37; font-weight:700;">Total</MudText>
-                <MudText Typo="Typo.h6" Style="color:#6F4E37; font-weight:700;">Rp @Subtotal.ToString("N0")</MudText>
+                <MudText Typo="Typo.h6" Style="color:#6F4E37; font-weight:700;">Rp @GrandTotal.ToString("N0")</MudText>
             </div>
 
             <MudPaper Class="pa-3 rounded mb-3" Elevation="0" Style="background:#FFF8E1; border:1px solid #FFE082;">

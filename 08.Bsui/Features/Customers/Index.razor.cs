@@ -91,6 +91,73 @@ public partial class Index
         await LoadCustomersAsync();
     }
 
+    private async Task ExportToExcelAsync()
+    {
+        try
+        {
+            var request = new GetCustomerRequest
+            {
+                Search = string.IsNullOrWhiteSpace(_searchText) ? null : _searchText,
+                Tier = _filterTier,
+                Segment = _filterSegment,
+                PageNumber = 1,
+                PageSize = 5000,
+            };
+            var result = await _customerService.GetCustomersAsync(request);
+            if (result.Error is not null)
+            {
+                _snackbar.AddError(result.Error.ToDetail());
+                return;
+            }
+
+            var rows = result.Result!.Items;
+            using var workbook = new ClosedXML.Excel.XLWorkbook();
+            var ws = workbook.Worksheets.Add("Pelanggan");
+
+            // Header
+            var headers = new[] { "Kode Member", "Nama", "No HP", "Email", "Tier", "Segmen", "Total Poin", "Total Belanja (Rp)", "Transaksi Terakhir", "Tanggal Daftar" };
+            for (int i = 0; i < headers.Length; i++)
+            {
+                ws.Cell(1, i + 1).Value = headers[i];
+                ws.Cell(1, i + 1).Style.Font.Bold = true;
+                ws.Cell(1, i + 1).Style.Fill.BackgroundColor = ClosedXML.Excel.XLColor.FromHtml("#6F4E37");
+                ws.Cell(1, i + 1).Style.Font.FontColor = ClosedXML.Excel.XLColor.White;
+            }
+
+            // Data
+            int row = 2;
+            foreach (var c in rows)
+            {
+                ws.Cell(row, 1).Value = c.MemberCode;
+                ws.Cell(row, 2).Value = c.FullName;
+                ws.Cell(row, 3).Value = c.PhoneNumber;
+                ws.Cell(row, 4).Value = c.EmailAddress ?? "";
+                ws.Cell(row, 5).Value = GetTierLabel(c.Tier);
+                ws.Cell(row, 6).Value = GetSegmentLabel(c.Segment);
+                ws.Cell(row, 7).Value = c.TotalPoints;
+                ws.Cell(row, 8).Value = (double)c.TotalSpend;
+                ws.Cell(row, 9).Value = c.LastTransactionDate?.ToString("yyyy-MM-dd") ?? "";
+                ws.Cell(row, 10).Value = c.CreatedAt.ToString("yyyy-MM-dd");
+                row++;
+            }
+
+            ws.Columns().AdjustToContents();
+
+            using var stream = new MemoryStream();
+            workbook.SaveAs(stream);
+            var base64 = Convert.ToBase64String(stream.ToArray());
+            var fileName = $"Pelanggan_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx";
+
+            await _jsRuntime.InvokeVoidAsync("downloadFileFromBase64", fileName,
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", base64);
+            _snackbar.AddSuccess($"Export Excel berhasil: {rows.Count()} data pelanggan.");
+        }
+        catch (Exception ex)
+        {
+            _snackbar.AddError($"Gagal export Excel: {ex.Message}");
+        }
+    }
+
     private async Task ExportToCsvAsync()
     {
         try

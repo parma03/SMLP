@@ -1,0 +1,61 @@
+@using Smlp.Base.Customer.Enums
+@using MudBlazor
+
+<MudTooltip Text="@GetTierTooltip()">
+    <MudChip T="string"
+             Size="@Size"
+             Style="@GetBadgeStyle()"
+             Icon="@GetTierIcon()"
+             Class="tier-badge">
+        @GetTierLabel()
+    </MudChip>
+</MudTooltip>
+
+<style>
+    .tier-badge {
+        font-weight: 700;
+        letter-spacing: 0.5px;
+    }
+</style>
+
+@code {
+    [Parameter] public CustomerTier Tier { get; set; }
+    [Parameter] public Size Size { get; set; } = Size.Small;
+    [Parameter] public bool ShowIcon { get; set; } = true;
+
+    private string GetTierLabel() => Tier switch
+    {
+        CustomerTier.Bronze => "Bronze",
+        CustomerTier.Silver => "Silver",
+        CustomerTier.Gold => "Gold",
+        CustomerTier.Platinum => "Platinum",
+        _ => Tier.ToString()
+    };
+
+    private string GetTierIcon() => ShowIcon ? Tier switch
+    {
+        CustomerTier.Bronze => Icons.Material.Filled.EmojiEvents,
+        CustomerTier.Silver => Icons.Material.Filled.WorkspacePremium,
+        CustomerTier.Gold => Icons.Material.Filled.Stars,
+        CustomerTier.Platinum => Icons.Material.Filled.Diamond,
+        _ => Icons.Material.Filled.Grade
+    } : string.Empty;
+
+    private string GetBadgeStyle() => Tier switch
+    {
+        CustomerTier.Bronze => "background: linear-gradient(135deg, #CD7F32, #A0522D); color: white;",
+        CustomerTier.Silver => "background: linear-gradient(135deg, #C0C0C0, #808080); color: white;",
+        CustomerTier.Gold   => "background: linear-gradient(135deg, #FFD700, #C8860A); color: #3E2723;",
+        CustomerTier.Platinum => "background: linear-gradient(135deg, #E5E4E2, #6B6B6B); color: white; box-shadow: 0 2px 6px rgba(0,0,0,0.3);",
+        _ => ""
+    };
+
+    private string GetTierTooltip() => Tier switch
+    {
+        CustomerTier.Bronze  => "Member Bronze - Tier awal",
+        CustomerTier.Silver  => "Member Silver - Belanja lebih untuk naik tier",
+        CustomerTier.Gold    => "Member Gold - Pelanggan setia!",
+        CustomerTier.Platinum => "Member Platinum - Pelanggan VIP terbaik!",
+        _ => Tier.ToString()
+    };
+}

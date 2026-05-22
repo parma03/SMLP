@@ -55,6 +55,13 @@
                        Disabled="@(_loading || !_customers.Any())">
                 Export CSV
             </MudButton>
+            <MudButton Variant="Variant.Outlined"
+                       StartIcon="@Icons.Material.Filled.GridOn"
+                       Color="Color.Primary"
+                       OnClick="ExportToExcelAsync"
+                       Disabled="@(_loading || !_customers.Any())">
+                Export Excel
+            </MudButton>
         </MudItem>
     </MudGrid>
 
@@ -87,7 +94,7 @@
             </MudTd>
             <MudTd>@context.PhoneNumber</MudTd>
             <MudTd>
-                <MudChip T="string" Size="Size.Small" Color="@GetTierColor(context.Tier)">@GetTierLabel(context.Tier)</MudChip>
+                <TierBadge Tier="@context.Tier" Size="Size.Small" />
             </MudTd>
             <MudTd>
                 <MudChip T="string" Size="Size.Small" Color="@GetSegmentColor(context.Segment)">@GetSegmentLabel(context.Segment)</MudChip>

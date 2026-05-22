@@ -1,0 +1,38 @@
+@using MudBlazor
+
+@* Skeleton loading for table rows *@
+<MudTable Items="@(Enumerable.Range(1, Rows))" Dense="@Dense" Elevation="0">
+    <HeaderContent>
+        @HeaderContent
+    </HeaderContent>
+    <RowTemplate>
+        @for (int c = 0; c < Columns; c++)
+        {
+            <MudTd>
+                <div class="skeleton-box" style="width: @GetWidth(c); height: 16px; border-radius: 4px;"></div>
+            </MudTd>
+        }
+    </RowTemplate>
+</MudTable>
+
+@code {
+    [Parameter] public int Rows { get; set; } = 5;
+    [Parameter] public int Columns { get; set; } = 5;
+    [Parameter] public bool Dense { get; set; } = true;
+    [Parameter] public RenderFragment? HeaderContent { get; set; }
+    [Parameter] public string[] ColumnWidths { get; set; } = Array.Empty<string>();
+
+    private string GetWidth(int col)
+    {
+        if (ColumnWidths.Length > col) return ColumnWidths[col];
+        // Vary widths for realistic look
+        return col switch
+        {
+            0 => "80px",
+            1 => "140px",
+            2 => "100px",
+            3 => "80px",
+            _ => "60px"
+        };
+    }
+}

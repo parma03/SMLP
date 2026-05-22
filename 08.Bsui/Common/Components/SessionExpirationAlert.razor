@@ -1,0 +1,91 @@
+@using Microsoft.AspNetCore.Components.Authorization
+@using Smlp.Bsui.Services.Authentication
+@using MudBlazor
+@implements IDisposable
+
+@if (_showWarning)
+{
+    <MudAlert Severity="Severity.Warning" 
+              Class="mb-0" 
+              Style="position: fixed; top: 64px; left: 0; right: 0; z-index: 9999; border-radius: 0;"
+              ShowCloseIcon="true"
+              CloseIconClicked="DismissWarning">
+        <MudText>
+            ⏰ Sesi Anda akan berakhir dalam <strong>@_remainingMinutes menit</strong>. 
+            <MudLink Color="Color.Warning" OnClick="RefreshNowAsync" Style="cursor:pointer; font-weight:700;">
+                Perpanjang Sesi
+            </MudLink>
+        </MudText>
+    </MudAlert>
+}
+
+@code {
+    [Inject] private AuthorizedAuthenticationStateProvider AuthStateProvider { get; set; } = default!;
+    [Inject] private ILogger<SessionExpirationAlert> Logger { get; set; } = default!;
+
+    private bool _showWarning = false;
+    private int _remainingMinutes = 5;
+    private bool _dismissed = false;
+    private System.Threading.Timer? _checkTimer;
+
+    protected override void OnInitialized()
+    {
+        // Check every 30 seconds
+        _checkTimer = new System.Threading.Timer(
+            async _ => await CheckSessionAsync(),
+            null,
+            TimeSpan.FromSeconds(10),
+            TimeSpan.FromSeconds(30));
+    }
+
+    private async Task CheckSessionAsync()
+    {
+        try
+        {
+            var token = await AuthStateProvider.GetAccessTokenAsync();
+            if (string.IsNullOrWhiteSpace(token)) return;
+
+            var handler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
+            var jwt = handler.ReadJwtToken(token);
+            var expiry = jwt.ValidTo;
+            var remaining = expiry - DateTime.UtcNow;
+
+            await InvokeAsync(() =>
+            {
+                if (remaining.TotalMinutes <= 5 && remaining.TotalMinutes > 0 && !_dismissed)
+                {
+                    _remainingMinutes = (int)Math.Ceiling(remaining.TotalMinutes);
+                    _showWarning = true;
+                }
+                else if (remaining.TotalMinutes > 5)
+                {
+                    _showWarning = false;
+                    _dismissed = false;
+                }
+                StateHasChanged();
+            });
+        }
+        catch (Exception ex)
+        {
+            Logger.LogDebug(ex, "SessionExpirationAlert check error");
+        }
+    }
+
+    private void DismissWarning()
+    {
+        _dismissed = true;
+        _showWarning = false;
+    }
+
+    private async Task RefreshNowAsync()
+    {
+        await AuthStateProvider.RefreshTokensAsync();
+        _showWarning = false;
+        _dismissed = false;
+    }
+
+    public void Dispose()
+    {
+        _checkTimer?.Dispose();
+    }
+}
