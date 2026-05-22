@@ -103,7 +103,12 @@
                     <MudTextField @bind-Value="_shopPhone" Label="No. Telepon" Variant="Variant.Outlined" Class="mb-3" />
                     <MudTextField @bind-Value="_shopEmail" Label="Email" Variant="Variant.Outlined" Class="mb-3" />
                     <MudButton Variant="Variant.Filled" Style="background:#6F4E37; color:white;"
-                               StartIcon="@Icons.Material.Filled.Save">
+                               StartIcon="@Icons.Material.Filled.Save"
+                               OnClick="SaveAppSettingsAsync" Disabled="@_isSavingSettings">
+                        @if (_isSavingSettings)
+                        {
+                            <MudProgressCircular Size="Size.Small" Indeterminate="true" Class="mr-2" />
+                        }
                         Simpan Pengaturan
                     </MudButton>
                 </MudPaper>
@@ -120,6 +125,76 @@
                         <MudListItem><MudText Typo="Typo.body2"><b>Database:</b> SQL Server</MudText></MudListItem>
                         <MudListItem><MudText Typo="Typo.body2"><b>Auth:</b> JWT Bearer Token</MudText></MudListItem>
                     </MudList>
+                </MudPaper>
+            </MudItem>
+        </MudGrid>
+    </MudTabPanel>
+
+    <MudTabPanel Text="Manajemen Role" Icon="@Icons.Material.Filled.Security">
+        <MudGrid>
+            <MudItem xs="12" md="7">
+                <MudPaper Class="pa-4 rounded-lg" Elevation="1">
+                    <MudText Typo="Typo.subtitle1" Class="mb-4" Style="color:#6F4E37; font-weight:700;">
+                        🛡️ Matriks Hak Akses per Role
+                    </MudText>
+                    <MudTable Dense="true" Elevation="0" Items="@_rolePermissions">
+                        <HeaderContent>
+                            <MudTh>Fitur / Modul</MudTh>
+                            <MudTh Style="text-align:center">Admin</MudTh>
+                            <MudTh Style="text-align:center">Owner</MudTh>
+                            <MudTh Style="text-align:center">Kasir</MudTh>
+                        </HeaderContent>
+                        <RowTemplate>
+                            <MudTd>
+                                <MudText Typo="Typo.body2" Style="font-weight:500;">@context.Feature</MudText>
+                            </MudTd>
+                            <MudTd Style="text-align:center">
+                                <MudIcon Icon="@(context.Admin ? Icons.Material.Filled.CheckCircle : Icons.Material.Filled.Cancel)"
+                                         Color="@(context.Admin ? Color.Success : Color.Error)" Size="Size.Small" />
+                            </MudTd>
+                            <MudTd Style="text-align:center">
+                                <MudIcon Icon="@(context.Owner ? Icons.Material.Filled.CheckCircle : Icons.Material.Filled.Cancel)"
+                                         Color="@(context.Owner ? Color.Success : Color.Error)" Size="Size.Small" />
+                            </MudTd>
+                            <MudTd Style="text-align:center">
+                                <MudIcon Icon="@(context.Kasir ? Icons.Material.Filled.CheckCircle : Icons.Material.Filled.Cancel)"
+                                         Color="@(context.Kasir ? Color.Success : Color.Error)" Size="Size.Small" />
+                            </MudTd>
+                        </RowTemplate>
+                    </MudTable>
+                </MudPaper>
+            </MudItem>
+            <MudItem xs="12" md="5">
+                <MudPaper Class="pa-4 rounded-lg" Elevation="1">
+                    <MudText Typo="Typo.subtitle1" Class="mb-3" Style="color:#6F4E37; font-weight:700;">
+                        📖 Deskripsi Role
+                    </MudText>
+                    <MudList T="string" Dense="true">
+                        <MudListItem>
+                            <div class="d-flex align-center gap-2 mb-2">
+                                <MudChip T="string" Size="Size.Small" Color="Color.Error">Admin</MudChip>
+                                <MudText Typo="Typo.body2">Akses penuh ke seluruh sistem termasuk manajemen pengguna dan konfigurasi.</MudText>
+                            </div>
+                        </MudListItem>
+                        <MudListItem>
+                            <div class="d-flex align-center gap-2 mb-2">
+                                <MudChip T="string" Size="Size.Small" Color="Color.Warning">Owner</MudChip>
+                                <MudText Typo="Typo.body2">Akses analytics, laporan, dan konfigurasi loyalitas. Tidak bisa kelola pengguna.</MudText>
+                            </div>
+                        </MudListItem>
+                        <MudListItem>
+                            <div class="d-flex align-center gap-2">
+                                <MudChip T="string" Size="Size.Small" Color="Color.Info">Kasir</MudChip>
+                                <MudText Typo="Typo.body2">Akses transaksi, pelanggan, dan redeem reward. Tidak bisa akses laporan atau konfigurasi.</MudText>
+                            </div>
+                        </MudListItem>
+                    </MudList>
+                    <MudDivider Class="my-3" />
+                    <MudAlert Severity="Severity.Info" Dense="true">
+                        <MudText Typo="Typo.caption">
+                            Role ditetapkan saat membuat atau mengedit pengguna di tab "Kelola Pengguna".
+                        </MudText>
+                    </MudAlert>
                 </MudPaper>
             </MudItem>
         </MudGrid>

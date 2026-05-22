@@ -9,21 +9,54 @@
     <MudProgressLinear Indeterminate="true" Color="Color.Primary" Class="mb-4" />
 }
 
-<MudGrid Class="mb-4">
-    <MudItem xs="12" Class="d-flex align-center gap-3 flex-wrap">
-        <MudSelect @bind-Value="_selectedPeriod" Label="Periode Cepat" Variant="Variant.Outlined"
-                   Style="max-width:220px;" ValueChanged="@((string v) => OnPeriodChanged(v))">
-            <MudSelectItem Value="@("7d")">7 Hari Terakhir</MudSelectItem>
-            <MudSelectItem Value="@("30d")">30 Hari Terakhir</MudSelectItem>
-            <MudSelectItem Value="@("90d")">3 Bulan Terakhir</MudSelectItem>
-            <MudSelectItem Value="@("ytd")">Tahun Ini</MudSelectItem>
-        </MudSelect>
-        <MudButton Variant="Variant.Filled" Style="background:#6F4E37; color:white;"
-                   StartIcon="@Icons.Material.Filled.Refresh" OnClick="LoadAnalyticsData">
-            Perbarui
-        </MudButton>
-    </MudItem>
-</MudGrid>
+<MudPaper Class="pa-4 rounded-lg mb-4" Elevation="1">
+    <MudGrid>
+        <MudItem xs="12" sm="6" md="3">
+            <MudSelect @bind-Value="_selectedPeriod" Label="Periode Cepat" Variant="Variant.Outlined"
+                       ValueChanged="@((string v) => OnPeriodChanged(v))">
+                <MudSelectItem Value="@("7d")">7 Hari Terakhir</MudSelectItem>
+                <MudSelectItem Value="@("30d")">30 Hari Terakhir</MudSelectItem>
+                <MudSelectItem Value="@("90d")">3 Bulan Terakhir</MudSelectItem>
+                <MudSelectItem Value="@("ytd")">Tahun Ini</MudSelectItem>
+                <MudSelectItem Value="@("custom")">Rentang Kustom</MudSelectItem>
+            </MudSelect>
+        </MudItem>
+        @if (_selectedPeriod == "custom")
+        {
+            <MudItem xs="12" sm="6" md="3">
+                <MudDatePicker @bind-Date="_customDateFrom" Label="Dari Tanggal" Variant="Variant.Outlined"
+                               MaxDate="@DateTime.Today" />
+            </MudItem>
+            <MudItem xs="12" sm="6" md="3">
+                <MudDatePicker @bind-Date="_customDateTo" Label="Sampai Tanggal" Variant="Variant.Outlined"
+                               MaxDate="@DateTime.Today" MinDate="@(_customDateFrom ?? DateTime.MinValue)" />
+            </MudItem>
+        }
+        <MudItem xs="12" sm="6" md="3" Class="d-flex align-center gap-2">
+            <MudButton Variant="Variant.Filled" Style="background:#6F4E37; color:white;"
+                       StartIcon="@Icons.Material.Filled.Search" OnClick="LoadAnalyticsData"
+                       Disabled="@(_selectedPeriod == "custom" && (!_customDateFrom.HasValue || !_customDateTo.HasValue))">
+                Terapkan Filter
+            </MudButton>
+            <MudButton Variant="Variant.Outlined" Color="Color.Default"
+                       StartIcon="@Icons.Material.Filled.Refresh" OnClick="LoadAnalyticsData">
+                Perbarui
+            </MudButton>
+        </MudItem>
+    </MudGrid>
+    @if (_selectedPeriod != "custom")
+    {
+        <MudText Typo="Typo.caption" Color="Color.Secondary" Class="mt-2">
+            Menampilkan data: <strong>@SelectedPeriodLabel</strong>
+        </MudText>
+    }
+    else if (_customDateFrom.HasValue && _customDateTo.HasValue)
+    {
+        <MudText Typo="Typo.caption" Color="Color.Secondary" Class="mt-2">
+            Menampilkan data: <strong>@_customDateFrom.Value.ToString("dd MMM yyyy")</strong> — <strong>@_customDateTo.Value.ToString("dd MMM yyyy")</strong>
+        </MudText>
+    }
+</MudPaper>
 
 @* KPI Cards *@
 <MudGrid Class="mb-4">

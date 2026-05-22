@@ -1,0 +1,177 @@
+@attribute [Authorize(Roles = "Admin,Owner")]
+@page "/TierRules"
+
+<BrowserTabTitle>Aturan Tier</BrowserTabTitle>
+<PageHeader Title="Aturan Tier Loyalitas" Icon="@Icons.Material.Filled.WorkspacePremium" />
+
+@if (_showForm)
+{
+    <MudPaper Class="pa-4 rounded-lg mb-4" Elevation="2" Style="border-left:4px solid #6F4E37;">
+        <MudText Typo="Typo.subtitle1" Class="mb-4" Style="color:#6F4E37; font-weight:700;">
+            @(_editingId.HasValue ? "✏️ Edit Aturan Tier" : "➕ Tambah Aturan Tier Baru")
+        </MudText>
+        <MudGrid>
+            <MudItem xs="12" sm="6">
+                <MudTextField @bind-Value="_form.Name" Label="Nama Aturan" Variant="Variant.Outlined"
+                              Required="true" Placeholder="Contoh: Bronze Tier" Class="mb-3" />
+            </MudItem>
+            <MudItem xs="12" sm="6">
+                <MudSelect @bind-Value="_form.Tier" Label="Tier Pelanggan" Variant="Variant.Outlined" Class="mb-3">
+                    <MudSelectItem Value="CustomerTier.Bronze">🥉 Bronze</MudSelectItem>
+                    <MudSelectItem Value="CustomerTier.Silver">🥈 Silver</MudSelectItem>
+                    <MudSelectItem Value="CustomerTier.Gold">🥇 Gold</MudSelectItem>
+                    <MudSelectItem Value="CustomerTier.Platinum">💎 Platinum</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+            <MudItem xs="12" sm="3">
+                <MudNumericField @bind-Value="_form.MinimumLifetimePoints" Label="Min. Poin Lifetime"
+                                 Variant="Variant.Outlined" Min="0" Format="N0" Class="mb-3"
+                                 Adornment="Adornment.Start" AdornmentText="⭐" />
+            </MudItem>
+            <MudItem xs="12" sm="3">
+                <MudNumericField @bind-Value="_form.MaximumLifetimePoints" Label="Maks. Poin Lifetime"
+                                 Variant="Variant.Outlined" Min="0" Format="N0" Class="mb-3"
+                                 Adornment="Adornment.Start" AdornmentText="⭐" />
+            </MudItem>
+            <MudItem xs="12" sm="3">
+                <MudNumericField @bind-Value="_form.PointMultiplier" Label="Multiplier Poin"
+                                 Variant="Variant.Outlined" Min="1.0m" Max="10.0m" Step="0.1m" Class="mb-3"
+                                 Placeholder="1.0 = normal, 2.0 = double" />
+            </MudItem>
+            <MudItem xs="12" sm="3">
+                <MudTextField @bind-Value="_form.BadgeColor" Label="Warna Badge (Hex)" Variant="Variant.Outlined"
+                              Placeholder="#CD7F32" Class="mb-3"
+                              Adornment="Adornment.Start" AdornmentText="#" />
+            </MudItem>
+            <MudItem xs="12">
+                <MudTextField @bind-Value="_form.BenefitDescription" Label="Deskripsi Benefit (Opsional)"
+                              Variant="Variant.Outlined" Lines="2" Class="mb-3"
+                              Placeholder="Contoh: Gratis minuman setiap bulan, diskon 10% setiap transaksi" />
+            </MudItem>
+            <MudItem xs="12" sm="3" Class="d-flex align-center">
+                <MudSwitch @bind-Value="_form.IsActive" Label="Aktif" Color="Color.Success" />
+            </MudItem>
+        </MudGrid>
+        <div class="d-flex gap-2">
+            <MudButton Variant="Variant.Filled" Style="background:#6F4E37; color:white;"
+                       StartIcon="@Icons.Material.Filled.Save" OnClick="SaveRuleAsync" Disabled="@_isSaving">
+                @if (_isSaving) { <MudProgressCircular Size="Size.Small" Indeterminate="true" Class="mr-2" /> }
+                Simpan
+            </MudButton>
+            <MudButton Variant="Variant.Outlined" Color="Color.Default" OnClick="CancelForm">Batal</MudButton>
+        </div>
+    </MudPaper>
+}
+
+<MudGrid>
+    <MudItem xs="12" md="8">
+        <MudPaper Class="pa-4 rounded-lg" Elevation="2">
+            <div class="d-flex justify-space-between align-center mb-3">
+                <MudText Typo="Typo.subtitle1" Style="color:#6F4E37; font-weight:700;">Daftar Aturan Tier</MudText>
+                @if (!_showForm)
+                {
+                    <MudButton Variant="Variant.Filled" Style="background:#6F4E37; color:white;"
+                               Size="Size.Small" StartIcon="@Icons.Material.Filled.Add"
+                               OnClick="ShowAddForm">
+                        Tambah Aturan
+                    </MudButton>
+                }
+            </div>
+            <MudTable Dense="true" Hover="true" Elevation="0" Items="@_rules" Loading="@_loading">
+                <HeaderContent>
+                    <MudTh>Nama Aturan</MudTh>
+                    <MudTh>Tier</MudTh>
+                    <MudTh Style="text-align:right">Min. Poin</MudTh>
+                    <MudTh Style="text-align:right">Maks. Poin</MudTh>
+                    <MudTh Style="text-align:right">Multiplier</MudTh>
+                    <MudTh>Status</MudTh>
+                    <MudTh>Aksi</MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd>
+                        <MudText Typo="Typo.body2" Style="font-weight:600;">@context.Name</MudText>
+                        @if (!string.IsNullOrEmpty(context.BenefitDescription))
+                        {
+                            <MudText Typo="Typo.caption" Color="Color.Secondary">@context.BenefitDescription</MudText>
+                        }
+                    </MudTd>
+                    <MudTd>
+                        @{
+                            var (tierLabel, tierStyle) = GetTierDisplay(context.Tier);
+                        }
+                        <MudChip T="string" Size="Size.Small" Style="@tierStyle">@tierLabel</MudChip>
+                    </MudTd>
+                    <MudTd Style="text-align:right">
+                        <MudText Typo="Typo.body2" Style="color:#C8860A;">⭐ @context.MinimumLifetimePoints.ToString("N0")</MudText>
+                    </MudTd>
+                    <MudTd Style="text-align:right">
+                        <MudText Typo="Typo.body2" Style="color:#C8860A;">⭐ @context.MaximumLifetimePoints.ToString("N0")</MudText>
+                    </MudTd>
+                    <MudTd Style="text-align:right">
+                        @if (context.PointMultiplier > 1)
+                        {
+                            <MudChip T="string" Size="Size.Small" Color="Color.Warning">@context.PointMultiplier×</MudChip>
+                        }
+                        else
+                        {
+                            <MudText Typo="Typo.caption" Color="Color.Secondary">1× (dasar)</MudText>
+                        }
+                    </MudTd>
+                    <MudTd>
+                        <MudChip T="string" Size="Size.Small" Color="@(context.IsActive? Color.Success: Color.Default)">
+                            @(context.IsActive ? "Aktif" : "Nonaktif")
+                        </MudChip>
+                    </MudTd>
+                    <MudTd>
+                        <MudTooltip Text="Edit">
+                            <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" Color="Color.Primary"
+                                           OnClick="@(() => ShowEditForm(context))" />
+                        </MudTooltip>
+                        <MudTooltip Text="Hapus">
+                            <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" Color="Color.Error"
+                                           OnClick="@(() => DeleteAsync(context))" />
+                        </MudTooltip>
+                    </MudTd>
+                </RowTemplate>
+                <NoRecordsContent>
+                    <MudText Class="pa-4 text-center" Color="Color.Secondary">
+                        Belum ada aturan tier. Klik "Tambah Aturan" untuk memulai.
+                    </MudText>
+                </NoRecordsContent>
+            </MudTable>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" md="4">
+        <MudPaper Class="pa-4 rounded-lg" Elevation="2">
+            <MudText Typo="Typo.subtitle1" Class="mb-3" Style="color:#6F4E37; font-weight:700;">
+                💡 Panduan Aturan Tier
+            </MudText>
+            <MudAlert Severity="Severity.Info" Dense="true" Class="mb-3">
+                Tier pelanggan ditentukan berdasarkan akumulasi poin seumur hidup.
+            </MudAlert>
+            <MudList T="string" Dense="true">
+                <MudListItem Icon="@Icons.Material.Filled.Circle" IconColor="Color.Warning">
+                    <MudText Typo="Typo.body2"><strong>🥉 Bronze:</strong> Default untuk pelanggan baru (0–999 poin)</MudText>
+                </MudListItem>
+                <MudListItem Icon="@Icons.Material.Filled.Circle" IconColor="Color.Default">
+                    <MudText Typo="Typo.body2"><strong>🥈 Silver:</strong> Pelanggan setia (1.000–4.999 poin)</MudText>
+                </MudListItem>
+                <MudListItem Icon="@Icons.Material.Filled.Circle" IconColor="Color.Warning">
+                    <MudText Typo="Typo.body2"><strong>🥇 Gold:</strong> Pelanggan premium (5.000–14.999 poin)</MudText>
+                </MudListItem>
+                <MudListItem Icon="@Icons.Material.Filled.Circle" IconColor="Color.Info">
+                    <MudText Typo="Typo.body2"><strong>💎 Platinum:</strong> Pelanggan VIP (15.000+ poin)</MudText>
+                </MudListItem>
+            </MudList>
+            <MudDivider Class="my-3" />
+            <MudAlert Severity="Severity.Success" Dense="true" Class="mb-2">
+                <MudText Typo="Typo.caption">
+                    <strong>Upgrade Otomatis:</strong> Sistem akan otomatis upgrade tier pelanggan setelah setiap transaksi sesuai aturan yang dikonfigurasi.
+                </MudText>
+            </MudAlert>
+            <MudText Typo="Typo.caption" Color="Color.Secondary">
+                Tips: Atur Maksimum Poin = 0 untuk tier tanpa batas atas (misal Platinum).
+            </MudText>
+        </MudPaper>
+    </MudItem>
+</MudGrid>

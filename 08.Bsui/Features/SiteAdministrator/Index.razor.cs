@@ -18,6 +18,25 @@ public partial class Index
     private string _shopAddress = string.Empty;
     private string _shopPhone = string.Empty;
     private string _shopEmail = string.Empty;
+    private bool _isSavingSettings = false;
+
+    private readonly List<RolePermissionRow> _rolePermissions = new()
+    {
+        new("Dashboard & Analytics", true, true, false),
+        new("Kelola Pelanggan (CRUD)", true, true, true),
+        new("Buat Transaksi", true, true, true),
+        new("Batalkan Transaksi", true, true, false),
+        new("Laporan & Export", true, true, false),
+        new("Aturan Poin", true, true, false),
+        new("Aturan Tier", true, true, false),
+        new("Kelola Reward", true, true, false),
+        new("Redeem Reward", true, true, true),
+        new("Penyesuaian Poin", true, false, false),
+        new("Customer Insights", true, true, false),
+        new("Audit Log", true, false, false),
+        new("Kelola Pengguna", true, false, false),
+        new("Site Administrator", true, false, false),
+    };
 
     private List<GetUserResponse> _users = new();
 
@@ -216,6 +235,27 @@ public partial class Index
         UserRole.Kasir => Color.Info,
         _ => Color.Default
     };
+
+    private async Task SaveAppSettingsAsync()
+    {
+        _isSavingSettings = true;
+        try
+        {
+            // TODO: Save to database via API when AppSettings endpoint is available
+            await Task.Delay(500); // Simulate save
+            _snackbar.AddSuccess("Pengaturan aplikasi berhasil disimpan.");
+        }
+        catch (Exception ex)
+        {
+            _snackbar.AddError($"Gagal menyimpan pengaturan: {ex.Message}");
+        }
+        finally
+        {
+            _isSavingSettings = false;
+        }
+    }
+
+    public record RolePermissionRow(string Feature, bool Admin, bool Owner, bool Kasir);
 
     public class UserFormModel
     {

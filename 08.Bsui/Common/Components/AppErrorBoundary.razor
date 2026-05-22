@@ -1,0 +1,70 @@
+@using Microsoft.AspNetCore.Components
+@inherits ErrorBoundaryBase
+
+@if (CurrentException is null)
+{
+    @ChildContent
+}
+else
+{
+    <MudPaper Class="pa-6 rounded-lg ma-4" Elevation="3" Style="border-left: 4px solid #D32F2F;">
+        <div class="d-flex align-center mb-4">
+            <MudIcon Icon="@Icons.Material.Filled.ErrorOutline" Color="Color.Error" Size="Size.Large" Class="mr-3" />
+            <div>
+                <MudText Typo="Typo.h6" Style="color:#D32F2F; font-weight:700;">
+                    Terjadi Kesalahan
+                </MudText>
+                <MudText Typo="Typo.body2" Color="Color.Secondary">
+                    Komponen ini mengalami error dan tidak dapat ditampilkan.
+                </MudText>
+            </div>
+        </div>
+
+        @if (_showDetail)
+        {
+            <MudPaper Class="pa-3 rounded mb-3" Elevation="0" Style="background:#FFF3E0;">
+                <MudText Typo="Typo.caption" Style="color:#E65100; font-family:monospace; white-space:pre-wrap; word-break:break-all;">
+                    @(CurrentException?.Message ?? "Unknown error")
+                </MudText>
+                @if (CurrentException?.StackTrace is not null)
+                {
+                    <MudText Typo="Typo.caption" Color="Color.Secondary" Style="font-family:monospace; font-size:10px; white-space:pre-wrap; word-break:break-all; margin-top:8px;">
+                        @CurrentException.StackTrace
+                    </MudText>
+                }
+            </MudPaper>
+        }
+
+        <div class="d-flex gap-2 flex-wrap">
+            <MudButton Variant="Variant.Filled" Style="background:#D32F2F; color:white;"
+                       StartIcon="@Icons.Material.Filled.Refresh"
+                       OnClick="Recover">
+                Coba Lagi
+            </MudButton>
+            <MudButton Variant="Variant.Outlined" Color="Color.Default"
+                       StartIcon="@Icons.Material.Filled.BugReport"
+                       OnClick="@(() => _showDetail = !_showDetail)">
+                @(_showDetail ? "Sembunyikan Detail" : "Lihat Detail Error")
+            </MudButton>
+            <MudButton Variant="Variant.Text" Color="Color.Default"
+                       StartIcon="@Icons.Material.Filled.Home"
+                       OnClick="GoHome">
+                Kembali ke Beranda
+            </MudButton>
+        </div>
+    </MudPaper>
+}
+
+@code {
+    private bool _showDetail = false;
+
+    [Inject] private NavigationManager _nav { get; set; } = default!;
+
+    private void GoHome() => _nav.NavigateTo("/", forceLoad: true);
+
+    protected override Task OnErrorAsync(Exception exception)
+    {
+        // Log or report error here if needed
+        return Task.CompletedTask;
+    }
+}

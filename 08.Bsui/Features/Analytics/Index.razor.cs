@@ -18,6 +18,8 @@ public partial class Index
     private List<BreadcrumbItem> _breadcrumbItems = new();
     private string _selectedPeriod = "30d";
     private bool _isLoading = false;
+    private DateTime? _customDateFrom = null;
+    private DateTime? _customDateTo = null;
 
     private GetDashboardSummaryResponse? _summary;
     private GetRevenueChartResponse? _revenueChart;
@@ -28,6 +30,8 @@ public partial class Index
         "30d" => "30 hari terakhir",
         "90d" => "3 bulan terakhir",
         "ytd" => "tahun ini",
+        "custom" when _customDateFrom.HasValue && _customDateTo.HasValue =>
+            $"{_customDateFrom.Value:dd MMM yyyy} — {_customDateTo.Value:dd MMM yyyy}",
         _ => "periode dipilih"
     };
 
@@ -88,11 +92,20 @@ public partial class Index
     private async Task OnPeriodChanged(string period)
     {
         _selectedPeriod = period;
-        await LoadAnalyticsData();
+        if (period != "custom")
+        {
+            _customDateFrom = null;
+            _customDateTo = null;
+            await LoadAnalyticsData();
+        }
     }
 
     private (int year, int month) GetPeriodYearMonth()
     {
+        if (_selectedPeriod == "custom" && _customDateFrom.HasValue)
+        {
+            return (_customDateFrom.Value.Year, _customDateFrom.Value.Month);
+        }
         return _selectedPeriod switch
         {
             "7d" => (DateTime.Today.Year, DateTime.Today.Month),

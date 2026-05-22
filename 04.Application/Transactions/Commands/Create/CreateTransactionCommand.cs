@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Smlp.Application.Common.Exceptions;
 using Smlp.Application.Services.Persistence;
+using Smlp.Base.Customer.Enums;
 using Smlp.Base.Transaction.Enums;
 using Smlp.Domain.Entities.Transaction;
 using Smlp.Shared.Common.Responses;
@@ -79,18 +80,48 @@ public class CreateTransactionCommandHandler : IRequestHandler<CreateTransaction
         customer.TotalSpend += totalAmount;
         customer.LastTransactionDate = transaction.TransactionDate;
 
-        // Update tier based on lifetime points
-        customer.Tier = customer.LifetimePoints switch
-        {
-            >= 5000 => Smlp.Base.Customer.Enums.CustomerTier.Platinum,
-            >= 2000 => Smlp.Base.Customer.Enums.CustomerTier.Gold,
-            >= 500 => Smlp.Base.Customer.Enums.CustomerTier.Silver,
-            _ => Smlp.Base.Customer.Enums.CustomerTier.Bronze,
-        };
+        // Tier upgrade automation: use TierRules from DB, fall back to hardcoded if none configured
+        customer.Tier = await DetermineNewTierAsync(customer.LifetimePoints, cancellationToken);
 
         await _context.SaveChangesAsync(this, cancellationToken);
 
         return new CommonCreateResponse { Id = transaction.Id };
+    }
+
+    /// <summary>
+    /// Determines the customer tier based on lifetime points using configured TierRules.
+    /// Falls back to hardcoded defaults if no TierRules are configured.
+    /// </summary>
+    private async Task<CustomerTier> DetermineNewTierAsync(int lifetimePoints, CancellationToken ct)
+    {
+        var tierRules = await _context.TierRules
+            .Where(r => r.IsActive && !r.IsDeleted)
+            .OrderByDescending(r => r.MinimumLifetimePoints)
+            .ToListAsync(ct);
+
+        if (tierRules.Any())
+        {
+            // Find the highest tier the customer qualifies for
+            foreach (var rule in tierRules)
+            {
+                var maxOk = rule.MaximumLifetimePoints == 0 || lifetimePoints <= rule.MaximumLifetimePoints;
+                if (lifetimePoints >= rule.MinimumLifetimePoints && maxOk)
+                {
+                    return rule.Tier;
+                }
+            }
+            // If no rule matched, return the lowest tier
+            return tierRules.OrderBy(r => r.MinimumLifetimePoints).First().Tier;
+        }
+
+        // Fallback to hardcoded defaults
+        return lifetimePoints switch
+        {
+            >= 15000 => CustomerTier.Platinum,
+            >= 5000 => CustomerTier.Gold,
+            >= 1000 => CustomerTier.Silver,
+            _ => CustomerTier.Bronze,
+        };
     }
 
     private async Task<string> GenerateTransactionCodeAsync(CancellationToken ct)
