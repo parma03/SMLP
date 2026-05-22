@@ -47,6 +47,15 @@
                 Tambah Pelanggan
             </MudButton>
         </MudItem>
+        <MudItem xs="12" Class="d-flex justify-end gap-2">
+            <MudButton Variant="Variant.Outlined"
+                       StartIcon="@Icons.Material.Filled.FileDownload"
+                       Color="Color.Success"
+                       OnClick="ExportToCsvAsync"
+                       Disabled="@(_loading || !_customers.Any())">
+                Export CSV
+            </MudButton>
+        </MudItem>
     </MudGrid>
 
     <MudTable Items="@_customers" Dense="true" Hover="true" Striped="true" Loading="@_loading"

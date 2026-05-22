@@ -1,3 +1,4 @@
+using Microsoft.JSInterop;
 using MudBlazor;
 using Smlp.Base.Customer.Enums;
 using Smlp.Bsui.Common.Extensions;
@@ -88,6 +89,66 @@ public partial class Index
 
         _snackbar.AddSuccess($"Pelanggan {customer.FullName} berhasil dihapus.");
         await LoadCustomersAsync();
+    }
+
+    private async Task ExportToCsvAsync()
+    {
+        try
+        {
+            // Load all data for export (up to 5000)
+            var request = new GetCustomerRequest
+            {
+                Search = string.IsNullOrWhiteSpace(_searchText) ? null : _searchText,
+                Tier = _filterTier,
+                Segment = _filterSegment,
+                PageNumber = 1,
+                PageSize = 5000,
+            };
+            var result = await _customerService.GetCustomersAsync(request);
+            if (result.Error is not null)
+            {
+                _snackbar.AddError(result.Error.ToDetail());
+                return;
+            }
+
+            var rows = result.Result!.Items;
+            var sb = new System.Text.StringBuilder();
+            sb.AppendLine("Kode Member,Nama,No HP,Email,Tier,Segmen,Total Poin,Total Belanja,Transaksi Terakhir,Tanggal Daftar");
+
+            foreach (var c in rows)
+            {
+                sb.AppendLine(string.Join(",",
+                    CsvEscape(c.MemberCode),
+                    CsvEscape(c.FullName),
+                    CsvEscape(c.PhoneNumber),
+                    CsvEscape(c.EmailAddress ?? ""),
+                    c.Tier.ToString(),
+                    GetSegmentLabel(c.Segment),
+                    c.TotalPoints.ToString(),
+                    c.TotalSpend.ToString("F2"),
+                    c.LastTransactionDate?.ToString("yyyy-MM-dd") ?? "",
+                    c.CreatedAt.ToString("yyyy-MM-dd")
+                ));
+            }
+
+            var csvBytes = System.Text.Encoding.UTF8.GetBytes(sb.ToString());
+            var base64 = Convert.ToBase64String(csvBytes);
+            var fileName = $"Pelanggan_{DateTime.Now:yyyyMMdd_HHmmss}.csv";
+
+            await _jsRuntime.InvokeVoidAsync("downloadFileFromBase64", fileName, "text/csv", base64);
+            _snackbar.AddSuccess($"Export berhasil: {rows.Count()} data pelanggan.");
+        }
+        catch (Exception ex)
+        {
+            _snackbar.AddError($"Gagal export: {ex.Message}");
+        }
+    }
+
+    private static string CsvEscape(string value)
+    {
+        if (value.Contains(',') || value.Contains('"') || value.Contains('\n'))
+            return $"\"{value.Replace("\"", "\"\"")}\"";
+        return value;
     }
 
     private Color GetTierColor(CustomerTier tier) => tier switch

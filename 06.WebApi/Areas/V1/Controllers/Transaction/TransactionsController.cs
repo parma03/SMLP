@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Smlp.Application.Transactions.Commands.Cancel;
 using Smlp.Application.Transactions.Commands.Create;
 using Smlp.Application.Transactions.Queries;
 using Smlp.Shared.Common.Responses;
@@ -38,5 +39,15 @@ public class TransactionsController : ApiControllerBase
     {
         var result = await Mediator.Send(new CreateTransactionCommand { Request = request });
         return CreatedAtAction(nameof(GetTransactionById), new { id = result.Id }, result);
+    }
+
+    [HttpPost(ApiEndpoint.V1.Transactions.RouteTemplateFor.Cancel)]
+    [Authorize(Roles = "Admin,Owner")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [Produces(typeof(SuccessResponse))]
+    public async Task<ActionResult<SuccessResponse>> CancelTransaction([FromRoute] Guid id)
+    {
+        return await Mediator.Send(new CancelTransactionCommand { Id = id });
     }
 }

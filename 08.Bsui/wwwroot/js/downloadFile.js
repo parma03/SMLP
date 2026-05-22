@@ -1,4 +1,4 @@
-﻿function downloadFile(filename, contentType, data) {
+function downloadFile(filename, contentType, data) {
     // Create the URL
     const file = new File([data], filename, { type: contentType });
     const exportUrl = URL.createObjectURL(file);
@@ -14,4 +14,23 @@
     // We don't need to keep the url, let's release the memory
     // On Safari it seems you need to comment this line... (please let me know if you know why)
     URL.revokeObjectURL(exportUrl);
+}
+
+function downloadFileFromBase64(filename, contentType, base64) {
+    const byteCharacters = atob(base64);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    const file = new File([byteArray], filename, { type: contentType });
+    const exportUrl = URL.createObjectURL(file);
+    const a = document.createElement("a");
+    document.body.appendChild(a);
+    a.href = exportUrl;
+    a.download = filename;
+    a.target = "_self";
+    a.click();
+    URL.revokeObjectURL(exportUrl);
+    document.body.removeChild(a);
 }
