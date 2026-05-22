@@ -22,6 +22,7 @@ public static class CommonRouteFor
     public const string Transactions = "/Transactions";
     public const string TransactionCreate = "/Transactions/Create";
     public static string TransactionDetail(Guid id) => $"/Transactions/{id}";
+    public static string TransactionEdit(Guid id) => $"/Transactions/{id}/Edit";
 
     // Point Adjustments
     public const string PointAdjustments = "/PointAdjustments";

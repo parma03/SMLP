@@ -16,9 +16,29 @@
         @* Left: Profile Card *@
         <MudItem xs="12" md="4">
             <MudPaper Class="pa-6 rounded-lg text-center" Elevation="2" Style="border-top:4px solid #6F4E37;">
-                <MudAvatar Style="background:#6F4E37; color:white; width:72px; height:72px; font-size:2rem; margin:0 auto 16px;" >
-                    @(_customer.FullName.FirstOrDefault())
-                </MudAvatar>
+                <div class="d-flex flex-column align-center mb-2" style="position:relative;">
+                    @if (_photoUrl is not null)
+                    {
+                        <MudAvatar Style="width:72px; height:72px; margin-bottom:8px;">
+                            <MudImage Src="@_photoUrl" ObjectFit="ObjectFit.Cover" Width="72" Height="72" />
+                        </MudAvatar>
+                    }
+                    else
+                    {
+                        <MudAvatar Style="background:#6F4E37; color:white; width:72px; height:72px; font-size:2rem; margin-bottom:8px;">
+                            @(_customer.FullName.FirstOrDefault())
+                        </MudAvatar>
+                    }
+                    <AuthorizeView Roles="Admin,Kasir">
+                        <Authorized>
+                            <MudIconButton Icon="@Icons.Material.Filled.PhotoCamera"
+                                           Size="Size.Small" Color="Color.Primary"
+                                           OnClick="OpenUploadPhotoDialog"
+                                           Style="position:absolute; bottom:-4px; right:calc(50% - 48px);"
+                                           Title="Upload Foto" />
+                        </Authorized>
+                    </AuthorizeView>
+                </div>
                 <MudText Typo="Typo.h5" Style="font-weight:700;">@_customer.FullName</MudText>
                 <MudChip T="string" Size="Size.Medium" Style="background:#C8860A; color:white; margin:8px 0;">
                     @(_customer.MemberCode)

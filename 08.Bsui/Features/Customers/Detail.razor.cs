@@ -18,12 +18,13 @@ public partial class Detail
     private bool _isLoading = true;
     private bool _loadingTransactions = false;
     private bool _loadingRedeems = false;
-    private bool _loadingPoints = false;
+    private readonly bool _loadingPoints = false;
 
     private GetCustomerResponse? _customer;
     private List<GetTransactionResponse> _transactions = new();
     private List<GetRedeemHistoryResponse> _redeems = new();
     private List<PointHistoryItem> _pointHistory = new();
+    private readonly string? _photoUrl = null;
 
     protected override async Task OnInitializedAsync()
     {

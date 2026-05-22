@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Smlp.Application.Transactions.Commands.Cancel;
+using Smlp.Application.Transactions.Commands.Update;
 using Smlp.Application.Transactions.Commands.Create;
 using Smlp.Application.Transactions.Queries;
 using Smlp.Shared.Common.Responses;
 using Smlp.Shared.Transaction.Transactions.Commands.Create;
+using Smlp.Shared.Transaction.Transactions.Commands.Update;
 using Smlp.Shared.Transaction.Transactions.Constants;
 using Smlp.Shared.Transaction.Transactions.Queries;
 
@@ -39,6 +41,17 @@ public class TransactionsController : ApiControllerBase
     {
         var result = await Mediator.Send(new CreateTransactionCommand { Request = request });
         return CreatedAtAction(nameof(GetTransactionById), new { id = result.Id }, result);
+    }
+
+
+    [HttpPut(ApiEndpoint.V1.Transactions.RouteTemplateFor.Update)]
+    [Authorize(Roles = "Admin,Owner")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [Produces(typeof(CommonUpdateResponse))]
+    public async Task<ActionResult<CommonUpdateResponse>> UpdateTransaction([FromRoute] Guid id, [FromBody] UpdateTransactionRequest request)
+    {
+        return await Mediator.Send(new UpdateTransactionCommand { Id = id, Request = request });
     }
 
     [HttpPost(ApiEndpoint.V1.Transactions.RouteTemplateFor.Cancel)]

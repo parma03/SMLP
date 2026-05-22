@@ -12,6 +12,7 @@ public static class ApiEndpoint
             {
                 public const string GetById = "{id:guid}";
                 public const string Cancel = "{id:guid}/cancel";
+                public const string Update = "{id:guid}";
             }
         }
     }

@@ -7,5 +7,6 @@ namespace Smlp.Base.Transaction.Enums
         [Description("Pending")] Pending = 1,
         [Description("Selesai")] Completed = 2,
         [Description("Dibatalkan")] Cancelled = 3,
+        [Description("Draft")] Draft = 4,
     }
 }

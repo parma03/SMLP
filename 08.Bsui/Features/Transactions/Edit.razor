@@ -1,0 +1,195 @@
+@attribute [Authorize(Roles = "Admin,Owner")]
+@page "/Transactions/{Id:guid}/Edit"
+
+<BrowserTabTitle>Edit Transaksi</BrowserTabTitle>
+<MudBreadcrumbs Items="_breadcrumbItems"></MudBreadcrumbs>
+<PageHeader Title="Edit Transaksi" Icon="@Icons.Material.Filled.Edit" />
+
+@if (_isLoading)
+{
+    <SkeletonTable />
+}
+else if (_transaction is null)
+{
+    <EmptyState Icon="@Icons.Material.Filled.ErrorOutline"
+                Title="Transaksi tidak ditemukan"
+                Description="Transaksi yang diminta tidak dapat ditemukan atau telah dihapus." />
+}
+else
+{
+    @if (_isSaving)
+    {
+        <MudProgressLinear Indeterminate="true" Color="Color.Primary" Class="mb-4" />
+    }
+
+    <MudGrid>
+        @* Left Panel *@
+        <MudItem xs="12" md="5">
+            @* Customer Info (readonly) *@
+            <MudPaper Class="pa-4 rounded-lg mb-4" Elevation="2">
+                <MudText Typo="Typo.subtitle1" Class="mb-3" Style="color:#6F4E37; font-weight:700;">
+                    <MudIcon Icon="@Icons.Material.Filled.Person" Class="mr-1" />
+                    Pelanggan
+                </MudText>
+                <MudPaper Class="pa-3 rounded" Elevation="0" Style="background:#FFF3E0; border:1px solid #FFB74D;">
+                    <div class="d-flex align-center">
+                        <MudAvatar Style="background:#C8860A; color:white;" Class="mr-3">
+                            @(_transaction.CustomerName.FirstOrDefault())
+                        </MudAvatar>
+                        <div>
+                            <MudText Typo="Typo.subtitle2">@_transaction.CustomerName</MudText>
+                            <MudText Typo="Typo.caption" Color="Color.Secondary">@_transaction.CustomerMemberCode</MudText>
+                            <MudChip T="string" Size="Size.Small" Color="Color.Warning" Class="mt-1">@_transaction.CustomerTierSnapshot</MudChip>
+                        </div>
+                    </div>
+                </MudPaper>
+                <MudAlert Severity="Severity.Info" Dense="true" Class="mt-2">
+                    Pelanggan tidak dapat diubah. Batalkan dan buat transaksi baru jika perlu mengganti pelanggan.
+                </MudAlert>
+            </MudPaper>
+
+            @* Payment *@
+            <MudPaper Class="pa-4 rounded-lg mb-4" Elevation="2">
+                <MudText Typo="Typo.subtitle1" Class="mb-3" Style="color:#6F4E37; font-weight:700;">
+                    <MudIcon Icon="@Icons.Material.Filled.Payment" Class="mr-1" />
+                    Pembayaran
+                </MudText>
+                <MudSelect @bind-Value="_paymentMethod" Label="Metode Pembayaran" Variant="Variant.Outlined" Class="mb-3">
+                    <MudSelectItem Value="@(PaymentMethod.Tunai)">💵 Tunai</MudSelectItem>
+                    <MudSelectItem Value="@(PaymentMethod.Qris)">📱 QRIS</MudSelectItem>
+                    <MudSelectItem Value="@(PaymentMethod.TransferBank)">🏦 Transfer Bank</MudSelectItem>
+                    <MudSelectItem Value="@(PaymentMethod.EWallet)">💳 E-Wallet (GoPay, OVO, Dana)</MudSelectItem>
+                    <MudSelectItem Value="@(PaymentMethod.Debit)">💳 Kartu Debit</MudSelectItem>
+                    <MudSelectItem Value="@(PaymentMethod.Kredit)">💳 Kartu Kredit</MudSelectItem>
+                </MudSelect>
+                <MudTextField @bind-Value="_notes"
+                              Label="Catatan"
+                              Variant="Variant.Outlined"
+                              Lines="2"
+                              Placeholder="Catatan opsional..." />
+            </MudPaper>
+        </MudItem>
+
+        @* Right Panel - Items & Summary *@
+        <MudItem xs="12" md="7">
+            <MudPaper Class="pa-4 rounded-lg mb-4" Elevation="2">
+                <div class="d-flex justify-space-between align-center mb-3">
+                    <MudText Typo="Typo.subtitle1" Style="color:#6F4E37; font-weight:700;">
+                        <MudIcon Icon="@Icons.Material.Filled.ShoppingCart" Class="mr-1" />
+                        Item Pembelian
+                    </MudText>
+                    <MudButton Variant="Variant.Outlined" Size="Size.Small"
+                               StartIcon="@Icons.Material.Filled.Add"
+                               Color="Color.Primary"
+                               OnClick="@AddItem">
+                        Tambah Item
+                    </MudButton>
+                </div>
+
+                <MudSimpleTable Dense="true" Hover="true">
+                    <thead>
+                        <tr>
+                            <th style="width:40%">Produk / Menu</th>
+                            <th style="text-align:right; width:22%">Harga (Rp)</th>
+                            <th style="text-align:center; width:12%">Qty</th>
+                            <th style="text-align:right; width:18%">Subtotal</th>
+                            <th style="width:8%"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in _items)
+                        {
+                            <tr>
+                                <td>
+                                    <MudTextField @bind-Value="item.ProductName" Variant="Variant.Text" Dense="true"
+                                                  Placeholder="Nama produk..." />
+                                </td>
+                                <td>
+                                    <MudNumericField @bind-Value="item.UnitPrice" Variant="Variant.Text" Dense="true"
+                                                     Format="N0" Min="0" HideSpinButtons="true" />
+                                </td>
+                                <td style="text-align:center">
+                                    <MudNumericField @bind-Value="item.Quantity" Variant="Variant.Text" Dense="true"
+                                                     Min="1" Max="99" />
+                                </td>
+                                <td style="text-align:right">
+                                    <MudText Style="color:#2E7D32; font-weight:600;">
+                                        Rp @((item.UnitPrice * item.Quantity).ToString("N0"))
+                                    </MudText>
+                                </td>
+                                <td>
+                                    <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" Color="Color.Error"
+                                                   OnClick="@(() => RemoveItem(item))" />
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </MudSimpleTable>
+
+                @if (!_items.Any())
+                {
+                    <MudText Class="pa-3 text-center" Color="Color.Secondary">
+                        Belum ada item. Klik "Tambah Item" untuk mulai.
+                    </MudText>
+                }
+            </MudPaper>
+
+            @* Summary *@
+            <MudPaper Class="pa-4 rounded-lg" Elevation="2" Style="border: 2px solid #6F4E37;">
+                <MudText Typo="Typo.subtitle1" Class="mb-3" Style="color:#6F4E37; font-weight:700;">
+                    <MudIcon Icon="@Icons.Material.Filled.Summarize" Class="mr-1" />
+                    Ringkasan
+                </MudText>
+
+                <div class="d-flex justify-space-between mb-1">
+                    <MudText>Subtotal (@_items.Count item)</MudText>
+                    <MudText Style="font-weight:600;">Rp @Subtotal.ToString("N0")</MudText>
+                </div>
+
+                <MudPaper Class="pa-3 rounded mb-2" Elevation="0" Style="background:#FFF3E0; border:1px solid #FFCCBC;">
+                    <MudText Typo="Typo.caption" Style="font-weight:600; color:#E64A19;" Class="mb-1">🏷️ DISKON (Rp)</MudText>
+                    <MudNumericField @bind-Value="_discountAmount"
+                                     Label="Diskon (Rp)"
+                                     Variant="Variant.Outlined"
+                                     Min="0"
+                                     Format="N0"
+                                     Dense="true" />
+                    @if (_discountAmount > 0)
+                    {
+                        <div class="d-flex justify-space-between mt-1">
+                            <MudText Typo="Typo.caption" Color="Color.Error">Potongan</MudText>
+                            <MudText Typo="Typo.caption" Color="Color.Error" Style="font-weight:700;">- Rp @_discountAmount.ToString("N0")</MudText>
+                        </div>
+                    }
+                </MudPaper>
+
+                <MudDivider Class="my-2" />
+                <div class="d-flex justify-space-between mb-3">
+                    <MudText Typo="Typo.h6" Style="color:#6F4E37; font-weight:700;">Total</MudText>
+                    <MudText Typo="Typo.h6" Style="color:#6F4E37; font-weight:700;">Rp @GrandTotal.ToString("N0")</MudText>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <MudButton Variant="Variant.Outlined"
+                               Color="Color.Default"
+                               StartIcon="@Icons.Material.Filled.ArrowBack"
+                               Href="@CommonRouteFor.TransactionDetail(Id)">
+                        Batal
+                    </MudButton>
+                    <MudButton Variant="Variant.Filled"
+                               Style="background:#6F4E37; color:white; flex:1;"
+                               Size="Size.Large"
+                               StartIcon="@Icons.Material.Filled.Save"
+                               OnClick="@SaveAsync"
+                               Disabled="@(!_items.Any(i => !string.IsNullOrWhiteSpace(i.ProductName)) || _isSaving)">
+                        @if (_isSaving)
+                        {
+                            <MudProgressCircular Size="Size.Small" Indeterminate="true" Class="mr-2" />
+                        }
+                        Simpan Perubahan
+                    </MudButton>
+                </div>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+}

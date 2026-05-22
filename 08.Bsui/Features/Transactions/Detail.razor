@@ -94,6 +94,14 @@
                     </MudButton>
                     <AuthorizeView Roles="Admin,Owner">
                         <Authorized>
+                            @if (_transaction.Status == TransactionStatus.Completed || _transaction.Status == TransactionStatus.Pending)
+                            {
+                                <MudButton Variant="Variant.Outlined" Color="Color.Warning" Size="Size.Small"
+                                           StartIcon="@Icons.Material.Filled.Edit"
+                                           Href="@CommonRouteFor.TransactionEdit(_transaction.Id)" FullWidth="true">
+                                    Edit Transaksi
+                                </MudButton>
+                            }
                             @if (_transaction.Status == TransactionStatus.Completed)
                             {
                                 <MudButton Variant="Variant.Outlined" Color="Color.Error" Size="Size.Small"

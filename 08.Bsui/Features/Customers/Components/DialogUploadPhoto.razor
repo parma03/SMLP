@@ -1,0 +1,160 @@
+@using MudBlazor
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Authorization
+@using Smlp.Bsui.Common.Extensions
+
+@inject ISnackbar _snackbar
+@inject HttpClient _httpClient
+
+<MudDialog>
+    <TitleContent>
+        <div class="d-flex align-center">
+            <MudIcon Icon="@Icons.Material.Filled.PhotoCamera" Class="mr-2" Style="color:#6F4E37;" />
+            <MudText Typo="Typo.h6">Upload Foto Pelanggan</MudText>
+        </div>
+    </TitleContent>
+    <DialogContent>
+        <div class="d-flex flex-column align-center">
+            @if (_previewUrl is not null)
+            {
+                <MudAvatar Style="width:120px; height:120px; margin-bottom:16px;">
+                    <MudImage Src="@_previewUrl" ObjectFit="ObjectFit.Cover" Width="120" Height="120" />
+                </MudAvatar>
+            }
+            else
+            {
+                <MudAvatar Style="width:120px; height:120px; background:#C8860A; color:white; font-size:3rem; margin-bottom:16px;">
+                    @(CustomerName?.FirstOrDefault())
+                </MudAvatar>
+            }
+
+            <MudText Typo="Typo.subtitle1" Class="mb-1" Style="font-weight:700;">@CustomerName</MudText>
+            <MudText Typo="Typo.caption" Color="Color.Secondary" Class="mb-3">@MemberCode</MudText>
+
+            <InputFile id="photoUploadInput" OnChange="OnFileSelected" accept="image/jpeg,image/png,image/webp" style="display:none" />
+
+            <MudButton Variant="Variant.Outlined"
+                       StartIcon="@Icons.Material.Filled.CloudUpload"
+                       HtmlTag="label"
+                       for="photoUploadInput"
+                       Style="cursor:pointer;">
+                Pilih Foto
+            </MudButton>
+
+            @if (_selectedFile is not null)
+            {
+                <MudPaper Class="pa-3 mt-3 rounded" Elevation="0" Style="background:#E8F5E9; border:1px solid #4CAF50; width:100%;">
+                    <div class="d-flex align-center gap-2">
+                        <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Success" />
+                        <div>
+                            <MudText Typo="Typo.body2" Style="font-weight:600;">@_selectedFile.Name</MudText>
+                            <MudText Typo="Typo.caption" Color="Color.Secondary">
+                                @((_selectedFile.Size / 1024.0).ToString("N1")) KB
+                            </MudText>
+                        </div>
+                    </div>
+                </MudPaper>
+            }
+
+            <MudAlert Severity="Severity.Info" Dense="true" Class="mt-3" Style="width:100%;">
+                Format: JPG, PNG, WebP. Ukuran maksimal 2MB.
+            </MudAlert>
+
+            @if (_errorMessage is not null)
+            {
+                <MudAlert Severity="Severity.Error" Dense="true" Class="mt-2" Style="width:100%;">@_errorMessage</MudAlert>
+            }
+        </div>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel" Variant="Variant.Text">Batal</MudButton>
+        <MudButton OnClick="UploadAsync"
+                   Variant="Variant.Filled"
+                   Style="background:#6F4E37; color:white;"
+                   Disabled="@(_selectedFile is null || _isUploading)">
+            @if (_isUploading)
+            {
+                <MudProgressCircular Size="Size.Small" Indeterminate="true" Class="mr-1" />
+            }
+            Upload Foto
+        </MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] private IMudDialogInstance MudDialog { get; set; } = default!;
+    [Parameter] public Guid CustomerId { get; set; }
+    [Parameter] public string? CustomerName { get; set; }
+    [Parameter] public string? MemberCode { get; set; }
+
+    private IBrowserFile? _selectedFile;
+    private string? _previewUrl;
+    private string? _errorMessage;
+    private bool _isUploading = false;
+
+    private async Task OnFileSelected(InputFileChangeEventArgs e)
+    {
+        _errorMessage = null;
+        var file = e.File;
+
+        var allowedTypes = new[] { "image/jpeg", "image/png", "image/webp" };
+        if (!allowedTypes.Contains(file.ContentType))
+        {
+            _errorMessage = "Format file tidak didukung. Gunakan JPG, PNG, atau WebP.";
+            return;
+        }
+
+        if (file.Size > 2 * 1024 * 1024)
+        {
+            _errorMessage = "Ukuran file melebihi 2MB.";
+            return;
+        }
+
+        _selectedFile = file;
+
+        // Create preview
+        var buffer = new byte[file.Size];
+        await file.OpenReadStream(maxAllowedSize: 2 * 1024 * 1024).ReadAsync(buffer);
+        var base64 = Convert.ToBase64String(buffer);
+        _previewUrl = $"data:{file.ContentType};base64,{base64}";
+    }
+
+    private async Task UploadAsync()
+    {
+        if (_selectedFile is null) return;
+
+        _isUploading = true;
+        _errorMessage = null;
+        try
+        {
+            using var content = new MultipartFormDataContent();
+            var buffer = new byte[_selectedFile.Size];
+            await _selectedFile.OpenReadStream(maxAllowedSize: 2 * 1024 * 1024).ReadAsync(buffer);
+            content.Add(new ByteArrayContent(buffer), "file", _selectedFile.Name);
+
+            var response = await _httpClient.PostAsync(
+                $"api/v1/customers/{CustomerId}/photo", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                _snackbar.AddSuccess("Foto pelanggan berhasil diupload!");
+                MudDialog.Close(DialogResult.Ok(_previewUrl));
+            }
+            else
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                _errorMessage = $"Gagal upload: {response.StatusCode}";
+            }
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = $"Terjadi kesalahan: {ex.Message}";
+        }
+        finally
+        {
+            _isUploading = false;
+        }
+    }
+
+    private void Cancel() => MudDialog.Cancel();
+}
