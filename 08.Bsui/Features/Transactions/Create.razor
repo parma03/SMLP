@@ -130,8 +130,9 @@
                         <tr>
                             <td>
                                 <MudAutocomplete T="string"
-                                                 @bind-Value="item.ProductName"
-                                                 SearchFunc="@(async (search, ct) => await SearchProductsAsync(search, item, ct))"
+                                                 Value="item.ProductName"
+                                                 ValueChanged="@((name) => OnProductSelected(item, name))"
+                                                 SearchFunc="@SearchProductsAsync"
                                                  Dense="true"
                                                  Variant="Variant.Text"
                                                  Placeholder="Cari / ketik nama produk..."
