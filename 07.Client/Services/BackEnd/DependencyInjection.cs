@@ -40,6 +40,7 @@ public static class DependencyInjection
         services.AddTransient<CustomerService>();
         services.AddTransient<RewardService>();
         services.AddTransient<PointRuleService>();
+        services.AddTransient<TierRuleService>();
 
         #endregion Master Services
 
