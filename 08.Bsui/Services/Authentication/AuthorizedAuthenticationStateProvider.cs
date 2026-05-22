@@ -1,9 +1,10 @@
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.JsonWebTokens;
 using Smlp.Client.Services.BackEnd.Auth;
 using Smlp.Shared.Auth.Requests;
 
@@ -97,11 +98,11 @@ public class AuthorizedAuthenticationStateProvider : AuthenticationStateProvider
             }
 
             var claims = ParseClaimsFromJwt(storedToken.Value);
-            var expiry = claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Exp);
+            var expiryClaim = claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Exp);
 
-            if (expiry is not null)
+            if (expiryClaim is not null && long.TryParse(expiryClaim.Value, out var expiryUnix))
             {
-                var expiryTime = DateTimeOffset.FromUnixTimeSeconds(long.Parse(expiry.Value));
+                var expiryTime = DateTimeOffset.FromUnixTimeSeconds(expiryUnix);
                 if (expiryTime < DateTimeOffset.UtcNow.AddSeconds(30))
                 {
                     // Token expired or about to expire - try refresh
@@ -111,6 +112,7 @@ public class AuthorizedAuthenticationStateProvider : AuthenticationStateProvider
                         await LogoutAsync();
                         return;
                     }
+
                     _identityLoaded = true;
                     return;
                 }
@@ -163,7 +165,8 @@ public class AuthorizedAuthenticationStateProvider : AuthenticationStateProvider
     /// </summary>
     public async Task RefreshTokensAsync()
     {
-        if (_authenticationOptions.Provider == "None") return;
+        if (_authenticationOptions.Provider == "None")
+            return;
 
         try
         {
@@ -172,11 +175,16 @@ public class AuthorizedAuthenticationStateProvider : AuthenticationStateProvider
                 return;
 
             var claims = ParseClaimsFromJwt(tokenResult.Value);
-            var expiry = claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Exp);
+            var expiryClaim = claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Exp);
 
-            if (expiry is null) return;
+            if (expiryClaim is null)
+                return;
 
-            var expiryTime = DateTimeOffset.FromUnixTimeSeconds(long.Parse(expiry.Value));
+            if (!long.TryParse(expiryClaim.Value, out var expiryUnix))
+                return;
+
+            var expiryTime = DateTimeOffset.FromUnixTimeSeconds(expiryUnix);
+
             // Refresh if token expires within 5 minutes
             if (expiryTime > DateTimeOffset.UtcNow.AddMinutes(5))
                 return;
@@ -254,10 +262,10 @@ public class AuthorizedAuthenticationStateProvider : AuthenticationStateProvider
 
     private static IEnumerable<Claim> ParseClaimsFromJwt(string jwt)
     {
-        var handler = new JwtSecurityTokenHandler();
+        var handler = new JsonWebTokenHandler();
         try
         {
-            var token = handler.ReadJwtToken(jwt);
+            var token = handler.ReadJsonWebToken(jwt);
             return token.Claims;
         }
         catch
