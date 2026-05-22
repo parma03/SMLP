@@ -158,6 +158,90 @@ public partial class Index
         }
     }
 
+    private async Task ExportToPdfAsync()
+    {
+        try
+        {
+            var request = new GetCustomerRequest
+            {
+                Search = string.IsNullOrWhiteSpace(_searchText) ? null : _searchText,
+                Tier = _filterTier,
+                Segment = _filterSegment,
+                PageNumber = 1,
+                PageSize = 5000,
+            };
+            var result = await _customerService.GetCustomersAsync(request);
+            if (result.Error is not null)
+            {
+                _snackbar.AddError(result.Error.ToDetail());
+                return;
+            }
+
+            var rows = result.Result!.Items;
+            var sb = new System.Text.StringBuilder();
+            sb.Append(@"<!DOCTYPE html>
+<html><head><meta charset='UTF-8'/>
+<style>
+body { font-family: Arial, sans-serif; font-size: 11px; margin: 20px; color: #333; }
+h1 { color: #6F4E37; font-size: 18px; margin-bottom: 4px; }
+.subtitle { color: #795548; font-size: 10px; margin-bottom: 16px; }
+table { border-collapse: collapse; width: 100%; }
+th { background: #6F4E37; color: white; padding: 7px 8px; text-align: left; font-size: 10px; }
+td { padding: 5px 8px; border-bottom: 1px solid #F0E9E3; font-size: 10px; }
+tr:nth-child(even) td { background: #FFF8F0; }
+.tier-bronze { color: #A0522D; font-weight: bold; }
+.tier-silver { color: #607D8B; font-weight: bold; }
+.tier-gold { color: #C8860A; font-weight: bold; }
+.tier-platinum { color: #6F4E37; font-weight: bold; }
+.points { color: #C8860A; font-weight: 600; }
+.amount { color: #2E7D32; font-weight: 600; }
+.footer { margin-top: 20px; font-size: 9px; color: #999; }
+</style></head><body>
+<h1>📋 Laporan Data Pelanggan</h1>
+<div class='subtitle'>Dicetak: ");
+            sb.Append(DateTime.Now.ToString("dd MMMM yyyy HH:mm"));
+            sb.Append($" &nbsp;|&nbsp; Total: {rows.Count()} pelanggan</div>");
+            sb.Append(@"<table><thead><tr>
+<th>Kode Member</th><th>Nama Pelanggan</th><th>No. HP</th><th>Tier</th><th>Segmen</th>
+<th style='text-align:right'>Total Poin</th><th style='text-align:right'>Total Belanja</th><th>Transaksi Terakhir</th>
+</tr></thead><tbody>");
+
+            foreach (var c in rows)
+            {
+                var tierCss = c.Tier switch
+                {
+                    Smlp.Base.Customer.Enums.CustomerTier.Bronze => "tier-bronze",
+                    Smlp.Base.Customer.Enums.CustomerTier.Silver => "tier-silver",
+                    Smlp.Base.Customer.Enums.CustomerTier.Gold => "tier-gold",
+                    Smlp.Base.Customer.Enums.CustomerTier.Platinum => "tier-platinum",
+                    _ => ""
+                };
+                sb.Append($"<tr><td><b>{System.Net.WebUtility.HtmlEncode(c.MemberCode)}</b></td>");
+                sb.Append($"<td>{System.Net.WebUtility.HtmlEncode(c.FullName)}</td>");
+                sb.Append($"<td>{System.Net.WebUtility.HtmlEncode(c.PhoneNumber)}</td>");
+                sb.Append($"<td class='{tierCss}'>{GetTierLabel(c.Tier)}</td>");
+                sb.Append($"<td>{GetSegmentLabel(c.Segment)}</td>");
+                sb.Append($"<td style='text-align:right' class='points'>⭐ {c.TotalPoints:N0}</td>");
+                sb.Append($"<td style='text-align:right' class='amount'>Rp {c.TotalSpend:N0}</td>");
+                sb.Append($"<td>{c.LastTransactionDate?.ToString("dd MMM yyyy") ?? "-"}</td></tr>");
+            }
+
+            sb.Append("</tbody></table>");
+            sb.Append($"<div class='footer'>SMLP — Sistem Manajemen Loyalitas Pelanggan &copy; {DateTime.Now.Year}</div>");
+            sb.Append("</body></html>");
+
+            var htmlBytes = System.Text.Encoding.UTF8.GetBytes(sb.ToString());
+            var base64 = Convert.ToBase64String(htmlBytes);
+            var fileName = $"Pelanggan_{DateTime.Now:yyyyMMdd_HHmmss}.html";
+            await _jsRuntime.InvokeVoidAsync("downloadFileFromBase64", fileName, "text/html", base64);
+            _snackbar.AddSuccess($"Export HTML/PDF berhasil: {rows.Count()} data. Buka file lalu Print → Save as PDF.");
+        }
+        catch (Exception ex)
+        {
+            _snackbar.AddError($"Gagal export PDF: {ex.Message}");
+        }
+    }
+
     private async Task ExportToCsvAsync()
     {
         try

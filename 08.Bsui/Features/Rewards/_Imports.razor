@@ -1,10 +1,14 @@
 @using MudBlazor
 @using Smlp.Client.Services.BackEnd.Masters
+@using Smlp.Client.Services.BackEnd.Transactions
 @using Microsoft.AspNetCore.Authorization
 @using Smlp.Bsui.Common.Constants
 @using Smlp.Bsui.Common.Components
 @using Smlp.Base.Reward.Enums
+@using Smlp.Bsui.Features.Rewards.Components
 
 @inject NavigationManager _navigationManager
 @inject ISnackbar _snackbar
+@inject IDialogService _dialogService
 @inject RewardService _rewardService
+@inject RedeemService _redeemService

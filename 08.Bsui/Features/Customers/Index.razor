@@ -62,6 +62,13 @@
                        Disabled="@(_loading || !_customers.Any())">
                 Export Excel
             </MudButton>
+            <MudButton Variant="Variant.Outlined"
+                       StartIcon="@Icons.Material.Filled.PictureAsPdf"
+                       Color="Color.Error"
+                       OnClick="ExportToPdfAsync"
+                       Disabled="@(_loading || !_customers.Any())">
+                Export PDF
+            </MudButton>
         </MudItem>
     </MudGrid>
 

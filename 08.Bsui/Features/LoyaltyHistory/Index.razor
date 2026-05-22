@@ -1,0 +1,145 @@
+@attribute [Authorize]
+@page "/LoyaltyHistory"
+
+<BrowserTabTitle>Riwayat Loyalitas</BrowserTabTitle>
+<PageHeader Title="Riwayat Loyalitas Poin" Icon="@Icons.Material.Filled.History" />
+
+<MudGrid Class="mb-4">
+    <MudItem xs="12" sm="6" md="4">
+        <MudTextField @bind-Value="_searchText"
+                      Label="Cari nama / kode member..."
+                      Variant="Variant.Outlined"
+                      Adornment="Adornment.Start"
+                      AdornmentIcon="@Icons.Material.Filled.Search"
+                      Immediate="true"
+                      DebounceInterval="400"
+                      OnDebounceIntervalElapsed="OnSearchChanged" />
+    </MudItem>
+    <MudItem xs="6" sm="3" md="2">
+        <MudDatePicker @bind-Date="_dateFrom" Label="Dari Tanggal" Variant="Variant.Outlined" />
+    </MudItem>
+    <MudItem xs="6" sm="3" md="2">
+        <MudDatePicker @bind-Date="_dateTo" Label="Sampai Tanggal" Variant="Variant.Outlined" />
+    </MudItem>
+    <MudItem xs="12" sm="6" md="2">
+        <MudSelect T="string" @bind-Value="_filterType" Label="Tipe Aktivitas" Variant="Variant.Outlined">
+            <MudSelectItem T="string" Value="@("all")">Semua</MudSelectItem>
+            <MudSelectItem T="string" Value="@("transaction")">🛍️ Transaksi</MudSelectItem>
+            <MudSelectItem T="string" Value="@("redeem")">🎁 Penukaran</MudSelectItem>
+            <MudSelectItem T="string" Value="@("adjustment")">⚙️ Penyesuaian</MudSelectItem>
+        </MudSelect>
+    </MudItem>
+    <MudItem xs="12" sm="6" md="2" Class="d-flex align-end">
+        <MudButton Variant="Variant.Outlined" Color="Color.Primary"
+                   StartIcon="@Icons.Material.Filled.Search"
+                   OnClick="LoadDataAsync"
+                   Style="width:100%;">
+            Cari
+        </MudButton>
+    </MudItem>
+</MudGrid>
+
+@* Summary Cards *@
+<MudGrid Class="mb-4">
+    <MudItem xs="12" sm="4">
+        <MudPaper Class="pa-4 rounded-lg" Elevation="2" Style="border-left:4px solid #C8860A;">
+            <div class="d-flex align-center justify-space-between">
+                <div>
+                    <MudText Typo="Typo.caption" Color="Color.Secondary">Total Poin Diperoleh</MudText>
+                    <MudText Typo="Typo.h5" Style="color:#C8860A; font-weight:700;">⭐ @TotalEarned.ToString("N0")</MudText>
+                </div>
+                <MudIcon Icon="@Icons.Material.Filled.AddCircle" Style="color:#C8860A; font-size:2.5rem; opacity:0.4;" />
+            </div>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" sm="4">
+        <MudPaper Class="pa-4 rounded-lg" Elevation="2" Style="border-left:4px solid #C62828;">
+            <div class="d-flex align-center justify-space-between">
+                <div>
+                    <MudText Typo="Typo.caption" Color="Color.Secondary">Total Poin Digunakan</MudText>
+                    <MudText Typo="Typo.h5" Style="color:#C62828; font-weight:700;">⭐ @TotalUsed.ToString("N0")</MudText>
+                </div>
+                <MudIcon Icon="@Icons.Material.Filled.RemoveCircle" Style="color:#C62828; font-size:2.5rem; opacity:0.4;" />
+            </div>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" sm="4">
+        <MudPaper Class="pa-4 rounded-lg" Elevation="2" Style="border-left:4px solid #2E7D32;">
+            <div class="d-flex align-center justify-space-between">
+                <div>
+                    <MudText Typo="Typo.caption" Color="Color.Secondary">Total Aktivitas</MudText>
+                    <MudText Typo="Typo.h5" Style="color:#2E7D32; font-weight:700;">@_filteredItems.Count</MudText>
+                </div>
+                <MudIcon Icon="@Icons.Material.Filled.Analytics" Style="color:#2E7D32; font-size:2.5rem; opacity:0.4;" />
+            </div>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+
+<MudPaper Class="pa-4 rounded-lg" Elevation="1">
+    @if (_loading)
+    {
+        <SkeletonTable />
+    }
+    else if (!_filteredItems.Any())
+    {
+        <EmptyState Icon="@Icons.Material.Filled.History"
+                    Title="Tidak Ada Riwayat"
+                    Description="Belum ada aktivitas loyalitas dalam periode yang dipilih." />
+    }
+    else
+    {
+        <MudTable Items="@_filteredItems" Dense="true" Hover="true" Striped="true"
+                  LoadingProgressColor="Color.Primary" Elevation="0">
+            <HeaderContent>
+                <MudTh>Tanggal</MudTh>
+                <MudTh>Pelanggan</MudTh>
+                <MudTh>Tipe</MudTh>
+                <MudTh>Keterangan</MudTh>
+                <MudTh Style="text-align:right">Poin</MudTh>
+                <MudTh>Status</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd>
+                    <MudText Typo="Typo.caption">@context.Date.ToString("dd MMM yyyy")</MudText>
+                    <MudText Typo="Typo.caption" Color="Color.Secondary">@context.Date.ToString("HH:mm")</MudText>
+                </MudTd>
+                <MudTd>
+                    <MudText Typo="Typo.body2">@context.CustomerName</MudText>
+                    <MudText Typo="Typo.caption" Color="Color.Secondary">@context.CustomerMemberCode</MudText>
+                </MudTd>
+                <MudTd>
+                    <MudChip T="string" Size="Size.Small" Color="@GetTypeColor(context.ActivityType)">
+                        @GetTypeLabel(context.ActivityType)
+                    </MudChip>
+                </MudTd>
+                <MudTd>
+                    <MudText Typo="Typo.body2">@context.Description</MudText>
+                    @if (!string.IsNullOrEmpty(context.Reference))
+                    {
+                        <MudText Typo="Typo.caption" Style="font-family:monospace; color:#6F4E37;">@context.Reference</MudText>
+                    }
+                </MudTd>
+                <MudTd Style="text-align:right">
+                    @if (context.Points > 0)
+                    {
+                        <MudText Style="color:#C8860A; font-weight:700;">+@context.Points.ToString("N0")</MudText>
+                    }
+                    else
+                    {
+                        <MudText Style="color:#C62828; font-weight:700;">@context.Points.ToString("N0")</MudText>
+                    }
+                </MudTd>
+                <MudTd>
+                    @if (!string.IsNullOrEmpty(context.Status))
+                    {
+                        <MudChip T="string" Size="Size.Small" Color="@GetStatusColor(context.Status)">@context.Status</MudChip>
+                    }
+                </MudTd>
+            </RowTemplate>
+            <PagerContent>
+                <MudTablePager PageSizeOptions="new int[]{25, 50, 100}" />
+            </PagerContent>
+        </MudTable>
+    }
+</MudPaper>

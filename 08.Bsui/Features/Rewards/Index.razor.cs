@@ -2,6 +2,7 @@ using MudBlazor;
 using Smlp.Base.Customer.Enums;
 using Smlp.Base.Reward.Enums;
 using Smlp.Bsui.Common.Extensions;
+using Smlp.Bsui.Features.Rewards.Components;
 using Smlp.Shared.Master.Rewards.Queries;
 
 namespace Smlp.Bsui.Features.Rewards;
@@ -46,6 +47,21 @@ public partial class Index
         finally
         {
             _loading = false;
+        }
+    }
+
+    private async Task OpenRedeemDialogAsync(GetRewardResponse reward)
+    {
+        var parameters = new DialogParameters<DialogRedeem>
+        {
+            { x => x.Reward, reward }
+        };
+        var options = new DialogOptions { MaxWidth = MaxWidth.Small, FullWidth = true, CloseButton = true };
+        var dialog = await _dialogService.ShowAsync<DialogRedeem>("Tukar Reward", parameters, options);
+        var result = await dialog.Result;
+        if (!result.Canceled)
+        {
+            await LoadRewardsAsync(); // refresh stock count
         }
     }
 

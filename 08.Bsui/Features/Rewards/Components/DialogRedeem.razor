@@ -1,0 +1,234 @@
+@using MudBlazor
+@using Microsoft.AspNetCore.Authorization
+@using Smlp.Client.Services.BackEnd.Masters
+@using Smlp.Client.Services.BackEnd.Transactions
+@using Smlp.Shared.Master.Customers.Queries
+@using Smlp.Shared.Master.Rewards.Queries
+@using Smlp.Shared.Transaction.RedeemHistories.Commands.Create
+@using Smlp.Bsui.Common.Extensions
+@using Smlp.Base.Customer.Enums
+@using Smlp.Base.Reward.Enums
+
+@inject ISnackbar _snackbar
+@inject CustomerService _customerService
+@inject RedeemService _redeemService
+
+<MudDialog>
+    <TitleContent>
+        <div class="d-flex align-center">
+            <MudIcon Icon="@Icons.Material.Filled.Redeem" Class="mr-2" Style="color:#C8860A;" />
+            <MudText Typo="Typo.h6">Tukar Reward: @Reward?.Name</MudText>
+        </div>
+    </TitleContent>
+    <DialogContent>
+        @if (Reward is not null)
+        {
+            <MudPaper Class="pa-3 rounded mb-4" Elevation="0" Style="background:#FFF8E0; border:1px solid #C8860A;">
+                <div class="d-flex justify-space-between align-center">
+                    <div>
+                        <MudText Typo="Typo.subtitle2" Style="color:#6F4E37;">@Reward.Name</MudText>
+                        <MudText Typo="Typo.body2" Color="Color.Secondary">@Reward.Description</MudText>
+                        <MudText Typo="Typo.caption" Style="color:#C8860A; font-weight:700;">
+                            ⭐ @Reward.PointCost.ToString("N0") poin
+                        </MudText>
+                    </div>
+                    <MudChip T="string" Size="Size.Small" Color="@GetTypeColor(Reward.Type)">@GetTypeLabel(Reward.Type)</MudChip>
+                </div>
+            </MudPaper>
+
+            <MudText Typo="Typo.subtitle2" Class="mb-2">Cari Pelanggan</MudText>
+            <div class="d-flex gap-2 mb-3">
+                <MudTextField @bind-Value="_memberSearch"
+                              Label="No. HP / Kode Member"
+                              Variant="Variant.Outlined"
+                              Placeholder="0812xxxxxxxx atau MBR-001"
+                              OnKeyUp="OnSearchKeyUp"
+                              FullWidth="true" />
+                <MudButton Variant="Variant.Filled"
+                           Style="background:#6F4E37; color:white; min-width:80px;"
+                           OnClick="SearchCustomerAsync"
+                           Disabled="@_isSearching">
+                    @if (_isSearching)
+                    {
+                        <MudProgressCircular Size="Size.Small" Indeterminate="true" />
+                    }
+                    else
+                    {
+                        <MudIcon Icon="@Icons.Material.Filled.Search" />
+                    }
+                </MudButton>
+            </div>
+
+            @if (_customer is not null)
+            {
+                <MudPaper Class="pa-3 rounded mb-3" Elevation="0" Style="background:#E8F5E9; border:1px solid #4CAF50;">
+                    <div class="d-flex align-center justify-space-between">
+                        <div class="d-flex align-center">
+                            <MudAvatar Style="background:#C8860A; color:white; margin-right:12px;">
+                                @(_customer.FullName.FirstOrDefault())
+                            </MudAvatar>
+                            <div>
+                                <MudText Typo="Typo.subtitle2">@_customer.FullName</MudText>
+                                <MudText Typo="Typo.caption" Color="Color.Secondary">@_customer.PhoneNumber · @_customer.MemberCode</MudText>
+                                <div class="d-flex align-center gap-1 mt-1">
+                                    <MudChip T="string" Size="Size.Small" Color="Color.Warning">@_customer.Tier</MudChip>
+                                    <MudText Typo="Typo.caption" Style="color:#C8860A; font-weight:700;">
+                                        ⭐ @_customer.TotalPoints.ToString("N0") poin
+                                    </MudText>
+                                </div>
+                            </div>
+                        </div>
+                        @if (_customer.TotalPoints < Reward.PointCost)
+                        {
+                            <MudChip T="string" Size="Size.Small" Color="Color.Error">Poin tidak cukup</MudChip>
+                        }
+                        else
+                        {
+                            <MudChip T="string" Size="Size.Small" Color="Color.Success">✓ Memenuhi syarat</MudChip>
+                        }
+                    </div>
+                    @if (_customer.TotalPoints >= Reward.PointCost)
+                    {
+                        <MudDivider Class="my-2" />
+                        <div class="d-flex justify-space-between">
+                            <MudText Typo="Typo.caption">Poin saat ini:</MudText>
+                            <MudText Typo="Typo.caption" Style="font-weight:700; color:#C8860A;">@_customer.TotalPoints.ToString("N0")</MudText>
+                        </div>
+                        <div class="d-flex justify-space-between">
+                            <MudText Typo="Typo.caption">Biaya redeem:</MudText>
+                            <MudText Typo="Typo.caption" Style="font-weight:700; color:#C62828;">- @Reward.PointCost.ToString("N0")</MudText>
+                        </div>
+                        <MudDivider Class="my-1" />
+                        <div class="d-flex justify-space-between">
+                            <MudText Typo="Typo.caption" Style="font-weight:700;">Sisa poin:</MudText>
+                            <MudText Typo="Typo.caption" Style="font-weight:700; color:#2E7D32;">@((_customer.TotalPoints - Reward.PointCost).ToString("N0"))</MudText>
+                        </div>
+                    }
+                </MudPaper>
+
+                <MudTextField @bind-Value="_notes"
+                              Label="Catatan (Opsional)"
+                              Variant="Variant.Outlined"
+                              Lines="2"
+                              Placeholder="Catatan tambahan untuk penukaran ini..."
+                              Class="mb-2" />
+            }
+
+            @if (_customer is null)
+            {
+                <MudAlert Severity="Severity.Info" Dense="true">
+                    Cari pelanggan berdasarkan No. HP atau kode member untuk melanjutkan penukaran.
+                </MudAlert>
+            }
+        }
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel" Variant="Variant.Text">Batal</MudButton>
+        <MudButton OnClick="SubmitRedeemAsync"
+                   Variant="Variant.Filled"
+                   Style="background:#C8860A; color:white;"
+                   Disabled="@(!CanRedeem || _isProcessing)">
+            @if (_isProcessing)
+            {
+                <MudProgressCircular Size="Size.Small" Indeterminate="true" Class="mr-1" />
+            }
+            Tukar Sekarang
+        </MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] private IMudDialogInstance MudDialog { get; set; } = default!;
+    [Parameter] public GetRewardResponse? Reward { get; set; }
+
+    private string _memberSearch = string.Empty;
+    private bool _isSearching = false;
+    private bool _isProcessing = false;
+    private GetCustomerResponse? _customer;
+    private string? _notes;
+
+    private bool CanRedeem =>
+        _customer is not null &&
+        Reward is not null &&
+        _customer.TotalPoints >= Reward.PointCost;
+
+    private async Task SearchCustomerAsync()
+    {
+        if (string.IsNullOrWhiteSpace(_memberSearch)) return;
+        _isSearching = true;
+        _customer = null;
+        try
+        {
+            var result = await _customerService.GetCustomersAsync(new GetCustomerRequest
+            {
+                Search = _memberSearch,
+                PageSize = 1
+            });
+            if (result.Error is not null)
+            {
+                _snackbar.AddError(result.Error.ToDetail());
+                return;
+            }
+            _customer = result.Result?.Items?.FirstOrDefault();
+            if (_customer is null)
+                _snackbar.AddWarning("Pelanggan tidak ditemukan.");
+        }
+        catch (Exception ex)
+        {
+            _snackbar.AddError($"Gagal mencari: {ex.Message}");
+        }
+        finally { _isSearching = false; }
+    }
+
+    private async Task OnSearchKeyUp(Microsoft.AspNetCore.Components.Web.KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter") await SearchCustomerAsync();
+    }
+
+    private async Task SubmitRedeemAsync()
+    {
+        if (!CanRedeem) return;
+        _isProcessing = true;
+        try
+        {
+            var result = await _redeemService.CreateRedeemAsync(new CreateRedeemRequest
+            {
+                CustomerId = _customer!.Id,
+                RewardId = Reward!.Id,
+                Notes = _notes
+            });
+            if (result.Error is not null)
+            {
+                _snackbar.AddError(result.Error.ToDetail());
+                return;
+            }
+            _snackbar.AddSuccess($"Berhasil! Reward '{Reward.Name}' ditukarkan untuk {_customer.FullName}.");
+            MudDialog.Close(DialogResult.Ok(true));
+        }
+        catch (Exception ex)
+        {
+            _snackbar.AddError($"Gagal proses redeem: {ex.Message}");
+        }
+        finally { _isProcessing = false; }
+    }
+
+    private void Cancel() => MudDialog.Cancel();
+
+    private Color GetTypeColor(RewardType type) => type switch
+    {
+        RewardType.FreeItem => Color.Success,
+        RewardType.DiscountAmount => Color.Info,
+        RewardType.DiscountPercent => Color.Warning,
+        RewardType.Voucher => Color.Secondary,
+        _ => Color.Default
+    };
+
+    private string GetTypeLabel(RewardType type) => type switch
+    {
+        RewardType.FreeItem => "🎁 Produk Gratis",
+        RewardType.DiscountAmount => "💰 Diskon Nominal",
+        RewardType.DiscountPercent => "🏷️ Diskon %",
+        RewardType.Voucher => "🎫 Voucher",
+        _ => type.ToString()
+    };
+}

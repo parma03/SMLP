@@ -1,0 +1,158 @@
+@using MudBlazor
+@using Smlp.Bsui.Common.Services.Notifications
+@inject NotificationService _notificationService
+@inject NavigationManager _navigationManager
+@implements IDisposable
+
+<MudTooltip Text="Notifikasi">
+    <MudIconButton Icon="@Icons.Material.Filled.Notifications"
+                   Color="Color.Inherit"
+                   OnClick="TogglePopover" />
+</MudTooltip>
+
+@if (_notificationService.HasUnread)
+{
+    <MudBadge Content="@_notificationService.UnreadCount"
+              Color="Color.Error"
+              Overlap="true"
+              Class="notification-badge-overlay" />
+}
+
+<MudPopover Open="@_open" AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight"
+            Class="notification-popover" Style="width:360px; max-height:480px; overflow:hidden;">
+    <MudPaper Elevation="4" Class="rounded-lg" Style="overflow:hidden;">
+        <div class="d-flex align-center justify-space-between pa-3" style="background:#3E2723; color:white;">
+            <div class="d-flex align-center">
+                <MudIcon Icon="@Icons.Material.Filled.Notifications" Class="mr-2" />
+                <MudText Typo="Typo.subtitle1" Style="color:white; font-weight:700;">Notifikasi</MudText>
+                @if (_notificationService.UnreadCount > 0)
+                {
+                    <MudChip T="string" Size="Size.Small" Color="Color.Error" Class="ml-2">@_notificationService.UnreadCount baru</MudChip>
+                }
+            </div>
+            <div class="d-flex gap-1">
+                @if (_notificationService.Items.Any())
+                {
+                    <MudTooltip Text="Tandai semua dibaca">
+                        <MudIconButton Icon="@Icons.Material.Filled.DoneAll"
+                                       Size="Size.Small" Color="Color.Inherit"
+                                       OnClick="MarkAllRead" />
+                    </MudTooltip>
+                    <MudTooltip Text="Hapus semua">
+                        <MudIconButton Icon="@Icons.Material.Filled.DeleteSweep"
+                                       Size="Size.Small" Color="Color.Inherit"
+                                       OnClick="ClearAll" />
+                    </MudTooltip>
+                }
+                <MudIconButton Icon="@Icons.Material.Filled.Close"
+                               Size="Size.Small" Color="Color.Inherit"
+                               OnClick="Close" />
+            </div>
+        </div>
+        <MudDivider />
+        <div style="max-height:380px; overflow-y:auto;">
+            @if (!_notificationService.Items.Any())
+            {
+                <div class="d-flex flex-column align-center justify-center pa-6">
+                    <MudIcon Icon="@Icons.Material.Filled.NotificationsNone" Style="font-size:3rem; color:#BDBDBD;" Class="mb-2" />
+                    <MudText Typo="Typo.body2" Color="Color.Secondary">Tidak ada notifikasi</MudText>
+                </div>
+            }
+            else
+            {
+                @foreach (var item in _notificationService.Items)
+                {
+                    <div class="notification-item @(item.IsRead ? "" : "unread")"
+                         @onclick="() => OnItemClick(item)"
+                         style="cursor:pointer; padding:12px 16px; border-bottom:1px solid #F0F0F0; background:@(item.IsRead ? "white" : "#FFFDE7");">
+                        <div class="d-flex align-start">
+                            <MudIcon Icon="@GetIcon(item.Level)"
+                                     Style="@($"color:{item.Color}; font-size:1.2rem; margin-right:10px; margin-top:2px; flex-shrink:0;")" />
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-space-between align-center">
+                                    <MudText Typo="Typo.subtitle2" Style="@(item.IsRead ? "" : "font-weight:700;")">
+                                        @item.Title
+                                    </MudText>
+                                    <div @onclick:stopPropagation="true" style="margin:-4px -8px 0 4px; flex-shrink:0;">
+                                        <MudIconButton Icon="@Icons.Material.Filled.Close"
+                                                       Size="Size.Small"
+                                                       OnClick="() => RemoveItem(item.Id)" />
+                                    </div>
+                                </div>
+                                <MudText Typo="Typo.caption" Color="Color.Secondary" Style="line-height:1.4;">@item.Message</MudText>
+                                <div class="d-flex align-center justify-space-between mt-1">
+                                    <MudText Typo="Typo.caption" Color="Color.Secondary" Style="font-size:0.7rem;">
+                                        @FormatTime(item.CreatedAt)
+                                    </MudText>
+                                    @if (!string.IsNullOrEmpty(item.ActionUrl) && !string.IsNullOrEmpty(item.ActionLabel))
+                                    {
+                                        <MudText Typo="Typo.caption" Style="color:#6F4E37; font-size:0.7rem; font-weight:600;">
+                                            @item.ActionLabel →
+                                        </MudText>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </MudPaper>
+</MudPopover>
+
+<style>
+    .notification-badge-overlay {
+        position: relative;
+        margin-left: -20px;
+        margin-top: -24px;
+        pointer-events: none;
+    }
+</style>
+
+@code {
+    private bool _open = false;
+
+    protected override void OnInitialized()
+    {
+        _notificationService.OnChange += StateHasChanged;
+    }
+
+    private void TogglePopover() => _open = !_open;
+    private void Close() => _open = false;
+
+    private void OnItemClick(NotificationItem item)
+    {
+        _notificationService.MarkRead(item.Id);
+        if (!string.IsNullOrEmpty(item.ActionUrl))
+        {
+            _open = false;
+            _navigationManager.NavigateTo(item.ActionUrl);
+        }
+    }
+
+    private void RemoveItem(Guid id) => _notificationService.Remove(id);
+    private void MarkAllRead() => _notificationService.MarkAllRead();
+    private void ClearAll() => _notificationService.Clear();
+
+    private string FormatTime(DateTimeOffset dt)
+    {
+        var diff = DateTimeOffset.Now - dt;
+        if (diff.TotalMinutes < 1) return "baru saja";
+        if (diff.TotalHours < 1) return $"{(int)diff.TotalMinutes} menit lalu";
+        if (diff.TotalDays < 1) return $"{(int)diff.TotalHours} jam lalu";
+        return dt.LocalDateTime.ToString("dd MMM HH:mm");
+    }
+
+    private string GetIcon(NotificationLevel level) => level switch
+    {
+        NotificationLevel.Success => Icons.Material.Filled.CheckCircle,
+        NotificationLevel.Warning => Icons.Material.Filled.Warning,
+        NotificationLevel.Error => Icons.Material.Filled.Error,
+        _ => Icons.Material.Filled.Info
+    };
+
+    public void Dispose()
+    {
+        _notificationService.OnChange -= StateHasChanged;
+    }
+}

@@ -146,6 +146,14 @@
                     }
                 </MudCardContent>
                 <MudCardActions>
+                    <MudButton Size="Size.Small" Color="Color.Secondary" Variant="Variant.Filled"
+                               StartIcon="@Icons.Material.Filled.Redeem"
+                               Disabled="@(!reward.IsActive || IsExpired(reward) || IsOutOfStock(reward))"
+                               OnClick="@(() => OpenRedeemDialogAsync(reward))"
+                               Style="background:#C8860A; color:white;">
+                        Tukar
+                    </MudButton>
+                    <MudSpacer />
                     <MudButton Size="Size.Small" Color="Color.Primary" Variant="Variant.Text"
                                Href="@CommonRouteFor.RewardEdit(reward.Id)">Edit</MudButton>
                     <MudButton Size="Size.Small" Color="@(reward.IsActive ? Color.Warning : Color.Success)"
