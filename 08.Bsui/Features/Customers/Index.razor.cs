@@ -11,21 +11,11 @@ public partial class Index
     private string _searchText = string.Empty;
     private CustomerTier? _filterTier;
     private CustomerSegment? _filterSegment;
-    private bool _loading = false;
+    private MudTable<GetCustomerResponse>? _table;
     private int _totalCount = 0;
-    private int _pageNumber = 1;
-    private readonly int _pageSize = 10;
 
-    private List<GetCustomerResponse> _customers = new();
-
-    protected override async Task OnInitializedAsync()
+    private async Task<TableData<GetCustomerResponse>> ServerReload(TableState state, CancellationToken ct)
     {
-        await LoadCustomersAsync();
-    }
-
-    private async Task LoadCustomersAsync()
-    {
-        _loading = true;
         try
         {
             var request = new GetCustomerRequest
@@ -33,49 +23,50 @@ public partial class Index
                 Search = string.IsNullOrWhiteSpace(_searchText) ? null : _searchText,
                 Tier = _filterTier,
                 Segment = _filterSegment,
-                PageNumber = _pageNumber,
-                PageSize = _pageSize,
+                PageNumber = state.Page + 1,
+                PageSize = state.PageSize,
             };
 
             var result = await _customerService.GetCustomersAsync(request);
             if (result.Error is not null)
             {
                 _snackbar.AddError(result.Error.ToDetail());
-                return;
+                return new TableData<GetCustomerResponse> { TotalItems = 0, Items = [] };
             }
 
-            _customers = result.Result!.Items.ToList();
-            _totalCount = result.Result.TotalCount;
+            _totalCount = result.Result!.TotalCount;
+            return new TableData<GetCustomerResponse>
+            {
+                TotalItems = _totalCount,
+                Items = result.Result.Items.ToList()
+            };
         }
         catch (Exception ex)
         {
             _snackbar.AddError($"Gagal memuat data: {ex.Message}");
-        }
-        finally
-        {
-            _loading = false;
+            return new TableData<GetCustomerResponse> { TotalItems = 0, Items = [] };
         }
     }
 
     private async Task OnSearchChanged(string value)
     {
         _searchText = value;
-        _pageNumber = 1;
-        await LoadCustomersAsync();
+        if (_table is not null)
+            await _table.ReloadServerData();
     }
 
     private async Task OnFilterTierChanged(CustomerTier? value)
     {
         _filterTier = value;
-        _pageNumber = 1;
-        await LoadCustomersAsync();
+        if (_table is not null)
+            await _table.ReloadServerData();
     }
 
     private async Task OnFilterSegmentChanged(CustomerSegment? value)
     {
         _filterSegment = value;
-        _pageNumber = 1;
-        await LoadCustomersAsync();
+        if (_table is not null)
+            await _table.ReloadServerData();
     }
 
     private async Task OnDeleteAsync(GetCustomerResponse customer)
@@ -88,7 +79,8 @@ public partial class Index
         }
 
         _snackbar.AddSuccess($"Pelanggan {customer.FullName} berhasil dihapus.");
-        await LoadCustomersAsync();
+        if (_table is not null)
+            await _table.ReloadServerData();
     }
 
     private async Task ExportToExcelAsync()
@@ -114,7 +106,6 @@ public partial class Index
             using var workbook = new ClosedXML.Excel.XLWorkbook();
             var ws = workbook.Worksheets.Add("Pelanggan");
 
-            // Header
             var headers = new[] { "Kode Member", "Nama", "No HP", "Email", "Tier", "Segmen", "Total Poin", "Total Belanja (Rp)", "Transaksi Terakhir", "Tanggal Daftar" };
             for (int i = 0; i < headers.Length; i++)
             {
@@ -124,7 +115,6 @@ public partial class Index
                 ws.Cell(1, i + 1).Style.Font.FontColor = ClosedXML.Excel.XLColor.White;
             }
 
-            // Data
             int row = 2;
             foreach (var c in rows)
             {
@@ -246,7 +236,6 @@ tr:nth-child(even) td { background: #FFF8F0; }
     {
         try
         {
-            // Load all data for export (up to 5000)
             var request = new GetCustomerRequest
             {
                 Search = string.IsNullOrWhiteSpace(_searchText) ? null : _searchText,
@@ -312,10 +301,10 @@ tr:nth-child(even) td { background: #FFF8F0; }
 
     private string GetTierLabel(CustomerTier tier) => tier switch
     {
-        CustomerTier.Bronze => "Bronze",
-        CustomerTier.Silver => "Silver",
-        CustomerTier.Gold => "Gold",
-        CustomerTier.Platinum => "Platinum",
+        CustomerTier.Bronze => "🥉 Bronze",
+        CustomerTier.Silver => "🥈 Silver",
+        CustomerTier.Gold => "🥇 Gold",
+        CustomerTier.Platinum => "💎 Platinum",
         _ => tier.ToString()
     };
 
