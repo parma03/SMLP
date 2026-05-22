@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Smlp.WebApi.Common.Middleware;
 using FluentValidation.AspNetCore;
 using Smlp.Application;
 using Smlp.Infrastructure;
@@ -82,6 +83,7 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseAuditAction(); // Audit action tracking middleware
 app.UseInfrastructure(builder.Configuration);
 app.UseDocumentationService(builder.Configuration);
 app.MapControllers();

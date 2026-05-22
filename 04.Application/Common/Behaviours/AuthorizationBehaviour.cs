@@ -67,18 +67,49 @@ public class AuthorizationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRe
             throw new ForbiddenAccessException($"{StartingErrorMessage} {_currentUserService.Username} does not have a Position ID.");
         }
 
-        var authorizationInfo = await _authorizationService.GetAuthorizationInfoAsync(_currentUserService.PositionId, cancellationToken);
-
+        // Check role-based policies first (AdminOnly, OwnerOnly, KasirOnly, etc.)
         foreach (var policy in authorizeAttributesWithPolicies.Select(a => a.Policy))
         {
+            var roleAuthorized = IsAuthorizedByRolePolicy(policy, _currentUserService.Role);
+            if (roleAuthorized.HasValue)
+            {
+                if (!roleAuthorized.Value)
+                    throw new ForbiddenAccessException($"{StartingErrorMessage} {_currentUserService.Username} with role '{_currentUserService.Role}' is not allowed by policy '{policy}'.");
+                continue;
+            }
+
+            // Fall back to permission-based authorization
+            if (string.IsNullOrWhiteSpace(_currentUserService.PositionId))
+                throw new ForbiddenAccessException($"{StartingErrorMessage} {_currentUserService.Username} does not have a Position ID.");
+
+            var authorizationInfo = await _authorizationService.GetAuthorizationInfoAsync(_currentUserService.PositionId, cancellationToken);
             var authorized = authorizationInfo.Roles.SelectMany(x => x.Permissions).Any(x => x.Equals(policy, StringComparison.OrdinalIgnoreCase));
 
             if (!authorized)
-            {
                 throw new ForbiddenAccessException($"{StartingErrorMessage} {_currentUserService.Username} with Position ID {_currentUserService.PositionId} does not have the following {AuthorizationClaimTypes.Permission}: {policy}");
-            }
         }
 
         return await next();
+    }
+
+    /// <summary>
+    /// Returns true/false for known role policies, or null if policy is not role-based.
+    /// </summary>
+    private static bool? IsAuthorizedByRolePolicy(string policy, string? role)
+    {
+        return policy switch
+        {
+            "AdminOnly"    => role?.Equals("Admin", StringComparison.OrdinalIgnoreCase) == true,
+            "OwnerOnly"    => role?.Equals("Owner", StringComparison.OrdinalIgnoreCase) == true,
+            "KasirOnly"    => role?.Equals("Kasir", StringComparison.OrdinalIgnoreCase) == true,
+            "AdminOrOwner" => role is not null &&
+                              (role.Equals("Admin", StringComparison.OrdinalIgnoreCase) ||
+                               role.Equals("Owner", StringComparison.OrdinalIgnoreCase)),
+            "AllRoles"     => role is not null &&
+                              (role.Equals("Admin", StringComparison.OrdinalIgnoreCase) ||
+                               role.Equals("Owner", StringComparison.OrdinalIgnoreCase) ||
+                               role.Equals("Kasir", StringComparison.OrdinalIgnoreCase)),
+            _              => null,
+        };
     }
 }
