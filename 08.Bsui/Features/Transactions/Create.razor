@@ -129,8 +129,17 @@
                     {
                         <tr>
                             <td>
-                                <MudTextField @bind-Value="item.ProductName" Variant="Variant.Text" Dense="true"
-                                              Placeholder="Nama produk..." />
+                                <MudAutocomplete T="string"
+                                                 @bind-Value="item.ProductName"
+                                                 SearchFunc="@(async (search, ct) => await SearchProductsAsync(search, item, ct))"
+                                                 Dense="true"
+                                                 Variant="Variant.Text"
+                                                 Placeholder="Cari / ketik nama produk..."
+                                                 ResetValueOnEmptyText="false"
+                                                 CoerceText="true"
+                                                 MinCharacters="0"
+                                                 AdornmentIcon="@Icons.Material.Filled.Search"
+                                                 AdornmentColor="Color.Primary" />
                             </td>
                             <td>
                                 <MudNumericField @bind-Value="item.UnitPrice" Variant="Variant.Text" Dense="true"

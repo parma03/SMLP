@@ -3,6 +3,7 @@ using Smlp.Base.Transaction.Enums;
 using Smlp.Bsui.Common.Constants;
 using Smlp.Bsui.Common.Extensions;
 using Smlp.Shared.Master.Customers.Queries;
+using Smlp.Shared.Master.Products.Queries;
 using Smlp.Shared.Transaction.Transactions.Commands.Create;
 
 namespace Smlp.Bsui.Features.Transactions;
@@ -35,10 +36,65 @@ public partial class Create
     private decimal GrandTotal => Math.Max(0, Subtotal - DiscountValue);
     private int EstimatedPoints => (int)(GrandTotal / 10_000);
 
+    // Product cache for autocomplete
+    private List<GetProductResponse> _productCache = new();
+    private bool _productCacheLoaded = false;
+
     protected override void OnInitialized()
     {
         SetupBreadcrumb();
         AddItem(); // default 1 item
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await LoadProductCacheAsync();
+        }
+    }
+
+    private async Task LoadProductCacheAsync()
+    {
+        try
+        {
+            var result = await _productService.GetProductsAsync(new GetProductRequest { IsActive = true, PageSize = 200 });
+            if (result.Result?.Items is not null)
+            {
+                _productCache = result.Result.Items;
+                _productCacheLoaded = true;
+            }
+        }
+        catch
+        {
+            // product cache load failure is non-fatal, autocomplete will still work with manual input
+        }
+    }
+
+    private async Task<IEnumerable<string>> SearchProductsAsync(string search, CreateTransactionItemRequest item, CancellationToken cancellationToken)
+    {
+        await Task.CompletedTask;
+        if (!_productCacheLoaded)
+            return Enumerable.Empty<string>();
+
+        var filtered = string.IsNullOrWhiteSpace(search)
+            ? _productCache
+            : _productCache.Where(p => p.Name.Contains(search, StringComparison.OrdinalIgnoreCase)).ToList();
+
+        return filtered.Select(p => p.Name).Take(10);
+    }
+
+    private void OnProductSelected(CreateTransactionItemRequest item, string? productName)
+    {
+        item.ProductName = productName;
+        // Auto-fill price if product found in cache
+        var product = _productCache.FirstOrDefault(p => p.Name == productName);
+        if (product is not null && item.UnitPrice == 0)
+        {
+            item.UnitPrice = product.Price;
+        }
+
+        StateHasChanged();
     }
 
     private void SetupBreadcrumb()
