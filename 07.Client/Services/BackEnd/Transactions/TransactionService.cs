@@ -46,6 +46,7 @@ public class TransactionService : IDisposable
         return (await _restClient.ExecuteAsync(restRequest)).ToResponseResult<SuccessResponse>();
     }
 
+
     public async Task<ResponseResult<CommonUpdateResponse>> UpdateTransactionAsync(Guid id, UpdateTransactionRequest request)
     {
         var restRequest = new RestRequest(id.ToString(), Method.Put);

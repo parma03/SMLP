@@ -82,7 +82,7 @@ public class UpdateTransactionCommandHandler : IRequestHandler<UpdateTransaction
                 ProductName = item.ProductName!,
                 UnitPrice = item.UnitPrice,
                 Quantity = item.Quantity,
-                TotalPrice = item.UnitPrice * item.Quantity,
+                SubTotal = item.UnitPrice * item.Quantity,
             });
         }
 

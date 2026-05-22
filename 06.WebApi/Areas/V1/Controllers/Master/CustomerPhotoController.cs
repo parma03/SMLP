@@ -56,7 +56,7 @@ public class CustomerPhotoController : ControllerBase
 
         // Store file and save the storage ID to customer notes (simple approach)
         // In a full implementation, we'd have a CustomerPhoto entity
-        var storedId = await _storageService.CreateAsync(bytes, DocumentType.Document, file.FileName);
+        var storedId = await _storageService.CreateAsync(bytes, DocumentType.Nota, file.FileName);
 
         // Save storage reference in the customer's notes field temporarily
         // TODO: proper CustomerPhoto entity
@@ -78,11 +78,11 @@ public class CustomerPhotoController : ControllerBase
     [HttpGet("{storageFileId}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetPhoto([FromRoute] Guid customerId, [FromRoute] string storageFileId)
+    public async Task<IActionResult> GetPhoto([FromRoute] string storageFileId)
     {
         try
         {
-            var bytes = await _storageService.ReadAsync(storageFileId, DocumentType.Document);
+            var bytes = await _storageService.ReadAsync(storageFileId, DocumentType.Nota);
             return File(bytes, "image/jpeg"); // Default to jpeg, could be stored
         }
         catch
