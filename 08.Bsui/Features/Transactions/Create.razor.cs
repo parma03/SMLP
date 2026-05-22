@@ -43,7 +43,7 @@ public partial class Create
     protected override void OnInitialized()
     {
         SetupBreadcrumb();
-        AddItem(); // default 1 item
+        AddItem();
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -61,32 +61,32 @@ public partial class Create
             var result = await _productService.GetProductsAsync(new GetProductRequest { IsActive = true, PageSize = 200 });
             if (result.Result?.Items is not null)
             {
-                _productCache = result.Result.Items;
+                _productCache = result.Result.Items.ToList();
                 _productCacheLoaded = true;
+                await InvokeAsync(StateHasChanged);
             }
         }
-        catch
+        catch (Exception ex)
         {
-            // product cache load failure is non-fatal, autocomplete will still work with manual input
+            _snackbar.AddWarning($"Gagal memuat daftar produk: {ex.Message}");
         }
     }
 
-    private async Task<IEnumerable<string>> SearchProductsAsync(string search, CreateTransactionItemRequest item, CancellationToken cancellationToken)
+    private Task<IEnumerable<string>> SearchProductsAsync(string search, CancellationToken cancellationToken)
     {
-        await Task.CompletedTask;
         if (!_productCacheLoaded)
-            return Enumerable.Empty<string>();
+            return Task.FromResult(Enumerable.Empty<string>());
 
         var filtered = string.IsNullOrWhiteSpace(search)
             ? _productCache
             : _productCache.Where(p => p.Name.Contains(search, StringComparison.OrdinalIgnoreCase)).ToList();
 
-        return filtered.Select(p => p.Name).Take(10);
+        return Task.FromResult(filtered.Select(p => p.Name).Take(10));
     }
 
     private void OnProductSelected(CreateTransactionItemRequest item, string? productName)
     {
-        item.ProductName = productName;
+        item.ProductName = productName ?? string.Empty;
         // Auto-fill price if product found in cache
         var product = _productCache.FirstOrDefault(p => p.Name == productName);
         if (product is not null && item.UnitPrice == 0)
