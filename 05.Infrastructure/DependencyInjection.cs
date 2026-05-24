@@ -19,6 +19,12 @@ using Smlp.Application.Services.Authorization;
 using Smlp.Application.BackgroundJobs;
 using Smlp.Infrastructure.CurrentUser;
 using Smlp.Infrastructure.Authorization;
+using Smlp.Application.Services.Email;
+using Smlp.Application.Services.Email.Models;
+using Smlp.Application.Services.WhatsApp;
+using Smlp.Application.Services.WhatsApp.Models;
+using Smlp.Infrastructure.Notifications.Email;
+using Smlp.Infrastructure.Notifications.WhatsApp;
 
 namespace Smlp.Infrastructure;
 
@@ -39,9 +45,38 @@ public static class DependencyInjection
         // Background Jobs
         services.AddScoped<IExpiredPointsJob, ExpiredPointsJob>();
 
+        // Notification Services
+        services.AddNotificationServices(configuration);
+
         var healthChecksBuilder = services.AddHealthCheckService(configuration);
         services.AddPersistenceService(configuration, healthChecksBuilder);
         services.AddBackgroundJobService(configuration, healthChecksBuilder);
+
+        return services;
+    }
+
+    private static IServiceCollection AddNotificationServices(this IServiceCollection services, IConfiguration configuration)
+    {
+        // Email
+        services.Configure<EmailSettings>(configuration.GetSection("Email"));
+        var emailProvider = configuration["Email:Provider"] ?? "None";
+        if (emailProvider is "Gmail" or "Smtp")
+            services.AddScoped<IEmailService, SmtpEmailService>();
+        else
+            services.AddScoped<IEmailService, NullEmailService>();
+
+        // WhatsApp
+        services.Configure<WhatsAppSettings>(configuration.GetSection("WhatsApp"));
+        var waProvider = configuration["WhatsApp:Provider"] ?? "None";
+        if (waProvider == "Fonnte")
+        {
+            services.AddHttpClient("Fonnte");
+            services.AddScoped<IWhatsAppService, FonnteWhatsAppService>();
+        }
+        else
+        {
+            services.AddScoped<IWhatsAppService, NullWhatsAppService>();
+        }
 
         return services;
     }

@@ -3,6 +3,8 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Smlp.Application.Common.Exceptions;
 using Smlp.Application.Services.Persistence;
+using Smlp.Application.Services.Email;
+using Smlp.Application.Services.WhatsApp;
 using Smlp.Base.Customer.Enums;
 using Smlp.Base.Transaction.Enums;
 using Smlp.Domain.Entities.Transaction;
@@ -29,8 +31,18 @@ public class CreateTransactionCommandValidator : AbstractValidator<CreateTransac
 public class CreateTransactionCommandHandler : IRequestHandler<CreateTransactionCommand, CommonCreateResponse>
 {
     private readonly ISmlpDbContext _context;
+    private readonly IEmailService _emailService;
+    private readonly IWhatsAppService _whatsAppService;
 
-    public CreateTransactionCommandHandler(ISmlpDbContext context) => _context = context;
+    public CreateTransactionCommandHandler(
+        ISmlpDbContext context,
+        IEmailService emailService,
+        IWhatsAppService whatsAppService)
+    {
+        _context = context;
+        _emailService = emailService;
+        _whatsAppService = whatsAppService;
+    }
 
     public async Task<CommonCreateResponse> Handle(CreateTransactionCommand request, CancellationToken cancellationToken)
     {
