@@ -1,5 +1,7 @@
-﻿using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Components;
 using Smlp.Client.Common.Extensions;
+using Smlp.Client.Common.Handlers;
 using Smlp.Client.Services.UserInfo;
 using Smlp.Shared.Common.Requests;
 using Smlp.Shared.Common.Responses;
@@ -14,11 +16,13 @@ namespace Smlp.Client.Services.BackEnd;
 public class DocumentService
 {
     private readonly RestClient _restClient;
+    private readonly NavigationManager _navigationManager;
 
-    public DocumentService(IOptions<BackEndOptions> backEndServiceOptions, UserInfoService userInfo)
+    public DocumentService(IOptions<BackEndOptions> backEndServiceOptions, UserInfoService userInfo, NavigationManager navigationManager)
     {
         _restClient = new RestClient($"{backEndServiceOptions.Value.BaseUrl}/{Documents.Segment}");
         _restClient.AddUserInfo(userInfo);
+        _navigationManager = navigationManager;
     }
 
     public async Task<ResponseResult<CreateDocumentResponse>> CreateDocumentAsync(CreateDocumentRequest request)
@@ -28,7 +32,7 @@ public class DocumentService
 
         var restResponse = await _restClient.ExecuteAsync(restRequest);
 
-        return restResponse.ToResponseResult<CreateDocumentResponse>();
+        return restResponse.ToResponseResultWithRedirect<CreateDocumentResponse>(_navigationManager);
     }
 
     public async Task<ResponseResult<CreateDocumentResponse>> CreateDocumentByTypeAsync(CreateDocumentByTypeRequest request)
@@ -38,7 +42,7 @@ public class DocumentService
 
         var restResponse = await _restClient.ExecuteAsync(restRequest);
 
-        return restResponse.ToResponseResult<CreateDocumentResponse>();
+        return restResponse.ToResponseResultWithRedirect<CreateDocumentResponse>(_navigationManager);
     }
 
     public async Task<ResponseResult<SuccessResponse>> DeleteDocumentAsync(Guid documentId)
@@ -46,7 +50,7 @@ public class DocumentService
         var restRequest = new RestRequest(documentId.ToString(), Method.Delete);
         var restResponse = await _restClient.ExecuteAsync(restRequest);
 
-        return restResponse.ToResponseResult<SuccessResponse>();
+        return restResponse.ToResponseResultWithRedirect<SuccessResponse>(_navigationManager);
     }
 
     public async Task<ResponseResult<PaginatedListResponse<GetDocumentsDocument>>> GetDocumentsAsync(PaginatedListRequest request)
@@ -56,7 +60,7 @@ public class DocumentService
 
         var restResponse = await _restClient.ExecuteAsync(restRequest);
 
-        return restResponse.ToResponseResult<PaginatedListResponse<GetDocumentsDocument>>();
+        return restResponse.ToResponseResultWithRedirect<PaginatedListResponse<GetDocumentsDocument>>(_navigationManager);
     }
 
     public async Task<ResponseResult<GetDocumentFileResponse>> GetDocumentFileAsync(Guid documentId)
@@ -64,7 +68,7 @@ public class DocumentService
         var restRequest = new RestRequest($"{nameof(Documents.RouteTemplateFor.Download)}/{documentId}", Method.Get);
         var restResponse = await _restClient.ExecuteAsync(restRequest);
 
-        return restResponse.ToResponseResult<GetDocumentFileResponse>();
+        return restResponse.ToResponseResultWithRedirect<GetDocumentFileResponse>(_navigationManager);
     }
     public async Task<ResponseResult<GetDocumentFileResponse>> GetDocumentFileByDocumentTypeAsync(GetDocumentFileRequest request)
     {
@@ -72,13 +76,13 @@ public class DocumentService
         restRequest.AddParameters(request);
         var restResponse = await _restClient.ExecuteAsync(restRequest);
 
-        return restResponse.ToResponseResult<GetDocumentFileResponse>();
+        return restResponse.ToResponseResultWithRedirect<GetDocumentFileResponse>(_navigationManager);
     }
     public async Task<ResponseResult<GetDocumentByIdResponse>> GetDocumentByIdAsync(Guid? documentId)
     {
         var restRequest = new RestRequest($"{nameof(Documents.RouteTemplateFor.ById)}/{documentId}", Method.Get);
         var restResponse = await _restClient.ExecuteAsync(restRequest);
 
-        return restResponse.ToResponseResult<GetDocumentByIdResponse>();
+        return restResponse.ToResponseResultWithRedirect<GetDocumentByIdResponse>(_navigationManager);
     }
 }

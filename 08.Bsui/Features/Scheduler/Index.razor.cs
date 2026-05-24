@@ -95,3 +95,14 @@ public partial class Index
         _ => (Color.Default, state ?? "—")
     };
 }
+
+// appended helpe
+    private static (string color, string text) GetDurationDisplay(long? durationMs)
+    {
+        if (!durationMs.HasValue) return ("#9E9E9E", "—");
+        var ms = durationMs.Value;
+        if (ms < 1000) return ("#4CAF50", $"{ms}ms");
+        if (ms < 10_000) return ("#FF9800", $"{ms / 1000.0:F1}s");
+        return ("#F44336", $"{ms / 1000.0:F1}s");
+    }
+}

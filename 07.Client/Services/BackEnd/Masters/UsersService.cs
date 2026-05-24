@@ -3,8 +3,10 @@
 */
 
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Components;
 using RestSharp;
 using Smlp.Client.Common.Extensions;
+using Smlp.Client.Common.Handlers;
 using Smlp.Client.Services.UserInfo;
 using Smlp.Shared.Common.Responses;
 using Smlp.Shared.Master.Users.Commands.Create;
@@ -17,7 +19,7 @@ public class UsersService : IDisposable
 {
     private readonly RestClient _restClient = default!;
 
-    public UsersService(IOptions<BackEndOptions> backEndServiceOptions, UserInfoService userInfo)
+    public UsersService(IOptions<BackEndOptions> backEndServiceOptions, UserInfoService userInfo, NavigationManager navigationManager)
     {
         if (backEndServiceOptions is null) return;
 
@@ -27,6 +29,7 @@ public class UsersService : IDisposable
         };
         _restClient = new RestClient(options);
         _restClient.AddUserInfo(userInfo);
+        _navigationManager = navigationManager;
     }
 
     public void Dispose()
@@ -45,14 +48,14 @@ public class UsersService : IDisposable
         var restRequest = new RestRequest(string.Empty, Method.Get);
         restRequest.AddQueryParameters(request);
         var restResponse = await _restClient.ExecuteAsync(restRequest);
-        return restResponse.ToResponseResult<PaginatedListResponse<GetUserResponse>>();
+        return restResponse.ToResponseResultWithRedirect<PaginatedListResponse<GetUserResponse>>(_navigationManager);
     }
 
     public async Task<ResponseResult<GetUserResponse>> GetUserByIdAsync(Guid id)
     {
         var restRequest = new RestRequest($"{id}", Method.Get);
         var restResponse = await _restClient.ExecuteAsync(restRequest);
-        return restResponse.ToResponseResult<GetUserResponse>();
+        return restResponse.ToResponseResultWithRedirect<GetUserResponse>(_navigationManager);
     }
 
     public async Task<ResponseResult<CommonCreateResponse>> CreateUserAsync(CreateUserRequest request)
@@ -60,7 +63,7 @@ public class UsersService : IDisposable
         var restRequest = new RestRequest(string.Empty, Method.Post);
         restRequest.AddBody(request);
         var restResponse = await _restClient.ExecuteAsync(restRequest);
-        return restResponse.ToResponseResult<CommonCreateResponse>();
+        return restResponse.ToResponseResultWithRedirect<CommonCreateResponse>(_navigationManager);
     }
 
     public async Task<ResponseResult<CommonUpdateResponse>> UpdateUserAsync(Guid id, UpdateUserRequest request)
@@ -82,13 +85,13 @@ public class UsersService : IDisposable
             restRequest.AddBody(request);
         }
         var restResponse = await _restClient.ExecuteAsync(restRequest);
-        return restResponse.ToResponseResult<CommonUpdateResponse>();
+        return restResponse.ToResponseResultWithRedirect<CommonUpdateResponse>(_navigationManager);
     }
 
     public async Task<ResponseResult<SuccessResponse>> DeleteUserAsync(Guid id)
     {
         var restRequest = new RestRequest($"{id}", Method.Delete);
         var restResponse = await _restClient.ExecuteAsync(restRequest);
-        return restResponse.ToResponseResult<SuccessResponse>();
+        return restResponse.ToResponseResultWithRedirect<SuccessResponse>(_navigationManager);
     }
 }

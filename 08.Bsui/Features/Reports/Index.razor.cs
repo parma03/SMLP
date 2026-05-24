@@ -187,33 +187,115 @@ public partial class Index
 
     // --- Excel builders using ClosedXML-style byte array via OpenXml placeholder ---
     // These build a simple CSV-like Excel using basic tab-separated approach.
-    // For production use, inject ClosedXML or EPPlus in the client project.
-
     private static byte[] BuildTransactionExcel(List<GetTransactionReportResponse> rows)
     {
-        var csv = new System.Text.StringBuilder();
-        csv.AppendLine("No. Transaksi,Pelanggan,Kode Member,Tanggal,Total Amount,Poin Didapat,Metode Bayar,Status,Tier");
-        foreach (var r in rows)
-            csv.AppendLine($"{r.TransactionCode},{r.CustomerName},{r.MemberCode},{r.TransactionDate.ToLocalTime():dd/MM/yyyy HH:mm},{r.TotalAmount:N0},{r.PointsEarned},{r.PaymentMethod},{r.Status},{r.Tier}");
-        return System.Text.Encoding.UTF8.GetBytes(csv.ToString());
+        using var workbook = new XLWorkbook();
+        var ws = workbook.Worksheets.Add("Laporan Transaksi");
+
+        // Header row
+        string[] headers = { "No. Transaksi", "Pelanggan", "Kode Member", "Tanggal", "Total Amount", "Poin Didapat", "Metode Bayar", "Status", "Tier" };
+        for (int i = 0; i < headers.Length; i++)
+        {
+            ws.Cell(1, i + 1).Value = headers[i];
+            ws.Cell(1, i + 1).Style.Font.Bold = true;
+            ws.Cell(1, i + 1).Style.Fill.BackgroundColor = XLColor.FromHtml("#6F4E37");
+            ws.Cell(1, i + 1).Style.Font.FontColor = XLColor.White;
+        }
+
+        // Data rows
+        for (int i = 0; i < rows.Count; i++)
+        {
+            var r = rows[i];
+            int row = i + 2;
+            ws.Cell(row, 1).Value = r.TransactionCode;
+            ws.Cell(row, 2).Value = r.CustomerName;
+            ws.Cell(row, 3).Value = r.MemberCode;
+            ws.Cell(row, 4).Value = r.TransactionDate.ToLocalTime().ToString("dd/MM/yyyy HH:mm");
+            ws.Cell(row, 5).Value = r.TotalAmount;
+            ws.Cell(row, 5).Style.NumberFormat.Format = "#,##0";
+            ws.Cell(row, 6).Value = r.PointsEarned;
+            ws.Cell(row, 7).Value = r.PaymentMethod;
+            ws.Cell(row, 8).Value = r.Status;
+            ws.Cell(row, 9).Value = r.Tier;
+            if (i % 2 == 1)
+                ws.Row(row).Style.Fill.BackgroundColor = XLColor.FromHtml("#F5F5F5");
+        }
+
+        ws.Columns().AdjustToContents();
+        using var ms = new System.IO.MemoryStream();
+        workbook.SaveAs(ms);
+        return ms.ToArray();
     }
 
     private static byte[] BuildRedeemExcel(List<GetRedeemReportResponse> rows)
     {
-        var csv = new System.Text.StringBuilder();
-        csv.AppendLine("Kode Redeem,Pelanggan,Kode Member,Reward,Tanggal Redeem,Poin Digunakan,Status,Diverifikasi Oleh");
-        foreach (var r in rows)
-            csv.AppendLine($"{r.RedeemCode},{r.CustomerName},{r.MemberCode},{r.RewardName},{r.RedeemDate.ToLocalTime():dd/MM/yyyy HH:mm},{r.PointsUsed},{r.Status},{r.VerifiedBy}");
-        return System.Text.Encoding.UTF8.GetBytes(csv.ToString());
+        using var workbook = new XLWorkbook();
+        var ws = workbook.Worksheets.Add("Laporan Redeem");
+
+        string[] headers = { "Kode Redeem", "Pelanggan", "Kode Member", "Reward", "Tanggal Redeem", "Poin Digunakan", "Status", "Diverifikasi Oleh" };
+        for (int i = 0; i < headers.Length; i++)
+        {
+            ws.Cell(1, i + 1).Value = headers[i];
+            ws.Cell(1, i + 1).Style.Font.Bold = true;
+            ws.Cell(1, i + 1).Style.Fill.BackgroundColor = XLColor.FromHtml("#6F4E37");
+            ws.Cell(1, i + 1).Style.Font.FontColor = XLColor.White;
+        }
+
+        for (int i = 0; i < rows.Count; i++)
+        {
+            var r = rows[i];
+            int row = i + 2;
+            ws.Cell(row, 1).Value = r.RedeemCode;
+            ws.Cell(row, 2).Value = r.CustomerName;
+            ws.Cell(row, 3).Value = r.MemberCode;
+            ws.Cell(row, 4).Value = r.RewardName;
+            ws.Cell(row, 5).Value = r.RedeemDate.ToLocalTime().ToString("dd/MM/yyyy HH:mm");
+            ws.Cell(row, 6).Value = r.PointsUsed;
+            ws.Cell(row, 7).Value = r.Status;
+            ws.Cell(row, 8).Value = r.VerifiedBy;
+            if (i % 2 == 1)
+                ws.Row(row).Style.Fill.BackgroundColor = XLColor.FromHtml("#F5F5F5");
+        }
+
+        ws.Columns().AdjustToContents();
+        using var ms = new System.IO.MemoryStream();
+        workbook.SaveAs(ms);
+        return ms.ToArray();
     }
 
     private static byte[] BuildPointExcel(List<GetPointReportResponse> rows)
     {
-        var csv = new System.Text.StringBuilder();
-        csv.AppendLine("Pelanggan,Kode Member,Jenis Aktivitas,Poin,Deskripsi,Tanggal,Saldo Setelah");
-        foreach (var r in rows)
-            csv.AppendLine($"{r.CustomerName},{r.MemberCode},{r.ActivityType},{r.Points},{r.Description},{r.ActivityDate.ToLocalTime():dd/MM/yyyy},{r.BalanceAfter}");
-        return System.Text.Encoding.UTF8.GetBytes(csv.ToString());
+        using var workbook = new XLWorkbook();
+        var ws = workbook.Worksheets.Add("Laporan Poin");
+
+        string[] headers = { "Pelanggan", "Kode Member", "Jenis Aktivitas", "Poin", "Deskripsi", "Tanggal", "Saldo Setelah" };
+        for (int i = 0; i < headers.Length; i++)
+        {
+            ws.Cell(1, i + 1).Value = headers[i];
+            ws.Cell(1, i + 1).Style.Font.Bold = true;
+            ws.Cell(1, i + 1).Style.Fill.BackgroundColor = XLColor.FromHtml("#6F4E37");
+            ws.Cell(1, i + 1).Style.Font.FontColor = XLColor.White;
+        }
+
+        for (int i = 0; i < rows.Count; i++)
+        {
+            var r = rows[i];
+            int row = i + 2;
+            ws.Cell(row, 1).Value = r.CustomerName;
+            ws.Cell(row, 2).Value = r.MemberCode;
+            ws.Cell(row, 3).Value = r.ActivityType;
+            ws.Cell(row, 4).Value = r.Points;
+            ws.Cell(row, 5).Value = r.Description;
+            ws.Cell(row, 6).Value = r.ActivityDate.ToLocalTime().ToString("dd/MM/yyyy");
+            ws.Cell(row, 7).Value = r.BalanceAfter;
+            if (i % 2 == 1)
+                ws.Row(row).Style.Fill.BackgroundColor = XLColor.FromHtml("#F5F5F5");
+        }
+
+        ws.Columns().AdjustToContents();
+        using var ms = new System.IO.MemoryStream();
+        workbook.SaveAs(ms);
+        return ms.ToArray();
     }
 
     private string GetReportTitle() => _reportType switch

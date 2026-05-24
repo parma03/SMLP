@@ -12,174 +12,274 @@
 }
 else
 {
-    @* Stats Cards *@
-    <MudGrid Class="mb-4">
-        <MudItem xs="6" sm="4" md="2">
-            <MudPaper Class="pa-3 rounded-lg text-center" Elevation="2" Style="border-top:4px solid #4CAF50;">
-                <MudText Typo="Typo.h5" Style="color:#4CAF50; font-weight:700;">@(_stats?.Succeeded.ToString("N0") ?? "—")</MudText>
-                <MudText Typo="Typo.caption" Color="Color.Secondary">Succeeded</MudText>
-            </MudPaper>
-        </MudItem>
-        <MudItem xs="6" sm="4" md="2">
-            <MudPaper Class="pa-3 rounded-lg text-center" Elevation="2" Style="border-top:4px solid #F44336;">
-                <MudText Typo="Typo.h5" Style="color:#F44336; font-weight:700;">@(_stats?.Failed ?? 0)</MudText>
-                <MudText Typo="Typo.caption" Color="Color.Secondary">Failed</MudText>
-            </MudPaper>
-        </MudItem>
-        <MudItem xs="6" sm="4" md="2">
-            <MudPaper Class="pa-3 rounded-lg text-center" Elevation="2" Style="border-top:4px solid #FF9800;">
-                <MudText Typo="Typo.h5" Style="color:#FF9800; font-weight:700;">@(_stats?.Processing ?? 0)</MudText>
-                <MudText Typo="Typo.caption" Color="Color.Secondary">Processing</MudText>
-            </MudPaper>
-        </MudItem>
-        <MudItem xs="6" sm="4" md="2">
-            <MudPaper Class="pa-3 rounded-lg text-center" Elevation="2" Style="border-top:4px solid #2196F3;">
-                <MudText Typo="Typo.h5" Style="color:#2196F3; font-weight:700;">@(_stats?.Enqueued ?? 0)</MudText>
-                <MudText Typo="Typo.caption" Color="Color.Secondary">Enqueued</MudText>
-            </MudPaper>
-        </MudItem>
-        <MudItem xs="6" sm="4" md="2">
-            <MudPaper Class="pa-3 rounded-lg text-center" Elevation="2" Style="border-top:4px solid #9C27B0;">
-                <MudText Typo="Typo.h5" Style="color:#9C27B0; font-weight:700;">@(_stats?.Scheduled ?? 0)</MudText>
-                <MudText Typo="Typo.caption" Color="Color.Secondary">Scheduled</MudText>
-            </MudPaper>
-        </MudItem>
-        <MudItem xs="6" sm="4" md="2">
-            <MudPaper Class="pa-3 rounded-lg text-center" Elevation="2" Style="border-top:4px solid #607D8B;">
-                <MudText Typo="Typo.h5" Style="color:#607D8B; font-weight:700;">@(_stats?.Servers ?? 0)</MudText>
-                <MudText Typo="Typo.caption" Color="Color.Secondary">Servers</MudText>
-            </MudPaper>
-        </MudItem>
-    </MudGrid>
+    <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-4" Class="mb-4">
 
-    @* Recurring Jobs Table *@
-    <MudPaper Class="pa-4 rounded-lg mb-4" Elevation="2">
-        <div class="d-flex justify-space-between align-center mb-3">
-            <MudText Typo="Typo.subtitle1" Style="color:#6F4E37; font-weight:700;">
-                🔄 Recurring Jobs (@(_recurringJobs.Count))
-            </MudText>
-            <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.Refresh"
-                       OnClick="LoadDataAsync" Disabled="_isLoading">
-                Refresh
-            </MudButton>
-        </div>
+        @* ─────────────── TAB 1: Recurring Jobs ─────────────── *@
+        <MudTabPanel Text="🔄 Recurring Jobs" Icon="@Icons.Material.Filled.Repeat">
 
-        <MudTable Dense="true" Hover="true" Elevation="0" Items="@_recurringJobs">
-            <HeaderContent>
-                <MudTh>Job ID</MudTh>
-                <MudTh>Cron</MudTh>
-                <MudTh>Timezone</MudTh>
-                <MudTh>Eksekusi Berikutnya</MudTh>
-                <MudTh>Eksekusi Terakhir</MudTh>
-                <MudTh>Status Terakhir</MudTh>
-                <MudTh Style="text-align:center">Aksi</MudTh>
-            </HeaderContent>
-            <RowTemplate>
-                <MudTd>
-                    <MudText Typo="Typo.body2" Style="font-family:monospace; font-size:0.8rem;">
-                        @context.Id
+            @* Stats Cards *@
+            <MudGrid Class="mb-4">
+                <MudItem xs="6" sm="4" md="2">
+                    <MudPaper Class="pa-3 rounded-lg text-center" Elevation="2" Style="border-top:4px solid #4CAF50;">
+                        <MudText Typo="Typo.h5" Style="color:#4CAF50; font-weight:700;">@(_stats?.Succeeded.ToString("N0") ?? "—")</MudText>
+                        <MudText Typo="Typo.caption" Color="Color.Secondary">Succeeded</MudText>
+                    </MudPaper>
+                </MudItem>
+                <MudItem xs="6" sm="4" md="2">
+                    <MudPaper Class="pa-3 rounded-lg text-center" Elevation="2" Style="border-top:4px solid #F44336;">
+                        <MudText Typo="Typo.h5" Style="color:#F44336; font-weight:700;">@(_stats?.Failed ?? 0)</MudText>
+                        <MudText Typo="Typo.caption" Color="Color.Secondary">Failed</MudText>
+                    </MudPaper>
+                </MudItem>
+                <MudItem xs="6" sm="4" md="2">
+                    <MudPaper Class="pa-3 rounded-lg text-center" Elevation="2" Style="border-top:4px solid #FF9800;">
+                        <MudText Typo="Typo.h5" Style="color:#FF9800; font-weight:700;">@(_stats?.Processing ?? 0)</MudText>
+                        <MudText Typo="Typo.caption" Color="Color.Secondary">Processing</MudText>
+                    </MudPaper>
+                </MudItem>
+                <MudItem xs="6" sm="4" md="2">
+                    <MudPaper Class="pa-3 rounded-lg text-center" Elevation="2" Style="border-top:4px solid #2196F3;">
+                        <MudText Typo="Typo.h5" Style="color:#2196F3; font-weight:700;">@(_stats?.Enqueued ?? 0)</MudText>
+                        <MudText Typo="Typo.caption" Color="Color.Secondary">Enqueued</MudText>
+                    </MudPaper>
+                </MudItem>
+                <MudItem xs="6" sm="4" md="2">
+                    <MudPaper Class="pa-3 rounded-lg text-center" Elevation="2" Style="border-top:4px solid #9C27B0;">
+                        <MudText Typo="Typo.h5" Style="color:#9C27B0; font-weight:700;">@(_stats?.Scheduled ?? 0)</MudText>
+                        <MudText Typo="Typo.caption" Color="Color.Secondary">Scheduled</MudText>
+                    </MudPaper>
+                </MudItem>
+                <MudItem xs="6" sm="4" md="2">
+                    <MudPaper Class="pa-3 rounded-lg text-center" Elevation="2" Style="border-top:4px solid #607D8B;">
+                        <MudText Typo="Typo.h5" Style="color:#607D8B; font-weight:700;">@(_stats?.Servers ?? 0)</MudText>
+                        <MudText Typo="Typo.caption" Color="Color.Secondary">Servers</MudText>
+                    </MudPaper>
+                </MudItem>
+            </MudGrid>
+
+            @* Recurring Jobs Table *@
+            <MudPaper Class="pa-4 rounded-lg" Elevation="2">
+                <div class="d-flex justify-space-between align-center mb-3">
+                    <MudText Typo="Typo.subtitle1" Style="color:#6F4E37; font-weight:700;">
+                        🔄 Recurring Jobs (@(_recurringJobs.Count))
                     </MudText>
-                </MudTd>
-                <MudTd>
-                    <MudChip Size="Size.Small" Style="background:#E3F2FD; color:#1565C0; font-family:monospace;">
-                        @context.CronExpression
-                    </MudChip>
-                </MudTd>
-                <MudTd>
-                    <MudText Typo="Typo.caption">@context.TimeZoneId</MudText>
-                </MudTd>
-                <MudTd>
-                    <MudText Typo="Typo.caption">
-                        @(context.NextExecution.HasValue
-                            ? context.NextExecution.Value.ToLocalTime().ToString("dd MMM yyyy HH:mm")
-                            : "—")
-                    </MudText>
-                </MudTd>
-                <MudTd>
-                    <MudText Typo="Typo.caption">
-                        @(context.LastExecution.HasValue
-                            ? context.LastExecution.Value.ToLocalTime().ToString("dd MMM yyyy HH:mm")
-                            : "Belum pernah")
-                    </MudText>
-                </MudTd>
-                <MudTd>
-                    @{
-                        var (chipColor, chipText) = GetJobStateChip(context.LastJobState);
-                    }
-                    <MudChip Size="Size.Small" Color="@chipColor">@chipText</MudChip>
-                    @if (!string.IsNullOrEmpty(context.Error))
-                    {
-                        <MudTooltip Text="@context.Error">
-                            <MudIcon Icon="@Icons.Material.Filled.Error" Color="Color.Error" Size="Size.Small" Class="ml-1" />
-                        </MudTooltip>
-                    }
-                </MudTd>
-                <MudTd Style="text-align:center">
-                    <MudButton Variant="Variant.Filled" Size="Size.Small"
-                               Style="background:#6F4E37; color:white;"
-                               StartIcon="@Icons.Material.Filled.PlayArrow"
-                               Disabled="_triggeringJobId == context.Id"
-                               OnClick="@(() => TriggerJobAsync(context.Id))">
-                        @if (_triggeringJobId == context.Id)
-                        {
-                            <MudProgressCircular Indeterminate="true" Size="Size.Small" />
-                        }
-                        else
-                        {
-                            <span>Trigger</span>
-                        }
+                    <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.Refresh"
+                               OnClick="LoadDataAsync" Disabled="_isLoading">
+                        Refresh
                     </MudButton>
-                </MudTd>
-            </RowTemplate>
-            <NoRecordsContent>
-                <EmptyState Title="Tidak ada recurring job" Icon="@Icons.Material.Filled.Schedule"
-                            Subtitle="Belum ada job yang terdaftar di scheduler." />
-            </NoRecordsContent>
-        </MudTable>
-    </MudPaper>
+                </div>
 
-    @* Recent Job History *@
-    <MudPaper Class="pa-4 rounded-lg" Elevation="2">
-        <MudText Typo="Typo.subtitle1" Class="mb-3" Style="color:#6F4E37; font-weight:700;">
-            📋 Riwayat Job Terakhir
-        </MudText>
-        <MudTable Dense="true" Hover="true" Elevation="0" Items="@(_stats?.RecentHistory ?? new())">
-            <HeaderContent>
-                <MudTh>Job ID</MudTh>
-                <MudTh>Nama Job</MudTh>
-                <MudTh>Status</MudTh>
-                <MudTh>Mulai</MudTh>
-                <MudTh>Selesai</MudTh>
-                <MudTh>Durasi</MudTh>
-            </HeaderContent>
-            <RowTemplate>
-                <MudTd><MudText Typo="Typo.caption" Style="font-family:monospace;">@context.JobId</MudText></MudTd>
-                <MudTd><MudText Typo="Typo.body2">@context.JobName</MudText></MudTd>
-                <MudTd>
-                    @{
-                        var (c2, t2) = GetJobStateChip(context.State);
-                    }
-                    <MudChip Size="Size.Small" Color="@c2">@t2</MudChip>
-                </MudTd>
-                <MudTd><MudText Typo="Typo.caption">@context.StartedAt.ToLocalTime().ToString("dd MMM HH:mm:ss")</MudText></MudTd>
-                <MudTd>
-                    <MudText Typo="Typo.caption">
-                        @(context.FinishedAt.HasValue
-                            ? context.FinishedAt.Value.ToLocalTime().ToString("dd MMM HH:mm:ss")
-                            : "—")
+                <MudTable Dense="true" Hover="true" Elevation="0" Items="@_recurringJobs">
+                    <HeaderContent>
+                        <MudTh>Job ID</MudTh>
+                        <MudTh>Cron</MudTh>
+                        <MudTh>Timezone</MudTh>
+                        <MudTh>Eksekusi Berikutnya</MudTh>
+                        <MudTh>Eksekusi Terakhir</MudTh>
+                        <MudTh>Status Terakhir</MudTh>
+                        <MudTh Style="text-align:center">Aksi</MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd>
+                            <MudText Typo="Typo.body2" Style="font-family:monospace; font-size:0.8rem;">
+                                @context.Id
+                            </MudText>
+                        </MudTd>
+                        <MudTd>
+                            <MudChip Size="Size.Small" Style="background:#E3F2FD; color:#1565C0; font-family:monospace;">
+                                @context.CronExpression
+                            </MudChip>
+                        </MudTd>
+                        <MudTd>
+                            <MudText Typo="Typo.caption">@context.TimeZoneId</MudText>
+                        </MudTd>
+                        <MudTd>
+                            <MudText Typo="Typo.caption">
+                                @(context.NextExecution.HasValue
+                                    ? context.NextExecution.Value.ToLocalTime().ToString("dd MMM yyyy HH:mm")
+                                    : "—")
+                            </MudText>
+                        </MudTd>
+                        <MudTd>
+                            <MudText Typo="Typo.caption">
+                                @(context.LastExecution.HasValue
+                                    ? context.LastExecution.Value.ToLocalTime().ToString("dd MMM yyyy HH:mm")
+                                    : "Belum pernah")
+                            </MudText>
+                        </MudTd>
+                        <MudTd>
+                            @{
+                                var (chipColor, chipText) = GetJobStateChip(context.LastJobState);
+                            }
+                            <MudChip Size="Size.Small" Color="@chipColor">@chipText</MudChip>
+                            @if (!string.IsNullOrEmpty(context.Error))
+                            {
+                                <MudTooltip Text="@context.Error">
+                                    <MudIcon Icon="@Icons.Material.Filled.Error" Color="Color.Error" Size="Size.Small" Class="ml-1" />
+                                </MudTooltip>
+                            }
+                        </MudTd>
+                        <MudTd Style="text-align:center">
+                            <MudButton Variant="Variant.Filled" Size="Size.Small"
+                                       Style="background:#6F4E37; color:white;"
+                                       StartIcon="@Icons.Material.Filled.PlayArrow"
+                                       Disabled="_triggeringJobId == context.Id"
+                                       OnClick="@(() => TriggerJobAsync(context.Id))">
+                                @if (_triggeringJobId == context.Id)
+                                {
+                                    <MudProgressCircular Indeterminate="true" Size="Size.Small" />
+                                }
+                                else
+                                {
+                                    <span>Trigger</span>
+                                }
+                            </MudButton>
+                        </MudTd>
+                    </RowTemplate>
+                    <NoRecordsContent>
+                        <EmptyState Title="Tidak ada recurring job" Icon="@Icons.Material.Filled.Schedule"
+                                    Subtitle="Belum ada job yang terdaftar di scheduler." />
+                    </NoRecordsContent>
+                </MudTable>
+            </MudPaper>
+
+        </MudTabPanel>
+
+        @* ─────────────── TAB 2: Job Monitor ─────────────── *@
+        <MudTabPanel Text="📊 Job Monitor" Icon="@Icons.Material.Filled.MonitorHeart">
+
+            @* Summary Stats for Monitor *@
+            <MudGrid Class="mb-4">
+                <MudItem xs="12" sm="6" md="3">
+                    <MudPaper Class="pa-4 rounded-lg" Elevation="2" Style="border-left:5px solid #4CAF50;">
+                        <div class="d-flex align-center">
+                            <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Style="color:#4CAF50; font-size:2rem;" Class="mr-3" />
+                            <div>
+                                <MudText Typo="Typo.h4" Style="color:#4CAF50; font-weight:700;">
+                                    @(_stats?.Succeeded.ToString("N0") ?? "—")
+                                </MudText>
+                                <MudText Typo="Typo.body2" Color="Color.Secondary">Total Succeeded</MudText>
+                            </div>
+                        </div>
+                    </MudPaper>
+                </MudItem>
+                <MudItem xs="12" sm="6" md="3">
+                    <MudPaper Class="pa-4 rounded-lg" Elevation="2" Style="border-left:5px solid #F44336;">
+                        <div class="d-flex align-center">
+                            <MudIcon Icon="@Icons.Material.Filled.Cancel" Style="color:#F44336; font-size:2rem;" Class="mr-3" />
+                            <div>
+                                <MudText Typo="Typo.h4" Style="color:#F44336; font-weight:700;">
+                                    @(_stats?.Failed ?? 0)
+                                </MudText>
+                                <MudText Typo="Typo.body2" Color="Color.Secondary">Total Failed</MudText>
+                            </div>
+                        </div>
+                    </MudPaper>
+                </MudItem>
+                <MudItem xs="12" sm="6" md="3">
+                    <MudPaper Class="pa-4 rounded-lg" Elevation="2" Style="border-left:5px solid #FF9800;">
+                        <div class="d-flex align-center">
+                            <MudIcon Icon="@Icons.Material.Filled.HourglassTop" Style="color:#FF9800; font-size:2rem;" Class="mr-3" />
+                            <div>
+                                <MudText Typo="Typo.h4" Style="color:#FF9800; font-weight:700;">
+                                    @(_stats?.Processing ?? 0)
+                                </MudText>
+                                <MudText Typo="Typo.body2" Color="Color.Secondary">Processing Now</MudText>
+                            </div>
+                        </div>
+                    </MudPaper>
+                </MudItem>
+                <MudItem xs="12" sm="6" md="3">
+                    <MudPaper Class="pa-4 rounded-lg" Elevation="2" Style="border-left:5px solid #2196F3;">
+                        <div class="d-flex align-center">
+                            <MudIcon Icon="@Icons.Material.Filled.Queue" Style="color:#2196F3; font-size:2rem;" Class="mr-3" />
+                            <div>
+                                <MudText Typo="Typo.h4" Style="color:#2196F3; font-weight:700;">
+                                    @(_stats?.Enqueued ?? 0)
+                                </MudText>
+                                <MudText Typo="Typo.body2" Color="Color.Secondary">In Queue</MudText>
+                            </div>
+                        </div>
+                    </MudPaper>
+                </MudItem>
+            </MudGrid>
+
+            @* Success Rate Bar *@
+            @if (_stats is not null && (_stats.Succeeded + _stats.Failed) > 0)
+            {
+                var total = _stats.Succeeded + _stats.Failed;
+                var successPct = (double)_stats.Succeeded / total * 100;
+                <MudPaper Class="pa-4 rounded-lg mb-4" Elevation="2">
+                    <MudText Typo="Typo.subtitle2" Class="mb-2" Style="color:#6F4E37; font-weight:700;">
+                        📈 Success Rate
                     </MudText>
-                </MudTd>
-                <MudTd>
-                    <MudText Typo="Typo.caption">
-                        @(context.DurationMs.HasValue
-                            ? $"{context.DurationMs.Value / 1000:F1}s"
-                            : "—")
+                    <div class="d-flex align-center gap-3">
+                        <MudProgressLinear Value="@successPct" Color="Color.Success" Rounded="true" Size="Size.Large" Class="flex-1" />
+                        <MudText Typo="Typo.body1" Style="font-weight:700; min-width:50px;">
+                            @successPct.ToString("F1")%
+                        </MudText>
+                    </div>
+                    <MudText Typo="Typo.caption" Color="Color.Secondary" Class="mt-1">
+                        @_stats.Succeeded.ToString("N0") sukses dari @total.ToString("N0") total eksekusi
                     </MudText>
-                </MudTd>
-            </RowTemplate>
-            <NoRecordsContent>
-                <MudText Class="pa-4 text-center" Color="Color.Secondary">Belum ada riwayat job</MudText>
-            </NoRecordsContent>
-        </MudTable>
-    </MudPaper>
+                </MudPaper>
+            }
+
+            @* Recent Job History *@
+            <MudPaper Class="pa-4 rounded-lg" Elevation="2">
+                <div class="d-flex justify-space-between align-center mb-3">
+                    <MudText Typo="Typo.subtitle1" Style="color:#6F4E37; font-weight:700;">
+                        📋 Riwayat Job Terakhir
+                    </MudText>
+                    <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.Refresh"
+                               OnClick="LoadDataAsync" Disabled="_isLoading" Size="Size.Small">
+                        Refresh
+                    </MudButton>
+                </div>
+
+                <MudTable Dense="true" Hover="true" Elevation="0" Items="@(_stats?.RecentHistory ?? new())">
+                    <HeaderContent>
+                        <MudTh>Job ID</MudTh>
+                        <MudTh>Nama Job</MudTh>
+                        <MudTh>Status</MudTh>
+                        <MudTh>Mulai</MudTh>
+                        <MudTh>Selesai</MudTh>
+                        <MudTh>Durasi</MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd><MudText Typo="Typo.caption" Style="font-family:monospace;">@context.JobId</MudText></MudTd>
+                        <MudTd><MudText Typo="Typo.body2">@context.JobName</MudText></MudTd>
+                        <MudTd>
+                            @{
+                                var (c2, t2) = GetJobStateChip(context.State);
+                            }
+                            <MudChip Size="Size.Small" Color="@c2">@t2</MudChip>
+                        </MudTd>
+                        <MudTd><MudText Typo="Typo.caption">@context.StartedAt.ToLocalTime().ToString("dd MMM HH:mm:ss")</MudText></MudTd>
+                        <MudTd>
+                            <MudText Typo="Typo.caption">
+                                @(context.FinishedAt.HasValue
+                                    ? context.FinishedAt.Value.ToLocalTime().ToString("dd MMM HH:mm:ss")
+                                    : "—")
+                            </MudText>
+                        </MudTd>
+                        <MudTd>
+                            @{
+                                var (durationColor, durationText) = GetDurationDisplay(context.DurationMs);
+                            }
+                            <MudText Typo="Typo.caption" Style="@($"color:{durationColor}")">
+                                @durationText
+                            </MudText>
+                        </MudTd>
+                    </RowTemplate>
+                    <NoRecordsContent>
+                        <EmptyState Title="Belum ada riwayat job" Icon="@Icons.Material.Filled.History"
+                                    Subtitle="Riwayat eksekusi job akan muncul di sini setelah job berjalan." />
+                    </NoRecordsContent>
+                </MudTable>
+            </MudPaper>
+
+        </MudTabPanel>
+
+    </MudTabs>
 }
