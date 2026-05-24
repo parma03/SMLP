@@ -10,7 +10,7 @@ using Smlp.Shared.Common.Responses;
 namespace Smlp.WebApi.Areas.V1.Controllers;
 
 [ApiVersion(ApiVersioning.V1.Number)]
-[Authorize(Roles = "Admin,Owner")]
+[Authorize(Policy = "AdminOrOwner")]
 public class AuditsController : ApiControllerBase
 {
     [HttpGet]

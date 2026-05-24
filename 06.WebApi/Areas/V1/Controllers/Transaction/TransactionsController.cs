@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Smlp.Application.Transactions.Commands.Cancel;
 using Smlp.Application.Transactions.Commands.Update;
@@ -34,7 +34,7 @@ public class TransactionsController : ApiControllerBase
     }
 
     [HttpPost]
-    [Authorize(Roles = "Admin,Kasir")]
+    [Authorize(Policy = "AdminOrKasir")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [Produces(typeof(CommonCreateResponse))]
     public async Task<ActionResult<CommonCreateResponse>> CreateTransaction([FromBody] CreateTransactionRequest request)
@@ -43,9 +43,8 @@ public class TransactionsController : ApiControllerBase
         return CreatedAtAction(nameof(GetTransactionById), new { id = result.Id }, result);
     }
 
-
     [HttpPut(ApiEndpoint.V1.Transactions.RouteTemplateFor.Update)]
-    [Authorize(Roles = "Admin,Owner")]
+    [Authorize(Policy = "AdminOrOwner")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [Produces(typeof(CommonUpdateResponse))]
@@ -55,7 +54,7 @@ public class TransactionsController : ApiControllerBase
     }
 
     [HttpPost(ApiEndpoint.V1.Transactions.RouteTemplateFor.Cancel)]
-    [Authorize(Roles = "Admin,Owner")]
+    [Authorize(Policy = "AdminOrOwner")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [Produces(typeof(SuccessResponse))]

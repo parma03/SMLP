@@ -1,3 +1,4 @@
+using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Smlp.Application.Common.Exceptions;
@@ -12,6 +13,18 @@ public class UpdateProductCommand : IRequest<CommonUpdateResponse>
 {
     public Guid Id { get; set; }
     public UpdateProductRequest Request { get; set; } = default!;
+}
+
+public class UpdateProductCommandValidator : AbstractValidator<UpdateProductCommand>
+{
+    public UpdateProductCommandValidator()
+    {
+        RuleFor(v => v.Id)
+            .NotEmpty().WithMessage("ID produk tidak boleh kosong.");
+        RuleFor(v => v.Request)
+            .NotNull()
+            .SetValidator(new UpdateProductRequestValidator());
+    }
 }
 
 public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand, CommonUpdateResponse>

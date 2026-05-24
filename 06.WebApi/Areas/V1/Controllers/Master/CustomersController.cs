@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Smlp.Application.Customers.Commands.Create;
 using Smlp.Application.Customers.Commands.Delete;
@@ -34,7 +34,7 @@ public class CustomersController : ApiControllerBase
     }
 
     [HttpPost]
-    [Authorize(Roles = "Admin,Kasir")]
+    [Authorize(Policy = "AdminOrKasir")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [Produces(typeof(CommonCreateResponse))]
     public async Task<ActionResult<CommonCreateResponse>> CreateCustomer([FromBody] CreateCustomerRequest request)
@@ -44,7 +44,7 @@ public class CustomersController : ApiControllerBase
     }
 
     [HttpPut(ApiEndpoint.V1.Customers.RouteTemplateFor.Update)]
-    [Authorize(Roles = "Admin,Kasir")]
+    [Authorize(Policy = "AdminOrKasir")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [Produces(typeof(CommonUpdateResponse))]
@@ -54,7 +54,7 @@ public class CustomersController : ApiControllerBase
     }
 
     [HttpDelete(ApiEndpoint.V1.Customers.RouteTemplateFor.Delete)]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Policy = "AdminOnly")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> DeleteCustomer([FromRoute] Guid id)

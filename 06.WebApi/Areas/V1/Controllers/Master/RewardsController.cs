@@ -34,7 +34,7 @@ public class RewardsController : ApiControllerBase
     }
 
     [HttpPost]
-    [Authorize(Roles = "Admin,Owner")]
+    [Authorize(Policy = "AdminOrOwner")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [Produces(typeof(CommonCreateResponse))]
     public async Task<ActionResult<CommonCreateResponse>> CreateReward([FromBody] CreateRewardRequest request)
@@ -44,7 +44,7 @@ public class RewardsController : ApiControllerBase
     }
 
     [HttpPut(ApiEndpoint.V1.Rewards.RouteTemplateFor.Update)]
-    [Authorize(Roles = "Admin,Owner")]
+    [Authorize(Policy = "AdminOrOwner")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [Produces(typeof(CommonUpdateResponse))]
@@ -54,7 +54,7 @@ public class RewardsController : ApiControllerBase
     }
 
     [HttpDelete(ApiEndpoint.V1.Rewards.RouteTemplateFor.Delete)]
-    [Authorize(Roles = "Admin,Owner")]
+    [Authorize(Policy = "AdminOrOwner")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> DeleteReward([FromRoute] Guid id)

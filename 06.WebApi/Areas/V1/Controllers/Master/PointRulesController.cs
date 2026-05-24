@@ -13,7 +13,7 @@ using Smlp.Shared.Master.PointRules.Queries;
 namespace Smlp.WebApi.Areas.V1.Controllers.Master;
 
 [ApiVersion(ApiVersioning.V1.Number)]
-[Authorize(Roles = "Admin,Owner")]
+[Authorize(Policy = "AdminOrOwner")]
 public class PointRulesController : ApiControllerBase
 {
     [HttpGet]

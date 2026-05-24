@@ -10,7 +10,7 @@ using Smlp.Shared.Analytics.Queries.GetRevenueChart;
 namespace Smlp.WebApi.Areas.V1.Controllers.Transaction;
 
 [ApiVersion(ApiVersioning.V1.Number)]
-[Authorize(Roles = "Admin,Owner")]
+[Authorize(Policy = "AdminOrOwner")]
 public class AnalyticsController : ApiControllerBase
 {
     /// <summary>Ringkasan dashboard utama: KPI, tier, poin beredar</summary>

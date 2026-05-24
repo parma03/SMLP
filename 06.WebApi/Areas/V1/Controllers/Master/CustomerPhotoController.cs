@@ -28,7 +28,7 @@ public class CustomerPhotoController : ControllerBase
 
     /// <summary>Upload foto avatar pelanggan.</summary>
     [HttpPost]
-    [Authorize(Roles = "Admin,Kasir")]
+    [Authorize(Policy = "AdminOrKasir")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

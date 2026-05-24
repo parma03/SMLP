@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Smlp.Application.RedeemHistories.Commands.Create;
 using Smlp.Application.RedeemHistories.Commands.Verify;
@@ -33,7 +33,7 @@ public class RedeemHistoriesController : ApiControllerBase
     }
 
     [HttpPost]
-    [Authorize(Roles = "Admin,Kasir,Customer")]
+    [Authorize(Policy = "AllRoles")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [Produces(typeof(CommonCreateResponse))]
     public async Task<ActionResult<CommonCreateResponse>> CreateRedeem([FromBody] CreateRedeemRequest request)
@@ -43,7 +43,7 @@ public class RedeemHistoriesController : ApiControllerBase
     }
 
     [HttpPut(ApiEndpoint.V1.RedeemHistories.RouteTemplateFor.Verify)]
-    [Authorize(Roles = "Admin,Kasir")]
+    [Authorize(Policy = "AdminOrKasir")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [Produces(typeof(CommonUpdateResponse))]

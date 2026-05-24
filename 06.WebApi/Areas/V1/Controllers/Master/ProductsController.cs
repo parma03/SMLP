@@ -34,7 +34,7 @@ public class ProductsController : ApiControllerBase
     }
 
     [HttpPost]
-    [Authorize(Roles = "Admin,Owner")]
+    [Authorize(Policy = "AdminOrOwner")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [Produces(typeof(CommonCreateResponse))]
     public async Task<ActionResult<CommonCreateResponse>> CreateProduct([FromBody] CreateProductRequest request)
@@ -44,7 +44,7 @@ public class ProductsController : ApiControllerBase
     }
 
     [HttpPut(ApiEndpoint.V1.Products.RouteTemplateFor.Update)]
-    [Authorize(Roles = "Admin,Owner")]
+    [Authorize(Policy = "AdminOrOwner")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [Produces(typeof(CommonUpdateResponse))]
@@ -54,7 +54,7 @@ public class ProductsController : ApiControllerBase
     }
 
     [HttpDelete(ApiEndpoint.V1.Products.RouteTemplateFor.Delete)]
-    [Authorize(Roles = "Admin,Owner")]
+    [Authorize(Policy = "AdminOrOwner")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> DeleteProduct([FromRoute] Guid id)

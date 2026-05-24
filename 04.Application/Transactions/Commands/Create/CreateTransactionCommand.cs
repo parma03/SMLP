@@ -1,3 +1,4 @@
+using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Smlp.Application.Common.Exceptions;
@@ -13,6 +14,16 @@ namespace Smlp.Application.Transactions.Commands.Create;
 public class CreateTransactionCommand : IRequest<CommonCreateResponse>
 {
     public CreateTransactionRequest Request { get; set; } = default!;
+}
+
+public class CreateTransactionCommandValidator : AbstractValidator<CreateTransactionCommand>
+{
+    public CreateTransactionCommandValidator()
+    {
+        RuleFor(v => v.Request)
+            .NotNull()
+            .SetValidator(new CreateTransactionRequestValidator());
+    }
 }
 
 public class CreateTransactionCommandHandler : IRequestHandler<CreateTransactionCommand, CommonCreateResponse>

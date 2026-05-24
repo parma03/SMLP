@@ -10,7 +10,7 @@ using Smlp.Shared.Reports.Queries.GetTransactionReport;
 namespace Smlp.WebApi.Areas.V1.Controllers.Transaction;
 
 [ApiVersion(ApiVersioning.V1.Number)]
-[Authorize(Roles = "Admin,Owner")]
+[Authorize(Policy = "AdminOrOwner")]
 public class ReportsController : ApiControllerBase
 {
     /// <summary>Laporan transaksi dengan filter tanggal dan pelanggan</summary>

@@ -30,6 +30,17 @@ builder.Services.AddFluentValidationAutoValidation();
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection(JwtOptions.SectionKey));
 builder.Services.AddJwtAuthentication(builder.Configuration);
 
+// Authorization Policies
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminOnly",       policy => policy.RequireRole("Admin"));
+    options.AddPolicy("OwnerOnly",       policy => policy.RequireRole("Owner"));
+    options.AddPolicy("KasirOnly",       policy => policy.RequireRole("Kasir"));
+    options.AddPolicy("AdminOrOwner",    policy => policy.RequireRole("Admin", "Owner"));
+    options.AddPolicy("AdminOrKasir",    policy => policy.RequireRole("Admin", "Kasir"));
+    options.AddPolicy("AllRoles",        policy => policy.RequireRole("Admin", "Owner", "Kasir"));
+});
+
 builder.Services.AddControllers(options =>
 {
     options.Filters.Add(new ApiExceptionFilterAttribute());

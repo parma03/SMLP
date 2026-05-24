@@ -10,7 +10,7 @@ using Smlp.Shared.Transaction.PointAdjustments.Queries;
 namespace Smlp.WebApi.Areas.V1.Controllers.Transactions;
 
 [ApiVersion(ApiVersioning.V1.Number)]
-[Authorize(Roles = "Admin,Owner")]
+[Authorize(Policy = "AdminOrOwner")]
 public class PointAdjustmentsController : ApiControllerBase
 {
     [HttpGet]

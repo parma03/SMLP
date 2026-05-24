@@ -1,5 +1,6 @@
-﻿using MediatR;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Smlp.Application.Services.Persistence;
 using Smlp.Base.Customer.Enums;
 using Smlp.Base.Transaction.Enums;
@@ -12,10 +13,37 @@ public class GetDashboardSummaryQuery : IRequest<GetDashboardSummaryResponse> { 
 public class GetDashboardSummaryQueryHandler : IRequestHandler<GetDashboardSummaryQuery, GetDashboardSummaryResponse>
 {
     private readonly ISmlpDbContext _context;
+    private readonly IMemoryCache _cache;
 
-    public GetDashboardSummaryQueryHandler(ISmlpDbContext context) => _context = context;
+    private const string CacheKey = "dashboard:summary";
+    private static readonly TimeSpan CacheExpiry = TimeSpan.FromMinutes(5);
+
+    public GetDashboardSummaryQueryHandler(ISmlpDbContext context, IMemoryCache cache)
+    {
+        _context = context;
+        _cache = cache;
+    }
 
     public async Task<GetDashboardSummaryResponse> Handle(GetDashboardSummaryQuery request, CancellationToken cancellationToken)
+    {
+        // Return cached result if available
+        if (_cache.TryGetValue(CacheKey, out GetDashboardSummaryResponse? cached) && cached is not null)
+            return cached;
+
+        var result = await FetchFromDatabaseAsync(cancellationToken);
+
+        var cacheOptions = new MemoryCacheEntryOptions
+        {
+            AbsoluteExpirationRelativeToNow = CacheExpiry,
+            SlidingExpiration = null,
+            Priority = CacheItemPriority.Normal
+        };
+        _cache.Set(CacheKey, result, cacheOptions);
+
+        return result;
+    }
+
+    private async Task<GetDashboardSummaryResponse> FetchFromDatabaseAsync(CancellationToken cancellationToken)
     {
         var now = DateTimeOffset.UtcNow;
         var startOfMonth = new DateTimeOffset(now.Year, now.Month, 1, 0, 0, 0, now.Offset);

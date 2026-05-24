@@ -9,7 +9,7 @@ using static Smlp.Shared.AppSettings.Constants.ApiEndpoint;
 namespace Smlp.WebApi.Areas.V1.Controllers.Master;
 
 [ApiVersion(ApiVersioning.V1.Number)]
-[Authorize(Roles = "Admin,Owner")]
+[Authorize(Policy = "AdminOrOwner")]
 public class AppSettingsController : ApiControllerBase
 {
     /// <summary>
