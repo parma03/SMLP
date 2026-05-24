@@ -6,6 +6,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
+using Smlp.Application.Audits;
 using Smlp.Application.Services.Persistence;
 using Smlp.Infrastructure.Persistence.Common.Constants;
 
@@ -31,6 +32,7 @@ public static class DependencyInjection
         });
 
         services.AddScoped<ISmlpDbContext>(provider => provider.GetRequiredService<SqlServerSmlpDbContext>());
+        services.AddScoped<IAuditRepository, AuditRepository>();
 
         healthChecksBuilder.AddSqlServer(
             connectionString: sqlServerOptions.ConnectionString,

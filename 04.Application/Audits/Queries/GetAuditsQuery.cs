@@ -1,6 +1,5 @@
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using Smlp.Application.Services.Persistence;
+using Smlp.Application.Audits;
 using Smlp.Shared.Audits.Queries.GetAudits;
 using Smlp.Shared.Common.Responses;
 
@@ -13,45 +12,12 @@ public class GetAuditsQuery : IRequest<PaginatedListResponse<GetAuditsAudit>>
 
 public class GetAuditsQueryHandler : IRequestHandler<GetAuditsQuery, PaginatedListResponse<GetAuditsAudit>>
 {
-    private readonly ISmlpDbContext _context;
+    private readonly IAuditRepository _auditRepository;
 
-    public GetAuditsQueryHandler(ISmlpDbContext context) => _context = context;
+    public GetAuditsQueryHandler(IAuditRepository auditRepository) => _auditRepository = auditRepository;
 
     public async Task<PaginatedListResponse<GetAuditsAudit>> Handle(GetAuditsQuery request, CancellationToken cancellationToken)
     {
-        var req = request.Request;
-        var query = _context.Audits.AsQueryable();
-
-        if (!string.IsNullOrWhiteSpace(req.Search))
-            query = query.Where(a =>
-                a.EntityName.Contains(req.Search) ||
-                a.ActionType.Contains(req.Search) ||
-                a.ActionName.Contains(req.Search) ||
-                a.FromIpAddress.Contains(req.Search));
-
-        if (req.From.HasValue)
-            query = query.Where(a => a.CreatedAt >= req.From.Value);
-
-        if (req.To.HasValue)
-            query = query.Where(a => a.CreatedAt <= req.To.Value);
-
-        var total = await query.CountAsync(cancellationToken);
-        var items = await query
-            .OrderByDescending(a => a.CreatedAt)
-            .Skip((req.PageNumber - 1) * req.PageSize)
-            .Take(req.PageSize)
-            .Select(a => new GetAuditsAudit
-            {
-                Id = a.Id,
-                Created = a.CreatedAt,
-                CreatedBy = a.CreatedBy,
-                EntityName = a.EntityName,
-                EntityId = a.EntityId,
-                ActionType = a.ActionType,
-                FromIpAddress = a.FromIpAddress,
-            })
-            .ToListAsync(cancellationToken);
-
-        return new PaginatedListResponse<GetAuditsAudit> { Items = items, TotalCount = total };
+        return await _auditRepository.GetAuditsAsync(request.Request, cancellationToken);
     }
 }

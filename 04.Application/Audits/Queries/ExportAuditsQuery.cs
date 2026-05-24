@@ -1,7 +1,6 @@
 using ClosedXML.Excel;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using Smlp.Application.Services.Persistence;
+using Smlp.Application.Audits;
 using Smlp.Shared.Audits.Queries.ExportAudits;
 
 namespace Smlp.Application.Audits.Queries;
@@ -13,35 +12,13 @@ public class ExportAuditsQuery : IRequest<ExportAuditsResponse>
 
 public class ExportAuditsQueryHandler : IRequestHandler<ExportAuditsQuery, ExportAuditsResponse>
 {
-    private readonly ISmlpDbContext _context;
+    private readonly IAuditRepository _auditRepository;
 
-    public ExportAuditsQueryHandler(ISmlpDbContext context) => _context = context;
+    public ExportAuditsQueryHandler(IAuditRepository auditRepository) => _auditRepository = auditRepository;
 
     public async Task<ExportAuditsResponse> Handle(ExportAuditsQuery request, CancellationToken cancellationToken)
     {
-        var query = _context.Audits.AsQueryable();
-
-        if (request.AuditIds.Any())
-            query = query.Where(a => request.AuditIds.Contains(a.Id));
-
-        var audits = await query
-            .OrderByDescending(a => a.CreatedAt)
-            .Take(10_000) // safety cap
-            .Select(a => new
-            {
-                a.CreatedAt,
-                a.CreatedBy,
-                a.EntityName,
-                a.ActionType,
-                a.ActionName,
-                a.EntityId,
-                a.TableName,
-                a.FromIpAddress,
-                a.OldValues,
-                a.NewValues,
-                a.ClientApplicationId,
-            })
-            .ToListAsync(cancellationToken);
+        var audits = await _auditRepository.GetAuditsByIdsAsync(request.AuditIds, cancellationToken);
 
         using var workbook = new XLWorkbook();
         var ws = workbook.Worksheets.Add("Audit Log");
@@ -80,13 +57,10 @@ public class ExportAuditsQueryHandler : IRequestHandler<ExportAuditsQuery, Expor
             row++;
         }
 
-        // Auto-fit columns (cap wide columns)
         ws.Columns(1, 8).AdjustToContents();
         ws.Column(9).Width = 40;
         ws.Column(10).Width = 40;
         ws.Column(11).Width = 20;
-
-        // Freeze header
         ws.SheetView.FreezeRows(1);
 
         using var stream = new MemoryStream();

@@ -1,7 +1,6 @@
 using MediatR;
-using Microsoft.EntityFrameworkCore;
+using Smlp.Application.Audits;
 using Smlp.Application.Common.Exceptions;
-using Smlp.Application.Services.Persistence;
 using Smlp.Shared.Audits.Queries.GetAudit;
 
 namespace Smlp.Application.Audits.Queries;
@@ -13,14 +12,13 @@ public class GetAuditByIdQuery : IRequest<GetAuditResponse>
 
 public class GetAuditByIdQueryHandler : IRequestHandler<GetAuditByIdQuery, GetAuditResponse>
 {
-    private readonly ISmlpDbContext _context;
+    private readonly IAuditRepository _auditRepository;
 
-    public GetAuditByIdQueryHandler(ISmlpDbContext context) => _context = context;
+    public GetAuditByIdQueryHandler(IAuditRepository auditRepository) => _auditRepository = auditRepository;
 
     public async Task<GetAuditResponse> Handle(GetAuditByIdQuery request, CancellationToken cancellationToken)
     {
-        var a = await _context.Audits
-            .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken)
+        var a = await _auditRepository.GetByIdAsync(request.Id, cancellationToken)
             ?? throw new NotFoundException("Audit", request.Id);
 
         return new GetAuditResponse
