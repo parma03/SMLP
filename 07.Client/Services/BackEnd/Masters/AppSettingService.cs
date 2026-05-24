@@ -20,7 +20,8 @@ public class AppSettingService : IDisposable
 
     public AppSettingService(IOptions<BackEndOptions> backEndServiceOptions, UserInfoService userInfo, NavigationManager navigationManager)
     {
-        if (backEndServiceOptions is null) return;
+        if (backEndServiceOptions is null)
+            return;
 
         var options = new RestClientOptions(new Uri($"{backEndServiceOptions!.Value.BaseUrl}/V1/AppSettings"))
         {
