@@ -7,7 +7,10 @@
 @using Smlp.Shared.Master.Users.Commands.Create
 @using Smlp.Shared.Master.Users.Commands.Update
 @using Smlp.Shared.Master.Users.Queries
+@using Smlp.Shared.AppSettings.Commands.UpsertAppSettings
+@using Smlp.Shared.AppSettings.Queries.GetAppSettings
 
 @inject NavigationManager _navigationManager
 @inject ISnackbar _snackbar
 @inject UsersService _usersService
+@inject AppSettingService _appSettingService

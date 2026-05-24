@@ -92,6 +92,10 @@
     </MudTabPanel>
 
     <MudTabPanel Text="Pengaturan Aplikasi" Icon="@Icons.Material.Filled.Settings">
+        @if (_loadingSettings)
+        {
+            <MudProgressLinear Indeterminate="true" Color="Color.Primary" Class="mb-3" />
+        }
         <MudGrid>
             <MudItem xs="12" md="6">
                 <MudPaper Class="pa-4 rounded-lg" Elevation="1">
@@ -102,18 +106,51 @@
                     <MudTextField @bind-Value="_shopAddress" Label="Alamat" Variant="Variant.Outlined" Class="mb-3" Lines="2" />
                     <MudTextField @bind-Value="_shopPhone" Label="No. Telepon" Variant="Variant.Outlined" Class="mb-3" />
                     <MudTextField @bind-Value="_shopEmail" Label="Email" Variant="Variant.Outlined" Class="mb-3" />
-                    <MudButton Variant="Variant.Filled" Style="background:#6F4E37; color:white;"
-                               StartIcon="@Icons.Material.Filled.Save"
-                               OnClick="SaveAppSettingsAsync" Disabled="@_isSavingSettings">
-                        @if (_isSavingSettings)
-                        {
-                            <MudProgressCircular Size="Size.Small" Indeterminate="true" Class="mr-2" />
-                        }
-                        Simpan Pengaturan
-                    </MudButton>
+                    <MudTextField @bind-Value="_shopLogoUrl" Label="Logo URL (opsional)" Variant="Variant.Outlined" Class="mb-3"
+                                  Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Image" />
+                    <MudDivider Class="my-3" />
+                    <MudText Typo="Typo.subtitle2" Class="mb-2" Style="color:#6F4E37; font-weight:700;">
+                        🧾 Pesan Footer Struk
+                    </MudText>
+                    <MudTextField @bind-Value="_receiptFooterMessage" Label="Teks footer pada struk transaksi"
+                                  Variant="Variant.Outlined" Class="mb-3" Lines="2" />
                 </MudPaper>
             </MudItem>
             <MudItem xs="12" md="6">
+                <MudPaper Class="pa-4 rounded-lg mb-4" Elevation="1">
+                    <MudText Typo="Typo.subtitle1" Class="mb-3" Style="color:#6F4E37; font-weight:700;">
+                        🎯 Pengaturan Loyalitas
+                    </MudText>
+                    <MudNumericField @bind-Value="_loyaltyPointExpireDays"
+                                     Label="Masa Berlaku Poin (hari)"
+                                     Variant="Variant.Outlined"
+                                     Class="mb-3"
+                                     Min="0"
+                                     Adornment="Adornment.End"
+                                     AdornmentText="hari"
+                                     HelperText="0 = poin tidak pernah kadaluarsa" />
+                    <MudNumericField @bind-Value="_loyaltyMinRedeemPoints"
+                                     Label="Minimum Poin untuk Redeem"
+                                     Variant="Variant.Outlined"
+                                     Class="mb-3"
+                                     Min="0"
+                                     Adornment="Adornment.End"
+                                     AdornmentText="poin"
+                                     HelperText="Minimum poin yang harus dimiliki pelanggan untuk menukar reward" />
+                    <MudNumericField @bind-Value="_loyaltyWelcomeBonus"
+                                     Label="Bonus Poin Selamat Datang"
+                                     Variant="Variant.Outlined"
+                                     Class="mb-3"
+                                     Min="0"
+                                     Adornment="Adornment.End"
+                                     AdornmentText="poin"
+                                     HelperText="Poin bonus yang diberikan saat pelanggan baru didaftarkan (0 = tidak ada bonus)" />
+                    <MudAlert Severity="Severity.Info" Dense="true" Class="mb-3">
+                        <MudText Typo="Typo.caption">
+                            Perubahan pengaturan loyalitas akan berlaku untuk transaksi baru. Poin yang sudah ada tidak terpengaruh.
+                        </MudText>
+                    </MudAlert>
+                </MudPaper>
                 <MudPaper Class="pa-4 rounded-lg" Elevation="1">
                     <MudText Typo="Typo.subtitle1" Class="mb-3" Style="color:#6F4E37; font-weight:700;">
                         📋 Informasi Sistem
@@ -126,6 +163,17 @@
                         <MudListItem><MudText Typo="Typo.body2"><b>Auth:</b> JWT Bearer Token</MudText></MudListItem>
                     </MudList>
                 </MudPaper>
+            </MudItem>
+            <MudItem xs="12">
+                <MudButton Variant="Variant.Filled" Style="background:#6F4E37; color:white;"
+                           StartIcon="@Icons.Material.Filled.Save"
+                           OnClick="SaveAppSettingsAsync" Disabled="@_isSavingSettings">
+                    @if (_isSavingSettings)
+                    {
+                        <MudProgressCircular Size="Size.Small" Indeterminate="true" Class="mr-2" />
+                    }
+                    Simpan Semua Pengaturan
+                </MudButton>
             </MudItem>
         </MudGrid>
     </MudTabPanel>

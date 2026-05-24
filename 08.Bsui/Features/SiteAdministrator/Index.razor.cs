@@ -2,6 +2,7 @@ using MudBlazor;
 using Smlp.Base.User.Enums;
 using Smlp.Bsui.Common.Constants;
 using Smlp.Bsui.Common.Extensions;
+using Smlp.Shared.AppSettings.Commands.UpsertAppSettings;
 using Smlp.Shared.Master.Users.Commands.Create;
 using Smlp.Shared.Master.Users.Commands.Update;
 using Smlp.Shared.Master.Users.Queries;
@@ -14,10 +15,23 @@ public partial class Index
     private string _searchUser = string.Empty;
     private string _filterRole = string.Empty;
     private bool _loadingUsers = false;
-    private string _shopName = "Kopi Nusantara";
+    private bool _loadingSettings = false;
+
+    // Shop info
+    private string _shopName = "SMLP Coffee Shop";
     private string _shopAddress = string.Empty;
     private string _shopPhone = string.Empty;
     private string _shopEmail = string.Empty;
+    private string _shopLogoUrl = string.Empty;
+
+    // Loyalty settings
+    private int _loyaltyPointExpireDays = 365;
+    private int _loyaltyMinRedeemPoints = 100;
+    private int _loyaltyWelcomeBonus = 0;
+
+    // Receipt
+    private string _receiptFooterMessage = "Terima kasih telah berbelanja!";
+
     private bool _isSavingSettings = false;
 
     private readonly List<RolePermissionRow> _rolePermissions = new()
@@ -52,7 +66,7 @@ public partial class Index
     protected override async Task OnInitializedAsync()
     {
         SetupBreadcrumb();
-        await LoadUsersAsync();
+        await Task.WhenAll(LoadUsersAsync(), LoadAppSettingsAsync());
     }
 
     private void SetupBreadcrumb()
@@ -62,6 +76,80 @@ public partial class Index
             CommonBreadcrumbFor.Active("Administrator"),
         };
     }
+
+    // ─── App Settings ────────────────────────────────────────────────────────
+
+    private async Task LoadAppSettingsAsync()
+    {
+        _loadingSettings = true;
+        try
+        {
+            var result = await _appSettingService.GetAppSettingsAsync();
+            if (result.Error is not null)
+            {
+                _snackbar.AddWarning("Gagal memuat pengaturan aplikasi.");
+                return;
+            }
+
+            var s = result.Result!;
+            _shopName = s.ShopName;
+            _shopAddress = s.ShopAddress;
+            _shopPhone = s.ShopPhone;
+            _shopEmail = s.ShopEmail;
+            _shopLogoUrl = s.ShopLogoUrl ?? string.Empty;
+            _loyaltyPointExpireDays = s.LoyaltyPointExpireDays;
+            _loyaltyMinRedeemPoints = s.LoyaltyMinRedeemPoints;
+            _loyaltyWelcomeBonus = s.LoyaltyWelcomeBonus;
+            _receiptFooterMessage = s.ReceiptFooterMessage;
+        }
+        catch (Exception ex)
+        {
+            _snackbar.AddError($"Gagal memuat pengaturan: {ex.Message}");
+        }
+        finally
+        {
+            _loadingSettings = false;
+        }
+    }
+
+    private async Task SaveAppSettingsAsync()
+    {
+        _isSavingSettings = true;
+        try
+        {
+            var payload = new UpsertAppSettingsRequest
+            {
+                ShopName = _shopName,
+                ShopAddress = _shopAddress,
+                ShopPhone = _shopPhone,
+                ShopEmail = _shopEmail,
+                ShopLogoUrl = string.IsNullOrWhiteSpace(_shopLogoUrl) ? null : _shopLogoUrl,
+                LoyaltyPointExpireDays = _loyaltyPointExpireDays,
+                LoyaltyMinRedeemPoints = _loyaltyMinRedeemPoints,
+                LoyaltyWelcomeBonus = _loyaltyWelcomeBonus,
+                ReceiptFooterMessage = _receiptFooterMessage,
+            };
+
+            var result = await _appSettingService.UpsertAppSettingsAsync(payload);
+            if (result.Error is not null)
+            {
+                _snackbar.AddError(result.Error.ToDetail());
+                return;
+            }
+
+            _snackbar.AddSuccess("Pengaturan aplikasi berhasil disimpan.");
+        }
+        catch (Exception ex)
+        {
+            _snackbar.AddError($"Gagal menyimpan pengaturan: {ex.Message}");
+        }
+        finally
+        {
+            _isSavingSettings = false;
+        }
+    }
+
+    // ─── Users ───────────────────────────────────────────────────────────────
 
     private async Task LoadUsersAsync()
     {
@@ -235,25 +323,6 @@ public partial class Index
         UserRole.Kasir => Color.Info,
         _ => Color.Default
     };
-
-    private async Task SaveAppSettingsAsync()
-    {
-        _isSavingSettings = true;
-        try
-        {
-            // TODO: Save to database via API when AppSettings endpoint is available
-            await Task.Delay(500); // Simulate save
-            _snackbar.AddSuccess("Pengaturan aplikasi berhasil disimpan.");
-        }
-        catch (Exception ex)
-        {
-            _snackbar.AddError($"Gagal menyimpan pengaturan: {ex.Message}");
-        }
-        finally
-        {
-            _isSavingSettings = false;
-        }
-    }
 
     public record RolePermissionRow(string Feature, bool Admin, bool Owner, bool Kasir);
 
