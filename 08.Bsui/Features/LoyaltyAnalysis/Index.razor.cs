@@ -10,7 +10,10 @@ public partial class Index
     private List<BreadcrumbItem> _breadcrumbItems = new();
     private bool _isLoading = false;
     private GetLoyaltyAnalysisResponse? _analysis;
-
+    private double RedemptionRate => (double)(_analysis?.RedemptionRate ?? 0);
+    private long TotalIssued => _analysis?.TotalPointsIssued ?? 0;
+    private long TotalRedeemed => _analysis?.TotalPointsRedeemed ?? 0;
+    private long TotalCirculating => _analysis?.TotalPointsCirculating ?? 0;
     protected override async Task OnInitializedAsync()
     {
         SetupBreadcrumb();
@@ -46,9 +49,4 @@ public partial class Index
             _isLoading = false;
         }
     }
-
-    private double RedemptionRate => (double)(_analysis?.RedemptionRate ?? 0);
-    private long TotalIssued => _analysis?.TotalPointsIssued ?? 0;
-    private long TotalRedeemed => _analysis?.TotalPointsRedeemed ?? 0;
-    private long TotalCirculating => _analysis?.TotalPointsCirculating ?? 0;
 }
