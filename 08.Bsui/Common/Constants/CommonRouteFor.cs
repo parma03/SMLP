@@ -44,6 +44,7 @@ public static class CommonRouteFor
     public const string TierRules = "/TierRules";
     public const string Products = "/Products";
     public const string ProductCreate = "/Products/Create";
+    public static string ProductEdit(Guid id) => $"/Products/{id}/Edit";
 
     // Administrator
     public const string SiteAdministrator = "/SiteAdministrator";

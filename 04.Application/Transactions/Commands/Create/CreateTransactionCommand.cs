@@ -65,6 +65,7 @@ public class CreateTransactionCommandHandler : IRequestHandler<CreateTransaction
             PointMultiplierSnapshot = multiplier,
             Items = req.Items.Select(i => new TransactionItem
             {
+                ProductId = i.ProductId,
                 ProductName = i.ProductName,
                 UnitPrice = i.UnitPrice,
                 Quantity = i.Quantity,
@@ -73,6 +74,29 @@ public class CreateTransactionCommandHandler : IRequestHandler<CreateTransaction
         };
 
         await _context.Transactions.AddAsync(transaction, cancellationToken);
+
+        // Inventory stock deduction for items linked to a product
+        var productIds = req.Items
+            .Where(i => i.ProductId.HasValue)
+            .Select(i => i.ProductId!.Value)
+            .Distinct()
+            .ToList();
+
+        if (productIds.Any())
+        {
+            var products = await _context.Products
+                .Where(p => productIds.Contains(p.Id) && !p.IsDeleted)
+                .ToListAsync(cancellationToken);
+
+            foreach (var item in req.Items.Where(i => i.ProductId.HasValue))
+            {
+                var product = products.FirstOrDefault(p => p.Id == item.ProductId!.Value);
+                if (product is not null && product.Stock > 0)
+                {
+                    product.Stock = Math.Max(0, product.Stock - item.Quantity);
+                }
+            }
+        }
 
         // Update customer points and spend
         customer.TotalPoints += pointsEarned;

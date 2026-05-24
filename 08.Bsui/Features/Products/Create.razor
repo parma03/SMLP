@@ -1,0 +1,102 @@
+@attribute [Authorize(Roles = "Admin,Owner")]
+@page "/Products/Create"
+
+<BrowserTabTitle>Tambah Produk</BrowserTabTitle>
+<MudBreadcrumbs Items="_breadcrumbItems"></MudBreadcrumbs>
+<PageHeader Title="Tambah Produk Baru" Icon="@Icons.Material.Filled.AddBox" />
+
+<MudGrid>
+    <MudItem xs="12" md="7">
+        <MudPaper Class="pa-6 rounded-lg" Elevation="2">
+            <MudText Typo="Typo.subtitle1" Class="mb-4" Style="color:#6F4E37; font-weight:700;">
+                <MudIcon Icon="@Icons.Material.Filled.Inventory2" Class="mr-1" />
+                Data Produk
+            </MudText>
+
+            <MudGrid>
+                <MudItem xs="12">
+                    <MudTextField @bind-Value="_model.Name"
+                                  Label="Nama Produk"
+                                  Variant="Variant.Outlined"
+                                  Required="true"
+                                  RequiredError="Nama produk wajib diisi"
+                                  Adornment="Adornment.Start"
+                                  AdornmentIcon="@Icons.Material.Filled.Inventory2"
+                                  Class="mb-3" />
+                </MudItem>
+                <MudItem xs="12">
+                    <MudTextField @bind-Value="_model.Description"
+                                  Label="Deskripsi (Opsional)"
+                                  Variant="Variant.Outlined"
+                                  Lines="3"
+                                  Placeholder="Deskripsi singkat produk..."
+                                  Class="mb-3" />
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudNumericField @bind-Value="_model.Price"
+                                     Label="Harga (Rp)"
+                                     Variant="Variant.Outlined"
+                                     Format="N0"
+                                     Min="0"
+                                     Adornment="Adornment.Start"
+                                     AdornmentText="Rp"
+                                     Class="mb-3" />
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudSwitch @bind-Value="_model.IsActive"
+                               Label="@(_model.IsActive ? "Produk Aktif" : "Produk Nonaktif")"
+                               Color="Color.Success"
+                               Class="mb-3 mt-2" />
+                </MudItem>
+            </MudGrid>
+
+            <MudDivider Class="my-4" />
+
+            <BottomButtonPanel>
+                <MudButton Variant="Variant.Outlined"
+                           Color="Color.Default"
+                           StartIcon="@Icons.Material.Filled.ArrowBack"
+                           Href="@CommonRouteFor.Products">
+                    Batal
+                </MudButton>
+                <MudButton Variant="Variant.Filled"
+                           Style="background:#6F4E37; color:white;"
+                           StartIcon="@Icons.Material.Filled.Save"
+                           Disabled="@_isLoading"
+                           OnClick="@SaveProductAsync">
+                    @if (_isLoading)
+                    {
+                        <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                        <MudText Class="ms-2">Menyimpan...</MudText>
+                    }
+                    else
+                    {
+                        <MudText>Simpan Produk</MudText>
+                    }
+                </MudButton>
+            </BottomButtonPanel>
+        </MudPaper>
+    </MudItem>
+
+    <MudItem xs="12" md="5">
+        <MudPaper Class="pa-4 rounded-lg" Elevation="2" Style="border-left:4px solid #6F4E37;">
+            <MudText Typo="Typo.subtitle2" Class="mb-3" Style="color:#6F4E37; font-weight:700;">
+                ℹ️ Panduan Pengisian
+            </MudText>
+            <MudList T="string" Dense="true">
+                <MudListItem Icon="@Icons.Material.Filled.Label">
+                    <MudText Typo="Typo.body2">Nama produk harus unik dan deskriptif</MudText>
+                </MudListItem>
+                <MudListItem Icon="@Icons.Material.Filled.AttachMoney">
+                    <MudText Typo="Typo.body2">Harga dalam Rupiah (tanpa titik/koma)</MudText>
+                </MudListItem>
+                <MudListItem Icon="@Icons.Material.Filled.ToggleOn">
+                    <MudText Typo="Typo.body2">Produk aktif akan tampil di pilihan transaksi</MudText>
+                </MudListItem>
+                <MudListItem Icon="@Icons.Material.Filled.Info">
+                    <MudText Typo="Typo.body2">Produk nonaktif tetap tersimpan tapi tidak bisa dipilih</MudText>
+                </MudListItem>
+            </MudList>
+        </MudPaper>
+    </MudItem>
+</MudGrid>

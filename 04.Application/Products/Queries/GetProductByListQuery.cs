@@ -42,6 +42,7 @@ public class GetProductByListQueryHandler : IRequestHandler<GetProductByListQuer
                 Description = p.Description,
                 Price = p.Price,
                 IsActive = p.IsActive,
+                Stock = p.Stock,
                 CategoryId = p.ProductId,
                 CategoryName = p.ProductCategory != null ? p.ProductCategory.Name : null,
             })

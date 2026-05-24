@@ -31,6 +31,7 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand,
         product.Description = req.Description;
         product.Price = req.Price;
         product.IsActive = req.IsActive;
+        product.Stock = req.Stock;
         product.ProductId = req.CategoryId;
 
         await _context.SaveChangesAsync(this, cancellationToken);

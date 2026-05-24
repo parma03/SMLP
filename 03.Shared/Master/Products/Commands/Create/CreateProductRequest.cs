@@ -6,5 +6,6 @@ public class CreateProductRequest
     public string? Description { get; set; }
     public decimal Price { get; set; }
     public bool IsActive { get; set; } = true;
+    public int Stock { get; set; } = 0;
     public Guid? CategoryId { get; set; }
 }

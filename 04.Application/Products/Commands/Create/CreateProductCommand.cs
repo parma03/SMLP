@@ -33,6 +33,7 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
             Description = req.Description,
             Price = req.Price,
             IsActive = req.IsActive,
+            Stock = req.Stock,
             ProductId = req.CategoryId,
         };
 
