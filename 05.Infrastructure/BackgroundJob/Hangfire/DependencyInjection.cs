@@ -3,8 +3,10 @@ using Hangfire.Dashboard.BasicAuthorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Smlp.Application.BackgroundJobs;
 using Smlp.Application.Services.BackgroundJob;
 using Smlp.Infrastructure.BackgroundJob.Hangfire.Storages.SqlServer;
+using Smlp.Infrastructure.BackgroundJob.Jobs;
 using Smlp.Shared.Common.Constants;
 using Smlp.Shared.Common.Extensions;
 
@@ -28,6 +30,7 @@ public static class DependencyInjection
         }
 
         services.AddTransient<IBackgroundJobService, HangfireBackgroundJobService>();
+        services.AddTransient<IExpiredPointsJob, ExpiredPointsJob>();
         services.AddHangfireServer(options => options.WorkerCount = hangfireBackgroundJobOptions.WorkerCount);
 
         healthChecksBuilder.AddHangfire(

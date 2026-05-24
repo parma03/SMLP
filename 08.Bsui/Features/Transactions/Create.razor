@@ -82,14 +82,82 @@
             <MudAlert Severity="Severity.Warning" Dense="true" Class="mb-3">
                 Pembayaran dilakukan langsung di kasir. Sistem hanya mencatat untuk loyalitas.
             </MudAlert>
-            <MudSelect @bind-Value="_paymentMethod" Label="Metode Pembayaran" Variant="Variant.Outlined" Class="mb-3">
-                <MudSelectItem Value="@(PaymentMethod.Tunai)">💵 Tunai</MudSelectItem>
-                <MudSelectItem Value="@(PaymentMethod.Qris)">📱 QRIS</MudSelectItem>
-                <MudSelectItem Value="@(PaymentMethod.TransferBank)">🏦 Transfer Bank</MudSelectItem>
-                <MudSelectItem Value="@(PaymentMethod.EWallet)">💳 E-Wallet (GoPay, OVO, Dana)</MudSelectItem>
-                <MudSelectItem Value="@(PaymentMethod.Debit)">💳 Kartu Debit</MudSelectItem>
-                <MudSelectItem Value="@(PaymentMethod.Kredit)">💳 Kartu Kredit</MudSelectItem>
-            </MudSelect>
+
+            @* Split Payment Toggle *@
+            <div class="d-flex align-center justify-space-between mb-3">
+                <MudText Typo="Typo.body2" Style="font-weight:600;">Mode Pembayaran</MudText>
+                <MudToggleGroup T="bool" @bind-Value="_isSplitPayment" Size="Size.Small" Color="Color.Primary">
+                    <MudToggleItem Value="false" Text="Tunggal" />
+                    <MudToggleItem Value="true" Text="Split" />
+                </MudToggleGroup>
+            </div>
+
+            @if (!_isSplitPayment)
+            {
+                @* Single Payment *@
+                <MudSelect @bind-Value="_paymentMethod" Label="Metode Pembayaran" Variant="Variant.Outlined" Class="mb-3">
+                    <MudSelectItem Value="@(PaymentMethod.Tunai)">💵 Tunai</MudSelectItem>
+                    <MudSelectItem Value="@(PaymentMethod.Qris)">📱 QRIS</MudSelectItem>
+                    <MudSelectItem Value="@(PaymentMethod.TransferBank)">🏦 Transfer Bank</MudSelectItem>
+                    <MudSelectItem Value="@(PaymentMethod.EWallet)">💳 E-Wallet (GoPay, OVO, Dana)</MudSelectItem>
+                    <MudSelectItem Value="@(PaymentMethod.Debit)">💳 Kartu Debit</MudSelectItem>
+                    <MudSelectItem Value="@(PaymentMethod.Kredit)">💳 Kartu Kredit</MudSelectItem>
+                </MudSelect>
+            }
+            else
+            {
+                @* Split Payment *@
+                <MudPaper Elevation="0" Class="pa-3 rounded mb-3" Style="background:#FFF3E0; border:1px dashed #FFB74D;">
+                    <MudText Typo="Typo.caption" Class="mb-2" Style="font-weight:600; color:#E64A19;">
+                        ✂️ Split Payment — Total harus sama dengan Grand Total
+                    </MudText>
+
+                    @foreach (var (payment, idx) in _splitPayments.Select((p, i) => (p, i)))
+                    {
+                        <div class="d-flex gap-2 align-center mb-2">
+                            <MudSelect @bind-Value="payment.PaymentMethod" Label="Metode" Variant="Variant.Outlined" Dense="true" Style="flex:1.2;">
+                                <MudSelectItem Value="@(PaymentMethod.Tunai)">💵 Tunai</MudSelectItem>
+                                <MudSelectItem Value="@(PaymentMethod.Qris)">📱 QRIS</MudSelectItem>
+                                <MudSelectItem Value="@(PaymentMethod.TransferBank)">🏦 Transfer Bank</MudSelectItem>
+                                <MudSelectItem Value="@(PaymentMethod.EWallet)">💳 E-Wallet</MudSelectItem>
+                                <MudSelectItem Value="@(PaymentMethod.Debit)">💳 Debit</MudSelectItem>
+                                <MudSelectItem Value="@(PaymentMethod.Kredit)">💳 Kredit</MudSelectItem>
+                            </MudSelect>
+                            <MudNumericField @bind-Value="payment.Amount" Label="Jumlah (Rp)"
+                                             Variant="Variant.Outlined" Dense="true" Format="N0" Min="0"
+                                             HideSpinButtons="true" Style="flex:1;" />
+                            <MudTextField @bind-Value="payment.Reference" Label="Ref."
+                                          Variant="Variant.Outlined" Dense="true" Style="flex:1;"
+                                          Placeholder="Opsional" />
+                            @if (_splitPayments.Count > 1)
+                            {
+                                <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small"
+                                               Color="Color.Error" OnClick="@(() => RemoveSplitPayment(idx))" />
+                            }
+                        </div>
+                    }
+
+                    <div class="d-flex justify-space-between align-center mt-2">
+                        <MudButton StartIcon="@Icons.Material.Filled.Add" Size="Size.Small"
+                                   Variant="Variant.Text" Color="Color.Primary"
+                                   OnClick="AddSplitPayment">Tambah Metode</MudButton>
+                        <div>
+                            @{ var splitTotal = _splitPayments.Sum(p => p.Amount); }
+                            @if (GrandTotal > 0 && splitTotal != GrandTotal)
+                            {
+                                <MudText Typo="Typo.caption" Color="Color.Error">
+                                    ⚠️ Total split: Rp @splitTotal.ToString("N0") (selisih: Rp @Math.Abs(GrandTotal - splitTotal).ToString("N0"))
+                                </MudText>
+                            }
+                            else if (GrandTotal > 0 && splitTotal == GrandTotal)
+                            {
+                                <MudText Typo="Typo.caption" Color="Color.Success">✅ Total split sesuai</MudText>
+                            }
+                        </div>
+                    </div>
+                </MudPaper>
+            }
+
             <MudTextField @bind-Value="_notes"
                           Label="Catatan"
                           Variant="Variant.Outlined"

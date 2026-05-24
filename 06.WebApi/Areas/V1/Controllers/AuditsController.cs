@@ -30,10 +30,8 @@ public class AuditsController : ApiControllerBase
 
     [HttpGet(ApiEndpoint.V1.Audits.RouteTemplateFor.Export)]
     [Produces(typeof(ExportAuditsResponse))]
-    public ActionResult<ExportAuditsResponse> ExportAudits([FromQuery] IList<Guid> auditIds)
+    public async Task<ActionResult<ExportAuditsResponse>> ExportAudits([FromQuery] IList<Guid> auditIds)
     {
-        // TODO: implement export to Excel
-        return Ok(new ExportAuditsResponse());
+        return await Mediator.Send(new ExportAuditsQuery { AuditIds = auditIds });
     }
 }
-

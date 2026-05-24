@@ -18,9 +18,13 @@ public partial class Create
     private bool _isSearching = false;
     private GetCustomerResponse? _selectedCustomer;
 
-    // Payment
+    // Payment — single mode
     private PaymentMethod _paymentMethod = PaymentMethod.Tunai;
     private string? _notes;
+
+    // Payment — split mode
+    private bool _isSplitPayment = false;
+    private List<PaymentEntryRequest> _splitPayments = new() { new PaymentEntryRequest { PaymentMethod = PaymentMethod.Tunai } };
 
     // Discount
     private decimal _discountPercent = 0;
@@ -87,13 +91,11 @@ public partial class Create
     private void OnProductSelected(CreateTransactionItemRequest item, string? productName)
     {
         item.ProductName = productName ?? string.Empty;
-        // Auto-fill price if product found in cache
         var product = _productCache.FirstOrDefault(p => p.Name == productName);
         if (product is not null && item.UnitPrice == 0)
         {
             item.UnitPrice = product.Price;
         }
-
         StateHasChanged();
     }
 
@@ -119,7 +121,7 @@ public partial class Create
         _selectedCustomer = null;
         try
         {
-            var result = await _customerService.GetCustomersAsync(new Smlp.Shared.Master.Customers.Queries.GetCustomerRequest
+            var result = await _customerService.GetCustomersAsync(new GetCustomerRequest
             {
                 Search = _memberSearch,
                 PageSize = 1
@@ -172,6 +174,21 @@ public partial class Create
         _items.Remove(item);
     }
 
+    // ── Split Payment helpers ────────────────────────────────────────────────
+
+    private void AddSplitPayment()
+    {
+        _splitPayments.Add(new PaymentEntryRequest { PaymentMethod = PaymentMethod.Tunai });
+    }
+
+    private void RemoveSplitPayment(int index)
+    {
+        if (_splitPayments.Count > 1)
+            _splitPayments.RemoveAt(index);
+    }
+
+    // ── Save ─────────────────────────────────────────────────────────────────
+
     private async Task SaveTransaction()
     {
         if (_selectedCustomer is null)
@@ -187,6 +204,23 @@ public partial class Create
             return;
         }
 
+        // Validate split payment totals
+        if (_isSplitPayment)
+        {
+            var splitTotal = _splitPayments.Sum(p => p.Amount);
+            if (splitTotal != GrandTotal)
+            {
+                _snackbar.AddWarning($"Total split payment (Rp {splitTotal:N0}) harus sama dengan Grand Total (Rp {GrandTotal:N0}).");
+                return;
+            }
+
+            if (_splitPayments.Any(p => p.Amount <= 0))
+            {
+                _snackbar.AddWarning("Semua entri split payment harus memiliki jumlah lebih dari Rp 0.");
+                return;
+            }
+        }
+
         _isLoading = true;
         try
         {
@@ -196,7 +230,14 @@ public partial class Create
             var request = new CreateTransactionRequest
             {
                 CustomerId = _selectedCustomer.Id,
-                PaymentMethod = _paymentMethod,
+                PaymentMethod = _isSplitPayment ? _splitPayments.OrderByDescending(p => p.Amount).First().PaymentMethod : _paymentMethod,
+                Payments = _isSplitPayment ? _splitPayments.Select(p => new PaymentEntryRequest
+                {
+                    PaymentMethod = p.PaymentMethod,
+                    Amount = p.Amount,
+                    Reference = p.Reference,
+                }).ToList() : new List<PaymentEntryRequest>(),
+                DiscountAmount = DiscountValue,
                 Notes = string.IsNullOrWhiteSpace(finalNotes) ? null : finalNotes,
                 Items = validItems.Select(i => new CreateTransactionItemRequest
                 {
@@ -213,7 +254,11 @@ public partial class Create
                 return;
             }
 
-            _snackbar.AddSuccess($"Transaksi berhasil disimpan! {EstimatedPoints} poin ditambahkan ke akun {_selectedCustomer.FullName}.");
+            var paymentDesc = _isSplitPayment
+                ? $"split {_splitPayments.Count} metode"
+                : _paymentMethod.ToString();
+
+            _snackbar.AddSuccess($"Transaksi berhasil ({paymentDesc})! {EstimatedPoints} poin ditambahkan ke akun {_selectedCustomer.FullName}.");
             _navigationManager.NavigateTo(CommonRouteFor.Transactions);
         }
         catch (Exception ex)
