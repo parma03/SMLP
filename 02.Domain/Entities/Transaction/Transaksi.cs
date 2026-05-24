@@ -1,4 +1,4 @@
-﻿using Smlp.Base.Transaction.Enums;
+using Smlp.Base.Transaction.Enums;
 using Smlp.Domain.Abstracts;
 using Smlp.Domain.Entities.Master;
 
@@ -11,9 +11,14 @@ namespace Smlp.Domain.Entities.Transaction
         public Customer Customer { get; set; } = default!;
         public DateTimeOffset TransactionDate { get; set; }
         public decimal TotalAmount { get; set; }
+        public decimal DiscountAmount { get; set; }
+        public decimal GrandTotal { get; set; }
         public int PointsEarned { get; set; }
         public int BonusPoints { get; set; }
+
+        /// <summary>Metode pembayaran utama (backward-compat, atau jika single payment).</summary>
         public PaymentMethod PaymentMethod { get; set; }
+
         public string? Notes { get; set; }
         public TransactionStatus Status { get; set; }
 
@@ -23,5 +28,8 @@ namespace Smlp.Domain.Entities.Transaction
 
         // Navigation
         public ICollection<TransactionItem> Items { get; set; } = new List<TransactionItem>();
+
+        /// <summary>Daftar pembayaran (mendukung split payment).</summary>
+        public ICollection<TransactionPayment> Payments { get; set; } = new List<TransactionPayment>();
     }
 }

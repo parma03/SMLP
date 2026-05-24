@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Smlp.Infrastructure.AppInfo;
 using Smlp.Infrastructure.BackgroundJob;
+using Smlp.Infrastructure.BackgroundJob.Jobs;
 using Smlp.Infrastructure.HealthCheck;
 using Smlp.Infrastructure.Persistence;
 using Smlp.Infrastructure.Storage;
@@ -15,6 +16,7 @@ using Smlp.Infrastructure.DateAndTime;
 using Smlp.InfrastructureDomainEvent;
 using Smlp.Infrastructure.Otp;
 using Smlp.Application.Services.Authorization;
+using Smlp.Application.BackgroundJobs;
 using Smlp.Infrastructure.CurrentUser;
 using Smlp.Infrastructure.Authorization;
 
@@ -33,6 +35,9 @@ public static class DependencyInjection
 
         // Register a stub IAuthorizationService (uses JWT roles, no external auth server)
         services.AddScoped<IAuthorizationService, LocalAuthorizationService>();
+
+        // Background Jobs
+        services.AddScoped<IExpiredPointsJob, ExpiredPointsJob>();
 
         var healthChecksBuilder = services.AddHealthCheckService(configuration);
         services.AddPersistenceService(configuration, healthChecksBuilder);

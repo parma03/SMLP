@@ -36,6 +36,7 @@ public interface ISmlpDbContext
 
     public DbSet<Transaksi> Transactions { get; }
     public DbSet<TransactionItem> TransactionItems { get; }
+    public DbSet<TransactionPayment> TransactionPayments { get; }
     public DbSet<RedeemHistory> RedeemHistories { get; }
     public DbSet<PointAdjustment> PointAdjustments { get; }
 

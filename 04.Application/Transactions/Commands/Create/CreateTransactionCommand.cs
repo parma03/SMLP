@@ -40,6 +40,8 @@ public class CreateTransactionCommandHandler : IRequestHandler<CreateTransaction
 
         var txCode = await GenerateTransactionCodeAsync(cancellationToken);
         var totalAmount = req.Items.Sum(i => i.UnitPrice * i.Quantity);
+        var discountAmount = req.DiscountAmount;
+        var grandTotal = Math.Max(0, totalAmount - discountAmount);
 
         var pointsEarned = 0;
         var multiplier = 1m;
@@ -47,8 +49,14 @@ public class CreateTransactionCommandHandler : IRequestHandler<CreateTransaction
         if (pointRule != null && pointRule.SpendAmount > 0)
         {
             multiplier = pointRule.BonusMultiplier ?? 1m;
-            pointsEarned = (int)(totalAmount / pointRule.SpendAmount * pointRule.PointEarned * multiplier);
+            // Points dihitung dari grandTotal (setelah diskon)
+            pointsEarned = (int)(grandTotal / pointRule.SpendAmount * pointRule.PointEarned * multiplier);
         }
+
+        // Resolve payment method (backward-compat + multiple payment)
+        var resolvedPaymentMethod = req.Payments.Any()
+            ? req.Payments.OrderByDescending(p => p.Amount).First().PaymentMethod  // primary = largest payment
+            : req.PaymentMethod;
 
         var transaction = new Transaksi
         {
@@ -56,9 +64,11 @@ public class CreateTransactionCommandHandler : IRequestHandler<CreateTransaction
             CustomerId = customer.Id,
             TransactionDate = DateTimeOffset.UtcNow,
             TotalAmount = totalAmount,
+            DiscountAmount = discountAmount,
+            GrandTotal = grandTotal,
             PointsEarned = pointsEarned,
             BonusPoints = 0,
-            PaymentMethod = req.PaymentMethod,
+            PaymentMethod = resolvedPaymentMethod,
             Notes = req.Notes,
             Status = TransactionStatus.Completed,
             CustomerTierSnapshot = customer.Tier.ToString(),
@@ -70,8 +80,37 @@ public class CreateTransactionCommandHandler : IRequestHandler<CreateTransaction
                 UnitPrice = i.UnitPrice,
                 Quantity = i.Quantity,
                 SubTotal = i.UnitPrice * i.Quantity,
-            }).ToList()
+            }).ToList(),
         };
+
+        // Build payments list
+        if (req.Payments.Any())
+        {
+            foreach (var p in req.Payments)
+            {
+                transaction.Payments.Add(new TransactionPayment
+                {
+                    Id = Guid.NewGuid(),
+                    PaymentMethod = p.PaymentMethod,
+                    Amount = p.Amount,
+                    Reference = p.Reference,
+                    CreatedAt = DateTimeOffset.UtcNow,
+                    CreatedBy = "system",
+                });
+            }
+        }
+        else
+        {
+            // Single payment (backward-compat)
+            transaction.Payments.Add(new TransactionPayment
+            {
+                Id = Guid.NewGuid(),
+                PaymentMethod = req.PaymentMethod,
+                Amount = grandTotal,
+                CreatedAt = DateTimeOffset.UtcNow,
+                CreatedBy = "system",
+            });
+        }
 
         await _context.Transactions.AddAsync(transaction, cancellationToken);
 
@@ -101,7 +140,7 @@ public class CreateTransactionCommandHandler : IRequestHandler<CreateTransaction
         // Update customer points and spend
         customer.TotalPoints += pointsEarned;
         customer.LifetimePoints += pointsEarned;
-        customer.TotalSpend += totalAmount;
+        customer.TotalSpend += grandTotal;
         customer.LastTransactionDate = transaction.TransactionDate;
 
         // Tier upgrade automation: use TierRules from DB, fall back to hardcoded if none configured
@@ -125,7 +164,6 @@ public class CreateTransactionCommandHandler : IRequestHandler<CreateTransaction
 
         if (tierRules.Any())
         {
-            // Find the highest tier the customer qualifies for
             foreach (var rule in tierRules)
             {
                 var maxOk = rule.MaximumLifetimePoints == 0 || lifetimePoints <= rule.MaximumLifetimePoints;
@@ -134,7 +172,6 @@ public class CreateTransactionCommandHandler : IRequestHandler<CreateTransaction
                     return rule.Tier;
                 }
             }
-            // If no rule matched, return the lowest tier
             return tierRules.OrderBy(r => r.MinimumLifetimePoints).First().Tier;
         }
 
