@@ -21,6 +21,7 @@ public static class TableNameFor
     public static readonly string Reward = nameof(Reward);
     public static readonly string Product = nameof(Product);
     public static readonly string ProductCategory = nameof(ProductCategory);
+    public static readonly string AppSetting = nameof(AppSetting);
 
     // Transaction
     public static readonly string Transaction = nameof(Transaction);

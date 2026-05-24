@@ -41,6 +41,7 @@ public class SmlpDbContext : DbContext, ISmlpDbContext
     public DbSet<TierRule> TierRules => Set<TierRule>();
     public DbSet<Reward> Rewards => Set<Reward>();
     public DbSet<Product> Products => Set<Product>();
+    public DbSet<AppSetting> AppSettings => Set<AppSetting>();
 
     #endregion Master Data Entities
 
