@@ -14,6 +14,7 @@ public static class ApiEndpoint
                 public const string Revenue = "revenue";
                 public const string CustomerInsights = "customer-insights";
                 public const string LoyaltyAnalysis = "loyalty-analysis";
+                public const string Export = "export";
             }
         }
     }

@@ -5,6 +5,7 @@
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Smlp.Client.Common.Handlers;
 using Smlp.Client.Services.BackEnd.Auth;
 using Smlp.Client.Services.BackEnd.Masters;
 using Smlp.Client.Services.BackEnd.Transactions;
@@ -22,6 +23,7 @@ public static class DependencyInjection
 
         #region Essential Services
 
+        services.AddScoped<UnauthorizedHttpHandler>();
         services.AddTransient<AuthService>();
         services.AddTransient<AuditService>();
         services.AddTransient<UsersService>();
@@ -58,6 +60,7 @@ public static class DependencyInjection
 
         services.AddTransient<AnalyticsService>();
         services.AddTransient<ReportService>();
+        services.AddTransient<SchedulerService>();
 
         #endregion Analytics & Reports
 
