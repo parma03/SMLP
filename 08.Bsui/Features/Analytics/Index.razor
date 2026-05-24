@@ -42,6 +42,21 @@
                        StartIcon="@Icons.Material.Filled.Refresh" OnClick="LoadAnalyticsData">
                 Perbarui
             </MudButton>
+            <MudMenu Icon="@Icons.Material.Filled.FileDownload" Variant="Variant.Outlined"
+                     Color="Color.Success" Dense="true" TooltipText="Export Excel">
+                <MudMenuItem OnClick="@(() => ExportAnalyticsAsync("revenue"))">
+                    <MudIcon Icon="@Icons.Material.Filled.TrendingUp" Size="Size.Small" Class="mr-1" /> Revenue
+                </MudMenuItem>
+                <MudMenuItem OnClick="@(() => ExportAnalyticsAsync("loyalty"))">
+                    <MudIcon Icon="@Icons.Material.Filled.Stars" Size="Size.Small" Class="mr-1" /> Loyalty
+                </MudMenuItem>
+                <MudMenuItem OnClick="@(() => ExportAnalyticsAsync("customer-insights"))">
+                    <MudIcon Icon="@Icons.Material.Filled.Psychology" Size="Size.Small" Class="mr-1" /> Customer Insights
+                </MudMenuItem>
+                <MudMenuItem OnClick="@(() => ExportAnalyticsAsync("dashboard"))">
+                    <MudIcon Icon="@Icons.Material.Filled.Dashboard" Size="Size.Small" Class="mr-1" /> Dashboard Summary
+                </MudMenuItem>
+            </MudMenu>
         </MudItem>
     </MudGrid>
     @if (_selectedPeriod != "custom")

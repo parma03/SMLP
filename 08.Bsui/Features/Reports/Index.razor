@@ -9,25 +9,6 @@
     <MudItem xs="12" sm="6" md="4">
         <MudCard Class="rounded-lg" Elevation="2">
             <MudCardContent>
-                <MudIcon Icon="@Icons.Material.Filled.People" Style="font-size:3rem; color:#6F4E37;" />
-                <MudText Typo="Typo.subtitle1" Style="font-weight:700;">Laporan Pelanggan</MudText>
-                <MudText Typo="Typo.caption" Color="Color.Secondary">
-                    Daftar lengkap pelanggan dengan detail poin, tier, dan riwayat transaksi
-                </MudText>
-            </MudCardContent>
-            <MudCardActions>
-                <MudButton Variant="Variant.Outlined" Color="Color.Primary" StartIcon="@Icons.Material.Filled.FileDownload">
-                    Export Excel
-                </MudButton>
-                <MudButton Variant="Variant.Text" Color="Color.Secondary" StartIcon="@Icons.Material.Filled.PictureAsPdf">
-                    Export PDF
-                </MudButton>
-            </MudCardActions>
-        </MudCard>
-    </MudItem>
-    <MudItem xs="12" sm="6" md="4">
-        <MudCard Class="rounded-lg" Elevation="2">
-            <MudCardContent>
                 <MudIcon Icon="@Icons.Material.Filled.ReceiptLong" Style="font-size:3rem; color:#C8860A;" />
                 <MudText Typo="Typo.subtitle1" Style="font-weight:700;">Laporan Transaksi</MudText>
                 <MudText Typo="Typo.caption" Color="Color.Secondary">
@@ -35,11 +16,15 @@
                 </MudText>
             </MudCardContent>
             <MudCardActions>
-                <MudButton Variant="Variant.Outlined" Color="Color.Primary" StartIcon="@Icons.Material.Filled.FileDownload">
+                <MudButton Variant="Variant.Outlined" Color="Color.Primary"
+                           StartIcon="@Icons.Material.Filled.FileDownload"
+                           Disabled="_isExporting"
+                           OnClick="@(() => ExportReportAsync("transactions"))">
+                    @if (_isExporting && _exportingType == "transactions")
+                    {
+                        <MudProgressCircular Indeterminate="true" Size="Size.Small" Class="mr-1" />
+                    }
                     Export Excel
-                </MudButton>
-                <MudButton Variant="Variant.Text" Color="Color.Secondary" StartIcon="@Icons.Material.Filled.PictureAsPdf">
-                    Export PDF
                 </MudButton>
             </MudCardActions>
         </MudCard>
@@ -54,11 +39,15 @@
                 </MudText>
             </MudCardContent>
             <MudCardActions>
-                <MudButton Variant="Variant.Outlined" Color="Color.Primary" StartIcon="@Icons.Material.Filled.FileDownload">
+                <MudButton Variant="Variant.Outlined" Color="Color.Primary"
+                           StartIcon="@Icons.Material.Filled.FileDownload"
+                           Disabled="_isExporting"
+                           OnClick="@(() => ExportReportAsync("redeems"))">
+                    @if (_isExporting && _exportingType == "redeems")
+                    {
+                        <MudProgressCircular Indeterminate="true" Size="Size.Small" Class="mr-1" />
+                    }
                     Export Excel
-                </MudButton>
-                <MudButton Variant="Variant.Text" Color="Color.Secondary" StartIcon="@Icons.Material.Filled.PictureAsPdf">
-                    Export PDF
                 </MudButton>
             </MudCardActions>
         </MudCard>
@@ -73,43 +62,15 @@
                 </MudText>
             </MudCardContent>
             <MudCardActions>
-                <MudButton Variant="Variant.Outlined" Color="Color.Primary" StartIcon="@Icons.Material.Filled.FileDownload">
+                <MudButton Variant="Variant.Outlined" Color="Color.Primary"
+                           StartIcon="@Icons.Material.Filled.FileDownload"
+                           Disabled="_isExporting"
+                           OnClick="@(() => ExportReportAsync("points"))">
+                    @if (_isExporting && _exportingType == "points")
+                    {
+                        <MudProgressCircular Indeterminate="true" Size="Size.Small" Class="mr-1" />
+                    }
                     Export Excel
-                </MudButton>
-            </MudCardActions>
-        </MudCard>
-    </MudItem>
-    <MudItem xs="12" sm="6" md="4">
-        <MudCard Class="rounded-lg" Elevation="2">
-            <MudCardContent>
-                <MudIcon Icon="@Icons.Material.Filled.Analytics" Style="font-size:3rem; color:#0277BD;" />
-                <MudText Typo="Typo.subtitle1" Style="font-weight:700;">Laporan Segmentasi</MudText>
-                <MudText Typo="Typo.caption" Color="Color.Secondary">
-                    Distribusi pelanggan per segmen RFM dan tier
-                </MudText>
-            </MudCardContent>
-            <MudCardActions>
-                <MudButton Variant="Variant.Outlined" Color="Color.Primary" StartIcon="@Icons.Material.Filled.FileDownload">
-                    Export Excel
-                </MudButton>
-            </MudCardActions>
-        </MudCard>
-    </MudItem>
-    <MudItem xs="12" sm="6" md="4">
-        <MudCard Class="rounded-lg" Elevation="2">
-            <MudCardContent>
-                <MudIcon Icon="@Icons.Material.Filled.BarChart" Style="font-size:3rem; color:#C62828;" />
-                <MudText Typo="Typo.subtitle1" Style="font-weight:700;">Laporan Ringkasan Bulanan</MudText>
-                <MudText Typo="Typo.caption" Color="Color.Secondary">
-                    Rekap bulanan: revenue, pelanggan baru, retention rate, reward cost
-                </MudText>
-            </MudCardContent>
-            <MudCardActions>
-                <MudButton Variant="Variant.Outlined" Color="Color.Primary" StartIcon="@Icons.Material.Filled.FileDownload">
-                    Export Excel
-                </MudButton>
-                <MudButton Variant="Variant.Text" Color="Color.Secondary" StartIcon="@Icons.Material.Filled.PictureAsPdf">
-                    Export PDF
                 </MudButton>
             </MudCardActions>
         </MudCard>
@@ -124,10 +85,9 @@
     <MudGrid>
         <MudItem xs="12" sm="4">
             <MudSelect @bind-Value="_reportType" Label="Jenis Laporan" Variant="Variant.Outlined">
-                <MudSelectItem Value="@("customers")">Pelanggan</MudSelectItem>
                 <MudSelectItem Value="@("transactions")">Transaksi</MudSelectItem>
+                <MudSelectItem Value="@("redeems")">Penukaran Reward</MudSelectItem>
                 <MudSelectItem Value="@("points")">Poin</MudSelectItem>
-                <MudSelectItem Value="@("rewards")">Reward</MudSelectItem>
             </MudSelect>
         </MudItem>
         <MudItem xs="6" sm="3">
@@ -136,12 +96,110 @@
         <MudItem xs="6" sm="3">
             <MudDatePicker @bind-Date="_reportTo" Label="Sampai Tanggal" Variant="Variant.Outlined" />
         </MudItem>
-        <MudItem xs="12" sm="2" Class="d-flex align-end">
+        <MudItem xs="12" sm="2" Class="d-flex align-end gap-2">
             <MudButton Variant="Variant.Filled" Style="background:#6F4E37; color:white; width:100%;"
-                       StartIcon="@Icons.Material.Filled.Download">
-                Generate
+                       StartIcon="@Icons.Material.Filled.Search"
+                       Disabled="_isGenerating"
+                       OnClick="GenerateReportAsync">
+                @if (_isGenerating)
+                {
+                    <MudProgressCircular Indeterminate="true" Size="Size.Small" Class="mr-1" />
+                }
+                Tampilkan
             </MudButton>
         </MudItem>
+        @if (_hasData)
+        {
+            <MudItem xs="12" sm="2" Class="d-flex align-end">
+                <MudButton Variant="Variant.Outlined" Color="Color.Success" Style="width:100%;"
+                           StartIcon="@Icons.Material.Filled.FileDownload"
+                           Disabled="_isExporting"
+                           OnClick="@(() => ExportReportAsync(_reportType))">
+                    @if (_isExporting)
+                    {
+                        <MudProgressCircular Indeterminate="true" Size="Size.Small" Class="mr-1" />
+                    }
+                    Export Excel
+                </MudButton>
+            </MudItem>
+        }
     </MudGrid>
 </MudPaper>
-EOF
+
+@* Data Preview *@
+@if (_hasData)
+{
+    <MudPaper Class="pa-4 rounded-lg mt-4" Elevation="2">
+        <div class="d-flex justify-space-between align-center mb-3">
+            <MudText Typo="Typo.subtitle1" Style="color:#6F4E37; font-weight:700;">
+                📋 @GetReportTitle() — @GetRowCount() baris
+            </MudText>
+        </div>
+
+        @if (_reportType == "transactions" && _transactionData.Any())
+        {
+            <MudTable Dense="true" Hover="true" Elevation="0" Items="@_transactionData">
+                <HeaderContent>
+                    <MudTh>No. Transaksi</MudTh>
+                    <MudTh>Pelanggan</MudTh>
+                    <MudTh>Tanggal</MudTh>
+                    <MudTh Style="text-align:right">Total</MudTh>
+                    <MudTh Style="text-align:right">Poin Didapat</MudTh>
+                    <MudTh>Status</MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd><MudText Typo="Typo.caption" Style="font-family:monospace;">@context.TransactionCode</MudText></MudTd>
+                    <MudTd><MudText Typo="Typo.body2">@context.CustomerName</MudText></MudTd>
+                    <MudTd><MudText Typo="Typo.caption">@context.TransactionDate.ToLocalTime().ToString("dd MMM yyyy HH:mm")</MudText></MudTd>
+                    <MudTd Style="text-align:right"><MudText Typo="Typo.body2">@context.TotalAmount.ToString("N0")</MudText></MudTd>
+                    <MudTd Style="text-align:right"><MudText Typo="Typo.body2" Color="Color.Success">+@context.PointsEarned</MudText></MudTd>
+                    <MudTd><MudChip Size="Size.Small" Color="Color.Success">@context.Status</MudChip></MudTd>
+                </RowTemplate>
+            </MudTable>
+        }
+
+        @if (_reportType == "redeems" && _redeemData.Any())
+        {
+            <MudTable Dense="true" Hover="true" Elevation="0" Items="@_redeemData">
+                <HeaderContent>
+                    <MudTh>Pelanggan</MudTh>
+                    <MudTh>Reward</MudTh>
+                    <MudTh>Tanggal</MudTh>
+                    <MudTh Style="text-align:right">Poin Digunakan</MudTh>
+                    <MudTh>Status</MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd><MudText Typo="Typo.body2">@context.CustomerName</MudText></MudTd>
+                    <MudTd><MudText Typo="Typo.body2">@context.RewardName</MudText></MudTd>
+                    <MudTd><MudText Typo="Typo.caption">@context.RedeemDate.ToLocalTime().ToString("dd MMM yyyy HH:mm")</MudText></MudTd>
+                    <MudTd Style="text-align:right"><MudText Typo="Typo.body2" Color="Color.Error">-@context.PointsUsed</MudText></MudTd>
+                    <MudTd><MudChip Size="Size.Small" Color="Color.Success">@context.Status</MudChip></MudTd>
+                </RowTemplate>
+            </MudTable>
+        }
+
+        @if (_reportType == "points" && _pointData.Any())
+        {
+            <MudTable Dense="true" Hover="true" Elevation="0" Items="@_pointData">
+                <HeaderContent>
+                    <MudTh>Pelanggan</MudTh>
+                    <MudTh>Jenis</MudTh>
+                    <MudTh>Tanggal</MudTh>
+                    <MudTh Style="text-align:right">Poin</MudTh>
+                    <MudTh>Keterangan</MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd><MudText Typo="Typo.body2">@context.CustomerName</MudText></MudTd>
+                    <MudTd><MudText Typo="Typo.caption">@context.ActivityType</MudText></MudTd>
+                    <MudTd><MudText Typo="Typo.caption">@context.ActivityDate.ToLocalTime().ToString("dd MMM yyyy")</MudText></MudTd>
+                    <MudTd Style="text-align:right">
+                        <MudText Typo="Typo.body2" Color="@(context.Points > 0 ? Color.Success : Color.Error)">
+                            @(context.Points > 0 ? "+" : "")@context.Points
+                        </MudText>
+                    </MudTd>
+                    <MudTd><MudText Typo="Typo.caption">@context.Description</MudText></MudTd>
+                </RowTemplate>
+            </MudTable>
+        }
+    </MudPaper>
+}

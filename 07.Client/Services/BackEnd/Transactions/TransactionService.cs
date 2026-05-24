@@ -1,6 +1,8 @@
+using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Options;
 using RestSharp;
 using Smlp.Client.Common.Extensions;
+using Smlp.Client.Common.Handlers;
 using Smlp.Client.Services.UserInfo;
 using Smlp.Shared.Common.Responses;
 using Smlp.Shared.Transaction.Transactions.Commands.Create;
@@ -13,37 +15,39 @@ namespace Smlp.Client.Services.BackEnd.Transactions;
 public class TransactionService : IDisposable
 {
     private readonly RestClient _restClient;
+    private readonly NavigationManager _navigationManager;
 
-    public TransactionService(IOptions<BackEndOptions> options, UserInfoService userInfo)
+    public TransactionService(IOptions<BackEndOptions> options, UserInfoService userInfo, NavigationManager navigationManager)
     {
         _restClient = new RestClient($"{options.Value.BaseUrl}/{TransactionEndpoint.Segment}");
         _restClient.AddUserInfo(userInfo);
+        _navigationManager = navigationManager;
     }
 
     public async Task<ResponseResult<PaginatedListResponse<GetTransactionResponse>>> GetTransactionsAsync(GetTransactionRequest request)
     {
         var restRequest = new RestRequest(string.Empty, Method.Get);
         restRequest.AddQueryParameters(request);
-        return (await _restClient.ExecuteAsync(restRequest)).ToResponseResult<PaginatedListResponse<GetTransactionResponse>>();
+        return (await _restClient.ExecuteAsync(restRequest)).ToResponseResultWithRedirect<PaginatedListResponse<GetTransactionResponse>>(_navigationManager);
     }
 
     public async Task<ResponseResult<GetTransactionResponse>> GetTransactionByIdAsync(Guid id)
     {
         var restRequest = new RestRequest(id.ToString(), Method.Get);
-        return (await _restClient.ExecuteAsync(restRequest)).ToResponseResult<GetTransactionResponse>();
+        return (await _restClient.ExecuteAsync(restRequest)).ToResponseResultWithRedirect<GetTransactionResponse>(_navigationManager);
     }
 
     public async Task<ResponseResult<CommonCreateResponse>> CreateTransactionAsync(CreateTransactionRequest request)
     {
         var restRequest = new RestRequest(string.Empty, Method.Post);
         restRequest.AddJsonBody(request);
-        return (await _restClient.ExecuteAsync(restRequest)).ToResponseResult<CommonCreateResponse>();
+        return (await _restClient.ExecuteAsync(restRequest)).ToResponseResultWithRedirect<CommonCreateResponse>(_navigationManager);
     }
 
     public async Task<ResponseResult<SuccessResponse>> CancelTransactionAsync(Guid id)
     {
         var restRequest = new RestRequest(TransactionEndpoint.RouteTemplateFor.Cancel.Replace("{id:guid}", id.ToString()), Method.Post);
-        return (await _restClient.ExecuteAsync(restRequest)).ToResponseResult<SuccessResponse>();
+        return (await _restClient.ExecuteAsync(restRequest)).ToResponseResultWithRedirect<SuccessResponse>(_navigationManager);
     }
 
 
@@ -51,7 +55,7 @@ public class TransactionService : IDisposable
     {
         var restRequest = new RestRequest(id.ToString(), Method.Put);
         restRequest.AddJsonBody(request);
-        return (await _restClient.ExecuteAsync(restRequest)).ToResponseResult<CommonUpdateResponse>();
+        return (await _restClient.ExecuteAsync(restRequest)).ToResponseResultWithRedirect<CommonUpdateResponse>(_navigationManager);
     }
 
     public void Dispose()

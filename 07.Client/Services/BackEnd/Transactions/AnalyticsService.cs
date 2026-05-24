@@ -1,7 +1,10 @@
+using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Options;
 using RestSharp;
 using Smlp.Client.Common.Extensions;
+using Smlp.Client.Common.Handlers;
 using Smlp.Client.Services.UserInfo;
+using Smlp.Shared.Analytics.Queries.ExportAnalytics;
 using Smlp.Shared.Analytics.Queries.GetCustomerInsights;
 using Smlp.Shared.Analytics.Queries.GetDashboardSummary;
 using Smlp.Shared.Analytics.Queries.GetLoyaltyAnalysis;
@@ -14,8 +17,9 @@ namespace Smlp.Client.Services.BackEnd.Transactions;
 public class AnalyticsService : IDisposable
 {
     private readonly RestClient _restClient;
+    private readonly NavigationManager _navigationManager;
 
-    public AnalyticsService(IOptions<BackEndOptions> options, UserInfoService userInfo)
+    public AnalyticsService(IOptions<BackEndOptions> options, UserInfoService userInfo, NavigationManager navigationManager)
     {
         _restClient = new RestClient($"{options.Value.BaseUrl}/{Analytics.Segment}");
         _restClient.AddUserInfo(userInfo);
@@ -46,6 +50,16 @@ public class AnalyticsService : IDisposable
     {
         var request = new RestRequest(Analytics.RouteTemplateFor.LoyaltyAnalysis, Method.Get);
         return (await _restClient.ExecuteAsync(request)).ToResponseResult<GetLoyaltyAnalysisResponse>();
+    }
+
+    public async Task<ResponseResult<ExportAnalyticsResponse>> ExportAsync(ExportAnalyticsRequest req)
+    {
+        var request = new RestRequest(Analytics.RouteTemplateFor.Export, Method.Get);
+        request.AddQueryParameter("type", req.Type);
+        request.AddQueryParameter("year", req.Year.ToString());
+        if (req.Month > 0)
+            request.AddQueryParameter("month", req.Month.ToString());
+        return (await _restClient.ExecuteAsync(request)).ToResponseResult<ExportAnalyticsResponse>();
     }
 
     public void Dispose()

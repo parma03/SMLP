@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Smlp.Application.Analytics.Queries;
 using Smlp.Shared.Analytics.Constants;
+using Smlp.Shared.Analytics.Queries.ExportAnalytics;
 using Smlp.Shared.Analytics.Queries.GetCustomerInsights;
 using Smlp.Shared.Analytics.Queries.GetDashboardSummary;
 using Smlp.Shared.Analytics.Queries.GetLoyaltyAnalysis;
@@ -47,5 +48,14 @@ public class AnalyticsController : ApiControllerBase
     public async Task<ActionResult<GetLoyaltyAnalysisResponse>> GetLoyaltyAnalysis()
     {
         return await Mediator.Send(new GetLoyaltyAnalysisQuery());
+    }
+
+    /// <summary>Export analytics ke Excel: revenue, loyalty, customer-insights, atau dashboard</summary>
+    [HttpGet(ApiEndpoint.V1.Analytics.RouteTemplateFor.Export)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> ExportAnalytics([FromQuery] ExportAnalyticsRequest request)
+    {
+        var result = await Mediator.Send(new ExportAnalyticsQuery { Request = request });
+        return File(result.Content, result.ContentType, result.FileName);
     }
 }

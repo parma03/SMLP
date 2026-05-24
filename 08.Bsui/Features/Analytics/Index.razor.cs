@@ -1,9 +1,11 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.JSInterop;
 using MudBlazor;
 using Smlp.Bsui.Common.Constants;
 using Smlp.Bsui.Common.Extensions;
+using Smlp.Shared.Analytics.Queries.ExportAnalytics;
 using Smlp.Shared.Analytics.Queries.GetDashboardSummary;
 using Smlp.Shared.Analytics.Queries.GetRevenueChart;
 
@@ -114,5 +116,45 @@ public partial class Index
             "ytd" => (DateTime.Today.Year, 0),
             _ => (DateTime.Today.Year, DateTime.Today.Month)
         };
+    }
+
+    private bool _isExporting = false;
+
+    private async Task ExportAnalyticsAsync(string type)
+    {
+        if (_isExporting) return;
+        _isExporting = true;
+        try
+        {
+            var (year, month) = GetPeriodYearMonth();
+            var result = await _analyticsService.ExportAsync(new ExportAnalyticsRequest
+            {
+                Type = type,
+                Year = year,
+                Month = month
+            });
+
+            if (result.Error is not null)
+            {
+                _snackbar.AddError($"Gagal export: {result.Error.ToDetail()}");
+                return;
+            }
+
+            var base64 = Convert.ToBase64String(result.Result!.Content);
+            await _jsRuntime.InvokeVoidAsync("downloadFileFromBase64",
+                result.Result.FileName,
+                result.Result.ContentType,
+                base64);
+
+            _snackbar.AddSuccess($"Export '{type}' berhasil diunduh.");
+        }
+        catch (Exception ex)
+        {
+            _snackbar.AddError($"Error export: {ex.Message}");
+        }
+        finally
+        {
+            _isExporting = false;
+        }
     }
 }
