@@ -12,4 +12,7 @@ public class GetProductResponse : Response
     public int Stock { get; set; }
     public Guid? CategoryId { get; set; }
     public string? CategoryName { get; set; }
+
+    /// <summary>URL gambar produk (null jika belum ada gambar).</summary>
+    public string? ImageUrl { get; set; }
 }
