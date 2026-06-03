@@ -1,0 +1,108 @@
+@using MudBlazor
+
+<MudDialog aria-modal="true" aria-labelledby="image-preview-title">
+    <TitleContent>
+        <div class="d-flex align-center justify-space-between" style="width:100%;">
+            <div class="d-flex align-center gap-2">
+                <MudIcon Icon="@Icons.Material.Filled.Image" Color="Color.Primary" aria-hidden="true" />
+                <MudText Typo="Typo.h6" id="image-preview-title">@Title</MudText>
+            </div>
+            @if (!string.IsNullOrWhiteSpace(SubTitle))
+            {
+                <MudText Typo="Typo.caption" Color="Color.Secondary">@SubTitle</MudText>
+            }
+        </div>
+    </TitleContent>
+    <DialogContent>
+        <div class="d-flex justify-center align-center" style="min-height:200px; position:relative;">
+            @if (_imageError)
+            {
+                <div class="d-flex flex-column align-center pa-8">
+                    <MudIcon Icon="@Icons.Material.Filled.BrokenImage"
+                             Style="font-size:4rem; color:#BDBDBD;"
+                             Class="mb-3" />
+                    <MudText Typo="Typo.body2" Color="Color.Secondary">Gambar tidak dapat ditampilkan</MudText>
+                    @if (!string.IsNullOrWhiteSpace(ImageUrl))
+                    {
+                        <MudText Typo="Typo.caption" Color="Color.Secondary" Class="mt-1"
+                                 Style="word-break:break-all; max-width:300px; text-align:center;">
+                            @ImageUrl
+                        </MudText>
+                    }
+                </div>
+            }
+            else if (!string.IsNullOrWhiteSpace(ImageUrl))
+            {
+                <img src="@ImageUrl"
+                     alt="@(AltText ?? Title)"
+                     style="max-width:100%; max-height:70vh; object-fit:contain; border-radius:8px; box-shadow:0 2px 12px rgba(0,0,0,0.15);"
+                     @onerror="OnImageError"
+                     loading="lazy" />
+            }
+            else
+            {
+                <div class="d-flex flex-column align-center pa-8">
+                    <MudIcon Icon="@Icons.Material.Filled.ImageNotSupported"
+                             Style="font-size:4rem; color:#BDBDBD;"
+                             Class="mb-3" />
+                    <MudText Typo="Typo.body2" Color="Color.Secondary">Belum ada gambar</MudText>
+                </div>
+            }
+        </div>
+
+        @if (!string.IsNullOrWhiteSpace(Description))
+        {
+            <MudDivider Class="my-3" />
+            <MudText Typo="Typo.body2" Color="Color.Secondary">@Description</MudText>
+        }
+    </DialogContent>
+    <DialogActions>
+        @if (!string.IsNullOrWhiteSpace(ImageUrl) && !_imageError)
+        {
+            <MudButton Variant="Variant.Outlined"
+                       Color="Color.Primary"
+                       StartIcon="@Icons.Material.Filled.OpenInNew"
+                       Href="@ImageUrl"
+                       Target="_blank"
+                       aria-label="Buka gambar di tab baru">
+                Buka di Tab Baru
+            </MudButton>
+        }
+        <MudButton Variant="Variant.Filled"
+                   Color="Color.Default"
+                   OnClick="Close"
+                   aria-label="Tutup dialog">
+            Tutup
+        </MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    private IMudDialogInstance MudDialog { get; set; } = default!;
+
+    /// <summary>Judul dialog (biasanya nama produk / nama item).</summary>
+    [Parameter] public string Title { get; set; } = "Preview Gambar";
+
+    /// <summary>Sub-judul opsional (misal: kode produk, kategori).</summary>
+    [Parameter] public string? SubTitle { get; set; }
+
+    /// <summary>URL gambar yang akan ditampilkan.</summary>
+    [Parameter] public string? ImageUrl { get; set; }
+
+    /// <summary>Teks alt untuk aksesibilitas.</summary>
+    [Parameter] public string? AltText { get; set; }
+
+    /// <summary>Deskripsi opsional di bawah gambar.</summary>
+    [Parameter] public string? Description { get; set; }
+
+    private bool _imageError = false;
+
+    private void OnImageError()
+    {
+        _imageError = true;
+        StateHasChanged();
+    }
+
+    private void Close() => MudDialog.Close();
+}

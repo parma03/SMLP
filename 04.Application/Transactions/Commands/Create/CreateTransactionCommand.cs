@@ -5,6 +5,7 @@ using Smlp.Application.Common.Exceptions;
 using Smlp.Application.Services.Persistence;
 using Smlp.Application.Services.Email;
 using Smlp.Application.Services.WhatsApp;
+using Smlp.Application.Services.PushNotification;
 using Smlp.Base.Customer.Enums;
 using Smlp.Base.Transaction.Enums;
 using Smlp.Domain.Entities.Transaction;
@@ -33,15 +34,18 @@ public class CreateTransactionCommandHandler : IRequestHandler<CreateTransaction
     private readonly ISmlpDbContext _context;
     private readonly IEmailService _emailService;
     private readonly IWhatsAppService _whatsAppService;
+    private readonly IPushNotificationService _pushNotification;
 
     public CreateTransactionCommandHandler(
         ISmlpDbContext context,
         IEmailService emailService,
-        IWhatsAppService whatsAppService)
+        IWhatsAppService whatsAppService,
+        IPushNotificationService pushNotification)
     {
         _context = context;
         _emailService = emailService;
         _whatsAppService = whatsAppService;
+        _pushNotification = pushNotification;
     }
 
     public async Task<CommonCreateResponse> Handle(CreateTransactionCommand request, CancellationToken cancellationToken)
@@ -174,10 +178,35 @@ public class CreateTransactionCommandHandler : IRequestHandler<CreateTransaction
 
         await _context.SaveChangesAsync(this, cancellationToken);
 
+        // Push notification real-time ke Admin & Kasir (fire-and-forget)
+        _ = SendPushNotificationsAsync(customer.FullName, transaction.TransactionCode, grandTotal, pointsEarned);
+
         // Fire-and-forget: kirim notifikasi email & WhatsApp tanpa block response
         _ = SendNotificationsAsync(customer, transaction.TransactionCode, grandTotal, pointsEarned, previousTier, customer.Tier);
 
         return new CommonCreateResponse { Id = transaction.Id };
+    }
+
+    /// <summary>
+    /// Kirim push notification real-time via SignalR ke role Admin dan Kasir.
+    /// Error di-swallow agar tidak menggagalkan transaksi utama.
+    /// </summary>
+    private async Task SendPushNotificationsAsync(
+        string customerName,
+        string transactionCode,
+        decimal grandTotal,
+        int pointsEarned)
+    {
+        try
+        {
+            var title = "Transaksi Baru";
+            var message = $"{customerName} — {transactionCode} | Rp {grandTotal:N0} | +{pointsEarned} poin";
+            var actionUrl = $"/Transactions";
+
+            await _pushNotification.SendToRoleAsync("Admin",  title, message, "success", actionUrl);
+            await _pushNotification.SendToRoleAsync("Kasir",  title, message, "success", actionUrl);
+        }
+        catch { /* swallow — push notification bukan critical path */ }
     }
 
     /// <summary>
