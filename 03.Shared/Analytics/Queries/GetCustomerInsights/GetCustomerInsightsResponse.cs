@@ -4,12 +4,13 @@ namespace Smlp.Shared.Analytics.Queries.GetCustomerInsights;
 
 public class GetCustomerInsightsResponse : Response
 {
-    // Segmentation
+    // Segmentation counts
     public int NewCount { get; set; }
     public int ActiveCount { get; set; }
     public int LoyalCount { get; set; }
     public int AtRiskCount { get; set; }
     public int InactiveCount { get; set; }
+    public int TotalCustomers { get; set; }
 
     // Cohort summary
     public decimal AvgTransactionValue { get; set; }
@@ -24,4 +25,7 @@ public class GetCustomerInsightsResponse : Response
 
     // Churn risk (no purchase > 45 days)
     public List<ChurnRiskItem> ChurnRiskCustomers { get; set; } = new();
+
+    // RFM Segments breakdown (untuk donut chart)
+    public List<RfmSegmentItem> RfmSegments { get; set; } = new();
 }

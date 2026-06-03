@@ -1,5 +1,7 @@
+using ClosedXML.Excel;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.JSInterop;
 using MudBlazor;
 using Smlp.Bsui.Common.Constants;
 using Smlp.Bsui.Common.Extensions;
@@ -10,11 +12,14 @@ namespace Smlp.Bsui.Features.CustomerInsights;
 
 public partial class Index
 {
+    [Inject] private IJSRuntime _js { get; set; } = default!;
+
     [CascadingParameter]
     protected Task<AuthenticationState> AuthenticationStateTask { get; set; } = default!;
     protected ClaimsPrincipal _user = default!;
     private List<BreadcrumbItem> _breadcrumbItems = new();
     private bool _isLoading = false;
+    private bool _isExporting = false;
 
     private GetCustomerInsightsResponse? _insights;
 
@@ -55,8 +60,111 @@ public partial class Index
         }
     }
 
+    // ---- Donut chart data ----
+    private double[] DonutData => _insights?.RfmSegments?
+        .Where(s => s.Count > 0)
+        .Select(s => (double)s.Count)
+        .ToArray() ?? Array.Empty<double>();
+
+    private string[] DonutLabels => _insights?.RfmSegments?
+        .Where(s => s.Count > 0)
+        .Select(s => s.Label)
+        .ToArray() ?? Array.Empty<string>();
+
+    private Color GetMudColor(string colorStr) => colorStr switch
+    {
+        "success" => Color.Success,
+        "info" => Color.Info,
+        "warning" => Color.Warning,
+        "error" => Color.Error,
+        "primary" => Color.Primary,
+        _ => Color.Default,
+    };
+
     private double RetentionRate => (double)(_insights?.RetentionRate ?? 0);
-    private int TotalSegmented => (_insights?.NewCount ?? 0) + (_insights?.ActiveCount ?? 0) +
-                                  (_insights?.LoyalCount ?? 0) + (_insights?.AtRiskCount ?? 0) +
-                                  (_insights?.InactiveCount ?? 0);
+    private int TotalSegmented => _insights?.RfmSegments?.Sum(s => s.Count) ?? 0;
+
+    // ---- Export Segmen ke Excel ----
+    private async Task ExportSegmentAsync()
+    {
+        if (_insights is null) return;
+        _isExporting = true;
+        try
+        {
+            using var wb = new XLWorkbook();
+            var ws = wb.Worksheets.Add("RFM Segmentasi");
+
+            // Header
+            ws.Cell(1, 1).Value = "Segmen";
+            ws.Cell(1, 2).Value = "Label";
+            ws.Cell(1, 3).Value = "Jumlah Pelanggan";
+            ws.Cell(1, 4).Value = "Persentase (%)";
+            ws.Cell(1, 5).Value = "Deskripsi";
+            ws.Cell(1, 6).Value = "Rekomendasi Aksi";
+
+            var headerRow = ws.Row(1);
+            headerRow.Style.Font.Bold = true;
+            headerRow.Style.Fill.BackgroundColor = XLColor.FromHtml("#6F4E37");
+            headerRow.Style.Font.FontColor = XLColor.White;
+
+            var total = TotalSegmented;
+            for (int i = 0; i < _insights.RfmSegments.Count; i++)
+            {
+                var seg = _insights.RfmSegments[i];
+                var row = i + 2;
+                ws.Cell(row, 1).Value = seg.Segment;
+                ws.Cell(row, 2).Value = seg.Label;
+                ws.Cell(row, 3).Value = seg.Count;
+                ws.Cell(row, 4).Value = total > 0 ? Math.Round((double)seg.Count / total * 100, 2) : 0;
+                ws.Cell(row, 5).Value = seg.Description;
+                ws.Cell(row, 6).Value = seg.ActionRecommendation;
+            }
+
+            // Summary sheet
+            var wsSummary = wb.Worksheets.Add("Ringkasan");
+            wsSummary.Cell(1, 1).Value = "Metrik";
+            wsSummary.Cell(1, 2).Value = "Nilai";
+            wsSummary.Row(1).Style.Font.Bold = true;
+            wsSummary.Row(1).Style.Fill.BackgroundColor = XLColor.FromHtml("#6F4E37");
+            wsSummary.Row(1).Style.Font.FontColor = XLColor.White;
+
+            var summaryData = new[]
+            {
+                ("Total Pelanggan", _insights.TotalCustomers.ToString("N0")),
+                ("Avg. Total Belanja", $"Rp {_insights.AvgTransactionValue:N0}"),
+                ("Avg. Poin", _insights.AvgPointsPerCustomer.ToString("N0")),
+                ("Retention Rate", $"{_insights.RetentionRate:F1}%"),
+                ("Churn Risk", _insights.ChurnRiskCustomers.Count.ToString("N0")),
+                ("Tanggal Export", DateTime.Now.ToString("dd/MM/yyyy HH:mm")),
+            };
+
+            for (int i = 0; i < summaryData.Length; i++)
+            {
+                wsSummary.Cell(i + 2, 1).Value = summaryData[i].Item1;
+                wsSummary.Cell(i + 2, 2).Value = summaryData[i].Item2;
+            }
+
+            ws.Columns().AdjustToContents();
+            wsSummary.Columns().AdjustToContents();
+
+            using var ms = new MemoryStream();
+            wb.SaveAs(ms);
+            var bytes = ms.ToArray();
+            var fileName = $"RFM_Segmentasi_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx";
+
+            var base64 = Convert.ToBase64String(bytes);
+            await _js.InvokeVoidAsync("downloadFileFromBase64", fileName,
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", base64);
+
+            _snackbar.AddSuccess("Ekspor segmentasi RFM berhasil!");
+        }
+        catch (Exception ex)
+        {
+            _snackbar.AddError($"Gagal mengekspor: {ex.Message}");
+        }
+        finally
+        {
+            _isExporting = false;
+        }
+    }
 }

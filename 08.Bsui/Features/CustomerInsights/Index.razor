@@ -11,30 +11,30 @@
 }
 
 <MudAlert Severity="Severity.Info" Class="mb-4">
-    📊 Analisis mendalam perilaku pelanggan — segmentasi otomatis, prediksi churn, dan rekomendasi aksi CRM.
+    📊 Analisis mendalam perilaku pelanggan — segmentasi RFM otomatis, prediksi churn, dan rekomendasi aksi CRM.
 </MudAlert>
 
 @* RFM KPI Row *@
 <MudGrid Class="mb-4">
     <MudItem xs="12" sm="6" md="3">
         <MudPaper Class="pa-4 rounded-lg" Elevation="2" Style="border-top:3px solid #2E7D32;">
-            <MudText Typo="Typo.caption" Color="Color.Secondary">Avg. Transaksi / Pelanggan</MudText>
-            <MudText Typo="Typo.h5" Style="color:#2E7D32; font-weight:700;">Rp @(_insights?.AvgTransactionValue.ToString("N0") ?? "—")</MudText>
-            <MudText Typo="Typo.caption" Color="Color.Secondary">rata-rata nilai belanja</MudText>
+            <MudText Typo="Typo.caption" Color="Color.Secondary">Total Pelanggan</MudText>
+            <MudText Typo="Typo.h5" Style="color:#2E7D32; font-weight:700;">@(_insights?.TotalCustomers.ToString("N0") ?? "—")</MudText>
+            <MudText Typo="Typo.caption" Color="Color.Secondary">terdaftar di sistem</MudText>
         </MudPaper>
     </MudItem>
     <MudItem xs="12" sm="6" md="3">
         <MudPaper Class="pa-4 rounded-lg" Elevation="2" Style="border-top:3px solid #C8860A;">
-            <MudText Typo="Typo.caption" Color="Color.Secondary">Avg. Poin / Pelanggan</MudText>
-            <MudText Typo="Typo.h5" Style="color:#C8860A; font-weight:700;">⭐ @(_insights?.AvgPointsPerCustomer.ToString("N0") ?? "—")</MudText>
-            <MudText Typo="Typo.caption" Color="Color.Secondary">rata-rata saldo poin</MudText>
+            <MudText Typo="Typo.caption" Color="Color.Secondary">Avg. Total Belanja</MudText>
+            <MudText Typo="Typo.h5" Style="color:#C8860A; font-weight:700;">Rp @(_insights?.AvgTransactionValue.ToString("N0") ?? "—")</MudText>
+            <MudText Typo="Typo.caption" Color="Color.Secondary">rata-rata per pelanggan</MudText>
         </MudPaper>
     </MudItem>
     <MudItem xs="12" sm="6" md="3">
         <MudPaper Class="pa-4 rounded-lg" Elevation="2" Style="border-top:3px solid #0277BD;">
             <MudText Typo="Typo.caption" Color="Color.Secondary">Retention Rate</MudText>
             <MudText Typo="Typo.h5" Style="color:#0277BD; font-weight:700;">@(_insights?.RetentionRate.ToString("F1") ?? "—")%</MudText>
-            <MudText Typo="Typo.caption" Color="Color.Secondary">kembali beli bulan ini</MudText>
+            <MudText Typo="Typo.caption" Color="Color.Secondary">pelanggan kembali beli</MudText>
         </MudPaper>
     </MudItem>
     <MudItem xs="12" sm="6" md="3">
@@ -46,79 +46,73 @@
     </MudItem>
 </MudGrid>
 
-@* Segmentasi Pelanggan *@
+@* RFM Segmentation + Donut Chart *@
 <MudGrid Class="mb-4">
-    <MudItem xs="12" md="7">
+    <MudItem xs="12" md="6">
         <MudPaper Class="pa-4 rounded-lg" Elevation="2">
-            <MudText Typo="Typo.subtitle1" Class="mb-3" Style="color:#6F4E37; font-weight:700;">
-                📐 Segmentasi Pelanggan (RFM)
-            </MudText>
-            @{
-                var segments = new[]
-                {
-                    ("🌟 Champions / Loyal", _insights?.LoyalCount ?? 0, Color.Success, "Beli sering & banyak — hadiahi dan minta review"),
-                    ("✅ Aktif", _insights?.ActiveCount ?? 0, Color.Info, "Transaksi reguler — tawarkan tier upgrade"),
-                    ("🚀 Pelanggan Baru", _insights?.NewCount ?? 0, Color.Primary, "Baru bergabung — onboarding rewards"),
-                    ("⚠️ Berisiko Churn", _insights?.AtRiskCount ?? 0, Color.Warning, "Mulai jarang — kirim penawaran comeback"),
-                    ("😴 Tidak Aktif", _insights?.InactiveCount ?? 0, Color.Error, "Lama tidak beli — kampanye win-back"),
-                };
+            <div class="d-flex justify-space-between align-center mb-3">
+                <MudText Typo="Typo.subtitle1" Style="color:#6F4E37; font-weight:700;">
+                    📐 Segmentasi RFM (Recency · Frequency · Monetary)
+                </MudText>
+                <MudButton Variant="Variant.Outlined" Size="Size.Small" Color="Color.Primary"
+                           StartIcon="@Icons.Material.Filled.Download"
+                           OnClick="ExportSegmentAsync"
+                           Disabled="_isExporting">
+                    @(_isExporting ? "Mengekspor..." : "Export Excel")
+                </MudButton>
+            </div>
+            @if (_insights?.RfmSegments?.Any() == true)
+            {
+                <MudTable Dense="true" Hover="true" Elevation="0" Items="@_insights.RfmSegments">
+                    <HeaderContent>
+                        <MudTh>Segmen</MudTh>
+                        <MudTh Style="text-align:right">Jumlah</MudTh>
+                        <MudTh Style="text-align:right">%</MudTh>
+                        <MudTh>Aksi CRM</MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd>
+                            <MudChip T="string" Size="Size.Small" Color="@GetMudColor(context.Color)">@context.Label</MudChip>
+                        </MudTd>
+                        <MudTd Style="text-align:right"><MudText Typo="Typo.subtitle2">@context.Count.ToString("N0")</MudText></MudTd>
+                        <MudTd Style="text-align:right">
+                            <MudText Typo="Typo.caption">
+                                @(TotalSegmented > 0 ? ((double)context.Count / TotalSegmented * 100).ToString("F1") : "0.0")%
+                            </MudText>
+                        </MudTd>
+                        <MudTd><MudText Typo="Typo.caption" Color="Color.Secondary">@context.ActionRecommendation</MudText></MudTd>
+                    </RowTemplate>
+                </MudTable>
             }
-            <MudTable Dense="true" Hover="true" Elevation="0" Items="@segments">
-                <HeaderContent>
-                    <MudTh>Segmen</MudTh>
-                    <MudTh Style="text-align:right">Jumlah</MudTh>
-                    <MudTh Style="text-align:right">%</MudTh>
-                    <MudTh>Rekomendasi Aksi</MudTh>
-                </HeaderContent>
-                <RowTemplate>
-                    <MudTd><MudChip T="string" Size="Size.Small" Color="@context.Item3">@context.Item1</MudChip></MudTd>
-                    <MudTd Style="text-align:right"><MudText Typo="Typo.subtitle2">@context.Item2</MudText></MudTd>
-                    <MudTd Style="text-align:right">
-                        <MudText Typo="Typo.caption">
-                            @(TotalSegmented > 0 ? ((double)context.Item2 / TotalSegmented * 100).ToString("F1") : "0.0")%
-                        </MudText>
-                    </MudTd>
-                    <MudTd><MudText Typo="Typo.caption" Color="Color.Secondary">@context.Item4</MudText></MudTd>
-                </RowTemplate>
-            </MudTable>
+            else if (!_isLoading)
+            {
+                <MudText Class="pa-4 text-center" Color="Color.Secondary">Belum ada data segmentasi</MudText>
+            }
         </MudPaper>
     </MudItem>
-    <MudItem xs="12" md="5">
+
+    <MudItem xs="12" md="6">
         <MudPaper Class="pa-4 rounded-lg" Elevation="2">
             <MudText Typo="Typo.subtitle1" Class="mb-3" Style="color:#6F4E37; font-weight:700;">
-                📐 RFM: Recency, Frequency, Monetary
+                🍩 Distribusi Segmen Pelanggan
             </MudText>
-            <MudList T="string" Dense="true">
-                <MudListItem>
-                    <div class="d-flex align-center mb-1">
-                        <MudIcon Icon="@Icons.Material.Filled.AccessTime" Style="color:#0277BD;" Class="mr-2" />
-                        <MudText Typo="Typo.body2" Style="color:#0277BD; font-weight:700;">RECENCY — Seberapa Baru</MudText>
-                    </div>
-                    <MudText Typo="Typo.caption" Color="Color.Secondary" Class="ml-6">
-                        Pelanggan yang baru bertransaksi lebih bernilai. Target: skor R tinggi.
-                    </MudText>
-                </MudListItem>
-                <MudDivider Class="my-2" />
-                <MudListItem>
-                    <div class="d-flex align-center mb-1">
-                        <MudIcon Icon="@Icons.Material.Filled.Repeat" Style="color:#C8860A;" Class="mr-2" />
-                        <MudText Typo="Typo.body2" Style="color:#C8860A; font-weight:700;">FREQUENCY — Seberapa Sering</MudText>
-                    </div>
-                    <MudText Typo="Typo.caption" Color="Color.Secondary" Class="ml-6">
-                        Pelanggan sering beli = loyal. Dorong kunjungan ulang dengan reward.
-                    </MudText>
-                </MudListItem>
-                <MudDivider Class="my-2" />
-                <MudListItem>
-                    <div class="d-flex align-center mb-1">
-                        <MudIcon Icon="@Icons.Material.Filled.AttachMoney" Style="color:#2E7D32;" Class="mr-2" />
-                        <MudText Typo="Typo.body2" Style="color:#2E7D32; font-weight:700;">MONETARY — Seberapa Besar</MudText>
-                    </div>
-                    <MudText Typo="Typo.caption" Color="Color.Secondary" Class="ml-6">
-                        Pelanggan dengan total belanja tinggi = VIP. Prioritaskan untuk program eksklusif.
-                    </MudText>
-                </MudListItem>
-            </MudList>
+            @if (_insights?.RfmSegments?.Any(s => s.Count > 0) == true && !_isLoading)
+            {
+                <MudChart ChartType="ChartType.Donut"
+                          InputData="@DonutData"
+                          InputLabels="@DonutLabels"
+                          LegendPosition="Position.Bottom"
+                          Width="100%"
+                          Height="280px" />
+            }
+            else if (_isLoading)
+            {
+                <MudSkeleton SkeletonType="SkeletonType.Rectangle" Height="280px" />
+            }
+            else
+            {
+                <MudText Class="pa-4 text-center" Color="Color.Secondary">Belum ada data untuk chart</MudText>
+            }
         </MudPaper>
     </MudItem>
 </MudGrid>
@@ -169,7 +163,7 @@
     <MudItem xs="12" md="6">
         <MudPaper Class="pa-4 rounded-lg" Elevation="2" Style="border-left:4px solid #E91E63;">
             <MudText Typo="Typo.subtitle1" Class="mb-3" Style="color:#E91E63; font-weight:700;">
-                🎂 Ulang Tahun Bulan Ini
+                🎂 Ulang Tahun dalam 14 Hari
             </MudText>
             <MudText Typo="Typo.caption" Color="Color.Secondary" Class="mb-2">
                 Kirim ucapan & reward spesial birthday untuk mempererat loyalitas
@@ -190,7 +184,7 @@
                             </div>
                         </MudTd>
                         <MudTd>
-                            <MudText Typo="Typo.body2">@context.BirthDate.ToString("dd MMMM")</MudText>
+                            <MudText Typo="Typo.body2">@context.BirthDate?.ToString("dd MMMM")</MudText>
                             @if (context.DaysUntilBirthday == 0)
                             {
                                 <MudChip T="string" Size="Size.Small" Color="Color.Error">🎂 HARI INI!</MudChip>
@@ -200,16 +194,19 @@
                                 <MudText Typo="Typo.caption" Color="Color.Secondary">@context.DaysUntilBirthday hari lagi</MudText>
                             }
                         </MudTd>
-                        <MudTd><MudText Typo="Typo.caption">@context.Tier</MudText></MudTd>
+                        <MudTd>
+                            <MudText Typo="Typo.caption" Color="Color.Secondary">@context.Tier</MudText>
+                            <MudText Typo="Typo.caption" Style="color:#C8860A;">⭐ @context.TotalPoints.ToString("N0")</MudText>
+                        </MudTd>
                     </RowTemplate>
                     <NoRecordsContent>
-                        <MudText Class="pa-3 text-center" Color="Color.Secondary">Tidak ada pelanggan berulang tahun bulan ini</MudText>
+                        <MudText Class="pa-3 text-center" Color="Color.Secondary">Tidak ada pelanggan berulang tahun dalam 14 hari</MudText>
                     </NoRecordsContent>
                 </MudTable>
             }
             else
             {
-                <MudText Class="pa-4 text-center" Color="Color.Secondary">Tidak ada pelanggan berulang tahun bulan ini</MudText>
+                <MudText Class="pa-4 text-center" Color="Color.Secondary">Tidak ada pelanggan berulang tahun dalam 14 hari ke depan</MudText>
             }
         </MudPaper>
     </MudItem>
@@ -234,7 +231,7 @@
             <RowTemplate>
                 <MudTd>
                     <MudText Style="@($"color:{(context.Rank <= 3 ? "#C8860A" : "#6F4E37")}; font-weight:700;")">
-                        @(context.Rank <= 1 ? "🥇" : context.Rank == 2 ? "🥈" : context.Rank == 3 ? "🥉" : $"#{context.Rank}")
+                        @(context.Rank == 1 ? "🥇" : context.Rank == 2 ? "🥈" : context.Rank == 3 ? "🥉" : $"#{context.Rank}")
                     </MudText>
                 </MudTd>
                 <MudTd>

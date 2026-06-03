@@ -1,0 +1,28 @@
+<MudDialog>
+    <TitleContent>
+        <div class="d-flex align-center gap-2">
+            @if (!string.IsNullOrWhiteSpace(Icon))
+            {
+                <MudIcon Icon="@Icon" Color="@IconColor" />
+            }
+            <MudText Typo="Typo.h6">@Title</MudText>
+        </div>
+    </TitleContent>
+    <DialogContent>
+        <MudText>@Message</MudText>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Variant="Variant.Outlined"
+                   Color="Color.Default"
+                   OnClick="OnCancel"
+                   Disabled="_isLoading">
+            @CancelText
+        </MudButton>
+        <MudLoadingButton Variant="Variant.Filled"
+                          Color="@ConfirmColor"
+                          Loading="_isLoading"
+                          OnClick="OnConfirm">
+            @ConfirmText
+        </MudLoadingButton>
+    </DialogActions>
+</MudDialog>

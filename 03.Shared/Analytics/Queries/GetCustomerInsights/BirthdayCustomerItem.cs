@@ -8,4 +8,10 @@ public class BirthdayCustomerItem
     public string? PhoneNumber { get; set; }
     public DateOnly? BirthDate { get; set; }
     public int TotalPoints { get; set; }
+
+    /// <summary>Nama tier pelanggan</summary>
+    public string Tier { get; set; } = string.Empty;
+
+    /// <summary>Berapa hari lagi sampai ulang tahun (0 = hari ini)</summary>
+    public int DaysUntilBirthday { get; set; }
 }

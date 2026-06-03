@@ -9,4 +9,7 @@ public class TopCustomerItem
     public decimal TotalSpend { get; set; }
     public int TotalPoints { get; set; }
     public int TransactionCount { get; set; }
+
+    /// <summary>Peringkat (1 = teratas)</summary>
+    public int Rank { get; set; }
 }

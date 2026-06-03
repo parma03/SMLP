@@ -166,12 +166,84 @@ public class CreateTransactionCommandHandler : IRequestHandler<CreateTransaction
         customer.TotalSpend += grandTotal;
         customer.LastTransactionDate = transaction.TransactionDate;
 
+        // Capture previous tier before upgrade check
+        var previousTier = customer.Tier;
+
         // Tier upgrade automation: use TierRules from DB, fall back to hardcoded if none configured
         customer.Tier = await DetermineNewTierAsync(customer.LifetimePoints, cancellationToken);
 
         await _context.SaveChangesAsync(this, cancellationToken);
 
+        // Fire-and-forget: kirim notifikasi email & WhatsApp tanpa block response
+        _ = SendNotificationsAsync(customer, transaction.TransactionCode, grandTotal, pointsEarned, previousTier, customer.Tier);
+
         return new CommonCreateResponse { Id = transaction.Id };
+    }
+
+    /// <summary>
+    /// Kirim notifikasi transaksi + tier upgrade via email &amp; WhatsApp (fire-and-forget).
+    /// Error tidak di-throw agar tidak menggagalkan transaksi utama.
+    /// </summary>
+    private async Task SendNotificationsAsync(
+        Domain.Entities.Master.Customer customer,
+        string transactionCode,
+        decimal grandTotal,
+        int pointsEarned,
+        CustomerTier previousTier,
+        CustomerTier newTier)
+    {
+        try
+        {
+            var hasTierUpgrade = newTier != previousTier;
+            var email = customer.EmailAddress;
+            var phone = customer.PhoneNumber;
+            var name = customer.FullName;
+
+            // Email: konfirmasi transaksi
+            if (!string.IsNullOrWhiteSpace(email))
+            {
+                try
+                {
+                    await _emailService.SendTransactionConfirmationAsync(
+                        email, name, transactionCode, grandTotal, pointsEarned);
+                }
+                catch { /* swallow — notifikasi bukan critical path */ }
+
+                // Email: tier upgrade
+                if (hasTierUpgrade)
+                {
+                    try
+                    {
+                        await _emailService.SendTierUpgradeAsync(
+                            email, name, previousTier.ToString(), newTier.ToString(), customer.TotalPoints);
+                    }
+                    catch { /* swallow */ }
+                }
+            }
+
+            // WhatsApp: konfirmasi transaksi
+            if (!string.IsNullOrWhiteSpace(phone))
+            {
+                try
+                {
+                    await _whatsAppService.SendTransactionConfirmationAsync(
+                        phone, name, transactionCode, grandTotal, pointsEarned);
+                }
+                catch { /* swallow */ }
+
+                // WhatsApp: tier upgrade
+                if (hasTierUpgrade)
+                {
+                    try
+                    {
+                        await _whatsAppService.SendTierUpgradeAsync(
+                            phone, name, newTier.ToString(), customer.TotalPoints);
+                    }
+                    catch { /* swallow */ }
+                }
+            }
+        }
+        catch { /* outer safety net */ }
     }
 
     /// <summary>
