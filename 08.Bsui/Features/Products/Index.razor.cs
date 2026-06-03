@@ -3,7 +3,6 @@ using MudBlazor;
 using Smlp.Bsui.Common.Components;
 using Smlp.Bsui.Common.Extensions;
 using Smlp.Shared.Master.Products.Queries;
-
 namespace Smlp.Bsui.Features.Products;
 
 public partial class Index
@@ -71,7 +70,8 @@ public partial class Index
         };
         var dialog = await _dialogService.ShowAsync<ConfirmDialog>("Hapus Produk", parameters);
         var dialogResult = await dialog.Result;
-        if (dialogResult is null || dialogResult.Canceled) return;
+        if (dialogResult is null || dialogResult.Canceled)
+            return;
 
         var result = await _productService.DeleteProductAsync(product.Id);
         if (result.Error is not null)
@@ -193,5 +193,26 @@ public partial class Index
         if (value.Contains(',') || value.Contains('"') || value.Contains('\n'))
             return $"\"{value.Replace("\"", "\"\"")}\"";
         return value;
+    }
+
+    private async Task OpenImagePreviewAsync(GetProductResponse product)
+    {
+        var parameters = new DialogParameters
+        {
+            [nameof(ImagePreviewDialog.Title)] = product.Name,
+            [nameof(ImagePreviewDialog.SubTitle)] = product.CategoryName ?? string.Empty,
+            [nameof(ImagePreviewDialog.ImageUrl)] = product.ImageUrl,
+            [nameof(ImagePreviewDialog.AltText)] = $"Gambar produk {product.Name}",
+            [nameof(ImagePreviewDialog.Description)] = product.Description,
+        };
+
+        var options = new DialogOptions
+        {
+            MaxWidth = MaxWidth.Medium,
+            FullWidth = true,
+            CloseOnEscapeKey = true,
+        };
+
+        await _dialogService.ShowAsync<ImagePreviewDialog>($"Preview — {product.Name}", parameters, options);
     }
 }

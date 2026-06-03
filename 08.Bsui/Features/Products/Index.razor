@@ -116,6 +116,19 @@
                 }
             </MudTd>
             <MudTd>
+                @if (!string.IsNullOrEmpty(context.ImageUrl))
+                {
+                    <MudTooltip Text="Preview Gambar">
+                        <MudIconButton Icon="@Icons.Material.Filled.Image" Size="Size.Small" Color="Color.Secondary"
+                                       OnClick="@(() => OpenImagePreviewAsync(context))" />
+                    </MudTooltip>
+                }
+                else
+                {
+                    <MudTooltip Text="Belum ada gambar">
+                        <MudIconButton Icon="@Icons.Material.Filled.BrokenImage" Size="Size.Small" Color="Color.Default" Disabled="true" />
+                    </MudTooltip>
+                }
                 <MudTooltip Text="Edit Produk">
                     <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" Color="Color.Primary"
                                    Href="@CommonRouteFor.ProductEdit(context.Id)" />
@@ -132,7 +145,7 @@
             </MudText>
         </NoRecordsContent>
         <PagerContent>
-            <MudTablePager PageSizeOptions="new int[]{10, 25, 50}" />
+            <MudTablePager PageSizeOptions="new int[] { 10, 25, 50 }" />
         </PagerContent>
     </MudTable>
 </MudPaper>

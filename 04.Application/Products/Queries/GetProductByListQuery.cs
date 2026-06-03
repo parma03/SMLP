@@ -19,7 +19,7 @@ public class GetProductByListQueryHandler : IRequestHandler<GetProductByListQuer
     public async Task<PaginatedListResponse<GetProductResponse>> Handle(GetProductByListQuery request, CancellationToken cancellationToken)
     {
         var req = request.Request;
-        var query = _context.Products.Include(p => p.ProductCategory).AsQueryable();
+        var query = _context.Products.Include(p => p.ProductCategory).AsNoTracking().AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(req.Search))
             query = query.Where(p => p.Name.Contains(req.Search) || (p.Description != null && p.Description.Contains(req.Search)));
@@ -45,6 +45,7 @@ public class GetProductByListQueryHandler : IRequestHandler<GetProductByListQuer
                 Stock = p.Stock,
                 CategoryId = p.ProductId,
                 CategoryName = p.ProductCategory != null ? p.ProductCategory.Name : null,
+                ImageUrl = p.ProductImage != null ? $"/api/v1/products/{p.Id}/image" : null,
             })
             .ToListAsync(cancellationToken);
 

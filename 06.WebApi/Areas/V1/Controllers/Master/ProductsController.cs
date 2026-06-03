@@ -1,9 +1,12 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Smlp.Application.Products.Commands.Create;
 using Smlp.Application.Products.Commands.Delete;
 using Smlp.Application.Products.Commands.Update;
 using Smlp.Application.Products.Queries;
+using Smlp.Application.Services.Persistence;
+using Smlp.Application.Services.Storage;
 using Smlp.Shared.Common.Responses;
 using Smlp.Shared.Master.Products.Commands.Create;
 using Smlp.Shared.Master.Products.Commands.Update;
@@ -31,6 +34,39 @@ public class ProductsController : ApiControllerBase
     public async Task<ActionResult<GetProductResponse>> GetProductById([FromRoute] Guid id)
     {
         return await Mediator.Send(new GetProductByIdQuery { Id = id });
+    }
+
+    /// <summary>Serve file gambar produk dari storage.</summary>
+    [HttpGet("{id:guid}/image")]
+    [AllowAnonymous]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetProductImage(
+        [FromRoute] Guid id,
+        [FromServices] ISmlpDbContext context,
+        [FromServices] IStorageService storage,
+        CancellationToken cancellationToken)
+    {
+        var product = await context.Products
+            .AsNoTracking()
+            .Select(p => new { p.Id, p.ProductImage, p.IsDeleted })
+            .FirstOrDefaultAsync(p => p.Id == id && !p.IsDeleted, cancellationToken);
+
+        if (product?.ProductImage is null)
+            return NotFound();
+
+        try
+        {
+            var bytes = await storage.ReadAsync(product.ProductImage.StorageFileId);
+            var contentType = string.IsNullOrWhiteSpace(product.ProductImage.FileContentType)
+                ? "image/jpeg"
+                : product.ProductImage.FileContentType;
+            return File(bytes, contentType, enableRangeProcessing: true);
+        }
+        catch
+        {
+            return NotFound();
+        }
     }
 
     [HttpPost]
