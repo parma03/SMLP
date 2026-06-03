@@ -26,16 +26,22 @@
     <PageViewTelemetryTracker />
 }
 
+@* Skip navigation for keyboard users *@
+<a href="#main-content" class="skip-nav-link">Lewati ke konten utama</a>
+
 <AuthorizeView>
     <Authorized>
         <MudThemeProvider Theme="@ThemeFor.MainLayout" />
         <MudDialogProvider FullWidth="true" MaxWidth="MaxWidth.Small" />
         <MudSnackbarProvider />
         <MudLayout>
-            <MudAppBar Elevation="2">
+            <MudAppBar Elevation="2" role="banner" aria-label="Header aplikasi SMLP">
                 @if (_authorized)
                 {
-                    <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+                    <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())"
+                                   aria-label="@(_drawerOpen ? "Tutup menu navigasi" : "Buka menu navigasi")"
+                                   aria-expanded="@_drawerOpen.ToString().ToLower()"
+                                   aria-controls="main-nav-drawer" />
                 }
                 <MudIcon Icon="@Icons.Material.Filled.LocalCafe" Color="Color.Inherit" Class="ml-2 mr-1" />
                 <MudText Typo="Typo.h6" Class="ml-1 font-weight-bold">@_appInfoOptions.Value.ShortName</MudText>
@@ -50,7 +56,8 @@
             </MudAppBar>
             @if (_authorized)
             {
-                <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
+                <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2"
+                           id="main-nav-drawer" role="navigation" aria-label="Sidebar navigasi">
                     <MudDrawerHeader>
                         <div class="drawer-header d-flex align-center pa-2">
                             <MudIcon Icon="@Icons.Material.Filled.LocalCafe" Style="color:#FFCCBC; font-size:2rem;" />
@@ -66,7 +73,7 @@
             }
             <MudMainContent>
                 <SessionExpirationAlert />
-                <div class="main-content">
+                <div class="main-content" id="main-content" role="main" tabindex="-1">
                     @if (_authorized)
                     {
                         if (_usingGeolocation)

@@ -1,6 +1,7 @@
-﻿@if (IsVisible)
+@if (IsVisible)
 {
-    <MudProgressLinear Color="Color.Primary" Striped="true" Indeterminate="true" Class="my-4" />
+    <MudProgressLinear Color="Color.Primary" Striped="true" Indeterminate="true" Class="my-4"
+                       role="progressbar" aria-label="Memuat data..." aria-busy="true" />
 }
 
 @code {

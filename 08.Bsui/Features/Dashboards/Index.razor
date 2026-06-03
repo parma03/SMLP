@@ -3,64 +3,121 @@
 <BrowserTabTitle>Dashboard</BrowserTabTitle>
 <MudBreadcrumbs Items="_breadcrumbItems"></MudBreadcrumbs>
 
+@* ── Live Metrics Indicator Bar ── *@
+<div class="d-flex align-center justify-space-between mb-3 live-metrics-bar"
+     role="status" aria-live="polite" aria-label="Status pembaruan dashboard">
+    <div class="d-flex align-center gap-2">
+        <MudIcon Icon="@LiveIcon" Color="@LiveIndicatorColor"
+                 Style="font-size:0.85rem;" aria-hidden="true" />
+        <MudText Typo="Typo.caption" Color="Color.Secondary">
+            @PollCountdownLabel
+        </MudText>
+        @if (_isPolling)
+        {
+            <MudProgressCircular Indeterminate="true" Size="Size.Small" Color="Color.Primary"
+                                 aria-label="Sedang memperbarui data" />
+        }
+        <MudText Typo="Typo.caption" Color="Color.Secondary" Class="d-none d-sm-flex">
+            · @LastRefreshedLabel
+        </MudText>
+    </div>
+    <div class="d-flex align-center gap-1">
+        <MudTooltip Text="@(_liveMetricsEnabled ? "Nonaktifkan live metrics" : "Aktifkan live metrics")">
+            <MudIconButton Icon="@(_liveMetricsEnabled ? Icons.Material.Filled.Pause : Icons.Material.Filled.PlayArrow)"
+                           Size="Size.Small"
+                           Color="@(_liveMetricsEnabled ? Color.Warning : Color.Success)"
+                           OnClick="ToggleLiveMetrics"
+                           aria-label="@(_liveMetricsEnabled ? "Nonaktifkan live metrics" : "Aktifkan live metrics")" />
+        </MudTooltip>
+        <MudTooltip Text="Refresh manual">
+            <MudIconButton Icon="@Icons.Material.Filled.Refresh"
+                           Size="Size.Small"
+                           Color="Color.Primary"
+                           Disabled="_isLoading"
+                           OnClick="ManualRefreshAsync"
+                           aria-label="Refresh manual dashboard" />
+        </MudTooltip>
+    </div>
+</div>
+
 @if (_isLoading)
 {
-    <MudProgressLinear Indeterminate="true" Color="Color.Primary" Class="mb-4" />
+    <MudProgressLinear Indeterminate="true" Color="Color.Primary" Class="mb-4"
+                       aria-label="Memuat data dashboard" />
 }
 
 @* KPI Summary Cards *@
+<section aria-label="KPI Ringkasan Dashboard">
 <MudGrid Class="mb-4">
     <MudItem xs="12" sm="6" md="3">
-        <MudPaper Class="pa-4 rounded-lg" Elevation="2" Style="border-top:4px solid #6F4E37;">
+        <MudPaper Class="pa-4 rounded-lg kpi-card" Elevation="2" Style="border-top:4px solid #6F4E37;"
+                  role="region" aria-label="Total Pelanggan">
             <div class="d-flex justify-space-between align-center">
                 <div>
                     <MudText Typo="Typo.caption" Color="Color.Secondary">Total Pelanggan</MudText>
-                    <MudText Typo="Typo.h4" Style="color:#6F4E37; font-weight:700;">@(_summary?.TotalCustomers.ToString("N0") ?? "—")</MudText>
+                    <MudText Typo="Typo.h4" Style="color:#6F4E37; font-weight:700;"
+                             aria-label="@($"Total pelanggan: {_summary?.TotalCustomers.ToString("N0") ?? "belum dimuat"}")">
+                        @(_summary?.TotalCustomers.ToString("N0") ?? "—")
+                    </MudText>
                     <MudText Typo="Typo.caption" Color="Color.Secondary">+@(_summary?.NewCustomersThisMonth ?? 0) baru bulan ini</MudText>
                 </div>
-                <MudIcon Icon="@Icons.Material.Filled.People" Style="font-size:3rem; color:#D7CCC8;" />
+                <MudIcon Icon="@Icons.Material.Filled.People" Style="font-size:3rem; color:#D7CCC8;" aria-hidden="true" />
             </div>
         </MudPaper>
     </MudItem>
     <MudItem xs="12" sm="6" md="3">
-        <MudPaper Class="pa-4 rounded-lg" Elevation="2" Style="border-top:4px solid #C8860A;">
+        <MudPaper Class="pa-4 rounded-lg kpi-card" Elevation="2" Style="border-top:4px solid #C8860A;"
+                  role="region" aria-label="Total Poin Aktif">
             <div class="d-flex justify-space-between align-center">
                 <div>
                     <MudText Typo="Typo.caption" Color="Color.Secondary">Total Poin Aktif</MudText>
-                    <MudText Typo="Typo.h4" Style="color:#C8860A; font-weight:700;">@(_summary?.TotalPointsCirculating.ToString("N0") ?? "—")</MudText>
+                    <MudText Typo="Typo.h4" Style="color:#C8860A; font-weight:700;"
+                             aria-label="@($"Total poin aktif: {_summary?.TotalPointsCirculating.ToString("N0") ?? "belum dimuat"}")">
+                        @(_summary?.TotalPointsCirculating.ToString("N0") ?? "—")
+                    </MudText>
                     <MudText Typo="Typo.caption" Color="Color.Secondary">poin beredar</MudText>
                 </div>
-                <MudIcon Icon="@Icons.Material.Filled.Stars" Style="font-size:3rem; color:#FFE082;" />
+                <MudIcon Icon="@Icons.Material.Filled.Stars" Style="font-size:3rem; color:#FFE082;" aria-hidden="true" />
             </div>
         </MudPaper>
     </MudItem>
     <MudItem xs="12" sm="6" md="3">
-        <MudPaper Class="pa-4 rounded-lg" Elevation="2" Style="border-top:4px solid #2E7D32;">
+        <MudPaper Class="pa-4 rounded-lg kpi-card" Elevation="2" Style="border-top:4px solid #2E7D32;"
+                  role="region" aria-label="Revenue Bulan Ini">
             <div class="d-flex justify-space-between align-center">
                 <div>
                     <MudText Typo="Typo.caption" Color="Color.Secondary">Revenue Bulan Ini</MudText>
-                    <MudText Typo="Typo.h5" Style="color:#2E7D32; font-weight:700;">Rp @(_summary?.TotalRevenueThisMonth.ToString("N0") ?? "—")</MudText>
+                    <MudText Typo="Typo.h5" Style="color:#2E7D32; font-weight:700;"
+                             aria-label="@($"Revenue bulan ini: Rp {_summary?.TotalRevenueThisMonth.ToString("N0") ?? "belum dimuat"}")">
+                        Rp @(_summary?.TotalRevenueThisMonth.ToString("N0") ?? "—")
+                    </MudText>
                     <MudText Typo="Typo.caption" Color="@RevenueGrowthColor">@RevenueGrowthLabel</MudText>
                 </div>
-                <MudIcon Icon="@Icons.Material.Filled.TrendingUp" Style="font-size:3rem; color:#A5D6A7;" />
+                <MudIcon Icon="@Icons.Material.Filled.TrendingUp" Style="font-size:3rem; color:#A5D6A7;" aria-hidden="true" />
             </div>
         </MudPaper>
     </MudItem>
     <MudItem xs="12" sm="6" md="3">
-        <MudPaper Class="pa-4 rounded-lg" Elevation="2" Style="border-top:4px solid #6A1B9A;">
+        <MudPaper Class="pa-4 rounded-lg kpi-card" Elevation="2" Style="border-top:4px solid #6A1B9A;"
+                  role="region" aria-label="Redeem Pending">
             <div class="d-flex justify-space-between align-center">
                 <div>
                     <MudText Typo="Typo.caption" Color="Color.Secondary">Redeem Pending</MudText>
-                    <MudText Typo="Typo.h4" Style="color:#6A1B9A; font-weight:700;">@(_summary?.TotalPendingRedeems ?? 0)</MudText>
+                    <MudText Typo="Typo.h4" Style="color:#6A1B9A; font-weight:700;"
+                             aria-label="@($"Redeem pending: {_summary?.TotalPendingRedeems ?? 0} menunggu verifikasi")">
+                        @(_summary?.TotalPendingRedeems ?? 0)
+                    </MudText>
                     <MudText Typo="Typo.caption" Color="Color.Secondary">menunggu verifikasi</MudText>
                 </div>
-                <MudIcon Icon="@Icons.Material.Filled.Redeem" Style="font-size:3rem; color:#CE93D8;" />
+                <MudIcon Icon="@Icons.Material.Filled.Redeem" Style="font-size:3rem; color:#CE93D8;" aria-hidden="true" />
             </div>
         </MudPaper>
     </MudItem>
 </MudGrid>
+</section>
 
 @* Tier Distribution + Recent Activity *@
+<section aria-label="Distribusi Tier dan Transaksi Terbaru">
 <MudGrid Class="mb-4">
     <MudItem xs="12" md="4">
         <MudPaper Class="pa-4 rounded-lg" Elevation="2">
@@ -134,14 +191,17 @@
                 </NoRecordsContent>
             </MudTable>
             <MudButton Variant="Variant.Text" Color="Color.Primary" Href="/Transactions" Size="Size.Small"
-                       EndIcon="@Icons.Material.Filled.ArrowForward" Class="mt-2">
+                       EndIcon="@Icons.Material.Filled.ArrowForward" Class="mt-2"
+                       aria-label="Lihat semua transaksi">
                 Lihat Semua Transaksi
             </MudButton>
         </MudPaper>
     </MudItem>
 </MudGrid>
+</section>
 
 @* Top Rewards + Pending Redeems *@
+<section aria-label="Reward Terpopuler dan Aksi Cepat">
 <MudGrid Class="mb-4">
     <MudItem xs="12" md="5">
         <MudPaper Class="pa-4 rounded-lg" Elevation="2">
@@ -219,19 +279,22 @@
                 </MudItem>
                 <MudItem xs="6" sm="3">
                     <MudButton Variant="Variant.Outlined" FullWidth="true" Href="/CustomerInsights"
-                               StartIcon="@Icons.Material.Filled.Psychology" Color="Color.Primary">
+                               StartIcon="@Icons.Material.Filled.Psychology" Color="Color.Primary"
+                               aria-label="Buka halaman Customer Insights">
                         Customer Insights
                     </MudButton>
                 </MudItem>
                 <MudItem xs="6" sm="3">
                     <MudButton Variant="Variant.Outlined" FullWidth="true" Href="/Reports"
-                               StartIcon="@Icons.Material.Filled.Assessment" Color="Color.Success">
+                               StartIcon="@Icons.Material.Filled.Assessment" Color="Color.Success"
+                               aria-label="Buka halaman Laporan">
                         Laporan
                     </MudButton>
                 </MudItem>
                 <MudItem xs="6" sm="3">
                     <MudButton Variant="Variant.Outlined" FullWidth="true" Href="/LoyaltyAnalysis"
-                               StartIcon="@Icons.Material.Filled.Stars" Color="Color.Default">
+                               StartIcon="@Icons.Material.Filled.Stars" Color="Color.Default"
+                               aria-label="Buka halaman Loyalty Analysis">
                         Loyalty Analysis
                     </MudButton>
                 </MudItem>
@@ -239,3 +302,4 @@
         </MudPaper>
     </MudItem>
 </MudGrid>
+</section>

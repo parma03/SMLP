@@ -215,18 +215,18 @@
 @* Top Spenders *@
 @if (_insights?.TopSpenders?.Any() == true)
 {
-    <MudPaper Class="pa-4 rounded-lg mt-4" Elevation="2">
+    <MudPaper Class="pa-4 rounded-lg mt-4" Elevation="2" role="region" aria-label="Top Pelanggan">
         <MudText Typo="Typo.subtitle1" Class="mb-3" Style="color:#6F4E37; font-weight:700;">
             👑 Top Pelanggan (by Total Belanja)
         </MudText>
         <MudTable Dense="true" Hover="true" Elevation="0" Items="@_insights.TopSpenders">
             <HeaderContent>
-                <MudTh>#</MudTh>
-                <MudTh>Pelanggan</MudTh>
-                <MudTh>Tier</MudTh>
-                <MudTh Style="text-align:right">Total Belanja</MudTh>
-                <MudTh Style="text-align:right">Total Poin</MudTh>
-                <MudTh Style="text-align:right">Transaksi</MudTh>
+                <MudTh scope="col">#</MudTh>
+                <MudTh scope="col">Pelanggan</MudTh>
+                <MudTh scope="col">Tier</MudTh>
+                <MudTh scope="col" Style="text-align:right">Total Belanja</MudTh>
+                <MudTh scope="col" Style="text-align:right">Total Poin</MudTh>
+                <MudTh scope="col" Style="text-align:right">Transaksi</MudTh>
             </HeaderContent>
             <RowTemplate>
                 <MudTd>
@@ -254,3 +254,66 @@
         </MudTable>
     </MudPaper>
 }
+
+@* ── Churn Prediction Score (Rule-Based) ── *@
+@if (_insights?.ChurnRiskCustomers?.Any() == true)
+{
+    <MudPaper Class="pa-4 rounded-lg mt-4" Elevation="2" role="region" aria-label="Prediksi Churn">
+        <MudText Typo="Typo.subtitle1" Class="mb-1" Style="color:#6F4E37; font-weight:700;">
+            📉 Prediksi Risiko Churn (Rule-Based Score)
+        </MudText>
+        <MudText Typo="Typo.caption" Color="Color.Secondary" Class="mb-3">
+            Skor risiko dihitung berdasarkan jumlah hari absen, total poin, dan tier pelanggan.
+            Semakin tinggi skor, semakin besar risiko pelanggan tidak kembali.
+        </MudText>
+        <MudTable Dense="true" Hover="true" Elevation="0" Items="@_insights.ChurnRiskCustomers">
+            <HeaderContent>
+                <MudTh scope="col">Pelanggan</MudTh>
+                <MudTh scope="col" Style="text-align:right">Hari Absen</MudTh>
+                <MudTh scope="col">Tier</MudTh>
+                <MudTh scope="col" Style="text-align:right">Poin</MudTh>
+                <MudTh scope="col">Skor Risiko Churn</MudTh>
+                <MudTh scope="col">Tingkat Risiko</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                @{
+                    var score = ComputeChurnScore(context);
+                    var riskLevel = score >= 75 ? ("Sangat Tinggi", Color.Error, "#C62828") :
+                                   score >= 55 ? ("Tinggi", Color.Warning, "#E65100") :
+                                   score >= 35 ? ("Sedang", Color.Warning, "#F57F17") :
+                                                 ("Rendah", Color.Success, "#2E7D32");
+                }
+                <MudTd>
+                    <div>
+                        <MudText Typo="Typo.body2">@context.FullName</MudText>
+                        <MudText Typo="Typo.caption" Color="Color.Secondary">@context.PhoneNumber</MudText>
+                    </div>
+                </MudTd>
+                <MudTd Style="text-align:right">
+                    <MudChip T="string" Size="Size.Small" Color="Color.Error">@context.DaysSinceLastPurchase hari</MudChip>
+                </MudTd>
+                <MudTd><MudText Typo="Typo.caption">@context.Tier</MudText></MudTd>
+                <MudTd Style="text-align:right; color:#C8860A;">⭐ @context.TotalPoints.ToString("N0")</MudTd>
+                <MudTd Style="min-width:140px;">
+                    <div class="d-flex align-center gap-1">
+                        <MudProgressLinear Value="@score" Color="@riskLevel.Item2"
+                                           Style="flex:1; height:8px; border-radius:4px;"
+                                           aria-label="@($"Skor risiko churn: {score}%")" />
+                        <MudText Typo="Typo.caption" Style="@($"color:{riskLevel.Item3}; font-weight:700; width:32px;")">
+                            @score%
+                        </MudText>
+                    </div>
+                </MudTd>
+                <MudTd>
+                    <MudChip T="string" Size="Size.Small" Color="@riskLevel.Item2"
+                             aria-label="@($"Tingkat risiko: {riskLevel.Item1}")">
+                        @riskLevel.Item1
+                    </MudChip>
+                </MudTd>
+            </RowTemplate>
+        </MudTable>
+    </MudPaper>
+}
+
+@* ── Recommendation Engine ── *@
+<RecommendationEngine Insights="@_insights" />

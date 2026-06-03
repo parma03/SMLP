@@ -180,3 +180,152 @@
     margin-bottom: 16px;
     opacity: 0.4;
 }
+
+/* ===== Accessibility: Skip Navigation ===== */
+.skip-nav-link {
+    position: absolute;
+    top: -100%;
+    left: 16px;
+    z-index: 99999;
+    background: #3E2723;
+    color: #FFF8E1;
+    padding: 10px 20px;
+    border-radius: 0 0 8px 8px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: top 0.2s ease;
+    outline: 3px solid #C8860A;
+}
+
+.skip-nav-link:focus {
+    top: 0;
+}
+
+/* ===== Accessibility: Focus Visible ===== */
+:focus-visible {
+    outline: 3px solid #C8860A !important;
+    outline-offset: 2px !important;
+}
+
+.mud-nav-link:focus-visible,
+.mud-button:focus-visible,
+.mud-icon-button:focus-visible {
+    outline: 3px solid #FFE082 !important;
+    outline-offset: 2px !important;
+    border-radius: 6px !important;
+}
+
+/* ===== Live Metrics Bar ===== */
+.live-metrics-bar {
+    background: rgba(111, 78, 55, 0.05);
+    border: 1px solid rgba(111, 78, 55, 0.12);
+    border-radius: 8px;
+    padding: 6px 12px;
+}
+
+/* ===== KPI Card Hover ===== */
+.kpi-card {
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    cursor: default;
+}
+
+.kpi-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(111, 78, 55, 0.15) !important;
+}
+
+/* ===== Mobile Responsive Improvements ===== */
+@media (max-width: 600px) {
+    .main-content {
+        padding: 8px 10px 16px 10px !important;
+    }
+
+    .mud-table-cell {
+        padding: 6px 6px !important;
+        font-size: 0.78rem !important;
+    }
+
+    /* Hide less-critical columns on mobile */
+    .mud-table-cell:nth-child(n+5) {
+        display: none;
+    }
+
+    /* Full-width buttons on mobile */
+    .mud-button-root.mobile-full {
+        width: 100% !important;
+        margin-bottom: 6px;
+    }
+
+    /* KPI card text scaling */
+    .kpi-card .mud-typography-h4 {
+        font-size: 1.5rem !important;
+    }
+
+    .kpi-card .mud-typography-h5 {
+        font-size: 1.2rem !important;
+    }
+
+    /* Compact breadcrumbs on mobile */
+    .mud-breadcrumbs {
+        font-size: 0.75rem !important;
+        margin-bottom: 8px !important;
+    }
+
+    /* Notification popover full-width on mobile */
+    .notification-popover {
+        width: calc(100vw - 24px) !important;
+        max-width: 360px !important;
+        right: 0 !important;
+        left: auto !important;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Stack action buttons vertically on very small screens */
+    .quick-actions-grid .mud-grid-item {
+        flex-basis: 50% !important;
+        max-width: 50% !important;
+    }
+
+    /* Churn risk table condensed */
+    .mud-table-root .mud-table-cell:nth-child(n+4) {
+        display: none;
+    }
+}
+
+@media (min-width: 601px) and (max-width: 960px) {
+    /* Tablet: hide least important columns */
+    .mud-table-cell.hide-tablet {
+        display: none !important;
+    }
+}
+
+/* ===== High Contrast / Reduced Motion ===== */
+@media (prefers-reduced-motion: reduce) {
+    .skeleton-box::after {
+        animation: none;
+    }
+
+    .kpi-card {
+        transition: none;
+    }
+
+    * {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ===== Screen reader only utility ===== */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}

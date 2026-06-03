@@ -167,4 +167,44 @@ public partial class Index
             _isExporting = false;
         }
     }
+
+    // ── Churn Prediction (Rule-Based Score) ───────────────────────────────────
+    /// <summary>
+    /// Rule-based churn risk score 0–100.
+    /// Rules: days absent (max 50), low points (max 30), bronze tier (max 20).
+    /// </summary>
+    private static int ComputeChurnScore(ChurnRiskItem item)
+    {
+        var score = 0;
+
+        // Days absent contribution (max 50 pts)
+        score += item.DaysSinceLastPurchase switch
+        {
+            >= 120 => 50,
+            >= 90  => 40,
+            >= 60  => 28,
+            _      => 15
+        };
+
+        // Low loyalty points = weaker retention bond (max 30 pts)
+        score += item.TotalPoints switch
+        {
+            0      => 30,
+            <= 100 => 20,
+            <= 500 => 10,
+            _      => 0
+        };
+
+        // Lower tier = less retention incentive (max 20 pts)
+        score += item.Tier?.ToLower() switch
+        {
+            "bronze"   => 20,
+            "silver"   => 10,
+            "gold"     => 5,
+            "platinum" => 0,
+            _          => 15
+        };
+
+        return Math.Min(score, 100);
+    }
 }

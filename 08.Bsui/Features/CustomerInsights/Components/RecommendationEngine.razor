@@ -1,0 +1,239 @@
+@using MudBlazor
+@using Smlp.Shared.Analytics.Queries.GetCustomerInsights
+
+@* ── Recommendation Engine ──────────────────────────────────────────────── *@
+@* Rule-based CRM recommendation engine built from RFM segmentation data    *@
+
+@if (Insights is not null)
+{
+    <MudPaper Class="pa-4 rounded-lg mt-4" Elevation="2" role="region"
+              aria-label="Rekomendasi Aksi CRM">
+        <div class="d-flex align-center justify-space-between mb-3">
+            <MudText Typo="Typo.subtitle1" Style="color:#6F4E37; font-weight:700;">
+                🤖 Rekomendasi Aksi CRM (Rule-Based Engine)
+            </MudText>
+            <MudChip T="string" Size="Size.Small" Color="Color.Primary">
+                @_recommendations.Count rekomendasi
+            </MudChip>
+        </div>
+
+        <MudAlert Severity="Severity.Info" Dense="true" Class="mb-3">
+            Rekomendasi dihasilkan otomatis berdasarkan segmentasi RFM, data churn, dan ulang tahun pelanggan.
+        </MudAlert>
+
+        @if (_recommendations.Any())
+        {
+            <MudGrid>
+                @foreach (var rec in _recommendations)
+                {
+                    <MudItem xs="12" sm="6" md="4">
+                        <MudCard Elevation="1" Class="rounded-lg h-100"
+                                 Style="@($"border-left:4px solid {rec.BorderColor};")">
+                            <MudCardContent Class="pa-3">
+                                <div class="d-flex align-center mb-2">
+                                    <MudIcon Icon="@rec.Icon"
+                                             Style="@($"color:{rec.BorderColor}; margin-right:8px; font-size:1.4rem;")"
+                                             aria-hidden="true" />
+                                    <div>
+                                        <MudText Typo="Typo.subtitle2" Style="font-weight:700; line-height:1.3;">
+                                            @rec.Title
+                                        </MudText>
+                                        <MudChip T="string" Size="Size.Small" Color="@rec.PriorityColor" Class="mt-0">
+                                            @rec.Priority
+                                        </MudChip>
+                                    </div>
+                                </div>
+                                <MudText Typo="Typo.caption" Color="Color.Secondary" Class="mb-2">
+                                    @rec.Description
+                                </MudText>
+                                <MudDivider Class="mb-2" />
+                                <div class="d-flex align-center justify-space-between">
+                                    <div>
+                                        <MudText Typo="Typo.caption" Color="Color.Secondary">Target</MudText>
+                                        <MudText Typo="Typo.body2" Style="font-weight:600;">
+                                            @rec.TargetCount pelanggan
+                                        </MudText>
+                                    </div>
+                                    <div class="text-right">
+                                        <MudText Typo="Typo.caption" Color="Color.Secondary">Kanal</MudText>
+                                        <MudText Typo="Typo.body2">@rec.Channel</MudText>
+                                    </div>
+                                </div>
+                                @if (!string.IsNullOrEmpty(rec.ActionUrl))
+                                {
+                                    <MudButton Variant="Variant.Text"
+                                               Color="Color.Primary"
+                                               Size="Size.Small"
+                                               Href="@rec.ActionUrl"
+                                               StartIcon="@Icons.Material.Filled.ArrowForward"
+                                               Class="mt-2 px-0"
+                                               aria-label="@($"Lakukan aksi: {rec.Title}")">
+                                        Lakukan Aksi
+                                    </MudButton>
+                                }
+                            </MudCardContent>
+                        </MudCard>
+                    </MudItem>
+                }
+            </MudGrid>
+        }
+        else
+        {
+            <MudText Class="pa-3 text-center" Color="Color.Secondary">
+                🎉 Tidak ada rekomendasi aksi saat ini — semua segmen dalam kondisi baik!
+            </MudText>
+        }
+    </MudPaper>
+}
+
+@code {
+    [Parameter] public GetCustomerInsightsResponse? Insights { get; set; }
+
+    private List<CrmRecommendation> _recommendations = new();
+
+    protected override void OnParametersSet()
+    {
+        GenerateRecommendations();
+    }
+
+    private void GenerateRecommendations()
+    {
+        _recommendations.Clear();
+        if (Insights is null) return;
+
+        // ── Rule 1: High churn risk ──────────────────────────────────────────
+        var churnCount = Insights.ChurnRiskCustomers?.Count ?? 0;
+        if (churnCount > 0)
+        {
+            _recommendations.Add(new CrmRecommendation
+            {
+                Title = "Reaktivasi Pelanggan Berisiko Churn",
+                Description = $"Ada {churnCount} pelanggan yang tidak bertransaksi >45 hari. " +
+                              "Kirim penawaran eksklusif atau voucher untuk memancing kembali.",
+                Priority = "🔴 Urgent",
+                PriorityColor = Color.Error,
+                Icon = Icons.Material.Filled.Warning,
+                BorderColor = "#C62828",
+                TargetCount = churnCount,
+                Channel = "WhatsApp + Email",
+                ActionUrl = "/CustomerInsights"
+            });
+        }
+
+        // ── Rule 2: Birthday window ──────────────────────────────────────────
+        var birthdayCount = Insights.BirthdaysThisMonth?.Count ?? 0;
+        if (birthdayCount > 0)
+        {
+            var todayCount = Insights.BirthdaysThisMonth?.Count(b => b.DaysUntilBirthday == 0) ?? 0;
+            _recommendations.Add(new CrmRecommendation
+            {
+                Title = "Ucapan & Reward Ulang Tahun",
+                Description = $"{birthdayCount} pelanggan berulang tahun dalam 14 hari ke depan" +
+                              (todayCount > 0 ? $" — {todayCount} HARI INI!" : "") +
+                              ". Kirim ucapan personal dan bonus poin birthday.",
+                Priority = todayCount > 0 ? "🔴 Urgent" : "🟡 Sedang",
+                PriorityColor = todayCount > 0 ? Color.Error : Color.Warning,
+                Icon = Icons.Material.Filled.Cake,
+                BorderColor = "#E91E63",
+                TargetCount = birthdayCount,
+                Channel = "WhatsApp",
+                ActionUrl = "/CustomerInsights"
+            });
+        }
+
+        // ── Rule 3: At-Risk RFM segment ──────────────────────────────────────
+        var atRiskSeg = Insights.RfmSegments?.FirstOrDefault(s => s.Segment == "At Risk");
+        if (atRiskSeg?.Count > 0)
+        {
+            _recommendations.Add(new CrmRecommendation
+            {
+                Title = "Tingkatkan Engagement Segmen At-Risk",
+                Description = $"{atRiskSeg.Count} pelanggan dalam segmen At-Risk (dahulu aktif, " +
+                              "kini jarang belanja). Tawarkan reward eksklusif tier upgrade.",
+                Priority = "🟠 Penting",
+                PriorityColor = Color.Warning,
+                Icon = Icons.Material.Filled.TrendingDown,
+                BorderColor = "#FF6F00",
+                TargetCount = atRiskSeg.Count,
+                Channel = "Email + Push",
+                ActionUrl = "/Rewards"
+            });
+        }
+
+        // ── Rule 4: Champions / Loyal — retention ────────────────────────────
+        var champSeg = Insights.RfmSegments?.FirstOrDefault(s => s.Segment == "Champions");
+        if (champSeg?.Count > 0)
+        {
+            _recommendations.Add(new CrmRecommendation
+            {
+                Title = "Apresiasi Pelanggan Terbaik (Champions)",
+                Description = $"{champSeg.Count} pelanggan champions setia. Berikan akses " +
+                              "reward eksklusif, preview produk, atau program referral khusus.",
+                Priority = "🟢 Proaktif",
+                PriorityColor = Color.Success,
+                Icon = Icons.Material.Filled.WorkspacePremium,
+                BorderColor = "#2E7D32",
+                TargetCount = champSeg.Count,
+                Channel = "WhatsApp Personal",
+                ActionUrl = "/CustomerInsights"
+            });
+        }
+
+        // ── Rule 5: Low retention ────────────────────────────────────────────
+        if (Insights.RetentionRate < 50m && Insights.TotalCustomers > 10)
+        {
+            _recommendations.Add(new CrmRecommendation
+            {
+                Title = "Perbaiki Program Retention",
+                Description = $"Retention rate {Insights.RetentionRate:F1}% di bawah target 50%. " +
+                              "Pertimbangkan program loyalty tier baru atau reward yang lebih menarik.",
+                Priority = "🟡 Sedang",
+                PriorityColor = Color.Warning,
+                Icon = Icons.Material.Filled.Autorenew,
+                BorderColor = "#F57F17",
+                TargetCount = Insights.TotalCustomers,
+                Channel = "In-App + Email",
+                ActionUrl = "/TierRules"
+            });
+        }
+
+        // ── Rule 6: New customers onboarding ─────────────────────────────────
+        var newSeg = Insights.RfmSegments?.FirstOrDefault(s => s.Segment == "New");
+        if (newSeg?.Count > 0)
+        {
+            _recommendations.Add(new CrmRecommendation
+            {
+                Title = "Onboarding Pelanggan Baru",
+                Description = $"{newSeg.Count} pelanggan baru perlu diedukasi tentang program loyalty. " +
+                              "Kirim panduan cara mendapat dan menukar poin.",
+                Priority = "🟢 Rutin",
+                PriorityColor = Color.Info,
+                Icon = Icons.Material.Filled.PersonAdd,
+                BorderColor = "#1565C0",
+                TargetCount = newSeg.Count,
+                Channel = "Email",
+                ActionUrl = "/Customers"
+            });
+        }
+
+        // Sort by priority (urgent first)
+        _recommendations = _recommendations
+            .OrderBy(r => r.Priority.StartsWith("🔴") ? 0 :
+                          r.Priority.StartsWith("🟠") ? 1 :
+                          r.Priority.StartsWith("🟡") ? 2 : 3)
+            .ToList();
+    }
+
+    private class CrmRecommendation
+    {
+        public string Title { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public string Priority { get; set; } = string.Empty;
+        public Color PriorityColor { get; set; } = Color.Default;
+        public string Icon { get; set; } = Icons.Material.Filled.Info;
+        public string BorderColor { get; set; } = "#6F4E37";
+        public int TargetCount { get; set; }
+        public string Channel { get; set; } = string.Empty;
+        public string? ActionUrl { get; set; }
+    }
+}

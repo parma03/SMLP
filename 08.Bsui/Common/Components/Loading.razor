@@ -1,10 +1,10 @@
-﻿@if (IsVisible)
+@if (IsVisible)
 {
-    <div class="loading">
-        <MudProgressCircular Color="Color.Primary" Size="Size.Large" Indeterminate="true" Class="mb-3" />
+    <div class="loading" role="status" aria-live="polite" aria-label="@(string.IsNullOrWhiteSpace(Description) ? "Memuat data dari server..." : Description)">
+        <MudProgressCircular Color="Color.Primary" Size="Size.Large" Indeterminate="true" Class="mb-3" aria-hidden="true" />
         @if (string.IsNullOrWhiteSpace(Description))
         {
-            <MudText Typo="Typo.body1">Retrieving data from the server...</MudText>
+            <MudText Typo="Typo.body1">Memuat data dari server...</MudText>
         }
         else
         {
