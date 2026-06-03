@@ -1,3 +1,4 @@
+@using Microsoft.JSInterop
 @using MudBlazor
 @using Smlp.Client.Services.BackEnd.Transactions
 @using Microsoft.AspNetCore.Authorization
@@ -8,5 +9,6 @@
 
 @inject NavigationManager _navigationManager
 @inject ISnackbar _snackbar
+@inject IJSRuntime _js
 
 @inject AnalyticsService _analyticsService

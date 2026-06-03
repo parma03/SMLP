@@ -96,7 +96,7 @@
             <MudText Typo="Typo.subtitle1" Class="mb-3" Style="color:#6F4E37; font-weight:700;">
                 🍩 Distribusi Segmen Pelanggan
             </MudText>
-            @if (_insights?.RfmSegments?.Any(s => s.Count > 0) == true && !_isLoading)
+            @if (_insights?.RfmSegments?.Any(s => s.Count > 0) == true && _dataLoaded && !_isLoading)
             {
                 <MudChart ChartType="ChartType.Donut"
                           InputData="@DonutData"
@@ -105,7 +105,7 @@
                           Width="100%"
                           Height="280px" />
             }
-            else if (_isLoading)
+            else if (_isLoading || !_dataLoaded)
             {
                 <MudSkeleton SkeletonType="SkeletonType.Rectangle" Height="280px" />
             }
@@ -279,9 +279,9 @@
                 @{
                     var score = ComputeChurnScore(context);
                     var riskLevel = score >= 75 ? ("Sangat Tinggi", Color.Error, "#C62828") :
-                                   score >= 55 ? ("Tinggi", Color.Warning, "#E65100") :
-                                   score >= 35 ? ("Sedang", Color.Warning, "#F57F17") :
-                                                 ("Rendah", Color.Success, "#2E7D32");
+                    score >= 55 ? ("Tinggi", Color.Warning, "#E65100") :
+                    score >= 35 ? ("Sedang", Color.Warning, "#F57F17") :
+                    ("Rendah", Color.Success, "#2E7D32");
                 }
                 <MudTd>
                     <div>

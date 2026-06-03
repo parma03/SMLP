@@ -20,6 +20,7 @@ public partial class Index
     private List<BreadcrumbItem> _breadcrumbItems = new();
     private string _selectedPeriod = "30d";
     private bool _isLoading = false;
+    private bool _dataLoaded = false;
     private DateTime? _customDateFrom = null;
     private DateTime? _customDateTo = null;
 
@@ -88,6 +89,7 @@ public partial class Index
         finally
         {
             _isLoading = false;
+            _dataLoaded = true;
         }
     }
 
@@ -108,6 +110,7 @@ public partial class Index
         {
             return (_customDateFrom.Value.Year, _customDateFrom.Value.Month);
         }
+
         return _selectedPeriod switch
         {
             "7d" => (DateTime.Today.Year, DateTime.Today.Month),
@@ -122,7 +125,8 @@ public partial class Index
 
     private async Task ExportAnalyticsAsync(string type)
     {
-        if (_isExporting) return;
+        if (_isExporting)
+            return;
         _isExporting = true;
         try
         {

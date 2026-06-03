@@ -12,14 +12,13 @@ namespace Smlp.Bsui.Features.CustomerInsights;
 
 public partial class Index
 {
-    [Inject] private IJSRuntime _js { get; set; } = default!;
-
     [CascadingParameter]
     protected Task<AuthenticationState> AuthenticationStateTask { get; set; } = default!;
     protected ClaimsPrincipal _user = default!;
     private List<BreadcrumbItem> _breadcrumbItems = new();
     private bool _isLoading = false;
     private bool _isExporting = false;
+    private bool _dataLoaded = false;
 
     private GetCustomerInsightsResponse? _insights;
 
@@ -57,6 +56,7 @@ public partial class Index
         finally
         {
             _isLoading = false;
+            _dataLoaded = true;
         }
     }
 
@@ -87,7 +87,8 @@ public partial class Index
     // ---- Export Segmen ke Excel ----
     private async Task ExportSegmentAsync()
     {
-        if (_insights is null) return;
+        if (_insights is null)
+            return;
         _isExporting = true;
         try
         {
@@ -108,7 +109,7 @@ public partial class Index
             headerRow.Style.Font.FontColor = XLColor.White;
 
             var total = TotalSegmented;
-            for (int i = 0; i < _insights.RfmSegments.Count; i++)
+            for (var i = 0; i < _insights.RfmSegments.Count; i++)
             {
                 var seg = _insights.RfmSegments[i];
                 var row = i + 2;
@@ -138,7 +139,7 @@ public partial class Index
                 ("Tanggal Export", DateTime.Now.ToString("dd/MM/yyyy HH:mm")),
             };
 
-            for (int i = 0; i < summaryData.Length; i++)
+            for (var i = 0; i < summaryData.Length; i++)
             {
                 wsSummary.Cell(i + 2, 1).Value = summaryData[i].Item1;
                 wsSummary.Cell(i + 2, 2).Value = summaryData[i].Item2;
@@ -181,28 +182,28 @@ public partial class Index
         score += item.DaysSinceLastPurchase switch
         {
             >= 120 => 50,
-            >= 90  => 40,
-            >= 60  => 28,
-            _      => 15
+            >= 90 => 40,
+            >= 60 => 28,
+            _ => 15
         };
 
         // Low loyalty points = weaker retention bond (max 30 pts)
         score += item.TotalPoints switch
         {
-            0      => 30,
+            0 => 30,
             <= 100 => 20,
             <= 500 => 10,
-            _      => 0
+            _ => 0
         };
 
         // Lower tier = less retention incentive (max 20 pts)
         score += item.Tier?.ToLower() switch
         {
-            "bronze"   => 20,
-            "silver"   => 10,
-            "gold"     => 5,
+            "bronze" => 20,
+            "silver" => 10,
+            "gold" => 5,
             "platinum" => 0,
-            _          => 15
+            _ => 15
         };
 
         return Math.Min(score, 100);

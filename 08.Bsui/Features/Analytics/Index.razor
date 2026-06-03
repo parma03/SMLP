@@ -112,7 +112,7 @@
             <MudText Typo="Typo.subtitle1" Class="mb-3" Style="color:#6F4E37; font-weight:700;">
                 📈 Tren Revenue Harian
             </MudText>
-            @if (_revenueChart?.DataPoints?.Any() == true)
+            @if (_revenueChart?.DataPoints?.Any() == true && _dataLoaded)
             {
                 <MudTable Dense="true" Hover="true" Elevation="0" Items="@_revenueChart.DataPoints">
                     <HeaderContent>
@@ -134,6 +134,10 @@
                         <MudTablePager PageSizeOptions="new int[]{7, 14, 30}" />
                     </PagerContent>
                 </MudTable>
+            }
+            else if (_isLoading || !_dataLoaded)
+            {
+                <MudSkeleton SkeletonType="SkeletonType.Rectangle" Height="220px" />
             }
             else
             {
