@@ -11,8 +11,11 @@ using Smlp.Shared.Localization;
 using Smlp.Shared.Common.Constants;
 using Smlp.WebApi.Common.Filters.ApiException;
 using Smlp.WebApi.Common.ModelBindings;
+using Smlp.WebApi.Hubs;
 using Smlp.WebApi.Services;
 using Smlp.WebApi.Services.Documentation;
+using Smlp.Application.Services.PushNotification;
+using Smlp.WebApi.Services.PushNotification;
 
 Console.WriteLine($"Starting {CommonValueFor.EntryAssemblySimpleName}...");
 
@@ -25,6 +28,10 @@ builder.Services.AddWebApi(builder.Configuration);
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddApiVersioning();
 builder.Services.AddFluentValidationAutoValidation();
+
+// SignalR untuk Push Notification
+builder.Services.AddSignalR();
+builder.Services.AddScoped<Smlp.Application.Services.PushNotification.IPushNotificationService, SignalRPushNotificationService>();
 
 // JWT Authentication
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection(JwtOptions.SectionKey));
@@ -89,6 +96,7 @@ if (!app.Environment.IsProduction())
 
 app.UseBackEndService(builder.Configuration);
 app.UseCors("SmlpCors");
+app.UseWebSockets(); // diperlukan untuk SignalR WebSocket transport
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
@@ -98,4 +106,5 @@ app.UseAuditAction(); // Audit action tracking middleware
 app.UseInfrastructure(builder.Configuration);
 app.UseDocumentationService(builder.Configuration);
 app.MapControllers();
+app.MapHub<NotificationHub>("/hubs/notification");
 app.Run();
