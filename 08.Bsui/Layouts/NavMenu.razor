@@ -51,11 +51,16 @@
                                     Href="@CommonRouteFor.TransactionCreate">
                             Input Transaksi
                         </MudNavLink>
-                        <MudNavLink Icon="@Icons.Material.Filled.Tune"
-                                    Match="NavLinkMatch.All"
-                                    Href="@CommonRouteFor.PointAdjustments">
-                            Penyesuaian Poin
-                        </MudNavLink>
+                        @* Penyesuaian Poin hanya untuk Admin dan Owner *@
+                        <AuthorizeView Roles="Admin,Owner">
+                            <Authorized>
+                                <MudNavLink Icon="@Icons.Material.Filled.Tune"
+                                            Match="NavLinkMatch.All"
+                                            Href="@CommonRouteFor.PointAdjustments">
+                                    Penyesuaian Poin
+                                </MudNavLink>
+                            </Authorized>
+                        </AuthorizeView>
                     </MudNavGroup>
                 </Authorized>
             </AuthorizeView>
@@ -173,6 +178,11 @@
                                 Match="NavLinkMatch.All"
                                 Href="@CommonRouteFor.Audits">
                         Audit Log
+                    </MudNavLink>
+                    <MudNavLink Icon="@Icons.Material.Filled.Schedule"
+                                Match="NavLinkMatch.All"
+                                Href="/Scheduler">
+                        Scheduler
                     </MudNavLink>
                 </Authorized>
             </AuthorizeView>

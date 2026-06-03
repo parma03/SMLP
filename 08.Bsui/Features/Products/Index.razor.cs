@@ -1,5 +1,6 @@
 using Microsoft.JSInterop;
 using MudBlazor;
+using Smlp.Bsui.Common.Components;
 using Smlp.Bsui.Common.Extensions;
 using Smlp.Shared.Master.Products.Queries;
 
@@ -61,14 +62,16 @@ public partial class Index
 
     private async Task OnDeleteAsync(GetProductResponse product)
     {
-        var confirmed = await _dialogService.ShowMessageBox(
-            "Konfirmasi Hapus",
-            $"Hapus produk \"{product.Name}\"? Tindakan ini tidak bisa dibatalkan.",
-            yesText: "Hapus",
-            noText: "Batal");
-
-        if (confirmed != true)
-            return;
+        var parameters = new DialogParameters
+        {
+            [nameof(ConfirmDialog.Title)] = "Hapus Produk",
+            [nameof(ConfirmDialog.Message)] = $"Hapus produk \"{product.Name}\"? Tindakan ini tidak bisa dibatalkan.",
+            [nameof(ConfirmDialog.Icon)] = Icons.Material.Filled.Delete,
+            [nameof(ConfirmDialog.ConfirmText)] = "Ya, Hapus",
+        };
+        var dialog = await _dialogService.ShowAsync<ConfirmDialog>("Hapus Produk", parameters);
+        var dialogResult = await dialog.Result;
+        if (dialogResult is null || dialogResult.Canceled) return;
 
         var result = await _productService.DeleteProductAsync(product.Id);
         if (result.Error is not null)

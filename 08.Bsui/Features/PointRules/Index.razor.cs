@@ -1,3 +1,5 @@
+using MudBlazor;
+using Smlp.Bsui.Common.Components;
 using Smlp.Bsui.Common.Extensions;
 using Smlp.Shared.Master.PointRules.Commands.Create;
 using Smlp.Shared.Master.PointRules.Commands.Update;
@@ -7,6 +9,8 @@ namespace Smlp.Bsui.Features.PointRules;
 
 public partial class Index
 {
+    [Inject] private IDialogService _dialogService { get; set; } = default!;
+
     private bool _loading = false;
     private bool _showForm = false;
     private bool _isSaving = false;
@@ -148,6 +152,17 @@ public partial class Index
 
     private async Task DeleteAsync(GetPointRuleResponse rule)
     {
+        var parameters = new DialogParameters
+        {
+            [nameof(ConfirmDialog.Title)] = "Hapus Aturan Poin",
+            [nameof(ConfirmDialog.Message)] = $"Yakin ingin menghapus aturan '{rule.Name}'? Aksi ini tidak bisa dibatalkan.",
+            [nameof(ConfirmDialog.Icon)] = Icons.Material.Filled.Delete,
+            [nameof(ConfirmDialog.ConfirmText)] = "Ya, Hapus",
+        };
+        var dialog = await _dialogService.ShowAsync<ConfirmDialog>("Hapus Aturan Poin", parameters);
+        var dialogResult = await dialog.Result;
+        if (dialogResult is null || dialogResult.Canceled) return;
+
         var result = await _pointRuleService.DeletePointRuleAsync(rule.Id);
         if (result.Error is not null)
         {

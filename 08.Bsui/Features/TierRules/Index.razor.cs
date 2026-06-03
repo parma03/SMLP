@@ -1,4 +1,6 @@
+using MudBlazor;
 using Smlp.Base.Customer.Enums;
+using Smlp.Bsui.Common.Components;
 using Smlp.Bsui.Common.Extensions;
 using Smlp.Shared.Master.TierRules.Commands.Create;
 using Smlp.Shared.Master.TierRules.Commands.Update;
@@ -8,6 +10,8 @@ namespace Smlp.Bsui.Features.TierRules;
 
 public partial class Index
 {
+    [Inject] private IDialogService _dialogService { get; set; } = default!;
+
     private bool _loading = false;
     private bool _showForm = false;
     private bool _isSaving = false;
@@ -136,6 +140,17 @@ public partial class Index
 
     private async Task DeleteAsync(GetTierRuleResponse rule)
     {
+        var parameters = new DialogParameters
+        {
+            [nameof(ConfirmDialog.Title)] = "Hapus Aturan Tier",
+            [nameof(ConfirmDialog.Message)] = $"Yakin ingin menghapus aturan tier '{rule.Name}'? Aksi ini tidak bisa dibatalkan.",
+            [nameof(ConfirmDialog.Icon)] = Icons.Material.Filled.Delete,
+            [nameof(ConfirmDialog.ConfirmText)] = "Ya, Hapus",
+        };
+        var dialog = await _dialogService.ShowAsync<ConfirmDialog>("Hapus Aturan Tier", parameters);
+        var dialogResult = await dialog.Result;
+        if (dialogResult is null || dialogResult.Canceled) return;
+
         var result = await _tierRuleService.DeleteTierRuleAsync(rule.Id);
         if (result.Error is not null)
         {

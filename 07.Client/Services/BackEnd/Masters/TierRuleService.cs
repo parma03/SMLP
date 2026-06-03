@@ -28,13 +28,15 @@ public class TierRuleService : IDisposable
     {
         var restRequest = new RestRequest(string.Empty, Method.Get);
         restRequest.AddQueryParameters(request);
-        return (await _restClient.ExecuteAsync(restRequest)).ToResponseResultWithRedirect<PaginatedListResponse<GetTierRuleResponse>>(_navigationManager);
+        // GET: gunakan retry otomatis (idempotent)
+        return await _restClient.ExecuteWithRetryAndRedirectAsync<PaginatedListResponse<GetTierRuleResponse>>(restRequest, _navigationManager);
     }
 
     public async Task<ResponseResult<GetTierRuleResponse>> GetTierRuleByIdAsync(Guid id)
     {
         var restRequest = new RestRequest(id.ToString(), Method.Get);
-        return (await _restClient.ExecuteAsync(restRequest)).ToResponseResultWithRedirect<GetTierRuleResponse>(_navigationManager);
+        // GET: gunakan retry otomatis (idempotent)
+        return await _restClient.ExecuteWithRetryAndRedirectAsync<GetTierRuleResponse>(restRequest, _navigationManager);
     }
 
     public async Task<ResponseResult<CommonCreateResponse>> CreateTierRuleAsync(CreateTierRuleRequest request)
