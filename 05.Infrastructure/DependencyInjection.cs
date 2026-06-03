@@ -25,6 +25,7 @@ using Smlp.Application.Services.WhatsApp;
 using Smlp.Application.Services.WhatsApp.Models;
 using Smlp.Infrastructure.Notifications.Email;
 using Smlp.Infrastructure.Notifications.WhatsApp;
+using Smlp.Infrastructure.Image;
 
 namespace Smlp.Infrastructure;
 
@@ -38,6 +39,7 @@ public static class DependencyInjection
         services.AddDomainEventService();
         services.AddOtpService();
         services.AddStorage(configuration);
+        services.AddImageCompressionService();
 
         // Register a stub IAuthorizationService (uses JWT roles, no external auth server)
         services.AddScoped<IAuthorizationService, LocalAuthorizationService>();
