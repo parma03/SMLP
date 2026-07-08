@@ -21,6 +21,7 @@ public class GetRedeemHistoryByListQueryHandler : IRequestHandler<GetRedeemHisto
     {
         var req = request.Request;
         var query = _context.RedeemHistories
+            .AsNoTracking()
             .Include(r => r.Customer)
             .Include(r => r.Reward)
             .Where(r => !r.IsDeleted);

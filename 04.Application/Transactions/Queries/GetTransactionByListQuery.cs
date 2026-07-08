@@ -21,6 +21,7 @@ public class GetTransactionByListQueryHandler : IRequestHandler<GetTransactionBy
     {
         var req = request.Request;
         var query = _context.Transactions
+            .AsNoTracking()
             .Include(t => t.Customer)
             .Include(t => t.Items)
             .Where(t => !t.IsDeleted);

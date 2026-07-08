@@ -26,6 +26,7 @@ public static class TableNameFor
     // Transaction
     public static readonly string Transaction = nameof(Transaction);
     public static readonly string TransactionItem = nameof(TransactionItem);
+    public static readonly string TransactionPayment = nameof(TransactionPayment);
     public static readonly string RedeemHistory = nameof(RedeemHistory);
     public static readonly string PointAdjustment = nameof(PointAdjustment);
 }

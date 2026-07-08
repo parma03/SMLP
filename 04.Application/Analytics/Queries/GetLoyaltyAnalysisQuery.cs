@@ -18,18 +18,22 @@ public class GetLoyaltyAnalysisQueryHandler : IRequestHandler<GetLoyaltyAnalysis
     {
         // Point economy
         var totalPointsIssued = await _context.Transactions
+            .AsNoTracking()
             .Where(t => !t.IsDeleted && t.Status == TransactionStatus.Completed)
             .SumAsync(t => (long?)(t.PointsEarned + t.BonusPoints), cancellationToken) ?? 0;
 
         var totalPointsRedeemed = await _context.RedeemHistories
+            .AsNoTracking()
             .Where(r => !r.IsDeleted && r.Status == RedeemStatus.Completed)
             .SumAsync(r => (long?)r.PointsUsed, cancellationToken) ?? 0;
 
         var totalPointsManualAdded = await _context.PointAdjustments
+            .AsNoTracking()
             .Where(a => !a.IsDeleted && a.Points > 0)
             .SumAsync(a => (long?)a.Points, cancellationToken) ?? 0;
 
         var totalPointsManualDeducted = await _context.PointAdjustments
+            .AsNoTracking()
             .Where(a => !a.IsDeleted && a.Points < 0)
             .SumAsync(a => (long?)-a.Points, cancellationToken) ?? 0;
 
@@ -40,6 +44,7 @@ public class GetLoyaltyAnalysisQueryHandler : IRequestHandler<GetLoyaltyAnalysis
 
         // Reward performance
         var rewardPerformance = await _context.RedeemHistories
+            .AsNoTracking()
             .Where(r => !r.IsDeleted)
             .GroupBy(r => new { r.RewardId, r.RewardNameSnapshot })
             .Select(g => new RewardPerformanceItem
@@ -56,6 +61,7 @@ public class GetLoyaltyAnalysisQueryHandler : IRequestHandler<GetLoyaltyAnalysis
         // Redemption trend — last 6 months
         var sixMonthsAgo = DateTimeOffset.UtcNow.AddMonths(-6);
         var redeemsByMonth = await _context.RedeemHistories
+            .AsNoTracking()
             .Where(r => !r.IsDeleted && r.Status == RedeemStatus.Completed && r.RedeemDate >= sixMonthsAgo)
             .GroupBy(r => new { r.RedeemDate.Year, r.RedeemDate.Month })
             .Select(g => new RedemptionTrendItem
@@ -69,6 +75,7 @@ public class GetLoyaltyAnalysisQueryHandler : IRequestHandler<GetLoyaltyAnalysis
 
         // Tier movement (monthly snapshot from customer current tiers grouped by month joined)
         var tierMovements = await _context.Customers
+            .AsNoTracking()
             .Where(c => !c.IsDeleted && c.CreatedAt >= sixMonthsAgo)
             .GroupBy(c => new { c.CreatedAt.Year, c.CreatedAt.Month, c.Tier })
             .Select(g => new { g.Key.Year, g.Key.Month, g.Key.Tier, Count = g.Count() })
@@ -88,8 +95,8 @@ public class GetLoyaltyAnalysisQueryHandler : IRequestHandler<GetLoyaltyAnalysis
             .ToList();
 
         // Manual adjustments summary
-        var manualAddCount = await _context.PointAdjustments.CountAsync(a => !a.IsDeleted && a.Points > 0, cancellationToken);
-        var manualDeductCount = await _context.PointAdjustments.CountAsync(a => !a.IsDeleted && a.Points < 0, cancellationToken);
+        var manualAddCount = await _context.PointAdjustments.AsNoTracking().CountAsync(a => !a.IsDeleted && a.Points > 0, cancellationToken);
+        var manualDeductCount = await _context.PointAdjustments.AsNoTracking().CountAsync(a => !a.IsDeleted && a.Points < 0, cancellationToken);
 
         return new GetLoyaltyAnalysisResponse
         {

@@ -1,6 +1,7 @@
 using MudBlazor;
 using Smlp.Base.Transaction.Enums;
 using Smlp.Bsui.Common.Extensions;
+using Smlp.Shared.Transaction.LoyaltyHistories.Queries;
 using Smlp.Shared.Transaction.PointAdjustments.Queries;
 using Smlp.Shared.Transaction.RedeemHistories.Queries;
 using Smlp.Shared.Transaction.Transactions.Queries;
@@ -184,16 +185,4 @@ public partial class Index
         RedeemStatus.Rejected => "Ditolak",
         _ => status.ToString()
     };
-}
-
-public class LoyaltyActivityItem
-{
-    public DateTimeOffset Date { get; set; }
-    public string CustomerName { get; set; } = string.Empty;
-    public string CustomerMemberCode { get; set; } = string.Empty;
-    public string ActivityType { get; set; } = string.Empty;
-    public string Description { get; set; } = string.Empty;
-    public string? Reference { get; set; }
-    public int Points { get; set; }
-    public string? Status { get; set; }
 }

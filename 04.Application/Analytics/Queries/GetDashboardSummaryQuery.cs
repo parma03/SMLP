@@ -1,4 +1,4 @@
-using MediatR;
+﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Smlp.Application.Services.Persistence;
@@ -50,18 +50,21 @@ public class GetDashboardSummaryQueryHandler : IRequestHandler<GetDashboardSumma
         var startOfLastMonth = startOfMonth.AddMonths(-1);
         var today = now.Date;
 
-        var totalCustomers = await _context.Customers.CountAsync(c => !c.IsDeleted, cancellationToken);
-        var newThisMonth = await _context.Customers.CountAsync(c => !c.IsDeleted && c.CreatedAt >= startOfMonth, cancellationToken);
+        var totalCustomers = await _context.Customers.AsNoTracking().CountAsync(c => !c.IsDeleted, cancellationToken);
+        var newThisMonth = await _context.Customers.AsNoTracking().CountAsync(c => !c.IsDeleted && c.CreatedAt >= startOfMonth, cancellationToken);
 
         var cutoffActive = now.AddDays(-30);
         var activeCustomers = await _context.Customers
+            .AsNoTracking()
             .CountAsync(c => !c.IsDeleted && c.LastTransactionDate >= cutoffActive, cancellationToken);
 
         var revenueThisMonth = await _context.Transactions
+            .AsNoTracking()
             .Where(t => !t.IsDeleted && t.Status == TransactionStatus.Completed && t.TransactionDate >= startOfMonth)
             .SumAsync(t => (decimal?)t.TotalAmount, cancellationToken) ?? 0;
 
         var revenueLastMonth = await _context.Transactions
+            .AsNoTracking()
             .Where(t => !t.IsDeleted && t.Status == TransactionStatus.Completed
                      && t.TransactionDate >= startOfLastMonth && t.TransactionDate < startOfMonth)
             .SumAsync(t => (decimal?)t.TotalAmount, cancellationToken) ?? 0;
@@ -71,29 +74,36 @@ public class GetDashboardSummaryQueryHandler : IRequestHandler<GetDashboardSumma
             : 0;
 
         var txToday = await _context.Transactions
+            .AsNoTracking()
             .CountAsync(t => !t.IsDeleted && t.TransactionDate.Date == today, cancellationToken);
 
         var txThisMonth = await _context.Transactions
+            .AsNoTracking()
             .CountAsync(t => !t.IsDeleted && t.TransactionDate >= startOfMonth, cancellationToken);
 
         var totalPointsCirculating = await _context.Customers
+            .AsNoTracking()
             .Where(c => !c.IsDeleted)
             .SumAsync(c => (int?)c.TotalPoints, cancellationToken) ?? 0;
 
         var totalPointsRedeemed = await _context.RedeemHistories
+            .AsNoTracking()
             .Where(r => !r.IsDeleted && r.Status == RedeemStatus.Completed)
             .SumAsync(r => (int?)r.PointsUsed, cancellationToken) ?? 0;
 
         var pendingRedeems = await _context.RedeemHistories
+            .AsNoTracking()
             .CountAsync(r => !r.IsDeleted && r.Status == RedeemStatus.Pending, cancellationToken);
 
         var tierCounts = await _context.Customers
+            .AsNoTracking()
             .Where(c => !c.IsDeleted)
             .GroupBy(c => c.Tier)
             .Select(g => new { Tier = g.Key, Count = g.Count() })
             .ToListAsync(cancellationToken);
 
         var topRewards = await _context.RedeemHistories
+            .AsNoTracking()
             .Where(r => !r.IsDeleted && r.Status == RedeemStatus.Completed)
             .GroupBy(r => new { r.RewardId, r.RewardNameSnapshot, r.PointCostSnapshot })
             .Select(g => new TopRewardItem

@@ -23,6 +23,7 @@ public class GetRevenueChartQueryHandler : IRequestHandler<GetRevenueChartQuery,
         var year = req.Year;
 
         var baseQuery = _context.Transactions
+            .AsNoTracking()
             .Where(t => !t.IsDeleted && t.Status == TransactionStatus.Completed && t.TransactionDate.Year == year);
 
         // Monthly revenue

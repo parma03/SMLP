@@ -1,4 +1,4 @@
-using MediatR;
+﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Smlp.Application.Services.Persistence;
 using Smlp.Shared.Analytics.Queries.GetCustomerInsights;
@@ -20,6 +20,7 @@ public class GetCustomerInsightsQueryHandler : IRequestHandler<GetCustomerInsigh
 
         // Load customers with transaction counts
         var customers = await _context.Customers
+            .AsNoTracking()
             .Where(c => !c.IsDeleted)
             .Select(c => new
             {
@@ -172,8 +173,9 @@ public class GetCustomerInsightsQueryHandler : IRequestHandler<GetCustomerInsigh
         var avgPoints = customers.Any() ? customers.Average(c => (double)c.TotalPoints) : 0;
 
         // Total transactions for retention calc
-        var totalTx = await _context.Transactions.CountAsync(t => !t.IsDeleted, cancellationToken);
+        var totalTx = await _context.Transactions.AsNoTracking().CountAsync(t => !t.IsDeleted, cancellationToken);
         var repeatTx = await _context.Transactions
+            .AsNoTracking()
             .Where(t => !t.IsDeleted)
             .GroupBy(t => t.CustomerId)
             .CountAsync(g => g.Count() > 1, cancellationToken);
@@ -182,6 +184,7 @@ public class GetCustomerInsightsQueryHandler : IRequestHandler<GetCustomerInsigh
 
         // Top spenders dengan Rank
         var topSpendersRaw = await _context.Customers
+            .AsNoTracking()
             .Where(c => !c.IsDeleted && c.TotalSpend > 0)
             .OrderByDescending(c => c.TotalSpend)
             .Take(10)
