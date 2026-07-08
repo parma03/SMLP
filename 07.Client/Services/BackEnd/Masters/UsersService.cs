@@ -18,11 +18,12 @@ namespace Smlp.Client.Services.BackEnd.Masters;
 public class UsersService : IDisposable
 {
     private readonly RestClient _restClient = default!;
-    private readonly NavigationManager _navigationManager;
+    private readonly NavigationManager _navigationManager = default!;
 
     public UsersService(IOptions<BackEndOptions> backEndServiceOptions, UserInfoService userInfo, NavigationManager navigationManager)
     {
-        if (backEndServiceOptions is null) return;
+        if (backEndServiceOptions is null)
+            return;
 
         var options = new RestClientOptions(new Uri($"{backEndServiceOptions!.Value.BaseUrl}/V1/Users"))
         {
@@ -85,6 +86,7 @@ public class UsersService : IDisposable
         {
             restRequest.AddBody(request);
         }
+
         var restResponse = await _restClient.ExecuteAsync(restRequest);
         return restResponse.ToResponseResultWithRedirect<CommonUpdateResponse>(_navigationManager);
     }

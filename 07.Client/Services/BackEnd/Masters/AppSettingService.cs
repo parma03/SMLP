@@ -17,7 +17,7 @@ namespace Smlp.Client.Services.BackEnd.Masters;
 public class AppSettingService : IDisposable
 {
     private readonly RestClient _restClient = default!;
-    private readonly NavigationManager _navigationManager;
+    private readonly NavigationManager _navigationManager = default!;
 
     public AppSettingService(IOptions<BackEndOptions> backEndServiceOptions, UserInfoService userInfo, NavigationManager navigationManager)
     {

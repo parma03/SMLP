@@ -30,9 +30,9 @@ public class AuditRepository : IAuditRepository
     {
         var query = _context.Audits.AsQueryable();
 
-        if (!string.IsNullOrWhiteSpace(request.Search))
+        if (!string.IsNullOrWhiteSpace(request.SearchText))
         {
-            var search = request.Search.Trim();
+            var search = request.SearchText.Trim();
             query = query.Where(a =>
                 a.EntityName.Contains(search) ||
                 a.ActionType.Contains(search) ||
@@ -51,7 +51,7 @@ public class AuditRepository : IAuditRepository
 
         var items = await query
             .OrderByDescending(a => a.CreatedAt)
-            .Skip((request.PageNumber - 1) * request.PageSize)
+            .Skip((request.Page - 1) * request.PageSize)
             .Take(request.PageSize)
             .Select(a => new GetAuditsAudit
             {
