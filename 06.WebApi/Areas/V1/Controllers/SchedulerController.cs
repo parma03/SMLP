@@ -37,7 +37,7 @@ public class SchedulerController : ApiControllerBase
         {
             Id = j.Id,
             CronExpression = j.Cron,
-            TimeZoneId = j.TimeZone?.Id ?? "UTC",
+            TimeZoneId = j.TimeZoneId ?? "UTC",
             NextExecution = j.NextExecution.HasValue
                 ? new DateTimeOffset(j.NextExecution.Value, TimeSpan.Zero)
                 : null,

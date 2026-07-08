@@ -31,7 +31,7 @@ public class AuthController : ApiControllerBase
     {
         try
         {
-            var result = await _mediator.Send(new LoginCommand(request.Username, request.Password));
+            var result = await _mediator.Send(new LoginCommand { Username = request.Username, Password = request.Password });
             return Ok(result);
         }
         catch (UnauthorizedAccessException ex)

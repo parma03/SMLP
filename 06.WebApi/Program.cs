@@ -1,21 +1,24 @@
 using System.Text.Json.Serialization;
-using Smlp.WebApi.Common.Middleware;
 using FluentValidation.AspNetCore;
 using Smlp.Application;
+using Smlp.Application.Services.PushNotification;
 using Smlp.Infrastructure;
-using Smlp.Infrastructure.Logging;
 using Smlp.Infrastructure.Authentication;
 using Smlp.Infrastructure.Authentication.Jwt;
+using Smlp.Infrastructure.BackgroundJob.Hangfire;
+using Smlp.Infrastructure.Logging;
 using Smlp.Infrastructure.Monitoring;
+using Smlp.Infrastructure.Persistence;
 using Smlp.Shared;
-using Smlp.Shared.Localization;
 using Smlp.Shared.Common.Constants;
+using Smlp.Shared.Localization;
 using Smlp.WebApi.Common.Filters.ApiException;
+using Smlp.WebApi.Common.Middleware;
 using Smlp.WebApi.Common.ModelBindings;
 using Smlp.WebApi.Hubs;
 using Smlp.WebApi.Services;
+using Smlp.WebApi.Services.BackEnd;
 using Smlp.WebApi.Services.Documentation;
-using Smlp.Application.Services.PushNotification;
 using Smlp.WebApi.Services.PushNotification;
 
 Console.WriteLine($"Starting {CommonValueFor.EntryAssemblySimpleName}...");
@@ -32,7 +35,7 @@ builder.Services.AddFluentValidationAutoValidation();
 
 // SignalR untuk Push Notification
 builder.Services.AddSignalR();
-builder.Services.AddScoped<Smlp.Application.Services.PushNotification.IPushNotificationService, SignalRPushNotificationService>();
+builder.Services.AddScoped<IPushNotificationService, SignalRPushNotificationService>();
 
 // JWT Authentication
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection(JwtOptions.SectionKey));
@@ -41,12 +44,12 @@ builder.Services.AddJwtAuthentication(builder.Configuration);
 // Authorization Policies
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("AdminOnly",       policy => policy.RequireRole("Admin"));
-    options.AddPolicy("OwnerOnly",       policy => policy.RequireRole("Owner"));
-    options.AddPolicy("KasirOnly",       policy => policy.RequireRole("Kasir"));
-    options.AddPolicy("AdminOrOwner",    policy => policy.RequireRole("Admin", "Owner"));
-    options.AddPolicy("AdminOrKasir",    policy => policy.RequireRole("Admin", "Kasir"));
-    options.AddPolicy("AllRoles",        policy => policy.RequireRole("Admin", "Owner", "Kasir"));
+    options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
+    options.AddPolicy("OwnerOnly", policy => policy.RequireRole("Owner"));
+    options.AddPolicy("KasirOnly", policy => policy.RequireRole("Kasir"));
+    options.AddPolicy("AdminOrOwner", policy => policy.RequireRole("Admin", "Owner"));
+    options.AddPolicy("AdminOrKasir", policy => policy.RequireRole("Admin", "Kasir"));
+    options.AddPolicy("AllRoles", policy => policy.RequireRole("Admin", "Owner", "Kasir"));
 });
 
 builder.Services.AddControllers(options =>
