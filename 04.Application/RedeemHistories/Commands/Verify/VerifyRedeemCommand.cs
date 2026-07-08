@@ -1,7 +1,9 @@
 using FluentValidation.Results;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Smlp.Application.Common.Caching;
 using Smlp.Application.Common.Exceptions;
+using Smlp.Application.Services.Caching;
 using Smlp.Application.Services.CurrentUser;
 using Smlp.Application.Services.Persistence;
 using Smlp.Base.Transaction.Enums;
@@ -20,11 +22,13 @@ public class VerifyRedeemCommandHandler : IRequestHandler<VerifyRedeemCommand, C
 {
     private readonly ISmlpDbContext _context;
     private readonly ICurrentUserService _currentUser;
+    private readonly ICacheService _cache;
 
-    public VerifyRedeemCommandHandler(ISmlpDbContext context, ICurrentUserService currentUser)
+    public VerifyRedeemCommandHandler(ISmlpDbContext context, ICurrentUserService currentUser, ICacheService cache)
     {
         _context = context;
         _currentUser = currentUser;
+        _cache = cache;
     }
 
     public async Task<CommonUpdateResponse> Handle(VerifyRedeemCommand request, CancellationToken cancellationToken)
@@ -69,6 +73,9 @@ public class VerifyRedeemCommandHandler : IRequestHandler<VerifyRedeemCommand, C
         redeem.Notes = req.Notes ?? redeem.Notes;
 
         await _context.SaveChangesAsync(this, cancellationToken);
+
+        // Verifikasi redeem mengubah status pending & (bila ditolak) poin yang dikembalikan ke customer
+        await _cache.RemoveAsync(CacheKeys.DashboardSummary, cancellationToken);
 
         return new CommonUpdateResponse { Id = redeem.Id };
     }

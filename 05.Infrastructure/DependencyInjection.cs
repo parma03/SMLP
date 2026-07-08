@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Smlp.Infrastructure.AppInfo;
 using Smlp.Infrastructure.BackgroundJob;
 using Smlp.Infrastructure.BackgroundJob.Jobs;
+using Smlp.Infrastructure.Caching;
 using Smlp.Infrastructure.HealthCheck;
 using Smlp.Infrastructure.Persistence;
 using Smlp.Infrastructure.Storage;
@@ -53,6 +54,7 @@ public static class DependencyInjection
         var healthChecksBuilder = services.AddHealthCheckService(configuration);
         services.AddPersistenceService(configuration, healthChecksBuilder);
         services.AddBackgroundJobService(configuration, healthChecksBuilder);
+        services.AddCachingService(configuration, healthChecksBuilder);
 
         return services;
     }

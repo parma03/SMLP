@@ -1,7 +1,9 @@
 using FluentValidation.Results;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Smlp.Application.Common.Caching;
 using Smlp.Application.Common.Exceptions;
+using Smlp.Application.Services.Caching;
 using Smlp.Application.Services.Persistence;
 using Smlp.Base.Transaction.Enums;
 using Smlp.Domain.Entities.Transaction;
@@ -18,8 +20,13 @@ public class CreateRedeemCommand : IRequest<CommonCreateResponse>
 public class CreateRedeemCommandHandler : IRequestHandler<CreateRedeemCommand, CommonCreateResponse>
 {
     private readonly ISmlpDbContext _context;
+    private readonly ICacheService _cache;
 
-    public CreateRedeemCommandHandler(ISmlpDbContext context) => _context = context;
+    public CreateRedeemCommandHandler(ISmlpDbContext context, ICacheService cache)
+    {
+        _context = context;
+        _cache = cache;
+    }
 
     public async Task<CommonCreateResponse> Handle(CreateRedeemCommand request, CancellationToken cancellationToken)
     {
@@ -94,6 +101,9 @@ public class CreateRedeemCommandHandler : IRequestHandler<CreateRedeemCommand, C
         reward.RedeemedCount += 1;
 
         await _context.SaveChangesAsync(this, cancellationToken);
+
+        // Redeem baru mengubah jumlah pending redeem & poin beredar di dashboard
+        await _cache.RemoveAsync(CacheKeys.DashboardSummary, cancellationToken);
 
         return new CommonCreateResponse { Id = redeem.Id };
     }

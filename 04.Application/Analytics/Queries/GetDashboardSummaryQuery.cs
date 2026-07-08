@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
+using Smlp.Application.Common.Caching;
+using Smlp.Application.Services.Caching;
 using Smlp.Application.Services.Persistence;
 using Smlp.Base.Customer.Enums;
 using Smlp.Base.Transaction.Enums;
@@ -13,34 +14,26 @@ public class GetDashboardSummaryQuery : IRequest<GetDashboardSummaryResponse> { 
 public class GetDashboardSummaryQueryHandler : IRequestHandler<GetDashboardSummaryQuery, GetDashboardSummaryResponse>
 {
     private readonly ISmlpDbContext _context;
-    private readonly IMemoryCache _cache;
+    private readonly ICacheService _cache;
 
-    private const string CacheKey = "dashboard:summary";
     private static readonly TimeSpan CacheExpiry = TimeSpan.FromMinutes(5);
 
-    public GetDashboardSummaryQueryHandler(ISmlpDbContext context, IMemoryCache cache)
+    public GetDashboardSummaryQueryHandler(ISmlpDbContext context, ICacheService cache)
     {
         _context = context;
         _cache = cache;
     }
 
-    public async Task<GetDashboardSummaryResponse> Handle(GetDashboardSummaryQuery request, CancellationToken cancellationToken)
+    public Task<GetDashboardSummaryResponse> Handle(GetDashboardSummaryQuery request, CancellationToken cancellationToken)
     {
-        // Return cached result if available
-        if (_cache.TryGetValue(CacheKey, out GetDashboardSummaryResponse? cached) && cached is not null)
-            return cached;
-
-        var result = await FetchFromDatabaseAsync(cancellationToken);
-
-        var cacheOptions = new MemoryCacheEntryOptions
-        {
-            AbsoluteExpirationRelativeToNow = CacheExpiry,
-            SlidingExpiration = null,
-            Priority = CacheItemPriority.Normal
-        };
-        _cache.Set(CacheKey, result, cacheOptions);
-
-        return result;
+        // ICacheService bekerja sama persis baik provider-nya InMemory (default,
+        // dev/single-instance) maupun Redis (multi-instance/production) — hanya
+        // bergantung pada konfigurasi "Caching:Provider", tidak ada perubahan kode.
+        return _cache.GetOrCreateAsync(
+            CacheKeys.DashboardSummary,
+            FetchFromDatabaseAsync,
+            CacheExpiry,
+            cancellationToken);
     }
 
     private async Task<GetDashboardSummaryResponse> FetchFromDatabaseAsync(CancellationToken cancellationToken)

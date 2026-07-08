@@ -1,7 +1,9 @@
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Smlp.Application.Common.Caching;
 using Smlp.Application.Common.Exceptions;
+using Smlp.Application.Services.Caching;
 using Smlp.Application.Services.Persistence;
 using Smlp.Application.Services.Email;
 using Smlp.Application.Services.WhatsApp;
@@ -35,17 +37,20 @@ public class CreateTransactionCommandHandler : IRequestHandler<CreateTransaction
     private readonly IEmailService _emailService;
     private readonly IWhatsAppService _whatsAppService;
     private readonly IPushNotificationService _pushNotification;
+    private readonly ICacheService _cache;
 
     public CreateTransactionCommandHandler(
         ISmlpDbContext context,
         IEmailService emailService,
         IWhatsAppService whatsAppService,
-        IPushNotificationService pushNotification)
+        IPushNotificationService pushNotification,
+        ICacheService cache)
     {
         _context = context;
         _emailService = emailService;
         _whatsAppService = whatsAppService;
         _pushNotification = pushNotification;
+        _cache = cache;
     }
 
     public async Task<CommonCreateResponse> Handle(CreateTransactionCommand request, CancellationToken cancellationToken)
@@ -177,6 +182,9 @@ public class CreateTransactionCommandHandler : IRequestHandler<CreateTransaction
         customer.Tier = await DetermineNewTierAsync(customer.LifetimePoints, cancellationToken);
 
         await _context.SaveChangesAsync(this, cancellationToken);
+
+        // Transaksi baru mengubah angka-angka di dashboard (revenue, poin, jumlah transaksi) — invalidate cache-nya
+        await _cache.RemoveAsync(CacheKeys.DashboardSummary, cancellationToken);
 
         // Push notification real-time ke Admin & Kasir (fire-and-forget)
         _ = SendPushNotificationsAsync(customer.FullName, transaction.TransactionCode, grandTotal, pointsEarned);
