@@ -1,9 +1,10 @@
 ﻿@page "/Common/Pages/Errors/CannotReachAuthorizationProvider"
 
 @using Microsoft.Extensions.Configuration
+@using AppAuthorizationOptions = Smlp.Bsui.Services.Authorization.AuthorizationOptions
 
 @inject IConfiguration configuration
-@inject IOptions<Services.Authorization.AuthorizationOptions> _authorizationOptions
+@inject IOptions<AppAuthorizationOptions> _authorizationOptions
 
 <div class="d-flex justify-space-around mt-16">
     <div>

@@ -6,7 +6,7 @@ namespace Smlp.Bsui.Common.Components;
 public partial class DialogRefresh
 {
     [CascadingParameter]
-    private MudDialogInstance MudDialog { get; set; } = default!;
+    private IMudDialogInstance MudDialog { get; set; } = default!;
 
     private void Refresh()
     {

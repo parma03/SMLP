@@ -86,7 +86,7 @@ else
                             </MudText>
                         </MudTd>
                         <MudTd>
-                            <MudChip Size="Size.Small" Style="background:#E3F2FD; color:#1565C0; font-family:monospace;">
+                            <MudChip Size="Size.Small" Style="background:#E3F2FD; color:#1565C0; font-family:monospace;" T="string">
                                 @context.CronExpression
                             </MudChip>
                         </MudTd>
@@ -111,7 +111,7 @@ else
                             @{
                                 var (chipColor, chipText) = GetJobStateChip(context.LastJobState);
                             }
-                            <MudChip Size="Size.Small" Color="@chipColor">@chipText</MudChip>
+                            <MudChip Size="Size.Small" Color="@chipColor" T="string">@chipText</MudChip>
                             @if (!string.IsNullOrEmpty(context.Error))
                             {
                                 <MudTooltip Text="@context.Error">
@@ -253,7 +253,7 @@ else
                             @{
                                 var (c2, t2) = GetJobStateChip(context.State);
                             }
-                            <MudChip Size="Size.Small" Color="@c2">@t2</MudChip>
+                            <MudChip Size="Size.Small" Color="@c2" T="string">@t2</MudChip>
                         </MudTd>
                         <MudTd><MudText Typo="Typo.caption">@context.StartedAt.ToLocalTime().ToString("dd MMM HH:mm:ss")</MudText></MudTd>
                         <MudTd>

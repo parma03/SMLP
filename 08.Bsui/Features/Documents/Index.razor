@@ -51,8 +51,8 @@
             <MudHighlighter Text="@context.Created.ToLongDateTimeDisplayText()" HighlightedText="@_searchKeyword" />
         </MudTd>
         <MudTd>
-            <AuthorizeView Roles="Admin">
-                <Authorized>
+            <AuthorizeView Roles="Admin" Context="deleteAuthContext">
+                <Authorized Context="deleteAuthContext">
                     <MudButton Variant="Variant.Filled" Color="Color.Dark" StartIcon="@Icons.Material.Filled.Delete" Size="Size.Small" OnClick="@(() => ShowDialogDelete(context))">
                         @CommonDisplayTextFor.Delete
                     </MudButton>

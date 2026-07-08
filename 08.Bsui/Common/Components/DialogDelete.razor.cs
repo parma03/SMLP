@@ -6,7 +6,7 @@ namespace Smlp.Bsui.Common.Components;
 public partial class DialogDelete
 {
     [CascadingParameter]
-    private MudDialogInstance MudDialog { get; set; } = default!;
+    private IMudDialogInstance MudDialog { get; set; } = default!;
 
     private void Cancel()
     {

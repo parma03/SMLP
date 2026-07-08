@@ -9,8 +9,6 @@ namespace Smlp.Bsui.Features.PointRules;
 
 public partial class Index
 {
-    [Inject] private IDialogService _dialogService { get; set; } = default!;
-
     private bool _loading = false;
     private bool _showForm = false;
     private bool _isSaving = false;

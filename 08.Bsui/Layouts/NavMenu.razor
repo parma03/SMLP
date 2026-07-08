@@ -16,8 +16,8 @@
             </MudNavLink>
 
             @* ========== CRM - PELANGGAN (Admin, Owner, Kasir) ========== *@
-            <AuthorizeView Roles="Admin,Owner,Kasir">
-                <Authorized>
+            <AuthorizeView Roles="Admin,Owner,Kasir" Context="crmAuthContext">
+                <Authorized Context="crmAuthContext">
                     <MudNavGroup Icon="@Icons.Material.Filled.People"
                                  ExpandIcon="@Icons.Material.Filled.ExpandMore"
                                  Title="Manajemen Pelanggan"
@@ -40,8 +40,8 @@
             </AuthorizeView>
 
             @* ========== TRANSAKSI (Admin, Owner, Kasir) ========== *@
-            <AuthorizeView Roles="Admin,Owner,Kasir">
-                <Authorized>
+            <AuthorizeView Roles="Admin,Owner,Kasir" Context="transactionAuthContext">
+                <Authorized Context="transactionAuthContext">
                     <MudNavGroup Icon="@Icons.Material.Filled.Receipt"
                                  ExpandIcon="@Icons.Material.Filled.ExpandMore"
                                  Title="Transaksi"
@@ -60,8 +60,8 @@
                             Input Transaksi
                         </MudNavLink>
                         @* Penyesuaian Poin hanya untuk Admin dan Owner *@
-                        <AuthorizeView Roles="Admin,Owner">
-                            <Authorized>
+                        <AuthorizeView Roles="Admin,Owner" Context="pointAdjustmentAuthContext">
+                            <Authorized Context="pointAdjustmentAuthContext">
                                 <MudNavLink Icon="@Icons.Material.Filled.Tune"
                                             Match="NavLinkMatch.All"
                                             Href="@CommonRouteFor.PointAdjustments"
@@ -75,8 +75,8 @@
             </AuthorizeView>
 
             @* ========== REWARD (Admin, Owner, Kasir) ========== *@
-            <AuthorizeView Roles="Admin,Owner,Kasir">
-                <Authorized>
+            <AuthorizeView Roles="Admin,Owner,Kasir" Context="rewardAuthContext">
+                <Authorized Context="rewardAuthContext">
                     <MudNavGroup Icon="@Icons.Material.Filled.CardGiftcard"
                                  ExpandIcon="@Icons.Material.Filled.ExpandMore"
                                  Title="Reward & Redeem"
@@ -105,8 +105,8 @@
             </AuthorizeView>
 
             @* ========== ANALYTICS (Admin, Owner only) ========== *@
-            <AuthorizeView Roles="Admin,Owner">
-                <Authorized>
+            <AuthorizeView Roles="Admin,Owner" Context="analyticsAuthContext">
+                <Authorized Context="analyticsAuthContext">
                     <MudNavGroup Icon="@Icons.Material.Filled.Analytics"
                                  ExpandIcon="@Icons.Material.Filled.ExpandMore"
                                  Title="Analytics & Laporan"
@@ -141,8 +141,8 @@
             </AuthorizeView>
 
             @* ========== MASTER DATA (Admin, Owner) ========== *@
-            <AuthorizeView Roles="Admin,Owner">
-                <Authorized>
+            <AuthorizeView Roles="Admin,Owner" Context="masterDataAuthContext">
+                <Authorized Context="masterDataAuthContext">
                     <MudNavGroup Icon="@Icons.Material.Filled.Settings"
                                  ExpandIcon="@Icons.Material.Filled.ExpandMore"
                                  Title="Master Data"
@@ -171,8 +171,8 @@
             </AuthorizeView>
 
             @* ========== ADMINISTRATOR (Admin only) ========== *@
-            <AuthorizeView Roles="Admin">
-                <Authorized>
+            <AuthorizeView Roles="Admin" Context="adminAuthContext">
+                <Authorized Context="adminAuthContext">
                     <MudDivider Class="my-2" Style="background-color:rgba(255,255,255,0.15);"
                                 role="separator" aria-hidden="true" />
                     <MudNavLink Icon="@Icons.Material.Filled.AdminPanelSettings"
@@ -197,8 +197,8 @@
             </AuthorizeView>
 
             @* ========== OWNER PANEL (Owner only) ========== *@
-            <AuthorizeView Roles="Owner">
-                <Authorized>
+            <AuthorizeView Roles="Owner" Context="ownerAuthContext">
+                <Authorized Context="ownerAuthContext">
                     <MudDivider Class="my-2" Style="background-color:rgba(255,255,255,0.15);"
                                 role="separator" aria-hidden="true" />
                     <MudNavLink Icon="@Icons.Material.Filled.ManageSearch"

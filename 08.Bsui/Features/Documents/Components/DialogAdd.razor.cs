@@ -17,7 +17,7 @@ namespace Smlp.Bsui.Features.Documents.Components;
 public partial class DialogAdd
 {
     [CascadingParameter]
-    private MudDialogInstance MudDialog { get; set; } = default!;
+    private IMudDialogInstance MudDialog { get; set; } = default!;
 
     private bool _isLoading;
     private ErrorResponse? _error;

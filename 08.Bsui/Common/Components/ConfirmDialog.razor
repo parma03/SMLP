@@ -19,13 +19,17 @@
                    aria-label="@CancelText">
             @CancelText
         </MudButton>
-        <MudLoadingButton Variant="Variant.Filled"
-                          Color="@ConfirmColor"
-                          Loading="_isLoading"
-                          OnClick="OnConfirm"
-                          aria-label="@ConfirmText"
-                          aria-busy="@_isLoading.ToString().ToLower()">
+        <MudButton Variant="Variant.Filled"
+                   Color="@ConfirmColor"
+                   Disabled="_isLoading"
+                   OnClick="OnConfirm"
+                   aria-label="@ConfirmText"
+                   aria-busy="@_isLoading.ToString().ToLower()">
+            @if (_isLoading)
+            {
+                <MudProgressCircular Class="me-2" Size="Size.Small" Indeterminate="true" />
+            }
             @ConfirmText
-        </MudLoadingButton>
+        </MudButton>
     </DialogActions>
 </MudDialog>

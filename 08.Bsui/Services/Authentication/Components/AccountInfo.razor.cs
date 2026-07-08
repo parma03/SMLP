@@ -7,7 +7,6 @@ namespace Smlp.Bsui.Services.Authentication.Components;
 public partial class AccountInfo
 {
     [Inject] private NavigationManager _navigationManager { get; set; } = default!;
-    [Inject] private IDialogService _dialogService { get; set; } = default!;
     [Inject] private AuthorizedAuthenticationStateProvider _authStateProvider { get; set; } = default!;
 
     private void NavigateToProfile()

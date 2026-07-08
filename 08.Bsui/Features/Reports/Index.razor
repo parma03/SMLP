@@ -153,7 +153,7 @@
                     <MudTd><MudText Typo="Typo.caption">@context.TransactionDate.ToLocalTime().ToString("dd MMM yyyy HH:mm")</MudText></MudTd>
                     <MudTd Style="text-align:right"><MudText Typo="Typo.body2">@context.TotalAmount.ToString("N0")</MudText></MudTd>
                     <MudTd Style="text-align:right"><MudText Typo="Typo.body2" Color="Color.Success">+@context.PointsEarned</MudText></MudTd>
-                    <MudTd><MudChip Size="Size.Small" Color="Color.Success">@context.Status</MudChip></MudTd>
+                    <MudTd><MudChip Size="Size.Small" Color="Color.Success" T="string">@context.Status</MudChip></MudTd>
                 </RowTemplate>
             </MudTable>
         }
@@ -173,7 +173,7 @@
                     <MudTd><MudText Typo="Typo.body2">@context.RewardName</MudText></MudTd>
                     <MudTd><MudText Typo="Typo.caption">@context.RedeemDate.ToLocalTime().ToString("dd MMM yyyy HH:mm")</MudText></MudTd>
                     <MudTd Style="text-align:right"><MudText Typo="Typo.body2" Color="Color.Error">-@context.PointsUsed</MudText></MudTd>
-                    <MudTd><MudChip Size="Size.Small" Color="Color.Success">@context.Status</MudChip></MudTd>
+                    <MudTd><MudChip Size="Size.Small" Color="Color.Success" T="string">@context.Status</MudChip></MudTd>
                 </RowTemplate>
             </MudTable>
         }

@@ -7,7 +7,7 @@ namespace Smlp.Bsui.Features.Audits.Components;
 public partial class DialogFilter
 {
     [CascadingParameter]
-    private MudDialogInstance MudDialog { get; set; } = default!;
+    private IMudDialogInstance MudDialog { get; set; } = default!;
 
     [Parameter]
     public FilterModel Model { get; set; } = default!;
