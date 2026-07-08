@@ -5,6 +5,7 @@ using Smlp.Bsui.Services.Authorization;
 using Smlp.Bsui.Services.External;
 using Smlp.Bsui.Services.FrontEnd;
 using Smlp.Bsui.Services.Geolocation;
+using Smlp.Bsui.Services.Monitoring;
 using Smlp.Bsui.Services.PushNotification;
 using Smlp.Bsui.Services.Security;
 using Smlp.Bsui.Services.Telemetry;
@@ -51,6 +52,12 @@ public static class DependencyInjection
         services.AddGeolocationService(configuration);
 
         #endregion Geolocation
+
+        #region Monitoring
+
+        services.AddMonitoringService(configuration);
+
+        #endregion Monitoring
 
         #region Security
 

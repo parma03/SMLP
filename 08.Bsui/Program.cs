@@ -9,6 +9,7 @@ using Smlp.Bsui.Services;
 using Smlp.Bsui.Services.Authentication;
 using Smlp.Bsui.Services.Authorization;
 using Smlp.Bsui.Services.Logging;
+using Smlp.Bsui.Services.Monitoring;
 using Smlp.Bsui.Services.Security;
 using Smlp.Client;
 using Smlp.Shared.Common.Constants;
@@ -55,5 +56,6 @@ app.UseRouting();
 app.UseAuthenticationService(app.Configuration);
 app.UseAuthorizationService(app.Configuration);
 app.MapBlazorHub();
+app.MapMonitoringEndpoints(app.Configuration); // Prometheus scrape endpoint (jika diaktifkan)
 app.MapFallbackToPage(CommonRouteFor.Host);
 app.Run();

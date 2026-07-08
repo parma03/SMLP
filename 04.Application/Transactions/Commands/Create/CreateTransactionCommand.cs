@@ -12,6 +12,7 @@ using Smlp.Base.Customer.Enums;
 using Smlp.Base.Transaction.Enums;
 using Smlp.Domain.Entities.Transaction;
 using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Services.Monitoring;
 using Smlp.Shared.Transaction.Transactions.Commands.Create;
 
 namespace Smlp.Application.Transactions.Commands.Create;
@@ -185,6 +186,12 @@ public class CreateTransactionCommandHandler : IRequestHandler<CreateTransaction
 
         // Transaksi baru mengubah angka-angka di dashboard (revenue, poin, jumlah transaksi) — invalidate cache-nya
         await _cache.RemoveAsync(CacheKeys.DashboardSummary, cancellationToken);
+
+        // Business metrics untuk monitoring (Prometheus/Grafana/App Insights)
+        SmlpMetrics.TransactionsCreated.Add(1, new KeyValuePair<string, object?>("payment_method", resolvedPaymentMethod.ToString()));
+        SmlpMetrics.TransactionAmount.Record((double)grandTotal);
+        if (pointsEarned > 0)
+            SmlpMetrics.PointsEarned.Add(pointsEarned);
 
         // Push notification real-time ke Admin & Kasir (fire-and-forget)
         _ = SendPushNotificationsAsync(customer.FullName, transaction.TransactionCode, grandTotal, pointsEarned);

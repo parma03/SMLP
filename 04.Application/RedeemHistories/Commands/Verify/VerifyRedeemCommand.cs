@@ -8,6 +8,7 @@ using Smlp.Application.Services.CurrentUser;
 using Smlp.Application.Services.Persistence;
 using Smlp.Base.Transaction.Enums;
 using Smlp.Shared.Common.Responses;
+using Smlp.Shared.Services.Monitoring;
 using Smlp.Shared.Transaction.RedeemHistories.Commands.Verify;
 
 namespace Smlp.Application.RedeemHistories.Commands.Verify;
@@ -76,6 +77,9 @@ public class VerifyRedeemCommandHandler : IRequestHandler<VerifyRedeemCommand, C
 
         // Verifikasi redeem mengubah status pending & (bila ditolak) poin yang dikembalikan ke customer
         await _cache.RemoveAsync(CacheKeys.DashboardSummary, cancellationToken);
+
+        // Business metric untuk monitoring (Prometheus/Grafana/App Insights)
+        SmlpMetrics.RedeemsVerified.Add(1, new KeyValuePair<string, object?>("status", redeem.Status.ToString()));
 
         return new CommonUpdateResponse { Id = redeem.Id };
     }

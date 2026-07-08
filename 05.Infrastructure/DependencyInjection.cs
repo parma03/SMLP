@@ -11,6 +11,7 @@ using Smlp.Infrastructure.BackgroundJob;
 using Smlp.Infrastructure.BackgroundJob.Jobs;
 using Smlp.Infrastructure.Caching;
 using Smlp.Infrastructure.HealthCheck;
+using Smlp.Infrastructure.Monitoring;
 using Smlp.Infrastructure.Persistence;
 using Smlp.Infrastructure.Storage;
 using Smlp.Infrastructure.DateAndTime;
@@ -41,6 +42,7 @@ public static class DependencyInjection
         services.AddOtpService();
         services.AddStorage(configuration);
         services.AddImageCompressionService();
+        services.AddMonitoringService(configuration);
 
         // Register a stub IAuthorizationService (uses JWT roles, no external auth server)
         services.AddScoped<IAuthorizationService, LocalAuthorizationService>();

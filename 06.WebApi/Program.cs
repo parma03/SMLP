@@ -6,6 +6,7 @@ using Smlp.Infrastructure;
 using Smlp.Infrastructure.Logging;
 using Smlp.Infrastructure.Authentication;
 using Smlp.Infrastructure.Authentication.Jwt;
+using Smlp.Infrastructure.Monitoring;
 using Smlp.Shared;
 using Smlp.Shared.Localization;
 using Smlp.Shared.Common.Constants;
@@ -107,4 +108,5 @@ app.UseInfrastructure(builder.Configuration);
 app.UseDocumentationService(builder.Configuration);
 app.MapControllers();
 app.MapHub<NotificationHub>("/hubs/notification");
+app.MapMonitoringEndpoints(builder.Configuration); // Prometheus scrape endpoint (jika diaktifkan)
 app.Run();
