@@ -35,10 +35,26 @@ public class TransactionConfiguration : IEntityTypeConfiguration<Transaksi>
             .HasColumnType(CommonColumnTypes.Nvarchar(CommonMaximumLengthFor.SimpleName));
 
         // Index untuk query optimization (list, filter, dan analytics)
-        builder.HasIndex(e => e.TransactionDate);
-        builder.HasIndex(e => e.CustomerId);
-        builder.HasIndex(e => new { e.CustomerId, e.TransactionDate });
-        builder.HasIndex(e => e.Status);
+        // Catatan: semua index di bawah diberi filter IsDeleted = 0 karena
+        // seluruh query transaksi selalu melalui global soft-delete query filter
+        // (lihat ModelBuilderExtensions.SetSoftDeleteQueryFilter), sehingga index
+        // yang hanya mencakup baris aktif jauh lebih kecil & efisien.
+
+        // Dipakai untuk sort default (OrderByDescending TransactionDate) di
+        // GetTransactionByListQuery & GetTransactionReportQuery.
+        builder.HasIndex(e => e.TransactionDate)
+            .HasFilter("[IsDeleted] = 0");
+
+        // Composite (CustomerId, TransactionDate) mencakup query berbasis CustomerId
+        // saja (leading column) sekaligus filter CustomerId + range tanggal,
+        // sehingga index tunggal CustomerId tidak lagi diperlukan.
+        builder.HasIndex(e => new { e.CustomerId, e.TransactionDate })
+            .HasFilter("[IsDeleted] = 0");
+
+        // Dipakai GetTransactionReportQuery & GetPointReportQuery yang selalu
+        // filter Status == Completed lalu range tanggal + sort tanggal.
+        builder.HasIndex(e => new { e.Status, e.TransactionDate })
+            .HasFilter("[IsDeleted] = 0");
 
         builder.HasOne(e => e.Customer)
             .WithMany(c => c.Transactions)

@@ -34,11 +34,22 @@ public class RedeemHistoryConfiguration : IEntityTypeConfiguration<RedeemHistory
             .HasColumnType(CommonColumnTypes.Nvarchar(CommonMaximumLengthFor.MediumText));
 
         // Index untuk query optimization (list, filter, dan analytics)
-        builder.HasIndex(e => e.RedeemDate);
-        builder.HasIndex(e => e.CustomerId);
-        builder.HasIndex(e => new { e.CustomerId, e.RedeemDate });
-        builder.HasIndex(e => e.RewardId);
-        builder.HasIndex(e => e.Status);
+        // Filter IsDeleted = 0 karena RedeemHistory juga tunduk pada global
+        // soft-delete query filter, sama seperti Transaction.
+        builder.HasIndex(e => e.RedeemDate)
+            .HasFilter("[IsDeleted] = 0");
+
+        // Composite (CustomerId, RedeemDate) mencakup query CustomerId saja
+        // (leading column), jadi index tunggal CustomerId dihapus.
+        builder.HasIndex(e => new { e.CustomerId, e.RedeemDate })
+            .HasFilter("[IsDeleted] = 0");
+
+        builder.HasIndex(e => e.RewardId)
+            .HasFilter("[IsDeleted] = 0");
+
+        // Dipakai GetPointReportQuery: filter Status == Completed + range tanggal.
+        builder.HasIndex(e => new { e.Status, e.RedeemDate })
+            .HasFilter("[IsDeleted] = 0");
 
         builder.HasOne(e => e.Customer)
             .WithMany(c => c.RedeemHistories)

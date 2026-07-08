@@ -43,9 +43,26 @@ public class CustomerConfiguration : IEntityTypeConfiguration<Customer>
             .HasColumnType(CommonColumnTypes.Nvarchar(CommonMaximumLengthFor.LargeText));
 
         // Index untuk query optimization (dashboard, insights, filter)
-        builder.HasIndex(e => e.Tier);
-        builder.HasIndex(e => e.LastTransactionDate);
-        builder.HasIndex(e => e.CreatedAt);
+        // Filter IsDeleted = 0 karena Customer tunduk pada global soft-delete
+        // query filter (ModelBuilderExtensions.SetSoftDeleteQueryFilter),
+        // sehingga index hanya mencakup baris aktif.
+        builder.HasIndex(e => e.Tier)
+            .HasFilter("[IsDeleted] = 0");
+
+        // Dipakai GetCustomerInsightsQuery untuk churn risk (LastTransactionDate < cutoff).
+        builder.HasIndex(e => e.LastTransactionDate)
+            .HasFilter("[IsDeleted] = 0");
+
+        // Dipakai untuk hitung NewCount (CreatedAt >= cutoffNew).
+        builder.HasIndex(e => e.CreatedAt)
+            .HasFilter("[IsDeleted] = 0");
+
+        // Dipakai GetCustomerInsightsQuery untuk top spenders
+        // (Where TotalSpend > 0, OrderByDescending TotalSpend, Take 10).
+        builder.HasIndex(e => e.TotalSpend)
+            .HasFilter("[IsDeleted] = 0 AND [TotalSpend] > 0");
+
+        // Dipakai untuk join/lookup Customer <-> User (login).
         builder.HasIndex(e => e.UserId);
     }
 }

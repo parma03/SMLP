@@ -28,9 +28,12 @@ public class PointAdjustmentConfiguration : IEntityTypeConfiguration<PointAdjust
             .HasColumnType(CommonColumnTypes.Nvarchar(CommonMaximumLengthFor.CreatedBy));
 
         // Index untuk query optimization (list, filter, dan analytics)
-        builder.HasIndex(e => e.CustomerId);
-        builder.HasIndex(e => e.AdjustmentDate);
-        builder.HasIndex(e => new { e.CustomerId, e.AdjustmentDate });
+        // Composite (CustomerId, AdjustmentDate) sudah mencakup query CustomerId
+        // saja (leading column), jadi index tunggal CustomerId dihapus.
+        builder.HasIndex(e => e.AdjustmentDate)
+            .HasFilter("[IsDeleted] = 0");
+        builder.HasIndex(e => new { e.CustomerId, e.AdjustmentDate })
+            .HasFilter("[IsDeleted] = 0");
 
         builder.HasOne(e => e.Customer)
             .WithMany()
