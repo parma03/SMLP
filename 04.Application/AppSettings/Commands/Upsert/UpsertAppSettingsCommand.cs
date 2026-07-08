@@ -17,7 +17,7 @@ public class UpsertAppSettingsCommandHandler : IRequestHandler<UpsertAppSettings
 
     public UpsertAppSettingsCommandHandler(ISmlpDbContext context) => _context = context;
 
-    public async Task Handle(UpsertAppSettingsCommand command, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(UpsertAppSettingsCommand command, CancellationToken cancellationToken)
     {
         var req = command.Request;
 
@@ -60,5 +60,7 @@ public class UpsertAppSettingsCommandHandler : IRequestHandler<UpsertAppSettings
         }
 
         await _context.SaveChangesAsync(this, cancellationToken);
+
+        return Unit.Value;
     }
 }

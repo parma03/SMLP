@@ -1,6 +1,8 @@
+using Smlp.Shared.Common.Responses;
+
 namespace Smlp.Shared.AppSettings.Queries.GetAppSettings;
 
-public class GetAppSettingsResponse
+public class GetAppSettingsResponse : Response
 {
     // Shop info
     public string ShopName { get; set; } = "SMLP Coffee Shop";

@@ -2,11 +2,8 @@ using ClosedXML.Excel;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Smlp.Application.Services.Persistence;
-using Smlp.Application.Analytics.Queries;
-using Smlp.Base.Transaction.Enums;
 using Smlp.Shared.Analytics.Queries.ExportAnalytics;
 using Smlp.Shared.Analytics.Queries.GetRevenueChart;
-using Smlp.Shared.Analytics.Queries.GetDashboardSummary;
 
 namespace Smlp.Application.Analytics.Queries;
 
@@ -76,7 +73,7 @@ public class ExportAnalyticsQueryHandler : IRequestHandler<ExportAnalyticsQuery,
         var ws = wb.Worksheets.Add("Revenue Bulanan");
         ApplyHeader(ws, new[] { "Bulan", "Revenue (Rp)", "Jumlah Transaksi", "Poin Diterbitkan" });
 
-        int row = 2;
+        var row = 2;
         foreach (var m in revenue.MonthlyRevenue)
         {
             ws.Cell(row, 1).Value = m.Label;
@@ -102,7 +99,7 @@ public class ExportAnalyticsQueryHandler : IRequestHandler<ExportAnalyticsQuery,
         {
             var ws2 = wb.Worksheets.Add("Revenue Harian");
             ApplyHeader(ws2, new[] { "Hari", "Revenue (Rp)", "Jumlah Transaksi", "Poin Diterbitkan" });
-            int row2 = 2;
+            var row2 = 2;
             foreach (var d in revenue.DailyRevenue)
             {
                 ws2.Cell(row2, 1).Value = d.Label;
@@ -112,6 +109,7 @@ public class ExportAnalyticsQueryHandler : IRequestHandler<ExportAnalyticsQuery,
                 ws2.Cell(row2, 4).Value = d.PointsEarned;
                 row2++;
             }
+
             ws2.Columns(1, 4).AdjustToContents();
         }
 
@@ -120,7 +118,7 @@ public class ExportAnalyticsQueryHandler : IRequestHandler<ExportAnalyticsQuery,
         {
             var ws3 = wb.Worksheets.Add("Metode Pembayaran");
             ApplyHeader(ws3, new[] { "Metode", "Total Revenue (Rp)", "Jumlah Transaksi" });
-            int row3 = 2;
+            var row3 = 2;
             foreach (var p in revenue.PaymentMethods)
             {
                 ws3.Cell(row3, 1).Value = p.Method;
@@ -129,6 +127,7 @@ public class ExportAnalyticsQueryHandler : IRequestHandler<ExportAnalyticsQuery,
                 ws3.Cell(row3, 3).Value = p.Count;
                 row3++;
             }
+
             ws3.Columns(1, 3).AdjustToContents();
         }
 
@@ -143,8 +142,9 @@ public class ExportAnalyticsQueryHandler : IRequestHandler<ExportAnalyticsQuery,
         var ws = wb.Worksheets.Add("Ekonomi Poin");
         ApplyHeader(ws, new[] { "Metrik", "Nilai" });
 
-        int row = 2;
-        void AddRow(string label, object val) { ws.Cell(row, 1).Value = label; ws.Cell(row, 2).Value = val?.ToString() ?? ""; row++; }
+        var row = 2;
+        void AddRow(string label, object val)
+        { ws.Cell(row, 1).Value = label; ws.Cell(row, 2).Value = val?.ToString() ?? ""; row++; }
 
         AddRow("Total Poin Diterbitkan", loyalty.TotalPointsIssued.ToString("N0"));
         AddRow("Total Poin Digunakan", loyalty.TotalPointsRedeemed.ToString("N0"));
@@ -161,7 +161,7 @@ public class ExportAnalyticsQueryHandler : IRequestHandler<ExportAnalyticsQuery,
         {
             var ws2 = wb.Worksheets.Add("Performa Reward");
             ApplyHeader(ws2, new[] { "Reward", "Total Redeem", "Total Poin Digunakan", "Rating" });
-            int r2 = 2;
+            var r2 = 2;
             foreach (var rp in loyalty.RewardPerformance)
             {
                 ws2.Cell(r2, 1).Value = rp.RewardName;
@@ -170,6 +170,7 @@ public class ExportAnalyticsQueryHandler : IRequestHandler<ExportAnalyticsQuery,
                 ws2.Cell(r2, 4).Value = rp.AverageRating > 0 ? $"{rp.AverageRating:F1}" : "—";
                 r2++;
             }
+
             ws2.Columns(1, 4).AdjustToContents();
         }
     }
@@ -182,7 +183,7 @@ public class ExportAnalyticsQueryHandler : IRequestHandler<ExportAnalyticsQuery,
         // Top customers
         var ws1 = wb.Worksheets.Add("Top Pelanggan");
         ApplyHeader(ws1, new[] { "No", "Nama", "Kode Member", "Total Belanja (Rp)", "Total Transaksi", "Poin Aktif", "Tier" });
-        int r1 = 2;
+        var r1 = 2;
         foreach (var (c, i) in insights.TopCustomers.Select((c, i) => (c, i + 1)))
         {
             ws1.Cell(r1, 1).Value = i;
@@ -195,6 +196,7 @@ public class ExportAnalyticsQueryHandler : IRequestHandler<ExportAnalyticsQuery,
             ws1.Cell(r1, 7).Value = c.Tier;
             r1++;
         }
+
         ws1.Columns(1, 7).AdjustToContents();
 
         // Churn risk
@@ -202,7 +204,7 @@ public class ExportAnalyticsQueryHandler : IRequestHandler<ExportAnalyticsQuery,
         {
             var ws2 = wb.Worksheets.Add("Risiko Churn");
             ApplyHeader(ws2, new[] { "Nama", "Kode Member", "Hari Terakhir Transaksi", "Skor Risiko", "Tier" });
-            int r2 = 2;
+            var r2 = 2;
             foreach (var c in insights.ChurnRiskCustomers)
             {
                 ws2.Cell(r2, 1).Value = c.FullName;
@@ -212,6 +214,7 @@ public class ExportAnalyticsQueryHandler : IRequestHandler<ExportAnalyticsQuery,
                 ws2.Cell(r2, 5).Value = c.Tier;
                 r2++;
             }
+
             ws2.Columns(1, 5).AdjustToContents();
         }
     }
@@ -224,8 +227,9 @@ public class ExportAnalyticsQueryHandler : IRequestHandler<ExportAnalyticsQuery,
         var ws = wb.Worksheets.Add("Ringkasan Dashboard");
         ApplyHeader(ws, new[] { "Metrik", "Nilai" });
 
-        int row = 2;
-        void AddRow(string label, string val) { ws.Cell(row, 1).Value = label; ws.Cell(row, 2).Value = val; row++; }
+        var row = 2;
+        void AddRow(string label, string val)
+        { ws.Cell(row, 1).Value = label; ws.Cell(row, 2).Value = val; row++; }
 
         AddRow("Total Pelanggan", summary.TotalCustomers.ToString("N0"));
         AddRow("Pelanggan Baru Bulan Ini", summary.NewCustomersThisMonth.ToString("N0"));
@@ -251,7 +255,7 @@ public class ExportAnalyticsQueryHandler : IRequestHandler<ExportAnalyticsQuery,
     // ── Helpers ──────────────────────────────────────────────────────────────
     private static void ApplyHeader(IXLWorksheet ws, string[] headers)
     {
-        for (int i = 0; i < headers.Length; i++)
+        for (var i = 0; i < headers.Length; i++)
         {
             var cell = ws.Cell(1, i + 1);
             cell.Value = headers[i];
