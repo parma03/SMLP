@@ -160,18 +160,17 @@ public class ExportAnalyticsQueryHandler : IRequestHandler<ExportAnalyticsQuery,
         if (loyalty.RewardPerformance.Any())
         {
             var ws2 = wb.Worksheets.Add("Performa Reward");
-            ApplyHeader(ws2, new[] { "Reward", "Total Redeem", "Total Poin Digunakan", "Rating" });
+            ApplyHeader(ws2, new[] { "Reward", "Total Redeem", "Total Poin Digunakan" });
             var r2 = 2;
             foreach (var rp in loyalty.RewardPerformance)
             {
                 ws2.Cell(r2, 1).Value = rp.RewardName;
-                ws2.Cell(r2, 2).Value = rp.TotalRedeemed;
+                ws2.Cell(r2, 2).Value = rp.RedeemCount;
                 ws2.Cell(r2, 3).Value = rp.TotalPointsUsed;
-                ws2.Cell(r2, 4).Value = rp.AverageRating > 0 ? $"{rp.AverageRating:F1}" : "—";
                 r2++;
             }
 
-            ws2.Columns(1, 4).AdjustToContents();
+            ws2.Columns(1, 3).AdjustToContents();
         }
     }
 
@@ -184,15 +183,15 @@ public class ExportAnalyticsQueryHandler : IRequestHandler<ExportAnalyticsQuery,
         var ws1 = wb.Worksheets.Add("Top Pelanggan");
         ApplyHeader(ws1, new[] { "No", "Nama", "Kode Member", "Total Belanja (Rp)", "Total Transaksi", "Poin Aktif", "Tier" });
         var r1 = 2;
-        foreach (var (c, i) in insights.TopCustomers.Select((c, i) => (c, i + 1)))
+        foreach (var (c, i) in insights.TopSpenders.Select((c, i) => (c, i + 1)))
         {
             ws1.Cell(r1, 1).Value = i;
             ws1.Cell(r1, 2).Value = c.FullName;
             ws1.Cell(r1, 3).Value = c.MemberCode;
-            ws1.Cell(r1, 4).Value = (double)c.TotalSpent;
+            ws1.Cell(r1, 4).Value = (double)c.TotalSpend;
             ws1.Cell(r1, 4).Style.NumberFormat.Format = "#,##0";
             ws1.Cell(r1, 5).Value = c.TransactionCount;
-            ws1.Cell(r1, 6).Value = c.CurrentPoints;
+            ws1.Cell(r1, 6).Value = c.TotalPoints;
             ws1.Cell(r1, 7).Value = c.Tier;
             r1++;
         }
@@ -203,19 +202,18 @@ public class ExportAnalyticsQueryHandler : IRequestHandler<ExportAnalyticsQuery,
         if (insights.ChurnRiskCustomers.Any())
         {
             var ws2 = wb.Worksheets.Add("Risiko Churn");
-            ApplyHeader(ws2, new[] { "Nama", "Kode Member", "Hari Terakhir Transaksi", "Skor Risiko", "Tier" });
+            ApplyHeader(ws2, new[] { "Nama", "Kode Member", "Hari Terakhir Transaksi", "Tier" });
             var r2 = 2;
             foreach (var c in insights.ChurnRiskCustomers)
             {
                 ws2.Cell(r2, 1).Value = c.FullName;
                 ws2.Cell(r2, 2).Value = c.MemberCode;
-                ws2.Cell(r2, 3).Value = c.DaysSinceLastTransaction;
-                ws2.Cell(r2, 4).Value = $"{c.ChurnRiskScore:F1}%";
-                ws2.Cell(r2, 5).Value = c.Tier;
+                ws2.Cell(r2, 3).Value = c.DaysSinceLastPurchase;
+                ws2.Cell(r2, 4).Value = c.Tier;
                 r2++;
             }
 
-            ws2.Columns(1, 5).AdjustToContents();
+            ws2.Columns(1, 4).AdjustToContents();
         }
     }
 

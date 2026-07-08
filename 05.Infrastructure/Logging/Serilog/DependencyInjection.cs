@@ -24,7 +24,7 @@ public static class DependencyInjection
         var appInfoOptions = configuration.GetSection(AppInfoOptions.SectionKey).Get<AppInfoOptions>();
 
         return loggerConfiguration
-            .ReadFrom.Configuration(configuration, new Serilog.Settings.Configuration.ConfigurationReaderOptions { SectionName = $"{nameof(Logging)}:{nameof(Serilog)}" })
+            .ReadFrom.Configuration(configuration, new ConfigurationReaderOptions { SectionName = $"{nameof(Logging)}:{nameof(Serilog)}" })
             .Enrich.WithProperty(PropertyNameFor.Version, CommonValueFor.EntryAssemblyVersion!)
             .Enrich.WithProperty(PropertyNameFor.ApplicationName, appInfoOptions?.FullName ?? "SMLP")
             .Enrich.WithProperty(PropertyNameFor.AssemblyName, CommonValueFor.EntryAssemblySimpleName!)

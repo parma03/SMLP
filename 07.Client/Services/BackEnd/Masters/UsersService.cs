@@ -18,6 +18,7 @@ namespace Smlp.Client.Services.BackEnd.Masters;
 public class UsersService : IDisposable
 {
     private readonly RestClient _restClient = default!;
+    private readonly NavigationManager _navigationManager;
 
     public UsersService(IOptions<BackEndOptions> backEndServiceOptions, UserInfoService userInfo, NavigationManager navigationManager)
     {
