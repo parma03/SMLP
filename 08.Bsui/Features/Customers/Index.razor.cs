@@ -1,6 +1,7 @@
 using Microsoft.JSInterop;
 using MudBlazor;
 using Smlp.Base.Customer.Enums;
+using Smlp.Bsui.Common.Components;
 using Smlp.Bsui.Common.Extensions;
 using Smlp.Shared.Master.Customers.Queries;
 
@@ -71,6 +72,18 @@ public partial class Index
 
     private async Task OnDeleteAsync(GetCustomerResponse customer)
     {
+        var parameters = new DialogParameters
+        {
+            [nameof(ConfirmDialog.Title)] = "Hapus Pelanggan",
+            [nameof(ConfirmDialog.Message)] = $"Hapus pelanggan \"{customer.FullName}\"? Tindakan ini tidak bisa dibatalkan.",
+            [nameof(ConfirmDialog.Icon)] = Icons.Material.Filled.Delete,
+            [nameof(ConfirmDialog.ConfirmText)] = "Ya, Hapus",
+        };
+        var dialog = await _dialogService.ShowAsync<ConfirmDialog>("Hapus Pelanggan", parameters);
+        var dialogResult = await dialog.Result;
+        if (dialogResult is null || dialogResult.Canceled)
+            return;
+
         var result = await _customerService.DeleteCustomerAsync(customer.Id);
         if (result.Error is not null)
         {

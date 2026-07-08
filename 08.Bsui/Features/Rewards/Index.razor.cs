@@ -1,6 +1,7 @@
 using MudBlazor;
 using Smlp.Base.Customer.Enums;
 using Smlp.Base.Reward.Enums;
+using Smlp.Bsui.Common.Components;
 using Smlp.Bsui.Common.Extensions;
 using Smlp.Bsui.Features.Rewards.Components;
 using Smlp.Shared.Master.Rewards.Queries;
@@ -81,6 +82,18 @@ public partial class Index
 
     private async Task DeleteAsync(GetRewardResponse reward)
     {
+        var parameters = new DialogParameters
+        {
+            [nameof(ConfirmDialog.Title)] = "Hapus Reward",
+            [nameof(ConfirmDialog.Message)] = $"Hapus reward \"{reward.Name}\"? Tindakan ini tidak bisa dibatalkan.",
+            [nameof(ConfirmDialog.Icon)] = Icons.Material.Filled.Delete,
+            [nameof(ConfirmDialog.ConfirmText)] = "Ya, Hapus",
+        };
+        var dialog = await _dialogService.ShowAsync<ConfirmDialog>("Hapus Reward", parameters);
+        var dialogResult = await dialog.Result;
+        if (dialogResult is null || dialogResult.Canceled)
+            return;
+
         var result = await _rewardService.DeleteRewardAsync(reward.Id);
         if (result.Error is not null)
         {

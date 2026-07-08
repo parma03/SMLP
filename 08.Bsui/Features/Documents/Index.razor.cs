@@ -123,23 +123,29 @@ public partial class Index
 
     private async Task ShowDialogDelete(GetDocumentsDocument document)
     {
-        var dialog = _dialogService.Show<DialogDelete>($"{CommonDisplayTextFor.Delete} {DisplayTextFor.Document} {document.FileName}");
-        var result = await dialog.Result;
-
-        if (!result.Cancelled)
+        var parameters = new DialogParameters
         {
-            var response = await _documentService.DeleteDocumentAsync(document.Id);
+            [nameof(ConfirmDialog.Title)] = $"{CommonDisplayTextFor.Delete} {DisplayTextFor.Document}",
+            [nameof(ConfirmDialog.Message)] = $"Hapus dokumen \"{document.FileName}\"? Tindakan ini tidak bisa dibatalkan.",
+            [nameof(ConfirmDialog.Icon)] = Icons.Material.Filled.Delete,
+            [nameof(ConfirmDialog.ConfirmText)] = "Ya, Hapus",
+        };
+        var dialog = await _dialogService.ShowAsync<ConfirmDialog>($"{CommonDisplayTextFor.Delete} {DisplayTextFor.Document} {document.FileName}", parameters);
+        var dialogResult = await dialog.Result;
+        if (dialogResult is null || dialogResult.Canceled)
+            return;
 
-            if (response.Error is not null)
-            {
-                _snackbar.AddErrors(response.Error.Details);
+        var response = await _documentService.DeleteDocumentAsync(document.Id);
 
-                return;
-            }
+        if (response.Error is not null)
+        {
+            _snackbar.AddErrors(response.Error.Details);
 
-            _snackbar.AddSuccess(SuccessMessageFor.Action(DisplayTextFor.Document, document.FileName, CommonDisplayTextFor.Deleted));
-
-            await _tableDocuments.ReloadServerData();
+            return;
         }
+
+        _snackbar.AddSuccess(SuccessMessageFor.Action(DisplayTextFor.Document, document.FileName, CommonDisplayTextFor.Deleted));
+
+        await _tableDocuments.ReloadServerData();
     }
 }
