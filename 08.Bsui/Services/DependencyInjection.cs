@@ -10,6 +10,7 @@ using Smlp.Bsui.Services.PushNotification;
 using Smlp.Bsui.Services.Security;
 using Smlp.Bsui.Services.Telemetry;
 using Smlp.Bsui.Services.UI;
+using Smlp.Bsui.Services.UserSession;
 
 namespace Smlp.Bsui.Services;
 
@@ -87,6 +88,13 @@ public static class DependencyInjection
         services.AddHostedService<PushHubService>();
 
         #endregion Notifications
+
+        #region User Session
+
+        // Per-circuit user session info (e.g. browser geolocation), shared across components
+        services.AddScoped<UserInfo>();
+
+        #endregion User Session
 
         return services;
     }

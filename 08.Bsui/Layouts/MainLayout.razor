@@ -10,6 +10,7 @@
 @using Smlp.Bsui.Services.HealthCheck.Components
 @using Smlp.Bsui.Services.Telemetry
 @using Smlp.Bsui.Services.Telemetry.ApplicationInsights.Components
+@using Smlp.Bsui.Services.UserSession
 
 @inherits LayoutComponentBase
 
@@ -20,6 +21,7 @@
 
 @inject AuthenticationStateProvider _authenticationStateProvider
 @inject IGeolocationService _geolocationService
+@inject UserInfo _userInfo
 
 @if (_usingApplicationInsights)
 {

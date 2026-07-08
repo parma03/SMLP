@@ -78,28 +78,28 @@
     <MudItem xs="12" sm="6" md="3">
         <MudPaper Class="pa-4 rounded-lg" Elevation="2" Style="border-top:3px solid #2E7D32;">
             <MudText Typo="Typo.caption" Color="Color.Secondary">Total Revenue</MudText>
-            <MudText Typo="Typo.h5" Style="color:#2E7D32; font-weight:700;">Rp @(_revenueChart?.TotalRevenue.ToString("N0") ?? "—")</MudText>
+            <MudText Typo="Typo.h5" Style="color:#2E7D32; font-weight:700;">Rp @(TotalRevenue.ToString("N0"))</MudText>
             <MudText Typo="Typo.caption" Color="Color.Secondary">@SelectedPeriodLabel</MudText>
         </MudPaper>
     </MudItem>
     <MudItem xs="12" sm="6" md="3">
         <MudPaper Class="pa-4 rounded-lg" Elevation="2" Style="border-top:3px solid #0277BD;">
             <MudText Typo="Typo.caption" Color="Color.Secondary">Rata-rata Transaksi</MudText>
-            <MudText Typo="Typo.h5" Style="color:#0277BD; font-weight:700;">Rp @(_revenueChart?.AverageTransactionValue.ToString("N0") ?? "—")</MudText>
+            <MudText Typo="Typo.h5" Style="color:#0277BD; font-weight:700;">Rp @(AverageTransactionValue.ToString("N0"))</MudText>
             <MudText Typo="Typo.caption" Color="Color.Secondary">per transaksi</MudText>
         </MudPaper>
     </MudItem>
     <MudItem xs="12" sm="6" md="3">
         <MudPaper Class="pa-4 rounded-lg" Elevation="2" Style="border-top:3px solid #C8860A;">
             <MudText Typo="Typo.caption" Color="Color.Secondary">Poin Diterbitkan</MudText>
-            <MudText Typo="Typo.h5" Style="color:#C8860A; font-weight:700;">@(_revenueChart?.TotalPointsIssued.ToString("N0") ?? "—") poin</MudText>
+            <MudText Typo="Typo.h5" Style="color:#C8860A; font-weight:700;">@(TotalPointsIssued.ToString("N0")) poin</MudText>
             <MudText Typo="Typo.caption" Color="Color.Secondary">periode ini</MudText>
         </MudPaper>
     </MudItem>
     <MudItem xs="12" sm="6" md="3">
         <MudPaper Class="pa-4 rounded-lg" Elevation="2" Style="border-top:3px solid #6A1B9A;">
             <MudText Typo="Typo.caption" Color="Color.Secondary">Total Transaksi</MudText>
-            <MudText Typo="Typo.h5" Style="color:#6A1B9A; font-weight:700;">@(_revenueChart?.TotalTransactions.ToString("N0") ?? "—")</MudText>
+            <MudText Typo="Typo.h5" Style="color:#6A1B9A; font-weight:700;">@(TotalTransactions.ToString("N0"))</MudText>
             <MudText Typo="Typo.caption" Color="Color.Secondary">transaksi selesai</MudText>
         </MudPaper>
     </MudItem>
@@ -112,9 +112,9 @@
             <MudText Typo="Typo.subtitle1" Class="mb-3" Style="color:#6F4E37; font-weight:700;">
                 📈 Tren Revenue Harian
             </MudText>
-            @if (_revenueChart?.DataPoints?.Any() == true && _dataLoaded)
+            @if (ChartDataPoints.Any() && _dataLoaded)
             {
-                <MudTable Dense="true" Hover="true" Elevation="0" Items="@_revenueChart.DataPoints">
+                <MudTable Dense="true" Hover="true" Elevation="0" Items="@ChartDataPoints">
                     <HeaderContent>
                         <MudTh>Tanggal</MudTh>
                         <MudTh Style="text-align:right">Revenue</MudTh>
@@ -122,10 +122,10 @@
                         <MudTh Style="text-align:right">Poin</MudTh>
                     </HeaderContent>
                     <RowTemplate>
-                        <MudTd><MudText Typo="Typo.caption">@context.Date.ToString("dd MMM yyyy")</MudText></MudTd>
-                        <MudTd Style="text-align:right; color:#2E7D32; font-weight:600;">Rp @context.Revenue.ToString("N0")</MudTd>
-                        <MudTd Style="text-align:right">@context.TransactionCount</MudTd>
-                        <MudTd Style="text-align:right; color:#C8860A;">⭐ @context.PointsIssued</MudTd>
+                        <MudTd><MudText Typo="Typo.caption">@context.Label</MudText></MudTd>
+                        <MudTd Style="text-align:right; color:#2E7D32; font-weight:600;">Rp @context.Amount.ToString("N0")</MudTd>
+                        <MudTd Style="text-align:right">@context.Transactions</MudTd>
+                        <MudTd Style="text-align:right; color:#C8860A;">⭐ @context.PointsEarned</MudTd>
                     </RowTemplate>
                     <NoRecordsContent>
                         <MudText Class="pa-4 text-center" Color="Color.Secondary">Tidak ada data pada periode ini</MudText>
@@ -155,10 +155,10 @@
             <MudText Typo="Typo.subtitle1" Class="mb-3" Style="color:#6F4E37; font-weight:700;">
                 🥧 Metode Pembayaran
             </MudText>
-            @if (_revenueChart?.PaymentBreakdowns?.Any() == true)
+            @if (PaymentBreakdowns.Any())
             {
                 <MudList T="string" Dense="true">
-                    @foreach (var pm in _revenueChart.PaymentBreakdowns)
+                    @foreach (var pm in PaymentBreakdowns)
                     {
                         <MudListItem>
                             <div class="d-flex justify-space-between align-center">
@@ -211,7 +211,7 @@
                 </MudItem>
                 <MudItem xs="6">
                     <MudPaper Class="pa-3 rounded" Elevation="0" Style="background:#EDE7F6; border:1px solid #CE93D8;">
-                        <MudText Typo="Typo.h5" Style="color:#6A1B9A; font-weight:700;">@(_summary?.TotalPointsRedeemed.ToString("N0") ?? 0)</MudText>
+                        <MudText Typo="Typo.h5" Style="color:#6A1B9A; font-weight:700;">@(_summary?.TotalPointsRedeemed.ToString("N0") ?? "0")</MudText>
                         <MudText Typo="Typo.caption">Total Poin Ditukar</MudText>
                     </MudPaper>
                 </MudItem>

@@ -1,10 +1,27 @@
 @using Smlp.Base.Customer.Enums
 @using Smlp.Base.Customer.Lists
 
-<MudSelect T="CustomerTier?" Label="@Label" @bind-Value="Value" Variant="Variant.Outlined" Clearable="true">
+<MudSelect T="CustomerTier?" Label="@Label" Value="Value" ValueChanged="OnValueChanged" Variant="Variant.Outlined" Clearable="true">
     <MudSelectItem T="CustomerTier?" Value="null">-- Semua Tier --</MudSelectItem>
-    @foreach (var tier in CustomerTierList.All)
+    @foreach (var tier in CustomerTierList.CustomerTierLists())
     {
-        <MudSelectItem T="CustomerTier?" Value="tier.Value">@tier.Label</MudSelectItem>
+        <MudSelectItem T="CustomerTier?" Value="@((CustomerTier?)tier)">@tier.GetDescription()</MudSelectItem>
     }
 </MudSelect>
+
+@code {
+    [Parameter]
+    public string? Label { get; set; }
+
+    [Parameter]
+    public CustomerTier? Value { get; set; }
+
+    [Parameter]
+    public EventCallback<CustomerTier?> ValueChanged { get; set; }
+
+    private async Task OnValueChanged(CustomerTier? value)
+    {
+        Value = value;
+        await ValueChanged.InvokeAsync(value);
+    }
+}

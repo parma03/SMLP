@@ -88,7 +88,7 @@ public partial class Index
         var dialog = _dialogService.Show<DialogAdd>($"{CommonDisplayTextFor.Add} {DisplayTextFor.Document}");
         var result = await dialog.Result;
 
-        if (!result.Cancelled)
+        if (!result.Canceled)
         {
             _snackbar.AddSuccess(SuccessMessageFor.Action(DisplayTextFor.Document, CommonDisplayTextFor.Added));
 

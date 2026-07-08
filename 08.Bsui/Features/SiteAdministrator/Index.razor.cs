@@ -159,8 +159,7 @@ public partial class Index
         {
             var request = new GetUserRequest
             {
-                Search = string.IsNullOrWhiteSpace(_searchUser) ? null : _searchUser,
-                PageSize = 100
+                DisplayName = string.IsNullOrWhiteSpace(_searchUser) ? null : _searchUser
             };
 
             var result = await _usersService.GetUsersAsync(request);

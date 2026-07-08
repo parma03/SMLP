@@ -220,6 +220,12 @@ public partial class Detail
         };
     }
 
+    private void OpenUploadPhotoDialog()
+    {
+        // TODO: Product/customer photo upload is not yet implemented (see roadmap).
+        _snackbar.AddInfo("Fitur upload foto akan segera hadir.");
+    }
+
     public class PointHistoryItem
     {
         public DateTimeOffset Date { get; set; }

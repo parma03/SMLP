@@ -95,14 +95,14 @@
             <MudGrid>
                 <MudItem xs="6">
                     <MudPaper Class="pa-3 rounded" Elevation="0" Style="background:#E8F5E9; border:1px solid #A5D6A7;">
-                        <MudText Typo="Typo.h5" Style="color:#2E7D32; font-weight:700;">+@(_analysis?.TotalPointsManuallyAdded.ToString("N0") ?? 0)</MudText>
+                        <MudText Typo="Typo.h5" Style="color:#2E7D32; font-weight:700;">+@(_analysis?.TotalPointsManuallyAdded.ToString("N0") ?? "0")</MudText>
                         <MudText Typo="Typo.caption">Poin Ditambah Manual</MudText>
                         <MudText Typo="Typo.caption" Color="Color.Secondary">@(_analysis?.TotalManualAdditions ?? 0) kejadian</MudText>
                     </MudPaper>
                 </MudItem>
                 <MudItem xs="6">
                     <MudPaper Class="pa-3 rounded" Elevation="0" Style="background:#FCE4EC; border:1px solid #F48FB1;">
-                        <MudText Typo="Typo.h5" Style="color:#C62828; font-weight:700;">-@(_analysis?.TotalPointsManuallyDeducted.ToString("N0") ?? 0)</MudText>
+                        <MudText Typo="Typo.h5" Style="color:#C62828; font-weight:700;">-@(_analysis?.TotalPointsManuallyDeducted.ToString("N0") ?? "0")</MudText>
                         <MudText Typo="Typo.caption">Poin Dikurangi Manual</MudText>
                         <MudText Typo="Typo.caption" Color="Color.Secondary">@(_analysis?.TotalManualDeductions ?? 0) kejadian</MudText>
                     </MudPaper>

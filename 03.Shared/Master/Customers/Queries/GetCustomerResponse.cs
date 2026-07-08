@@ -17,6 +17,7 @@ public class GetCustomerResponse : Response
     public CustomerSegment Segment { get; set; }
     public int TotalPoints { get; set; }
     public int LifetimePoints { get; set; }
+    public int TotalTransactions { get; set; }
     public decimal TotalSpend { get; set; }
     public DateTimeOffset? LastTransactionDate { get; set; }
     public string? Notes { get; set; }

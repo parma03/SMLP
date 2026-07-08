@@ -6,7 +6,7 @@ public class ThemeFor
 {
     public static readonly MudTheme MainLayout = new()
     {
-        Palette = new Palette()
+        PaletteLight = new PaletteLight()
         {
             Primary = "#6F4E37",        // Coffee brown
             PrimaryLighten = "#8B6347",

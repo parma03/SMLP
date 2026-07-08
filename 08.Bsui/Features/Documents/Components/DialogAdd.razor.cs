@@ -57,14 +57,9 @@ public partial class DialogAdd
             return;
         }
 
-        var optionsToDisableBackdropClick = new DialogOptions()
-        {
-            DisableBackdropClick = true
-        };
-
         _isLoading = true;
 
-        MudDialog.SetOptions(optionsToDisableBackdropClick);
+        await MudDialog.SetOptionsAsync(MudDialog.Options with { BackdropClick = false });
 
         await using var memoryStream = new MemoryStream();
         await _model.File.OpenReadStream(_maximumFileSizeInBytes).CopyToAsync(memoryStream);
@@ -77,14 +72,9 @@ public partial class DialogAdd
 
         var response = await _documentService.CreateDocumentAsync(request);
 
-        var optionsToEnableBackdropClick = new DialogOptions()
-        {
-            DisableBackdropClick = false
-        };
-
         _isLoading = false;
 
-        MudDialog.SetOptions(optionsToEnableBackdropClick);
+        await MudDialog.SetOptionsAsync(MudDialog.Options with { BackdropClick = true });
 
         if (response.Error is not null)
         {

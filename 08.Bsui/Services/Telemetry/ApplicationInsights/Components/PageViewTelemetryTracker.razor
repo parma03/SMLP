@@ -1,5 +1,8 @@
 ﻿@using Microsoft.ApplicationInsights
 @using Microsoft.AspNetCore.Http
+@using Smlp.Bsui.Services.UserSession
 
 @inject TelemetryClient _telemetryClient
 @inject IHttpContextAccessor _httpContextAccessor
+@inject NavigationManager _navigationManager
+@inject UserInfo _userInfo

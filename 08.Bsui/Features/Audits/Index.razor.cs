@@ -1,6 +1,4 @@
-﻿using Microsoft.JSInterop;
-using MudBlazor;
-using Smlp.Bsui.Common.Constants;
+﻿using Smlp.Bsui.Common.Constants;
 using Smlp.Bsui.Common.Extensions;
 using Smlp.Bsui.Features.Audits.Components;
 using Smlp.Shared.Audits.Constants;
@@ -73,14 +71,11 @@ public partial class Index
         var dialog = _dialogService.Show<DialogFilter>($"{CommonDisplayTextFor.Filter} data {DisplayTextFor.Audits}", parameters);
         var result = await dialog.Result;
 
-        if (!result.Cancelled)
-        {
-            _filterModel = (FilterModel)result.Data;
+        if (!result.Canceled)
 
             await _tableAudits.ReloadServerData();
 
-            _selectedAudits = new HashSet<GetAuditsAudit>();
-        }
+        _selectedAudits = new HashSet<GetAuditsAudit>();
     }
 
     private async Task OnSearch(string keyword)

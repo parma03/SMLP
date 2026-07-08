@@ -27,6 +27,31 @@ public partial class Index
     private GetDashboardSummaryResponse? _summary;
     private GetRevenueChartResponse? _revenueChart;
 
+    private decimal TotalRevenue => _revenueChart?.MonthlyRevenue?.Sum(x => x.Amount) ?? 0;
+    private int TotalTransactions => _revenueChart?.MonthlyRevenue?.Sum(x => x.Transactions) ?? 0;
+    private decimal AverageTransactionValue => TotalTransactions > 0 ? TotalRevenue / TotalTransactions : 0;
+    private int TotalPointsIssued => _revenueChart?.MonthlyRevenue?.Sum(x => x.PointsEarned) ?? 0;
+
+    private List<RevenueDataPoint> ChartDataPoints =>
+        (_revenueChart?.DailyRevenue?.Any() == true ? _revenueChart.DailyRevenue : _revenueChart?.MonthlyRevenue) ?? new();
+
+    private List<PaymentMethodBreakdownDisplay> PaymentBreakdowns
+    {
+        get
+        {
+            var methods = _revenueChart?.PaymentMethods ?? new();
+            var total = methods.Sum(m => m.Amount);
+            return methods
+                .Select(m => new PaymentMethodBreakdownDisplay
+                {
+                    PaymentMethod = m.Method,
+                    TotalRevenue = m.Amount,
+                    Percentage = total > 0 ? m.Amount / total * 100 : 0
+                })
+                .ToList();
+        }
+    }
+
     private string SelectedPeriodLabel => _selectedPeriod switch
     {
         "7d" => "7 hari terakhir",
@@ -161,4 +186,11 @@ public partial class Index
             _isExporting = false;
         }
     }
+}
+
+public class PaymentMethodBreakdownDisplay
+{
+    public string PaymentMethod { get; set; } = default!;
+    public decimal TotalRevenue { get; set; }
+    public decimal Percentage { get; set; }
 }

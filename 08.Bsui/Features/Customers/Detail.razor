@@ -124,7 +124,7 @@
                 }
                 <MudDivider Class="my-2" />
                 <MudText Typo="Typo.caption" Color="Color.Secondary">
-                    Bergabung: @_customer.JoinDate.ToString("dd MMM yyyy")
+                    Bergabung: @_customer.CreatedAt.ToString("dd MMM yyyy")
                 </MudText>
                 @if (_customer.LastTransactionDate.HasValue)
                 {
