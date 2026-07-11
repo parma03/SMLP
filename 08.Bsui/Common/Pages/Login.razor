@@ -2,112 +2,298 @@
 
 <style type="text/css">
     * {
-        margin: 0;
-        padding: 0;
         box-sizing: border-box;
     }
 
     html, body {
+        background-color: #241812;
+        width: 100%;
+    }
+
+    .login-shell {
+        display: flex;
+        min-height: 100vh;
+        width: 100%;
+    }
+
+    /* ===== Left brand panel (hidden on small screens) ===== */
+    .login-brand {
+        position: relative;
+        flex: 1 1 46%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 56px 56px 40px 56px;
+        background: radial-gradient(circle at 15% 15%, rgba(200,134,10,0.28) 0%, transparent 45%),
+                    radial-gradient(circle at 85% 85%, rgba(111,78,55,0.35) 0%, transparent 50%),
+                    linear-gradient(150deg, #241812 0%, #3E2723 55%, #4A3425 100%);
+        color: #FFF8E1;
+        overflow: hidden;
+    }
+
+    .login-brand::after {
+        content: "";
+        position: absolute;
+        inset: 0;
         background-image: url("./img/bg_login.png");
-        background-color: #3E2723;
         background-position: center;
         background-repeat: no-repeat;
         background-size: cover;
-        width: 100%;
+        opacity: 0.12;
+        pointer-events: none;
     }
 
-    .login-container {
+    .login-brand-top, .login-brand-bottom {
+        position: relative;
+        z-index: 1;
+    }
+
+    .login-brand-logo {
+        width: 56px;
+        height: 56px;
+        border-radius: 16px;
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.14);
         display: flex;
-        justify-content: center;
         align-items: center;
-        height: 100vh;
-        padding: 0 24px;
+        justify-content: center;
+        margin-bottom: 28px;
+    }
+
+    .login-brand-title {
+        font-size: 2.1rem;
+        font-weight: 800;
+        line-height: 1.25;
+        margin-bottom: 12px;
+        max-width: 420px;
+    }
+
+    .login-brand-subtitle {
+        font-size: 1rem;
+        color: #E8D9C6;
+        max-width: 400px;
+        line-height: 1.6;
+    }
+
+    .login-feature-list {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        margin-top: 40px;
+    }
+
+    .login-feature-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+    }
+
+    .login-feature-icon {
+        width: 36px;
+        height: 36px;
+        flex-shrink: 0;
+        border-radius: 10px;
+        background: rgba(200,134,10,0.22);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .login-feature-text {
+        color: #F3E9DD;
+    }
+
+    .login-feature-text strong {
+        display: block;
+        font-size: 0.92rem;
+        margin-bottom: 2px;
+    }
+
+    .login-feature-text span {
+        font-size: 0.82rem;
+        color: #C7B3A0;
+    }
+
+    /* ===== Right form panel ===== */
+    .login-form-panel {
+        flex: 1 1 54%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        background: #F6F1EA;
     }
 
     .login-card {
-        background: rgba(255, 255, 255, 0.97);
-        border-radius: 16px;
-        padding: 48px 40px;
         width: 100%;
-        max-width: 420px;
-        box-shadow: 0 20px 60px rgba(0,0,0,0.35);
-        text-align: center;
+        max-width: 400px;
+        padding: 8px 4px;
+    }
+
+    .login-card-mobile-header {
+        display: none;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 28px;
     }
 
     .login-title {
-        color: #3E2723;
-        font-size: 28px;
-        font-weight: 700;
+        color: #2E2019;
+        font-size: 1.65rem;
+        font-weight: 800;
         margin-bottom: 4px;
     }
 
     .login-subtitle {
-        color: #795548;
-        font-size: 14px;
+        color: #6B5B4F;
+        font-size: 0.9rem;
         margin-bottom: 32px;
     }
 
-    @@media (max-width: 480px) {
+    .login-footer-note {
+        text-align: center;
+        color: #9B8A7A;
+        font-size: 0.75rem;
+        margin-top: 28px;
+    }
+
+    /* ===== Responsive: stack on tablets/phones ===== */
+    @@media (max-width: 960px) {
+        .login-brand {
+            display: none;
+        }
+
+        .login-form-panel {
+            flex: 1 1 100%;
+            background: linear-gradient(180deg, #3E2723 0%, #3E2723 220px, #F6F1EA 220px, #F6F1EA 100%);
+        }
+
+        .login-card-mobile-header {
+            display: flex;
+        }
+
         .login-card {
+            background: #FFFFFF;
+            border-radius: 20px;
             padding: 32px 24px;
+            box-shadow: 0 20px 50px rgba(46,32,25,0.25);
+        }
+    }
+
+    @@media (max-width: 480px) {
+        .login-form-panel {
+            padding: 16px;
+        }
+
+        .login-card {
+            padding: 26px 18px;
+        }
+
+        .login-title {
+            font-size: 1.4rem;
         }
     }
 </style>
 
-<div class="login-container">
-    <div class="login-card">
-        <div class="mb-3">
-            <MudIcon Icon="@Icons.Material.Filled.LocalCafe" Style="font-size:4rem; color:#6F4E37;" />
+<div class="login-shell">
+    <div class="login-brand" aria-hidden="true">
+        <div class="login-brand-top">
+            <div class="login-brand-logo">
+                <MudIcon Icon="@Icons.Material.Filled.LocalCafe" Style="font-size:1.9rem; color:#FFE9CC;" />
+            </div>
+            <div class="login-brand-title">Sistem Manajemen Loyalitas Pelanggan</div>
+            <div class="login-brand-subtitle">
+                Kelola poin, tier, dan reward pelanggan Anda dalam satu platform yang cepat, rapi, dan mudah dipantau.
+            </div>
+
+            <div class="login-feature-list">
+                <div class="login-feature-item">
+                    <div class="login-feature-icon">
+                        <MudIcon Icon="@Icons.Material.Filled.Loyalty" Style="font-size:1.15rem; color:#FFD79A;" />
+                    </div>
+                    <div class="login-feature-text">
+                        <strong>Poin &amp; Reward</strong>
+                        <span>Pantau perolehan dan penukaran poin secara real-time</span>
+                    </div>
+                </div>
+                <div class="login-feature-item">
+                    <div class="login-feature-icon">
+                        <MudIcon Icon="@Icons.Material.Filled.Insights" Style="font-size:1.15rem; color:#FFD79A;" />
+                    </div>
+                    <div class="login-feature-text">
+                        <strong>Analitik Pelanggan</strong>
+                        <span>Segmentasi, tren transaksi, dan laporan siap pakai</span>
+                    </div>
+                </div>
+                <div class="login-feature-item">
+                    <div class="login-feature-icon">
+                        <MudIcon Icon="@Icons.Material.Filled.Security" Style="font-size:1.15rem; color:#FFD79A;" />
+                    </div>
+                    <div class="login-feature-text">
+                        <strong>Aman &amp; Terkontrol</strong>
+                        <span>Akses berbasis peran untuk setiap anggota tim</span>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="login-title">SMLP</div>
-        <div class="login-subtitle">Sistem Manajemen Loyalitas Pelanggan</div>
+        <div class="login-brand-bottom">
+            <MudText Typo="Typo.caption" Style="color:#9B8A7A;">© @DateTime.Now.Year Sistem Manajemen Loyalitas Pelanggan</MudText>
+        </div>
+    </div>
 
-        <MudTextField @bind-Value="_username"
-                      Label="Username"
-                      Variant="Variant.Outlined"
-                      Adornment="Adornment.Start"
-                      AdornmentIcon="@Icons.Material.Filled.Person"
-                      Class="mb-3"
-                      FullWidth="true"
-                      @onkeypress="OnKeyPressAsync"
-                      Disabled="@_processing" />
+    <div class="login-form-panel">
+        <div class="login-card">
+            <div class="login-card-mobile-header">
+                <MudIcon Icon="@Icons.Material.Filled.LocalCafe" Style="font-size:2.2rem; color:#FFE9CC;" />
+                <MudText Typo="Typo.h6" Style="color:#FFF8E1; font-weight:700;">SMLP</MudText>
+            </div>
 
-        <MudTextField @bind-Value="_password"
-                      Label="Password"
-                      Variant="Variant.Outlined"
-                      Adornment="Adornment.End"
-                      AdornmentIcon="@(_showPassword ? Icons.Material.Filled.VisibilityOff : Icons.Material.Filled.Visibility)"
-                      OnAdornmentClick="TogglePasswordVisibility"
-                      InputType="@_passwordInputType"
-                      Class="mb-4"
-                      FullWidth="true"
-                      @onkeypress="OnKeyPressAsync"
-                      Disabled="@_processing" />
+            <div class="login-title">Selamat Datang Kembali</div>
+            <div class="login-subtitle">Masuk untuk melanjutkan ke dashboard SMLP Anda</div>
 
-        <MudButton Variant="Variant.Filled"
-                   FullWidth="true"
-                   Size="Size.Large"
-                   Style="background:#6F4E37; color:white; border-radius:8px; font-size:16px; font-weight:600;"
-                   Disabled="@_processing"
-                   OnClick="OnClickLoginAsync">
-            @if (_processing)
-            {
-                <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
-                <MudText Class="ms-2">Memproses...</MudText>
-            }
-            else
-            {
-                <MudText>Masuk</MudText>
-            }
-        </MudButton>
+            <MudTextField @bind-Value="_username"
+                          Label="Username"
+                          Variant="Variant.Outlined"
+                          Adornment="Adornment.Start"
+                          AdornmentIcon="@Icons.Material.Filled.PersonOutline"
+                          Class="mb-4"
+                          FullWidth="true"
+                          @onkeypress="OnKeyPressAsync"
+                          Disabled="@_processing" />
 
-        @if (_errorMessage is not null)
-        {
-            <MudAlert Severity="Severity.Error" Class="mt-3" Dense="true">@_errorMessage</MudAlert>
-        }
+            <MudTextField @bind-Value="_password"
+                          Label="Password"
+                          Variant="Variant.Outlined"
+                          Adornment="Adornment.End"
+                          AdornmentIcon="@(_showPassword ? Icons.Material.Filled.VisibilityOff : Icons.Material.Filled.Visibility)"
+                          OnAdornmentClick="TogglePasswordVisibility"
+                          InputType="@_passwordInputType"
+                          Class="mb-5"
+                          FullWidth="true"
+                          @onkeypress="OnKeyPressAsync"
+                          Disabled="@_processing" />
 
-        <MudText Typo="Typo.caption" Color="Color.Secondary" Class="mt-4">
-            © @DateTime.Now.Year Sistem Manajemen Loyalitas Pelanggan
-        </MudText>
+            <MudButton Variant="Variant.Filled"
+                       FullWidth="true"
+                       Size="Size.Large"
+                       Color="Color.Primary"
+                       Style="border-radius:10px; font-size:16px; font-weight:700; height:48px;"
+                       Disabled="@_processing"
+                       OnClick="OnClickLoginAsync">
+                @if (_processing)
+                {
+                    <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                    <MudText Class="ms-2">Memproses...</MudText>
+                }
+                else
+                {
+                    <MudText>Masuk</MudText>
+                }
+            </MudButton>
+
+            <div class="login-footer-note">
+                © @DateTime.Now.Year Sistem Manajemen Loyalitas Pelanggan
+            </div>
+        </div>
     </div>
 </div>

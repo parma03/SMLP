@@ -1,17 +1,28 @@
 @using MudBlazor
 
 <div class="empty-state" role="status" aria-label="@($"Kosong: {Title}")">
-    <MudIcon Icon="@Icon" Style="font-size:64px; opacity:0.35; color:#9e9e9e;" Class="mb-4" aria-hidden="true" />
-    <MudText Typo="Typo.h6" Color="Color.Secondary" Class="mb-2">@Title</MudText>
+    <div class="empty-state-icon-badge d-flex align-center justify-center mb-4">
+        <MudIcon Icon="@Icon" Style="font-size:40px; opacity:0.55; color:#6F4E37;" aria-hidden="true" />
+    </div>
+    <MudText Typo="Typo.h6" Style="color:#2E2019; font-weight:700;" Class="mb-1">@Title</MudText>
     @if (!string.IsNullOrEmpty(Description))
     {
-        <MudText Typo="Typo.body2" Color="Color.Secondary" Class="mb-4" Style="text-align:center; max-width:320px;">@Description</MudText>
+        <MudText Typo="Typo.body2" Style="color:#8A7A6B; text-align:center; max-width:340px;" Class="mb-4">@Description</MudText>
     }
     @if (ActionContent is not null)
     {
         @ActionContent
     }
 </div>
+
+<style>
+    .empty-state-icon-badge {
+        width: 88px;
+        height: 88px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(111,78,55,0.10) 0%, rgba(111,78,55,0.04) 70%);
+    }
+</style>
 
 @code {
     [Parameter] public string Icon { get; set; } = Icons.Material.Filled.Inbox;

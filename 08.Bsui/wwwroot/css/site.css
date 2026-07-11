@@ -1,3 +1,148 @@
+/* ======================================================================
+   SMLP Design System — global tokens & polish
+   ====================================================================== */
+:root {
+    --smlp-primary: #6F4E37;
+    --smlp-primary-dark: #3E2723;
+    --smlp-secondary: #C8860A;
+    --smlp-radius-sm: 8px;
+    --smlp-radius: 12px;
+    --smlp-radius-lg: 18px;
+    --smlp-shadow-sm: 0 1px 3px rgba(46,32,25,0.08), 0 1px 2px rgba(46,32,25,0.06);
+    --smlp-shadow: 0 4px 14px rgba(46,32,25,0.10);
+    --smlp-shadow-lg: 0 12px 32px rgba(46,32,25,0.16);
+    --smlp-transition: 180ms cubic-bezier(.4,0,.2,1);
+}
+
+html, body {
+    font-family: "Plus Jakarta Sans", "Segoe UI", Helvetica, Arial, sans-serif;
+    scroll-behavior: smooth;
+}
+
+/* Slim, modern scrollbar */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(111,78,55,0.35) transparent;
+}
+*::-webkit-scrollbar { width: 8px; height: 8px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb {
+    background-color: rgba(111,78,55,0.35);
+    border-radius: 20px;
+}
+*::-webkit-scrollbar-thumb:hover { background-color: rgba(111,78,55,0.55); }
+
+/* Soft, consistent elevation across cards/papers */
+.mud-paper {
+    border-radius: var(--smlp-radius) !important;
+}
+
+.mud-card {
+    border-radius: var(--smlp-radius) !important;
+    transition: box-shadow var(--smlp-transition), transform var(--smlp-transition);
+}
+
+.mud-elevation-1, .mud-elevation-2, .mud-elevation-3, .mud-elevation-4 {
+    box-shadow: var(--smlp-shadow-sm) !important;
+}
+
+/* Buttons: gentle lift + smoother radius */
+.mud-button-root {
+    border-radius: var(--smlp-radius-sm) !important;
+    transition: transform var(--smlp-transition), box-shadow var(--smlp-transition), background-color var(--smlp-transition) !important;
+}
+
+.mud-button-filled:hover,
+.mud-fab:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--smlp-shadow) !important;
+}
+
+.mud-icon-button {
+    transition: background-color var(--smlp-transition), transform var(--smlp-transition);
+}
+
+.mud-icon-button:hover {
+    transform: scale(1.06);
+}
+
+/* Inputs: comfier, rounded outlined fields */
+.mud-input-outlined .mud-input-outlined-border {
+    border-radius: var(--smlp-radius-sm) !important;
+    transition: border-color var(--smlp-transition), box-shadow var(--smlp-transition);
+}
+
+.mud-input-outlined.mud-shrink .mud-input-outlined-border,
+.mud-input-outlined:hover .mud-input-outlined-border {
+    border-width: 1.5px !important;
+}
+
+/* Tables: cleaner header, comfortable rows */
+.mud-table-container {
+    border-radius: var(--smlp-radius) !important;
+}
+
+.mud-table-head .mud-table-cell {
+    font-weight: 700 !important;
+    text-transform: uppercase;
+    font-size: 0.72rem !important;
+    letter-spacing: .04em;
+    opacity: .75;
+}
+
+.mud-table-row {
+    transition: background-color var(--smlp-transition);
+}
+
+/* Chips & badges: slightly bolder, rounded pill */
+.mud-chip {
+    font-weight: 600 !important;
+    border-radius: 999px !important;
+}
+
+/* AppBar: subtle glass depth */
+.mud-appbar {
+    backdrop-filter: saturate(140%) blur(6px);
+}
+
+/* Drawer nav links: comfier spacing */
+.mud-nav-link .mud-nav-link-text,
+.mud-nav-group .mud-nav-link-text {
+    font-weight: 500;
+}
+
+/* Page fade-in transition for a nicer perceived-performance feel */
+.main-content > * {
+    animation: smlp-fade-up 220ms ease both;
+}
+
+@keyframes smlp-fade-up {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .main-content > * { animation: none; }
+}
+
+/* Dialogs: rounder corners, roomier padding */
+.mud-dialog {
+    border-radius: var(--smlp-radius-lg) !important;
+    overflow: hidden;
+}
+
+/* Tooltips: softer look */
+.mud-tooltip {
+    border-radius: var(--smlp-radius-sm) !important;
+    font-weight: 500 !important;
+}
+
+/* Snackbar: rounder, elevated */
+#mud-snackbar-container .mud-alert {
+    border-radius: var(--smlp-radius-sm) !important;
+    box-shadow: var(--smlp-shadow-lg) !important;
+}
+
 #blazor-error-ui {
     background-color: rgba(0, 0, 0, 0.6) !important;
     position: fixed !important;
@@ -204,8 +349,25 @@
 
 /* ===== Accessibility: Focus Visible ===== */
 :focus-visible {
-    outline: 3px solid #C8860A !important;
-    outline-offset: 2px !important;
+    outline: 2px solid #C8860A !important;
+    outline-offset: 1px !important;
+    border-radius: 4px;
+}
+
+/* Inputs already show MudBlazor's own focus border; use a soft glow instead of a boxy outline */
+.mud-input-outlined:focus-within {
+    outline: none !important;
+}
+
+.mud-input-outlined:focus-within .mud-input-outlined-border {
+    border-color: var(--mud-palette-secondary) !important;
+    border-width: 2px !important;
+    box-shadow: 0 0 0 3px rgba(200,134,10,0.18);
+}
+
+.mud-input-outlined input:focus-visible,
+.mud-input-outlined textarea:focus-visible {
+    outline: none !important;
 }
 
 .mud-nav-link:focus-visible,

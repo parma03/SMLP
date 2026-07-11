@@ -1,5 +1,4 @@
-using Microsoft.AspNetCore.Components;
-using MudBlazor;
+using Smlp.Bsui.Common.Extensions;
 using Smlp.Bsui.Services.Authentication;
 using Smlp.Client.Services.BackEnd.Auth;
 using Smlp.Shared.Auth.Requests;
@@ -11,11 +10,11 @@ public partial class Login
     [Inject] public NavigationManager NavigationManager { get; set; } = default!;
     [Inject] public AuthorizedAuthenticationStateProvider AuthStateProvider { get; set; } = default!;
     [Inject] public AuthService AuthService { get; set; } = default!;
+    [Inject] public ISnackbar Snackbar { get; set; } = default!;
 
     private bool _processing = false;
     private string _username = string.Empty;
     private string _password = string.Empty;
-    private string? _errorMessage = null;
     private InputType _passwordInputType = InputType.Password;
     private bool _showPassword = false;
 
@@ -29,12 +28,11 @@ public partial class Login
     {
         if (string.IsNullOrWhiteSpace(_username) || string.IsNullOrWhiteSpace(_password))
         {
-            _errorMessage = "Username dan password wajib diisi.";
+            Snackbar.AddError("Username dan password wajib diisi.");
             return;
         }
 
         _processing = true;
-        _errorMessage = null;
 
         try
         {
@@ -43,7 +41,7 @@ public partial class Login
 
             if (result.Error is not null)
             {
-                _errorMessage = result.Error.Detail ?? "Login gagal. Periksa username dan password Anda.";
+                Snackbar.AddError(result.Error.Detail ?? "Login gagal. Periksa username dan password Anda.");
                 return;
             }
 
@@ -55,7 +53,7 @@ public partial class Login
         }
         catch (Exception)
         {
-            _errorMessage = "Terjadi kesalahan. Silakan coba lagi.";
+            Snackbar.AddError("Terjadi kesalahan. Silakan coba lagi.");
         }
         finally
         {
@@ -65,6 +63,7 @@ public partial class Login
 
     private async Task OnKeyPressAsync(Microsoft.AspNetCore.Components.Web.KeyboardEventArgs e)
     {
-        if (e.Key == "Enter") await OnClickLoginAsync();
+        if (e.Key == "Enter")
+            await OnClickLoginAsync();
     }
 }

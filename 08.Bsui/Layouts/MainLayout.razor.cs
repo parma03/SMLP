@@ -47,6 +47,16 @@ public partial class MainLayout
     {
         if (firstRender)
         {
+            try
+            {
+                var breakpoint = await _browserViewportService.GetCurrentBreakpointAsync();
+                _drawerOpen = breakpoint is Breakpoint.Md or Breakpoint.Lg or Breakpoint.Xl or Breakpoint.Xxl;
+            }
+            catch
+            {
+                // Keep default drawer state if breakpoint detection is unavailable (e.g. during prerendering).
+            }
+
             await ((AuthorizedAuthenticationStateProvider)_authenticationStateProvider).LoadIdentity();
 
             if (_usingGeolocation)
