@@ -10,7 +10,7 @@ using Smlp.Shared.Common.Responses;
 
 namespace Smlp.WebApi.Areas.V1.Controllers.Auth;
 
-public class AuthController : ApiControllerBase
+public class AuthsController : ApiControllerBase
 {
     [HttpPost(ApiEndpoint.V1.Auths.RouteTemplateFor.Login)]
     [Consumes(ContentTypes.ApplicationXWwwFormUrlEncoded)]

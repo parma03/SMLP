@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Smlp.Client.Services.BackEnd.Auth;
+using Smlp.Client.Services.UserInfo;
 using Smlp.Shared.Auth.Requests;
 
 namespace Smlp.Bsui.Services.Authentication;
@@ -22,6 +23,7 @@ public class AuthorizedAuthenticationStateProvider : AuthenticationStateProvider
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly AuthService _authService;
     private readonly NavigationManager _navigationManager;
+    private readonly UserInfoService _userInfoService;
 
     private ClaimsPrincipal _currentUser = new(new ClaimsIdentity());
     private bool _identityLoaded = false;
@@ -32,7 +34,8 @@ public class AuthorizedAuthenticationStateProvider : AuthenticationStateProvider
         ProtectedLocalStorage localStorage,
         ILogger<AuthorizedAuthenticationStateProvider> logger,
         AuthService authService,
-        NavigationManager navigationManager)
+        NavigationManager navigationManager,
+        UserInfoService userInfoService)
     {
         _httpContextAccessor = httpContextAccessor;
         _authenticationOptions = authenticationOptions.Value;
@@ -40,6 +43,7 @@ public class AuthorizedAuthenticationStateProvider : AuthenticationStateProvider
         _logger = logger;
         _authService = authService;
         _navigationManager = navigationManager;
+        _userInfoService = userInfoService;
 
         // Mode None: grant full access for development
         if (_authenticationOptions.Provider == "None")
@@ -121,6 +125,7 @@ public class AuthorizedAuthenticationStateProvider : AuthenticationStateProvider
             var identity = new ClaimsIdentity(claims, "jwt");
             _currentUser = new ClaimsPrincipal(identity);
             _identityLoaded = true;
+            _userInfoService.AccessToken = storedToken.Value;
 
             NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(_currentUser)));
         }
@@ -142,6 +147,7 @@ public class AuthorizedAuthenticationStateProvider : AuthenticationStateProvider
         var identity = new ClaimsIdentity(claims, "jwt");
         _currentUser = new ClaimsPrincipal(identity);
         _identityLoaded = true;
+        _userInfoService.AccessToken = accessToken;
 
         NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(_currentUser)));
     }
@@ -154,10 +160,11 @@ public class AuthorizedAuthenticationStateProvider : AuthenticationStateProvider
 
         _currentUser = new ClaimsPrincipal(new ClaimsIdentity());
         _identityLoaded = true;
+        _userInfoService.AccessToken = string.Empty;
         NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(_currentUser)));
 
         // Redirect to login
-        _navigationManager.NavigateTo("/Account/Login", true);
+        _navigationManager.NavigateTo("/Login", true);
     }
 
     /// <summary>
@@ -222,6 +229,7 @@ public class AuthorizedAuthenticationStateProvider : AuthenticationStateProvider
             var newClaims = ParseClaimsFromJwt(response.Result.AccessToken);
             var identity = new ClaimsIdentity(newClaims, "jwt");
             _currentUser = new ClaimsPrincipal(identity);
+            _userInfoService.AccessToken = response.Result.AccessToken;
 
             NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(_currentUser)));
             _logger.LogInformation("Token berhasil di-refresh.");

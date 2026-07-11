@@ -5,7 +5,7 @@ using Smlp.Shared.Auth.Requests;
 
 namespace Smlp.Bsui.Common.Pages;
 
-public partial class Login
+public partial class Login : IDisposable
 {
     [Inject] public NavigationManager NavigationManager { get; set; } = default!;
     [Inject] public AuthorizedAuthenticationStateProvider AuthStateProvider { get; set; } = default!;
@@ -17,6 +17,41 @@ public partial class Login
     private string _password = string.Empty;
     private InputType _passwordInputType = InputType.Password;
     private bool _showPassword = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Guard: kalau user sudah authenticated (mis. kembali/refresh di URL /Login
+        // padahal token masih valid), redirect ke dashboard alih-alih menampilkan
+        // form login di dalam shell yang sudah authorized.
+        AuthStateProvider.AuthenticationStateChanged += OnAuthenticationStateChanged;
+
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        RedirectIfAuthenticated(authState);
+    }
+
+    private void OnAuthenticationStateChanged(Task<AuthenticationState> task)
+    {
+        _ = HandleAuthenticationStateChangedAsync(task);
+    }
+
+    private async Task HandleAuthenticationStateChangedAsync(Task<AuthenticationState> task)
+    {
+        var authState = await task;
+        RedirectIfAuthenticated(authState);
+    }
+
+    private void RedirectIfAuthenticated(AuthenticationState authState)
+    {
+        if (authState.User.Identity?.IsAuthenticated == true)
+        {
+            NavigationManager.NavigateTo("/", true);
+        }
+    }
+
+    public void Dispose()
+    {
+        AuthStateProvider.AuthenticationStateChanged -= OnAuthenticationStateChanged;
+    }
 
     private void TogglePasswordVisibility()
     {
