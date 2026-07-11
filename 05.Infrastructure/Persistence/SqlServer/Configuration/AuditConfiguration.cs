@@ -20,6 +20,13 @@ public class AuditConfiguration : IEntityTypeConfiguration<Audit>
         builder.Property(e => e.FromIpAddress).HasColumnType(CommonColumnTypes.Nvarchar(50));
         builder.Property(e => e.OldValues).HasColumnType("nvarchar(max)");
         builder.Property(e => e.NewValues).HasColumnType("nvarchar(max)");
-        builder.OwnsOne(e => e.FromGeolocation);
+        builder.OwnsOne(e => e.FromGeolocation, geolocation =>
+        {
+            geolocation.Property(g => g.Latitude);
+            geolocation.Property(g => g.Longitude);
+            geolocation.Property(g => g.Accuracy);
+            geolocation.Property(g => g.City).HasColumnType(CommonColumnTypes.Nvarchar(100));
+            geolocation.Property(g => g.Country).HasColumnType(CommonColumnTypes.Nvarchar(100));
+        });
     }
 }

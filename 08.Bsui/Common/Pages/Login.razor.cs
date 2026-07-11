@@ -53,7 +53,7 @@ public partial class Login
                 NavigationManager.NavigateTo("/", true);
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             _errorMessage = "Terjadi kesalahan. Silakan coba lagi.";
         }

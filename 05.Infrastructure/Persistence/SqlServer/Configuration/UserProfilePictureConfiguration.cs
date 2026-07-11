@@ -16,5 +16,15 @@ public class UserProfilePictureConfiguration : IEntityTypeConfiguration<UserProf
         builder.ConfigureFileProperties();
 
         builder.HasIndex(e => e.UserId);
+
+        // Relasi UserProfilePicture.User dikonfigurasi secara eksplisit sebagai relasi
+        // TERPISAH dari User.ProfilePicture (lihat UserConfiguration). FK yang dipakai
+        // di sini adalah UserProfilePicture.UserId (UserProfilePicture = dependent side),
+        // merepresentasikan "user pemilik file foto ini" (bisa dipakai untuk histori
+        // upload, terlepas dari mana foto yang sedang aktif di User.ProfilePictureId).
+        builder.HasOne(e => e.User)
+            .WithMany()
+            .HasForeignKey(e => e.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

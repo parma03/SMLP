@@ -14,7 +14,7 @@ public static class DependencyInjection
     {
         var backgroundJobOptions = configuration.GetSection(BackgroundJobOptions.SectionKey).Get<BackgroundJobOptions>();
 
-        switch (backgroundJobOptions.Provider)
+        switch (backgroundJobOptions!.Provider)
         {
             case BackgroundJobProvider.None:
                 services.AddNoneBackgroundJobService();
@@ -35,7 +35,7 @@ public static class DependencyInjection
     {
         var backgroundJobOptions = configuration.GetSection(BackgroundJobOptions.SectionKey).Get<BackgroundJobOptions>();
 
-        switch (backgroundJobOptions.Provider)
+        switch (backgroundJobOptions!.Provider)
         {
             case BackgroundJobProvider.None:
                 break;

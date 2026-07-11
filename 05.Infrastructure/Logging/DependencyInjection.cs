@@ -18,7 +18,7 @@ public static class DependencyInjection
 
         var loggingOptions = configuration.GetSection(LoggingOptions.SectionKey).Get<LoggingOptions>();
 
-        switch (loggingOptions.Provider)
+        switch (loggingOptions!.Provider)
         {
             case LoggingProvider.None:
                 hostBuilder.UseNoneLoggingService();

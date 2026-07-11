@@ -10,7 +10,7 @@ public static class DependencyInjection
     {
         var documentationOptions = configuration.GetSection(DocumentationOptions.SectionKey).Get<DocumentationOptions>();
 
-        switch (documentationOptions.Provider)
+        switch (documentationOptions!.Provider)
         {
             case DocumentationProvider.None:
                 services.AddNoneDocumentationService();
@@ -31,7 +31,7 @@ public static class DependencyInjection
     {
         var documentationOptions = configuration.GetSection(DocumentationOptions.SectionKey).Get<DocumentationOptions>();
 
-        switch (documentationOptions.Provider)
+        switch (documentationOptions!.Provider)
         {
             case DocumentationProvider.None:
                 app.UseNoneDocumentationService();

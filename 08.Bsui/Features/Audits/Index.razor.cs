@@ -35,7 +35,7 @@ public partial class Index
         };
     }
 
-    private async Task<TableData<GetAuditsAudit>> ReloadTableAudits(TableState state)
+    private async Task<TableData<GetAuditsAudit>> ReloadTableAudits(TableState state, CancellationToken cancellationToken)
     {
         _error = null;
 
@@ -68,7 +68,7 @@ public partial class Index
             { nameof(DialogFilter.Model), _filterModel }
         };
 
-        var dialog = _dialogService.Show<DialogFilter>($"{CommonDisplayTextFor.Filter} data {DisplayTextFor.Audits}", parameters);
+        var dialog = await _dialogService.ShowAsync<DialogFilter>($"{CommonDisplayTextFor.Filter} data {DisplayTextFor.Audits}", parameters);
         var result = await dialog.Result;
 
         if (!result.Canceled)

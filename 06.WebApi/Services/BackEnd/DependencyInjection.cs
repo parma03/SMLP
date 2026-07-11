@@ -13,7 +13,7 @@ public static class DependencyInjection
     {
         var backEndOptions = configuration.GetSection(BackEndOptions.SectionKey).Get<BackEndOptions>();
 
-        if (!string.IsNullOrWhiteSpace(backEndOptions.BasePath))
+        if (!string.IsNullOrWhiteSpace(backEndOptions!.BasePath))
         {
             app.UsePathBase(backEndOptions.BasePath);
         }

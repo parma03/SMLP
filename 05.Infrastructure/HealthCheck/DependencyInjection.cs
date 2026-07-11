@@ -19,13 +19,13 @@ public static class DependencyInjection
 
         if (healthCheckOptions!.UI.Enabled)
         {
-            var healthChecksUIBuilder = services.AddHealthChecksUI(settings => settings.AddHealthCheckEndpoint($"{appInfoOptions.FullName} {nameof(Infrastructure)}", $"{healthCheckOptions.UI.AbsoluteUri}{healthCheckOptions.Endpoint}"));
+            var healthChecksUIBuilder = services.AddHealthChecksUI(settings => settings.AddHealthCheckEndpoint($"{appInfoOptions!.FullName} {nameof(Infrastructure)}", $"{healthCheckOptions.UI.AbsoluteUri}{healthCheckOptions.Endpoint}"));
 
             switch (healthCheckOptions.UI.Storage.Provider)
             {
                 case HealthCheckStorageProvider.SqlServer:
                     var sqlServerOptions = configuration.GetSection(SqlServerOptions.SectionKey).Get<SqlServerOptions>();
-                    healthChecksUIBuilder.AddSqlServerStorage(sqlServerOptions);
+                    healthChecksUIBuilder.AddSqlServerStorage(sqlServerOptions!);
                     break;
 
                 default:

@@ -46,8 +46,15 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.HasIndex(e => e.IsActive);
 
-        // Catatan: relasi ProfilePicture (User.ProfilePictureId <-> UserProfilePicture.UserId)
-        // sengaja tidak dikonfigurasi ulang di sini agar tidak mengubah perilaku mapping
-        // yang sudah berjalan (dua FK terpisah antara User dan UserProfilePicture).
+        // Relasi User.ProfilePicture dikonfigurasi secara eksplisit sebagai relasi
+        // TERPISAH dari UserProfilePicture.User (lihat UserProfilePictureConfiguration).
+        // FK yang dipakai di sini adalah User.ProfilePictureId (User = dependent side),
+        // merepresentasikan "foto profil yang sedang aktif" untuk user ini.
+        // WithMany() tanpa parameter berarti tidak ada navigation collection balik
+        // dari sisi UserProfilePicture untuk relasi ini secara spesifik.
+        builder.HasOne(e => e.ProfilePicture)
+            .WithMany()
+            .HasForeignKey(e => e.ProfilePictureId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

@@ -30,4 +30,8 @@
     <Folder Include="Areas\V1\Controllers\Transaction\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Services\Documentation\**\*.md" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
 </Project>

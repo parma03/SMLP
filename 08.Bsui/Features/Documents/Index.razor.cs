@@ -47,7 +47,7 @@ public partial class Index
         };
     }
 
-    private async Task<TableData<GetDocumentsDocument>> ReloadTableDocuments(TableState state)
+    private async Task<TableData<GetDocumentsDocument>> ReloadTableDocuments(TableState state, CancellationToken cancellationToken)
     {
         _error = null;
 
@@ -85,7 +85,7 @@ public partial class Index
 
     private async Task ShowDialogAdd()
     {
-        var dialog = _dialogService.Show<DialogAdd>($"{CommonDisplayTextFor.Add} {DisplayTextFor.Document}");
+        var dialog = await _dialogService.ShowAsync<DialogAdd>($"{CommonDisplayTextFor.Add} {DisplayTextFor.Document}");
         var result = await dialog.Result;
 
         if (!result.Canceled)

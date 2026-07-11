@@ -3,6 +3,7 @@ using Smlp.Shared.Common.Constants;
 using Smlp.Shared.Services.Logging.Constants;
 using Serilog;
 using Serilog.Debugging;
+using Serilog.Settings.Configuration;
 
 namespace Smlp.Bsui.Services.Logging.Serilog;
 
@@ -21,7 +22,7 @@ public static class DependencyInjection
         var appInfoOptions = configuration.GetSection(AppInfoOptions.SectionKey).Get<AppInfoOptions>();
 
         return loggerConfiguration
-            .ReadFrom.Configuration(configuration, sectionName: $"{nameof(Logging)}:{nameof(Serilog)}")
+            .ReadFrom.Configuration(configuration, new ConfigurationReaderOptions { SectionName = $"{nameof(Logging)}:{nameof(Serilog)}" })
             .Enrich.WithProperty(PropertyNameFor.Version, CommonValueFor.EntryAssemblyVersion!)
             .Enrich.WithProperty(PropertyNameFor.ApplicationName, appInfoOptions.FullName)
             .Enrich.WithProperty(PropertyNameFor.AssemblyName, CommonValueFor.EntryAssemblySimpleName!)

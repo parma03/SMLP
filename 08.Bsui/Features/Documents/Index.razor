@@ -13,7 +13,7 @@
 <MudTable Elevation="0" Hover="true" Breakpoint="Breakpoint.Sm"
           FixedHeader="true" Height="@HeightFor.ScrollableTable"
           @ref="_tableDocuments"
-          ServerData="@(new Func<TableState, Task<TableData<GetDocumentsDocument>>>(ReloadTableDocuments))">
+          ServerData="@(new Func<TableState, CancellationToken, Task<TableData<GetDocumentsDocument>>>(ReloadTableDocuments))">
     <ToolBarContent>
         <MudButton Variant="Variant.Filled" Color="Color.Tertiary" StartIcon="@Icons.Material.Filled.Refresh" OnClick="Refresh">@CommonDisplayTextFor.Refresh</MudButton>
         <AuthorizeView Roles="Admin">
