@@ -16,7 +16,6 @@ public static class DatabaseMigration
         var persistenceOptions = configuration.GetSection(PersistenceOptions.SectionKey).Get<PersistenceOptions>();
 
         SmlpDbContext context;
-        bool isMigrationNeeded;
 
         switch (persistenceOptions!.Provider)
         {
@@ -25,40 +24,32 @@ public static class DatabaseMigration
                 break;
 
             case PersistenceProvider.SqlServer:
-                context = serviceProvider.GetRequiredService<SqlServerSmlpDbContext>();
-
-                isMigrationNeeded = (await context.Database.GetPendingMigrationsAsync()).Any();
-
-                if (isMigrationNeeded)
-                {
-                    logger.LogInformation("Applying {PersistenceProvider} database migration...", persistenceOptions.Provider);
-                    context.Database.Migrate();
-                }
-                else
-                {
-                    logger.LogInformation("{PersistenceProvider} database is up to date. No database migration required.", persistenceOptions.Provider);
-                }
-
-                break;
-
             case PersistenceProvider.VaultSqlServer:
                 context = serviceProvider.GetRequiredService<SqlServerSmlpDbContext>();
-
-                isMigrationNeeded = (await context.Database.GetPendingMigrationsAsync()).Any();
-
-                if (isMigrationNeeded)
-                {
-                    logger.LogInformation("Applying {PersistenceProvider} database migration...", persistenceOptions.Provider);
-                    context.Database.Migrate();
-                }
-                else
-                {
-                    logger.LogInformation("{PersistenceProvider} database is up to date. No database migration required.", persistenceOptions.Provider);
-                }
-
+                await MigrateSqlServerAsync(context, logger, persistenceOptions.Provider);
                 break;
+
             default:
                 throw new ArgumentException($"{CommonDisplayTextFor.Unsupported} {nameof(Persistence)} {nameof(PersistenceOptions.Provider)}: {persistenceOptions.Provider}");
+        }
+    }
+
+    private static async Task MigrateSqlServerAsync<T>(SmlpDbContext context, ILogger<T> logger, string provider)
+    {
+        try
+        {
+            logger.LogInformation("Checking {PersistenceProvider} database and applying pending migrations if needed...", provider);
+            await context.Database.MigrateAsync();
+            logger.LogInformation("{PersistenceProvider} database is up to date.", provider);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex,
+                "Failed to migrate {PersistenceProvider} database. Verify the connection string, that the SQL " +
+                "Server/LocalDB instance is running and reachable, and that the configured login has permission " +
+                "to create/access the target database.",
+                provider);
+            throw;
         }
     }
 }

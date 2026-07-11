@@ -1,4 +1,3 @@
-using Microsoft.JSInterop;
 using Smlp.Bsui.Services.Geolocation.Abstractions;
 
 namespace Smlp.Bsui.Services.Geolocation.Darnton;
