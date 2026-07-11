@@ -9,7 +9,8 @@ namespace Smlp.Domain.Entities.Master
         public decimal Price { get; set; }
         public bool IsActive { get; set; }
         public int Stock { get; set; } = 0;
-        public FileEntity? ProductImage { get; set; }
+        public Guid? ProductImageId { get; set; }
+        public ProductImage? ProductImage { get; set; }
         // FK
         public Guid? ProductId { get; set; }
         // Navigation

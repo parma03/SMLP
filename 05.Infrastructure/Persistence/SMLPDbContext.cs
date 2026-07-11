@@ -40,7 +40,9 @@ public class SmlpDbContext : DbContext, ISmlpDbContext
     public DbSet<PointRule> PointRules => Set<PointRule>();
     public DbSet<TierRule> TierRules => Set<TierRule>();
     public DbSet<Reward> Rewards => Set<Reward>();
+    public DbSet<RewardImage> RewardImages => Set<RewardImage>();
     public DbSet<Product> Products => Set<Product>();
+    public DbSet<ProductImage> ProductImages => Set<ProductImage>();
     public DbSet<AppSetting> AppSettings => Set<AppSetting>();
 
     #endregion Master Data Entities

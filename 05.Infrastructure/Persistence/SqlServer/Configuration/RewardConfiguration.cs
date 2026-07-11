@@ -29,11 +29,16 @@ public class RewardConfiguration : IEntityTypeConfiguration<Reward>
         builder.Property(e => e.FreeItemName)
             .HasColumnType(CommonColumnTypes.Nvarchar(CommonMaximumLengthFor.MediumText));
 
-        // Catatan: navigasi RewardImage (tipe abstrak FileEntity) sengaja tidak
-        // dikonfigurasi ulang di sini untuk menghindari perubahan pada mapping yang
-        // sudah berjalan saat ini.
+        // RewardImage sekarang dipetakan sebagai entity concrete tersendiri
+        // (lihat RewardImageConfiguration), bukan lagi tipe abstrak FileEntity,
+        // agar tidak membentuk hierarki tabel yang tidak sengaja dengan Document.
+        builder.HasOne(e => e.RewardImage)
+            .WithMany()
+            .HasForeignKey(e => e.RewardImageId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasIndex(e => e.IsActive);
+        builder.HasIndex(e => e.RewardImageId);
         builder.HasIndex(e => new { e.ValidFrom, e.ValidUntil });
         builder.HasIndex(e => e.PointCost);
     }

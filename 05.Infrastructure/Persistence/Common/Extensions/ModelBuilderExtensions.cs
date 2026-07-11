@@ -42,6 +42,13 @@ public static class ModelBuilderExtensions
         {
             if (!typeof(IDeletable).IsAssignableFrom(entityType.ClrType)) continue;
 
+            // EF Core only allows a query filter to be declared on the root entity
+            // type of a mapping hierarchy; derived types inherit it automatically.
+            // Skipping non-root types here also guards against accidental shared
+            // hierarchies (e.g. two unrelated entities that happen to share a
+            // common abstract base class) throwing at model-build time.
+            if (entityType.BaseType is not null) continue;
+
             var parameter = Expression.Parameter(entityType.ClrType, "e");
             var property = Expression.Property(parameter, nameof(IDeletable.IsDeleted));
             var falseConstant = Expression.Constant(false);

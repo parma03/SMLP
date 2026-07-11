@@ -1,0 +1,18 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Smlp.Domain.Entities.Master;
+using Smlp.Infrastructure.Persistence.Common.Constants;
+using Smlp.Infrastructure.Persistence.Common.Extensions;
+
+namespace Smlp.Infrastructure.Persistence.SqlServer.Configuration;
+
+public class ProductImageConfiguration : IEntityTypeConfiguration<ProductImage>
+{
+    public void Configure(EntityTypeBuilder<ProductImage> builder)
+    {
+        builder.ToTable(TableNameFor.ProductImage, TableGroupFor.Master);
+        builder.ConfigureCreatableProperties();
+        builder.ConfigureModifiableProperties();
+        builder.ConfigureFileProperties();
+    }
+}

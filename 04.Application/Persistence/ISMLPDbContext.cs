@@ -27,7 +27,9 @@ public interface ISmlpDbContext
     public DbSet<PointRule> PointRules { get; }
     public DbSet<TierRule> TierRules { get; }
     public DbSet<Reward> Rewards { get; }
+    public DbSet<RewardImage> RewardImages { get; }
     public DbSet<Product> Products { get; }
+    public DbSet<ProductImage> ProductImages { get; }
     public DbSet<AppSetting> AppSettings { get; }
 
     #endregion Master Data Entities

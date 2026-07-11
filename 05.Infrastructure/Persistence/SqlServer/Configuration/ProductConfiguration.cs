@@ -22,15 +22,20 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.Property(e => e.Description)
             .HasColumnType(CommonColumnTypes.Nvarchar(CommonMaximumLengthFor.LargeText));
 
-        // Catatan: navigasi ProductImage (tipe abstrak FileEntity) sengaja
-        // tidak dikonfigurasi ulang di sini agar tidak mengubah mapping yang
-        // sudah berjalan saat ini.
+        // ProductImage sekarang dipetakan sebagai entity concrete tersendiri
+        // (lihat ProductImageConfiguration), bukan lagi tipe abstrak FileEntity,
+        // agar tidak membentuk hierarki tabel yang tidak sengaja dengan Document.
+        builder.HasOne(e => e.ProductImage)
+            .WithMany()
+            .HasForeignKey(e => e.ProductImageId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(e => e.ProductCategory)
             .WithOne(e => e.Product)
             .HasForeignKey<Product>(e => e.ProductId);
 
         builder.HasIndex(e => e.ProductId);
+        builder.HasIndex(e => e.ProductImageId);
         builder.HasIndex(e => e.IsActive);
         builder.HasIndex(e => e.Name);
     }

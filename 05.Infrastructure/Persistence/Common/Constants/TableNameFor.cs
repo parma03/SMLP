@@ -19,7 +19,9 @@ public static class TableNameFor
     public static readonly string PointRule = nameof(PointRule);
     public static readonly string TierRule = nameof(TierRule);
     public static readonly string Reward = nameof(Reward);
+    public static readonly string RewardImage = nameof(RewardImage);
     public static readonly string Product = nameof(Product);
+    public static readonly string ProductImage = nameof(ProductImage);
     public static readonly string ProductCategory = nameof(ProductCategory);
     public static readonly string AppSetting = nameof(AppSetting);
 

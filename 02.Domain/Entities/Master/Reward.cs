@@ -18,6 +18,7 @@ namespace Smlp.Domain.Entities.Master
         public DateOnly? ValidUntil { get; set; }
         public bool IsActive { get; set; }
         public int MinimumTier { get; set; }
-        public FileEntity? RewardImage { get; set; }
+        public Guid? RewardImageId { get; set; }
+        public RewardImage? RewardImage { get; set; }
     }
 }
