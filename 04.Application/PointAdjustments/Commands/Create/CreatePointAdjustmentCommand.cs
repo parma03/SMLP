@@ -34,7 +34,6 @@ public class CreatePointAdjustmentCommandHandler : IRequestHandler<CreatePointAd
             .FirstOrDefaultAsync(c => c.Id == req.CustomerId && !c.IsDeleted, cancellationToken)
             ?? throw new NotFoundException(nameof(Customer), req.CustomerId);
 
-        // Validate sufficient points for deduction
         if (req.Points < 0 && customer.TotalPoints < Math.Abs(req.Points))
             throw new InvalidOperationException($"Poin pelanggan tidak cukup. Saldo: {customer.TotalPoints}, diminta: {Math.Abs(req.Points)}");
 
