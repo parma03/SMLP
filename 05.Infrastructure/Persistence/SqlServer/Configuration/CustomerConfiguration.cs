@@ -42,6 +42,9 @@ public class CustomerConfiguration : IEntityTypeConfiguration<Customer>
         builder.Property(e => e.Notes)
             .HasColumnType(CommonColumnTypes.Nvarchar(CommonMaximumLengthFor.LargeText));
 
+        builder.Property(e => e.TotalSpend)
+            .HasPrecision(18, 2);
+
         // Index untuk query optimization (dashboard, insights, filter)
         // Filter IsDeleted = 0 karena Customer tunduk pada global soft-delete
         // query filter (ModelBuilderExtensions.SetSoftDeleteQueryFilter),

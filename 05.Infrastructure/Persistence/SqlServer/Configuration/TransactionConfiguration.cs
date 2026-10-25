@@ -31,6 +31,18 @@ public class TransactionConfiguration : IEntityTypeConfiguration<Transaksi>
         builder.Property(e => e.Notes)
             .HasColumnType(CommonColumnTypes.Nvarchar(CommonMaximumLengthFor.LargeText));
 
+        builder.Property(e => e.TotalAmount)
+            .HasPrecision(18, 2);
+
+        builder.Property(e => e.DiscountAmount)
+            .HasPrecision(18, 2);
+
+        builder.Property(e => e.GrandTotal)
+            .HasPrecision(18, 2);
+
+        builder.Property(e => e.PointMultiplierSnapshot)
+            .HasPrecision(18, 2);
+
         builder.Property(e => e.CustomerTierSnapshot)
             .HasColumnType(CommonColumnTypes.Nvarchar(CommonMaximumLengthFor.SimpleName));
 

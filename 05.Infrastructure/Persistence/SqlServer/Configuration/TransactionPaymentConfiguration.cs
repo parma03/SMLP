@@ -18,6 +18,9 @@ public class TransactionPaymentConfiguration : IEntityTypeConfiguration<Transact
             .HasConversion<string>()
             .HasColumnType(CommonColumnTypes.Nvarchar(CommonMaximumLengthFor.SimpleName));
 
+        builder.Property(e => e.Amount)
+            .HasPrecision(18, 2);
+
         builder.Property(e => e.Reference)
             .HasColumnType(CommonColumnTypes.Nvarchar(CommonMaximumLengthFor.ShortText));
 

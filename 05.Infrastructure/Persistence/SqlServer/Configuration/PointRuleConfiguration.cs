@@ -19,6 +19,12 @@ public class PointRuleConfiguration : IEntityTypeConfiguration<PointRule>
             .IsRequired()
             .HasColumnType(CommonColumnTypes.Nvarchar(CommonMaximumLengthFor.MediumText));
 
+        builder.Property(e => e.SpendAmount)
+            .HasPrecision(18, 2);
+
+        builder.Property(e => e.BonusMultiplier)
+            .HasPrecision(18, 2);
+
         builder.Property(e => e.Notes)
             .HasColumnType(CommonColumnTypes.Nvarchar(CommonMaximumLengthFor.LargeText));
 

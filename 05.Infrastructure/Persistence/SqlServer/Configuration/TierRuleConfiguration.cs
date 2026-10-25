@@ -22,6 +22,10 @@ public class TierRuleConfiguration : IEntityTypeConfiguration<TierRule>
         builder.Property(e => e.Tier)
             .HasConversion<string>()
             .HasColumnType(CommonColumnTypes.Nvarchar(CommonMaximumLengthFor.SimpleName));
+
+        builder.Property(e => e.PointMultiplier)
+            .HasPrecision(18, 2);
+
         builder.HasIndex(e => e.Tier).IsUnique();
 
         builder.Property(e => e.BenefitDescription)

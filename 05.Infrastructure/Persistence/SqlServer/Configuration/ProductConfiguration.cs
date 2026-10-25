@@ -22,6 +22,9 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.Property(e => e.Description)
             .HasColumnType(CommonColumnTypes.Nvarchar(CommonMaximumLengthFor.LargeText));
 
+        builder.Property(e => e.Price)
+            .HasPrecision(18, 2);
+
         // ProductImage sekarang dipetakan sebagai entity concrete tersendiri
         // (lihat ProductImageConfiguration), bukan lagi tipe abstrak FileEntity,
         // agar tidak membentuk hierarki tabel yang tidak sengaja dengan Document.

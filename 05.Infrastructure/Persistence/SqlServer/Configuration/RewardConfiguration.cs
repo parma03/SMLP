@@ -26,6 +26,12 @@ public class RewardConfiguration : IEntityTypeConfiguration<Reward>
             .HasConversion<string>()
             .HasColumnType(CommonColumnTypes.Nvarchar(CommonMaximumLengthFor.SimpleName));
 
+        builder.Property(e => e.DiscountAmount)
+            .HasPrecision(18, 2);
+
+        builder.Property(e => e.DiscountPercent)
+            .HasPrecision(18, 2);
+
         builder.Property(e => e.FreeItemName)
             .HasColumnType(CommonColumnTypes.Nvarchar(CommonMaximumLengthFor.MediumText));
 

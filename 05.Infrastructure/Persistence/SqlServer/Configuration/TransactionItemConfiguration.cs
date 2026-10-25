@@ -18,6 +18,12 @@ public class TransactionItemConfiguration : IEntityTypeConfiguration<Transaction
             .IsRequired()
             .HasColumnType(CommonColumnTypes.Nvarchar(CommonMaximumLengthFor.MediumText));
 
+        builder.Property(e => e.UnitPrice)
+            .HasPrecision(18, 2);
+
+        builder.Property(e => e.SubTotal)
+            .HasPrecision(18, 2);
+
         builder.HasIndex(e => e.TransactionId);
         builder.HasIndex(e => e.ProductId);
 
